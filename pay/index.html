@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>결제 — 허봇스</title>
+<link rel="icon" href="../favicon.png">
+<link rel="stylesheet" href="pay.css">
+<script src="https://js.tosspayments.com/v2/standard"></script>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
+  <a class="back" href="javascript:history.length>1?history.back():location.assign('../')">← 돌아가기</a>
+</header>
+<main>
+  <h1 id="title">등록 · 결제</h1>
+  <p class="sub" id="sub">아래 정보를 적고 결제 수단을 고르면 바로 등록됩니다.</p>
+
+  <section class="card" id="prodCard">
+    <h2>상품</h2>
+    <div class="prod">
+      <div><div class="n" id="pName"><span class="spin"></span>불러오는 중</div><div class="d" id="pDesc"></div></div>
+      <div class="p" id="pPrice"></div>
+    </div>
+    <div class="seat" id="seat"></div>
+  </section>
+
+  <form class="card" id="form" autocomplete="on" novalidate>
+    <h2>신청자</h2>
+    <label for="name">이름</label>
+    <input type="text" id="name" name="name" placeholder="실명" autocomplete="name" required>
+    <label for="phone">휴대폰</label>
+    <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" autocomplete="tel" inputmode="numeric" required>
+    <label for="email">이메일 <span style="color:var(--warm);font-weight:400">— 확인 메일과 날짜 안내가 갑니다</span></label>
+    <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+    <details class="refund" style="margin-top:18px">
+      <summary>환불 규정 보기</summary>
+      <ul>
+        <li>결제 후 7일 안이면 이유 없이 전액 환불</li>
+        <li>날짜 확정 뒤 8일 전까지 전액 · 7일~3일 전 70% 또는 다음 기수 이월</li>
+        <li>2일 전~전날은 다음 기수 이월만 · 당일·불참은 환불 없음</li>
+        <li>자리 양도는 2일 전까지 가능</li>
+      </ul>
+      <p style="margin:8px 0 0"><a href="../policy/refund.html" target="_blank" rel="noopener">전문 보기</a></p>
+    </details>
+    <label class="agree"><input type="checkbox" id="agree"><span>환불 규정과 <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>·<a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>을 확인했고 동의합니다.</span></label>
+  </form>
+
+  <section class="card" id="payCard" hidden>
+    <h2>결제 수단</h2>
+    <div id="payment-method"></div>
+    <div id="agreement"></div>
+  </section>
+
+  <button class="btn" id="payBtn" disabled>결제하기</button>
+  <p class="msg" id="msg"></p>
+  <p class="note">결제창은 토스페이먼츠가 띄우며 카드 정보는 저희 서버에 저장되지 않습니다. 결제 즉시 확인 메일이 갑니다.</p>
+
+  <footer class="legal" id="legal"></footer>
+</main>
+
+<script>
+// ── 설정 ─────────────────────────────────────────────────────────────────
+// 테스트 키. 심사 통과 뒤 실제 클라이언트 키(live_gck_…)로 바꾼다. 시크릿 키는 여기 절대 안 둔다.
+const TOSS_CLIENT_KEY = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
+const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";   // 공개용 키 — 상품 읽기만 된다
+const FN = SB_URL + "/functions/v1/";
+const DEFAULT_PRODUCT = "seminar-10-early";
+
+const $ = (s) => document.querySelector(s);
+const won = (n) => n.toLocaleString("ko-KR") + "원";
+const params = new URLSearchParams(location.search);
+const productId = params.get("p") || DEFAULT_PRODUCT;
+let product = null, widgets = null, ready = false;
+
+fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) $("#legal").innerHTML = t; }).catch(() => {});
+
+async function loadProduct() {
+  const r = await fetch(SB_URL + "/rest/v1/pay_products?id=eq." + encodeURIComponent(productId) + "&select=*", { headers: { apikey: SB_KEY } });
+  const rows = r.ok ? await r.json() : [];
+  product = rows[0];
+  if (!product) { $("#pName").textContent = "지금은 판매하지 않는 상품입니다"; $("#pDesc").textContent = ""; return; }
+  $("#pName").textContent = product.name;
+  $("#pDesc").textContent = product.description || "";
+  $("#pPrice").innerHTML = won(product.price) + "<small>부가세 포함</small>";
+  document.title = product.name + " — 허봇스";
+  if (product.capacity) {
+    const t = await fetch(SB_URL + "/rest/v1/rpc/pay_taken", { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_event: product.event_key }) }).then(r => r.ok ? r.json() : null).catch(() => null);
+    const left = product.capacity - (t || 0);
+    if (left <= 0) { $("#seat").textContent = "정원이 다 찼습니다"; $("#seat").classList.add("full"); return; }
+    $("#seat").textContent = "정원 " + product.capacity + "명 · 남은 자리 " + left;
+  }
+  await mountWidget();
+}
+
+async function mountWidget() {
+  try {
+    const toss = TossPayments(TOSS_CLIENT_KEY);
+    widgets = toss.widgets({ customerKey: TossPayments.ANONYMOUS });
+    await widgets.setAmount({ currency: "KRW", value: product.price });
+    $("#payCard").hidden = false;
+    await Promise.all([
+      widgets.renderPaymentMethods({ selector: "#payment-method", variantKey: "DEFAULT" }),
+      widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+    ]);
+    ready = true; $("#payBtn").disabled = false;
+  } catch (e) {
+    $("#msg").textContent = "결제창을 불러오지 못했습니다. 새로고침해 주세요. (" + (e.message || e) + ")";
+  }
+}
+
+function field(id) { const el = $("#" + id); el.classList.remove("err"); return el; }
+$("#payBtn").addEventListener("click", async () => {
+  if (!ready || !product) return;
+  $("#msg").textContent = "";
+  const name = field("name").value.trim(), phone = field("phone").value.replace(/[^0-9]/g, ""), email = field("email").value.trim();
+  const agree = $("#agree").checked;
+  const bad = (id, m) => { $("#" + id).classList.add("err"); $("#msg").textContent = m; $("#" + id).focus(); };
+  if (name.length < 2) return bad("name", "이름을 적어 주세요");
+  if (!/^01[016789]\d{7,8}$/.test(phone)) return bad("phone", "휴대폰 번호를 확인해 주세요");
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad("email", "이메일을 확인해 주세요");
+  if (!agree) { $("#msg").textContent = "환불 규정에 동의해 주세요"; return; }
+
+  $("#payBtn").disabled = true; $("#payBtn").innerHTML = '<span class="spin"></span>주문 만드는 중';
+  try {
+    const r = await fetch(FN + "pay-create", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY },
+      body: JSON.stringify({ product_id: product.id, name, phone, email, agree }) });
+    const o = await r.json();
+    if (!o.ok) throw new Error(o.message || "주문을 만들지 못했습니다");
+    sessionStorage.setItem("hb_order", JSON.stringify({ orderId: o.orderId, amount: o.amount, orderName: o.orderName }));
+    const base = location.origin + location.pathname.replace(/[^/]*$/, "");
+    await widgets.requestPayment({
+      orderId: o.orderId, orderName: o.orderName,
+      successUrl: base + "done.html", failUrl: base + "fail.html",
+      customerName: o.customerName, customerEmail: o.customerEmail, customerMobilePhone: o.customerMobilePhone,
+    });
+  } catch (e) {
+    $("#msg").textContent = e.message || String(e);
+    $("#payBtn").disabled = false; $("#payBtn").textContent = "결제하기";
+  }
+});
+$("#phone").addEventListener("input", (e) => {
+  const v = e.target.value.replace(/[^0-9]/g, "").slice(0, 11);
+  e.target.value = v.replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
+});
+loadProduct();
+</script>
+</body>
+</html>

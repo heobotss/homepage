@@ -1,0 +1,24 @@
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/pretendard-700.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0B0A09;--ink-2:#131110;--bone:#F2EEE6;--bone-2:#CBC3B6;--warm:#9C9285;--line:#2A2521;--brass:#C89242;--brass-lt:#E2B778;--bad:#E07A6B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;font-size:15.5px;line-height:1.8;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--brass-lt)}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,4vw,40px);border-bottom:1px solid var(--line)}
+.top .logo{font-weight:700;font-size:19px;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.top nav a{font-size:13px;color:var(--warm);text-decoration:none;margin-left:14px}
+.top nav a.on,.top nav a:hover{color:var(--brass-lt)}
+main{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(18px,4vw,28px) 80px}
+h1{font-size:clamp(22px,4vw,28px);letter-spacing:-.03em;margin:0 0 4px}
+.date{color:var(--warm);font-size:13px;margin:0 0 28px}
+h2{font-size:17px;margin:30px 0 8px;letter-spacing:-.02em}
+p,li{color:var(--bone-2)}
+ol,ul{padding-left:20px}
+li{margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+td,th{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{color:var(--bone);background:var(--ink-2);font-weight:700;white-space:nowrap}
+.todo{color:var(--bad)}
+.box{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.legal{margin-top:34px;font-size:12px;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
+.legal a{color:var(--warm)}
