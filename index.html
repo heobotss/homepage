@@ -814,6 +814,30 @@ section[id],figure.band{scroll-margin-top:74px}
 .risks b{font-size:13.5px; font-weight:700; color:var(--brass-lt); min-width:5.4em}
 .risks span{font-size:13.5px; color:var(--warm)}
 
+/* ══ 판매 중인 상품 ══ */
+#s-shop{padding-block:clamp(64px,8vw,120px)}
+.shop{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(16px,2vw,22px); margin-top:clamp(28px,3.4vw,40px)}
+@media (max-width:820px){ .shop{grid-template-columns:1fr} }
+.pcard{position:relative; display:flex; flex-direction:column; padding:clamp(24px,2.8vw,34px);
+  background:linear-gradient(165deg,var(--ink-3),var(--ink-2)); border:1px solid var(--line); box-shadow:var(--lift)}
+.pcard.pick{border-color:rgba(199,154,78,.6)}
+.pcard .tag{align-self:flex-start; font-size:11.5px; font-weight:700; letter-spacing:.04em; padding:4px 10px; border-radius:99px;
+  background:rgba(199,154,78,.14); color:var(--brass-lt)}
+.pcard .tag.plain{background:rgba(255,255,255,.05); color:var(--warm)}
+.pcard h3{margin:14px 0 4px; font-size:clamp(20px,2.2vw,25px); font-weight:900; letter-spacing:-.035em; color:var(--bone); line-height:1.35}
+.pcard .opt{font-size:14px; color:var(--brass)}
+.pcard .pr{margin:18px 0 4px; font-family:var(--tech); font-size:clamp(34px,4vw,44px); font-weight:700; color:var(--bone); letter-spacing:-.01em; line-height:1}
+.pcard .pr small{font-family:var(--sans); font-size:15px; font-weight:500; color:var(--warm); margin-left:4px}
+.pcard .vat{font-size:12.5px; color:var(--warm)}
+.pcard dl{margin:20px 0 0; display:grid; grid-template-columns:auto 1fr; gap:7px 16px; font-size:14.5px}
+.pcard dt{color:var(--warm)} .pcard dd{margin:0; color:var(--bone-2)}
+.pcard .acts{margin-top:auto; padding-top:24px; display:flex; gap:10px; flex-wrap:wrap}
+.pcard .acts .btn{flex:1 1 150px; border-radius:8px; padding:14px 18px}
+.pcard .acts .btn-solid{background:#C79A4E; color:#14100A; border-color:#C79A4E; box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.pcard .acts .btn-solid:hover{background:var(--brass-lt); border-color:var(--brass-lt)}
+.shop-note{margin-top:18px; font-size:13.5px; color:var(--warm)}
+.shop-note a{color:var(--brass-lt)}
+
 /* ══ 사진 띠 ══ */
 .band{position:relative; margin:0; overflow:hidden; background:var(--ink-2)}
 .band img{display:block; width:100%; aspect-ratio:21/9; object-fit:cover; object-position:50% 24%; filter:contrast(1.03)}
@@ -1065,6 +1089,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
             <span class="go">강의 보기 <span aria-hidden="true">→</span></span>
           </a>
         </div>
+        <p class="shop-note">세미나 10기는 지금 신청할 수 있습니다 — <a href="#/price">판매 중인 상품 보기 →</a></p>
       </div>
     </div>
   </section>
@@ -1828,6 +1853,54 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 
 <div class="screen" id="v-요금" data-view="요금" data-slug="price" data-label="플랜">
 <!-- ═══════════ 요금 (밝은 면) ═══════════ -->
+<!-- ═══════════ 판매 중인 상품 ═══════════ -->
+<section id="s-shop" data-rail="상품">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="label">지금 신청할 수 있는 것</p>
+      <h2 class="h-lg">판매 중인 상품</h2>
+      <p class="lede">결제하면 바로 등록되고, 확인 메일이 갑니다. 날짜·장소가 정해지면 같은 메일로 안내드립니다.</p>
+    </div>
+    <div class="shop rv">
+      <article class="pcard pick">
+        <span class="tag">사전등록 · 기간 한정</span>
+        <h3>4T 트레이너 마케팅 세미나 10기</h3>
+        <p class="opt">사전등록가</p>
+        <div class="pr">390,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
+        <dl>
+          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
+          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
+          <dt>정원</dt><dd>12명 · 결제 순 마감</dd>
+          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
+        </dl>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=seminar-10-early">신청·결제</a>
+          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">일반</span>
+        <h3>4T 트레이너 마케팅 세미나 10기</h3>
+        <p class="opt">일반가</p>
+        <div class="pr">590,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
+        <dl>
+          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
+          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
+          <dt>정원</dt><dd>12명 · 사전등록과 합산</dd>
+          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
+        </dl>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=seminar-10">신청·결제</a>
+          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
+        </div>
+      </article>
+    </div>
+    <p class="shop-note rv">결제는 토스페이먼츠로 처리되며 카드 정보는 저희가 보관하지 않습니다. 문의 010-8245-5022 · gjwodbs77@gmail.com</p>
+  </div>
+</section>
+
 <section class="paper" id="s-plans" data-rail="플랜">
   <div class="wrap">
     <div class="sec-head rv">
