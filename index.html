@@ -885,6 +885,16 @@ section[id],figure.band{scroll-margin-top:74px}
 #s-shop{padding-block:clamp(52px,6vw,90px)}
 .shop{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(16px,2vw,22px); margin-top:clamp(28px,3.4vw,40px)}
 @media (max-width:820px){ .shop{grid-template-columns:1fr} }
+/* 진단에서 고른 강의 — 강의 화면 맨 위 한 칸 */
+.vpick{margin:0 0 clamp(28px,4vw,44px); padding:clamp(22px,3vw,32px) 0; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2); word-break:keep-all}
+.vpick .vp-k{margin:0; font-size:14px; color:var(--brass); font-weight:700}
+.vpick h3{margin:6px 0 0; font-size:clamp(24px,3vw,32px); font-weight:900; letter-spacing:-.04em; color:var(--bone); line-height:1.3}
+.vpick .vp-a{margin:10px 0 0; font-size:16px; color:var(--bone-2); max-width:34em}
+.vpick .vp-in{margin:14px 0 0; font-size:15px; color:var(--warm)}
+.vpick .vp-in b{color:var(--bone); font-family:var(--tech); font-size:18px; margin-left:2px}
+.vpick .acts{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+.vpick .vp-m{margin:14px 0 0; font-size:14px; color:var(--warm)}
+.vpick .vp-m a{color:var(--bone-2)}
 .pcard{position:relative; display:flex; flex-direction:column; padding:clamp(24px,2.8vw,34px);
   background:linear-gradient(165deg,var(--ink-3),var(--ink-2)); border:1px solid var(--line); box-shadow:var(--lift)}
 .pcard.pick{border-color:rgba(147,147,147,.6)}
@@ -1184,8 +1194,8 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <span class="gt-n">28,200곳</span>
         </button>
         <button type="button" role="tab" data-mode="trainer" aria-selected="false">
-          <span class="gt-k">TRAINER</span><span class="gt-t">운동 지도자 중 나를 잽니다</span>
-          <span class="gt-n">105,225곳</span>
+          <span class="gt-k">TRAINER</span><span class="gt-t">트레이너인 나를 잽니다</span>
+          <span class="gt-n">글쓴이 105,225명</span>
         </button>
       </div>
 
@@ -1885,6 +1895,8 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <h2 class="h-md">배운 것을 그대로 센터에 옮기는 강의</h2>
       <p class="lede">결제하면 바로 열립니다. 결제 후 7일 안이고 한 편도 재생하지 않았다면 전액 환불합니다 · <a href="policy/refund.html" style="color:var(--brass-lt)">환불 규정</a></p>
     </div>
+    <!-- 자가진단 결과의 「강의 보기」가 #/vod?part=<파트id> 로 들어오면 여기에 그 강의를 먼저 보여 준다 -->
+    <div class="vpick" id="vodPick" hidden></div>
     <div class="vpaid rv">
       <article class="pcard pick wide">
         <span class="tag">한 번에 전부</span>
@@ -2357,7 +2369,9 @@ VIEWS.forEach(function(v){
 
   function parse(){
     var h = (location.hash || "").replace(/^#/, "");
-    if (h.indexOf("/") === 0) return { view: h.slice(1) || VIEWS[0].key, sec: null };
+    var qi = h.indexOf("?"), qs = "";
+    if (qi >= 0) { qs = h.slice(qi + 1); h = h.slice(0, qi); }   /* #/vod?part=… 처럼 뒤에 붙은 값 */
+    if (h.indexOf("/") === 0) return { view: h.slice(1) || VIEWS[0].key, sec: null, qs: qs };
     if (h && SEC2VIEW[h]) return { view: SEC2VIEW[h], sec: h };   /* 옛 주소도 받아 준다 */
     return { view: VIEWS[0].key, sec: null };
   }
@@ -2387,10 +2401,32 @@ VIEWS.forEach(function(v){
     if (push) history.pushState(null, "", "#/" + v.key);
   }
 
-  addEventListener("hashchange", function(){ var r = parse(); show(r.view, r.sec, false); });
+  /* 자가진단이 고른 강의를 강의 화면 맨 위에 보여 준다 — 문항·강의 정보는 score/questions.json 한 곳에서 */
+  function pick(qs){
+    var box = document.getElementById("vodPick"); if (!box) return;
+    var part = new URLSearchParams(qs || "").get("part");
+    if (!part) { box.hidden = true; return; }
+    var e = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+    var w = function(n){ return n.toLocaleString("ko-KR"); };
+    fetch("score/questions.json").then(function(r){ return r.json(); }).then(function(d){
+      var P = d.parts[part]; if (!P) { box.hidden = true; return; }
+      var pr = d.products[P.product], ms = d.products["vod-4t-master"];
+      box.innerHTML = '<p class="vp-k">자가진단에서 고른 강의</p>'
+        + '<h3>' + e(P.title) + '</h3>'
+        + '<p class="vp-a">' + e(P.about) + '</p>'
+        + '<p class="vp-in">' + e(pr.name) + ' ' + pr.count + '편 안에 들어 있습니다 · <b>' + w(pr.price) + '원</b></p>'
+        + '<div class="acts"><a class="btn btn-solid" href="pay/?p=' + e(P.product) + '">' + e(pr.name) + ' 구매하기</a>'
+        + '<a class="btn btn-line" href="vod/?c=' + e(P.product) + '&t=' + encodeURIComponent(P.title) + '">이미 구매했다면 바로 보기</a></div>'
+        + '<p class="vp-m">회원관리·세일즈·운동지도 15편을 한 번에 보시려면 <a href="pay/?p=vod-4t-master">4T 마스터 ' + w(ms.price) + '원</a></p>';
+      box.hidden = false;
+      setTimeout(function(){ var y = box.getBoundingClientRect().top + pageYOffset - 90; window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" }); }, 150);
+    }).catch(function(){ box.hidden = true; });
+  }
+
+  addEventListener("hashchange", function(){ var r = parse(); show(r.view, r.sec, false); pick(r.qs); });
   window.__go = show;
   /* 첫 그리기는 눈금자 레일이 준비된 뒤에 부른다 (아래에서 호출) */
-  window.__boot = function(){ var r = parse(); show(r.view, r.sec, false); };
+  window.__boot = function(){ var r = parse(); show(r.view, r.sec, false); pick(r.qs); };
 })();
 
 /* ───── 눈금자 레일 — 지금 열린 화면 것만 ─────
@@ -3335,7 +3371,7 @@ function rank(m, v){
    그 위에 바늘을 꽂는다. 봉우리가 어디에 있는지, 내가 그 왼쪽인지
    오른쪽인지가 글자 없이 한눈에 들어온다.
 
-   센터 자료는 #dist (28,200곳), 트레이너 자료는 #distT (글 쓰는 계정 105,225곳).
+   센터 자료는 #dist (28,200곳), 트레이너 자료는 #distT (피트니스 글쓴이 105,225명 — 트레이너만이 아니다).
    인스타그램은 전국 기준선이 없다 — 없는 것을 있는 척하지 않고
    빈 자리를 그대로 보여 준다.
    ══════════════════════════════════════════ */
@@ -3380,7 +3416,7 @@ function rank(m, v){
         { k:"t:인스타",   라벨:"인스타 한 달 발행",    예:"예: 12", max:999,  단:1 },
         { k:"t:문의",     라벨:"한 달에 새 문의",      예:"예: 5",  max:999,  단:1 }
       ],
-      말: "<b>피트니스 안의 운동 지도자들 사이에서 내가 어디쯤인지</b> 바로 알려드립니다.",
+      말: "<b>피트니스 글을 쓰는 사람들, 리뷰에 이름이 적힌 트레이너들 사이에서 내가 어디쯤인지</b> 바로 알려드립니다.",
       바닥: "한 칸만 넣어도 됩니다. 좋아요·저장은 아예 재지 않습니다.",
       끝말: "좋아요·저장·도달은 재지 않습니다 — 올라가도 회원은 오지 않기 때문입니다.",
       단추: "내 이름부터 세어 보기 →"

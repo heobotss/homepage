@@ -111,7 +111,7 @@ async function boot(){
   var r3 = await sb.from("vod_files").select("*").order("sort");
   state.files = r3.data || [];
   var q = new URLSearchParams(location.search).get("c");
-  if (q && state.access[q]) openCourse(q); else home();
+  if (q && state.access[q]) openCourse(q, new URLSearchParams(location.search).get("t")); else home();
 }
 
 function whoBar(){
@@ -144,18 +144,20 @@ function home(){
   $app.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ openCourse(b.getAttribute("data-c")); }; });
 }
 
-function openCourse(id){
+// want: 영상 제목 — 자가진단의 「이미 구매했다면 바로 보기」가 넘겨준다. 그 영상이 든 묶음을 열고 바로 띄운다
+function openCourse(id, want){
   var c = COURSES.filter(function(x){ return x.id===id; })[0]; if(!c) return home();
   state.course = id;
   history.replaceState(null, "", location.pathname + "?c=" + id);
   var vids = state.videos.filter(function(v){ return v.product_id===id; });
   var colls = []; vids.forEach(function(v){ if (colls.indexOf(v.collection)<0) colls.push(v.collection); });
   var files = state.files.filter(function(f){ return f.product_id===id; });
-  state.coll = colls[0];
+  var wv = want ? vids.filter(function(v){ return v.title === want; })[0] : null;
+  state.coll = wv ? wv.collection : colls[0];
   var h = whoBar() + '<a href="#" class="back" id="toHome">← 내 강의</a>';
   h += '<div class="player" id="player"><video id="vid" controls playsinline controlslist="nodownload nofullscreen" disablepictureinpicture></video><span class="mark" id="mark"></span><button class="fs" id="fs" type="button">전체화면</button></div>';
   h += '<p class="ptitle" id="ptitle">'+esc(c.name)+'</p><p class="muted" id="pmsg">목록에서 영상을 고르세요 · '+ymd(state.access[id])+'까지</p>';
-  if (colls.length>1) h += '<div class="tabs" id="tabs">'+colls.map(function(n,i){ return '<button data-k="'+esc(n)+'" class="'+(i?'':'on')+'">'+esc(label(n))+'</button>'; }).join("")+'</div>';
+  if (colls.length>1) h += '<div class="tabs" id="tabs">'+colls.map(function(n,i){ return '<button data-k="'+esc(n)+'" class="'+(n===state.coll?'on':'')+'">'+esc(label(n))+'</button>'; }).join("")+'</div>';
   else h += '<div style="height:18px"></div>';
   h += '<div class="list" id="list"></div>';
   if (files.length) h += '<h2 class="sec">문제지 내려받기</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+' PDF</button>'; }).join("")+'</div>';
@@ -167,7 +169,7 @@ function openCourse(id){
   if (tabs) tabs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ tabs.querySelectorAll("button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); state.coll=b.getAttribute("data-k"); drawList(); }; });
   $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
   drawList();
-  var first = vids.filter(function(v){ return v.collection===state.coll; })[0];
+  var first = wv || vids.filter(function(v){ return v.collection===state.coll; })[0];
   if (first) play(first.id, false);
 }
 function label(n){

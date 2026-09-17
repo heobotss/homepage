@@ -260,7 +260,7 @@ input[type=email].err{border-color:var(--bad)}
       <div class="buy">
         <p class="p" id="recPrice"></p>
         <div class="acts">
-          <a class="btn line" href="../#/vod">강의 보기</a>
+          <a class="btn line" id="recView" href="../#/vod">강의 보기</a>
           <a class="btn" id="recBuy" href="../pay/">구매하기</a>
         </div>
       </div>
@@ -461,6 +461,7 @@ input[type=email].err{border-color:var(--bad)}
     }
     $("#recPrice").innerHTML = prod.name + " · " + prod.count + "편<b>" + won(prod.price) + "원</b>";
     $("#recBuy").href = "../pay/?p=" + prodId;
+    $("#recView").href = P ? "../#/vod?part=" + result.rec : "../#/vod";
 
     show("result");
   }
