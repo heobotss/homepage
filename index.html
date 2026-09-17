@@ -325,6 +325,33 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* ══ 후기 — 인스타 원문 · 계정 · 스토리 사진 (09-17) ══ */
+#s-reviews{padding-block:clamp(40px,5vw,72px); border-top:1px solid var(--line)}
+.rv-head{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:6px 24px}
+.rv-head .label{flex-basis:100%}
+.rv-head h2{margin:6px 0 0}
+.rv-sub{font-size:13.5px; color:var(--warm)}
+.rv-sub a{color:var(--bone); border-bottom:1px solid var(--brass)}
+.rv-rail{margin-top:22px; display:grid; grid-auto-flow:column; grid-auto-columns:minmax(320px,380px); gap:12px;
+  overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain; padding-bottom:10px; scrollbar-width:thin; scrollbar-color:#333 transparent}
+.rv-card{margin:0; display:grid; grid-template-columns:104px 1fr; gap:16px; align-items:start; padding:16px; border:1px solid var(--line-2); border-radius:14px; background:var(--ink-2); scroll-snap-align:start}
+.rv-shot{display:block; border-radius:10px; overflow:hidden; border:1px solid #2a2a2a}
+.rv-shot img{display:block; width:104px; height:185px; object-fit:cover}
+.rv-card figcaption{display:flex; flex-direction:column; min-height:185px}
+.rv-card blockquote{margin:0; font-size:14.5px; line-height:1.65; color:var(--bone); word-break:keep-all; position:relative; padding-top:18px}
+.rv-card blockquote::before{content:"“"; position:absolute; left:-2px; top:-10px; font-size:40px; line-height:1; color:var(--brass); font-family:Georgia,serif}
+.rv-who{margin-top:auto; padding-top:12px; display:flex; flex-direction:column; gap:2px}
+.rv-who a{font-size:13px; font-weight:700; color:var(--bone)}
+.rv-who span{font-size:12px; color:var(--warm)}
+@media (max-width:760px){
+  .rv-rail{grid-auto-columns:86%; margin:18px -16px 0; padding:0 16px 8px; scroll-padding-left:16px}
+  .rv-card{grid-template-columns:88px 1fr; gap:12px; padding:14px}
+  .rv-shot img{width:88px; height:156px}
+  .rv-card figcaption{min-height:156px}
+  .rv-card blockquote{font-size:14px}
+  .rv-sub{font-size:12.5px}
+}
+
 /* 휴대폰에서 12px 밑으로 내려가는 라벨·번호를 12~12.5px 로 올린다 (09-17) */
 @media (max-width:760px){
   .label,.p-fig i,.p-t,.pcard .tag,.tag-soon,.tag-now,.tag-pick,.mk,.m-lab,.vfree-tag,.viz .note,.can-list .t{font-size:12.5px !important}
@@ -1193,6 +1220,110 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </article>
     </div>
     <div class="lane-dots" id="laneDots" aria-label="판매 칸 넘기기"><button type="button" aria-label="강의" aria-current="true"></button><button type="button" aria-label="세미나"></button><button type="button" aria-label="프로그램"></button></div>
+  </div>
+</section>
+
+<!-- ═══════════ 먼저 다녀간 선생님들 — 인스타 후기 원문 (09-17) ═══════════ -->
+<section id="s-reviews" data-rail="후기">
+  <div class="wrap">
+    <div class="rv-head">
+      <p class="label">먼저 다녀간 선생님들</p>
+      <h2 class="h-md">직접 올려 주신 후기 144건 중에서</h2>
+      <p class="rv-sub">인스타그램에 남겨 주신 글을 고치지 않고 옮겼습니다 · <a href="https://www.instagram.com/heobotss/" target="_blank" rel="noopener">후기 전체 보기 →</a></p>
+    </div>
+    <div class="rv-rail" id="rvRail">
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/park_coach_h.i.t/" target="_blank" rel="noopener"><img src="img/review-01.webp" alt="@park_coach_h.i.t 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>트레이너 강의 4번, 대표자 강의 5번 총 9번 들은 강의. 곧 10번 듣게 될 강의. 이것이 바로 최고의 강의후기</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/park_coach_h.i.t/" target="_blank" rel="noopener">@park_coach_h.i.t</a><span>센터 대표 · 재수강</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/jknife_life/" target="_blank" rel="noopener"><img src="img/review-02.webp" alt="@jknife_life 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>블로그를 업체에 몇백만 원을 주고 배워보기도 하고 … 이번 교육은 “왜 이렇게 해야 하는지”에 대한 명확한 이유와 근거를 설명해주는 교육이었습니다.</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/jknife_life/" target="_blank" rel="noopener">@jknife_life</a><span>센터 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/woo_h.i.t/" target="_blank" rel="noopener"><img src="img/review-03.webp" alt="@woo_h.i.t 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>프리랜서 트레이너라 마케팅을 어떻게 해야 할지 고민이 많던 중… 갈 곳을 딱! 정해준 세미나</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/woo_h.i.t/" target="_blank" rel="noopener">@woo_h.i.t</a><span>트레이너 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/seonnn_keyver/" target="_blank" rel="noopener"><img src="img/review-04.webp" alt="@seonnn_keyver 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>알려주시는 모든 내용들은 대표님이 직접 모두 해본 후 근거 있는 결과값들을 알려주시니 더 이해가 빠르고 명확해서 너무 좋음</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/seonnn_keyver/" target="_blank" rel="noopener">@seonnn_keyver</a><span>센터 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/ji_hyun_1202/" target="_blank" rel="noopener"><img src="img/review-05.webp" alt="@ji_hyun_1202 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>센터운영자 강의때도 듣고서 아직도 부족하지만 순위가 많이 오르고 그로인해 신규회원이 많이 늘어남으로써 …</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/ji_hyun_1202/" target="_blank" rel="noopener">@ji_hyun_1202</a><span>필라테스 센터 운영</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/css_gym/" target="_blank" rel="noopener"><img src="img/review-06.webp" alt="@css_gym 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>혼자 삽질 그만하고 모르면 배우자라는 마인드로 세미나 듣고 오니 로직과 틀이 있고 때려 맞추는 형식이 아니었다</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/css_gym/" target="_blank" rel="noopener">@css_gym</a><span>트레이너 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/broad_minded94/" target="_blank" rel="noopener"><img src="img/review-07.webp" alt="@broad_minded94 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>초보도 알아듣기 쉽게 설명해주셔서 4시간이 40분처럼 느껴졌어요.. 대표님 덕분에 정말 많은 시간과 기회비용을 절약했습니다</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/broad_minded94/" target="_blank" rel="noopener">@broad_minded94</a><span>센터 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/ch_h.i.t/" target="_blank" rel="noopener"><img src="img/review-08.webp" alt="@ch_h.i.t 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>일단 하라는 대로 실행했고 그 과정에서 분명한 성과도 경험했습니다</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/ch_h.i.t/" target="_blank" rel="noopener">@ch_h.i.t</a><span>트레이너 · 재수강</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/rryuburi/" target="_blank" rel="noopener"><img src="img/review-09.webp" alt="@rryuburi 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>센터가 나아가야 할 길과 앞으로 해나가야 할 것들, 그리고 바꾸어야 할 것들이 가닥이 잡히고 명확해지는 시간이었습니다.</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/rryuburi/" target="_blank" rel="noopener">@rryuburi</a><span>PT 센터 인수 대표</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/wonsun2_/" target="_blank" rel="noopener"><img src="img/review-10.webp" alt="@wonsun2_ 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>왜 성공했는지 모르고 다시 인스타를 파고 블로그를 해도 아무런 변화가 없었죠. 덕분에 왜 안됐는지 어떻게 해야하는지 많이 배웠습니다</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/wonsun2_/" target="_blank" rel="noopener">@wonsun2_</a><span>트레이너 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/mediel_pilates/" target="_blank" rel="noopener"><img src="img/review-11.webp" alt="@mediel_pilates 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>그동안 막연하게 생각만 했던 마케팅의 방향이 조금 더 또렷해졌고</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/mediel_pilates/" target="_blank" rel="noopener">@mediel_pilates</a><span>필라테스 센터 대표</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/pila_jay/" target="_blank" rel="noopener"><img src="img/review-12.webp" alt="@pila_jay 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>하나부터 열까지 ‘하는 방법’을 너무 쉽게 알려주시니 안 할 수가 없을 정도입니다.. 강추하는 강의</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/pila_jay/" target="_blank" rel="noopener">@pila_jay</a><span>트레이너 세미나</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rv-card">
+          <a class="rv-shot" href="https://www.instagram.com/korean_kaori/" target="_blank" rel="noopener"><img src="img/review-13.webp" alt="@korean_kaori 님이 인스타그램에 올린 후기" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <blockquote>빈말은 잘 못 하는 성격인데, 진짜 강추.</blockquote>
+            <p class="rv-who"><a href="https://www.instagram.com/korean_kaori/" target="_blank" rel="noopener">@korean_kaori</a><span>센터 오픈 준비</span></p>
+          </figcaption>
+        </figure>
+    </div>
   </div>
 </section>
 
