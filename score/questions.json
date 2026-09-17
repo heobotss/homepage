@@ -1,5 +1,5 @@
 {
-  "v": "2026-09-17a",
+  "v": "2026-09-17c",
   "areas": [
     {
       "key": "lesson",
@@ -30,6 +30,28 @@
       "key": "center",
       "name": "센터 관리",
       "max": 10
+    }
+  ],
+  "levels": [
+    {
+      "lv": 1,
+      "name": "LV1",
+      "rule": "LV1 문항 39개를 모두 「예」"
+    },
+    {
+      "lv": 2,
+      "name": "LV2",
+      "rule": "LV1까지 통과 + LV2 문항 29개를 모두 「예」"
+    },
+    {
+      "lv": 3,
+      "name": "LV3",
+      "rule": "LV2까지 통과 + LV3 문항 20개를 모두 「예」"
+    },
+    {
+      "lv": 4,
+      "name": "LV4",
+      "rule": "LV3까지 통과 + 총 95점 이상"
     }
   ],
   "products": {
@@ -148,220 +170,927 @@
   },
   "questions": [
     {
-      "id": "L1",
+      "id": "q3",
       "src": 3,
       "area": "lesson",
+      "lv": 1,
+      "preview": true,
       "part": "sales-rereg",
       "text": "첫 수업 전에 간단한 상담을 하고 수업을 시작한다"
     },
     {
-      "id": "L2",
+      "id": "q4",
       "src": 4,
       "area": "lesson",
+      "lv": 1,
+      "preview": true,
       "part": "coach-custom",
       "text": "그날 운동 순서를 미리 짜 두고 수업에 들어간다"
     },
     {
-      "id": "L3",
+      "id": "q6",
       "src": 6,
       "area": "lesson",
+      "lv": 1,
+      "preview": true,
       "part": "coach-smalltalk",
       "text": "수업을 시작할 때 회원의 몸 컨디션부터 확인한다"
     },
     {
-      "id": "L4",
+      "id": "q8",
       "src": 8,
       "area": "lesson",
+      "lv": 3,
+      "preview": true,
       "part": "coach-smalltalk",
       "text": "세트 사이 쉬는 시간에 회원과 나누는 대화가 부담스럽지 않다"
     },
     {
-      "id": "L5",
+      "id": "q10",
       "src": 10,
       "area": "lesson",
+      "lv": 1,
+      "preview": true,
       "part": "coach-teaching",
       "text": "수업 중 회원의 운동 동작을 옆에서 보조해 준다"
     },
     {
-      "id": "L6",
+      "id": "q17",
       "src": 17,
       "area": "lesson",
+      "lv": 3,
+      "preview": true,
       "part": "coach-static",
       "text": "정적 체형평가를 할 줄 안다"
     },
     {
-      "id": "L7",
+      "id": "q18",
       "src": 18,
       "area": "lesson",
+      "lv": 3,
+      "preview": true,
       "part": "coach-dynamic",
       "text": "동적 체형평가를 할 줄 안다"
     },
     {
-      "id": "L8",
+      "id": "q21",
       "src": 21,
       "area": "lesson",
+      "lv": 1,
+      "preview": true,
       "part": "sales-rereg",
       "text": "수업이 끝나면 그날 수업에 대한 피드백을 해 준다"
     },
     {
-      "id": "L9",
+      "id": "q25",
       "src": 25,
       "area": "lesson",
+      "lv": 2,
+      "preview": true,
       "part": "sales-rereg",
       "text": "회원의 근력 변화를 기록해서 확인한다"
     },
     {
-      "id": "E1",
+      "id": "q32",
       "src": 32,
       "area": "experience",
+      "lv": 2,
+      "preview": true,
       "part": "sales-ot",
       "text": "OT나 체험 수업을 PT 등록으로 이어 본 적이 있다",
       "hint": "한 번이라도 있었으면 「예」."
     },
     {
-      "id": "E2",
+      "id": "q34",
       "src": 34,
       "area": "experience",
+      "lv": 4,
+      "preview": true,
       "part": "sales-rereg",
       "text": "1년 넘게 함께한 회원이 있다",
       "hint": "한 번이라도 있었으면 「예」."
     },
     {
-      "id": "E3",
+      "id": "q36",
       "src": 36,
       "area": "experience",
+      "lv": 3,
+      "preview": true,
       "part": "sales-referral",
       "text": "기존 회원의 소개로 등록한 회원이 있다",
       "hint": "한 번이라도 있었으면 「예」."
     },
     {
-      "id": "E4",
+      "id": "q33",
       "src": 33,
       "area": "experience",
+      "lv": 4,
+      "preview": true,
       "part": "coach-2on1",
       "text": "2:1 이상 그룹 수업을 해 본 적이 있다",
       "hint": "한 번이라도 있었으면 「예」."
     },
     {
-      "id": "E5",
+      "id": "q43",
       "src": 43,
       "area": "experience",
+      "lv": 1,
+      "preview": true,
       "part": "member-online",
       "text": "회원 리뷰를 꾸준히 쌓고 있다",
       "hint": "지금 하고 있으면 「예」."
     },
     {
-      "id": "C1",
+      "id": "q50",
       "src": 50,
       "area": "care",
+      "lv": 2,
+      "preview": true,
       "part": "member-personal",
       "text": "회원이 혼자 할 개인운동을 짜 준다"
     },
     {
-      "id": "C2",
+      "id": "q49",
       "src": 49,
       "area": "care",
+      "lv": 2,
+      "preview": true,
       "part": "member-diet",
       "text": "회원에게 식단 구성 가이드를 줄 수 있다"
     },
     {
-      "id": "C3",
+      "id": "q46",
       "src": 46,
       "area": "care",
+      "lv": 1,
+      "preview": true,
       "part": "sales-rereg",
       "text": "회원의 운동 사진이나 영상을 찍어 준다"
     },
     {
-      "id": "S1",
+      "id": "q63",
       "src": 63,
       "area": "self",
+      "lv": 2,
+      "preview": true,
       "part": null,
       "text": "트레이너로서 몸 관리가 되어 있다 (체지방률 남성 15%, 여성 20% 미만)",
       "hint": "지금 기준으로 답해 주세요."
     },
     {
-      "id": "S2",
+      "id": "q65",
       "src": 65,
       "area": "self",
+      "lv": 1,
+      "preview": true,
       "part": null,
       "text": "일주일에 세 번 이상 내 운동을 한다"
     },
     {
-      "id": "S3",
+      "id": "q68",
       "src": 68,
       "area": "self",
+      "lv": 2,
+      "preview": true,
       "part": "member-online",
       "text": "경력·자격·사진을 정리한 트레이너 프로필이 있다"
     },
     {
-      "id": "S4",
+      "id": "q70",
       "src": 70,
       "area": "self",
+      "lv": 1,
+      "preview": true,
       "part": "member-online",
       "text": "트레이너 블로그를 운영한다"
     },
     {
-      "id": "S5",
+      "id": "q71",
       "src": 71,
       "area": "self",
+      "lv": 1,
+      "preview": true,
       "part": "member-online",
       "text": "트레이너 인스타그램을 운영한다"
     },
     {
-      "id": "S6",
+      "id": "q75",
       "src": 75,
       "area": "self",
+      "lv": 2,
+      "preview": true,
       "part": null,
       "text": "트레이너로서 목표가 뚜렷하다"
     },
     {
-      "id": "K1",
+      "id": "q78",
       "src": 78,
       "area": "skill",
+      "lv": 2,
+      "preview": true,
       "part": "sales-consult",
       "text": "회원 상담을 할 줄 안다"
     },
     {
-      "id": "K2",
+      "id": "q79",
       "src": 79,
       "area": "skill",
+      "lv": 2,
+      "preview": true,
       "part": "sales-inbody",
       "text": "인바디 결과를 회원에게 설명할 줄 안다"
     },
     {
-      "id": "K3",
+      "id": "q77",
       "src": 77,
       "area": "skill",
+      "lv": 3,
+      "preview": true,
       "part": null,
       "text": "전화 상담에 응대할 줄 안다"
     },
     {
-      "id": "K4",
+      "id": "q86",
       "src": 86,
       "area": "skill",
+      "lv": 2,
+      "preview": true,
       "part": null,
       "text": "내 한 달 평균 매출이 얼마인지 안다"
     },
     {
-      "id": "X1",
+      "id": "q91",
       "src": 91,
       "area": "center",
+      "lv": 1,
+      "preview": true,
       "part": null,
       "text": "회원이 들어오면 먼저 인사한다"
     },
     {
-      "id": "X2",
+      "id": "q92",
       "src": 92,
       "area": "center",
+      "lv": 1,
+      "preview": true,
       "part": null,
       "text": "스케줄이 바뀌면 센터와 공유한다"
     },
     {
-      "id": "X3",
+      "id": "q93",
       "src": 93,
       "area": "center",
+      "lv": 1,
+      "preview": true,
       "part": null,
       "text": "수업 전후로 기구를 닦고 정리한다"
+    },
+    {
+      "id": "q1",
+      "src": 1,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "첫 수업 전에 연락처를 알려 드리며 트레이너 소개 연락을 한다"
+    },
+    {
+      "id": "q2",
+      "src": 2,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": "member-schedule",
+      "text": "수업 당일, 수업 전에 회원에게 스케줄 알림을 보낸다"
+    },
+    {
+      "id": "q5",
+      "src": 5,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "수업을 시작할 때 그날 할 운동을 간단히 설명한다"
+    },
+    {
+      "id": "q7",
+      "src": 7,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": "coach-teaching",
+      "text": "운동을 지도하기 전에 직접 몸으로 시범을 보인다"
+    },
+    {
+      "id": "q9",
+      "src": 9,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": "coach-smalltalk",
+      "text": "세트 사이 쉬는 시간을 조절할 수 있다"
+    },
+    {
+      "id": "q11",
+      "src": 11,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "한 번 수업에 운동 종류를 네 가지 이상 넣는다"
+    },
+    {
+      "id": "q12",
+      "src": 12,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "수업에 근육별 스트레칭을 넣는다"
+    },
+    {
+      "id": "q13",
+      "src": 13,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "수업할 때 회원보다 목소리가 크다"
+    },
+    {
+      "id": "q14",
+      "src": 14,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "다음에 할 운동을 미리 안내한다"
+    },
+    {
+      "id": "q15",
+      "src": 15,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "자가근막이완 방법을 알고 지도한다"
+    },
+    {
+      "id": "q16",
+      "src": 16,
+      "area": "lesson",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "운동 횟수를 틀리지 않고 정확하게 센다"
+    },
+    {
+      "id": "q19",
+      "src": 19,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": "coach-smalltalk",
+      "text": "수업 중에 운동 강도를 확인한다"
+    },
+    {
+      "id": "q20",
+      "src": 20,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "유산소 운동기구 사용법을 설명해 준다"
+    },
+    {
+      "id": "q22",
+      "src": 22,
+      "area": "lesson",
+      "lv": 1,
+      "preview": false,
+      "part": "sales-rereg",
+      "text": "다음 수업의 운동 부위나 방향을 알려 준다"
+    },
+    {
+      "id": "q23",
+      "src": 23,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "100가지 이상의 운동 동작을 알고 지도한다"
+    },
+    {
+      "id": "q24",
+      "src": 24,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": "coach-static",
+      "text": "체형 신드롬을 알고 그에 맞는 운동을 처방할 수 있다"
+    },
+    {
+      "id": "q26",
+      "src": 26,
+      "area": "lesson",
+      "lv": 2,
+      "preview": false,
+      "part": "sales-rereg",
+      "text": "회원의 심폐지구력 변화를 기록해서 확인한다"
+    },
+    {
+      "id": "q27",
+      "src": 27,
+      "area": "lesson",
+      "lv": 2,
+      "preview": false,
+      "part": "coach-dynamic",
+      "text": "회원의 움직임 기능 변화를 확인한다"
+    },
+    {
+      "id": "q28",
+      "src": 28,
+      "area": "lesson",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "회원의 통증 정도 변화를 확인한다"
+    },
+    {
+      "id": "q29",
+      "src": 29,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "주말 수업이 가능하다"
+    },
+    {
+      "id": "q30",
+      "src": 30,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "오전 수업이 가능하다"
+    },
+    {
+      "id": "q31",
+      "src": 31,
+      "area": "experience",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "내 회원들의 이름을 모두 외우고 있다"
+    },
+    {
+      "id": "q35",
+      "src": 35,
+      "area": "experience",
+      "lv": 4,
+      "preview": false,
+      "part": "sales-consult",
+      "text": "한 번에 100회 이상 등록한 회원이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q37",
+      "src": 37,
+      "area": "experience",
+      "lv": 4,
+      "preview": false,
+      "part": "sales-referral",
+      "text": "회원의 가족을 소개받아 수업해 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q38",
+      "src": 38,
+      "area": "experience",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "다른 지역에 사는 회원이 나와 운동하려고 등록한 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q39",
+      "src": 39,
+      "area": "experience",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "바디프로필을 준비하는 회원을 맡아 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q40",
+      "src": 40,
+      "area": "experience",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "회원에게 선물을 받아 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q41",
+      "src": 41,
+      "area": "experience",
+      "lv": 2,
+      "preview": false,
+      "part": "member-online",
+      "text": "수업이 끝나는 회원과 함께 사진을 남긴다"
+    },
+    {
+      "id": "q42",
+      "src": 42,
+      "area": "experience",
+      "lv": 4,
+      "preview": false,
+      "part": "sales-rereg",
+      "text": "수업이 끝났던 회원이 나중에 다시 와서 재등록한 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q44",
+      "src": 44,
+      "area": "experience",
+      "lv": 1,
+      "preview": false,
+      "part": "sales-inbody",
+      "text": "회원의 인바디 변화 자료를 모아 두고 있다"
+    },
+    {
+      "id": "q45",
+      "src": 45,
+      "area": "experience",
+      "lv": 1,
+      "preview": false,
+      "part": "sales-rereg",
+      "text": "회원 포트폴리오를 만들고 있다"
+    },
+    {
+      "id": "q47",
+      "src": 47,
+      "area": "care",
+      "lv": 1,
+      "preview": false,
+      "part": "sales-rereg",
+      "text": "회원의 운동 영상을 찍어 준다"
+    },
+    {
+      "id": "q48",
+      "src": 48,
+      "area": "care",
+      "lv": 2,
+      "preview": false,
+      "part": "sales-inbody",
+      "text": "회원의 비포·애프터 사진을 만들어 준다"
+    },
+    {
+      "id": "q51",
+      "src": 51,
+      "area": "care",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "개인운동과 별도로 회원에게 숙제를 내 준다"
+    },
+    {
+      "id": "q52",
+      "src": 52,
+      "area": "care",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "회원이 개인운동을 하러 오면 피드백을 해 준다"
+    },
+    {
+      "id": "q53",
+      "src": 53,
+      "area": "care",
+      "lv": 2,
+      "preview": false,
+      "part": "member-diet",
+      "text": "회원에게 물 마시는 양 가이드를 준다"
+    },
+    {
+      "id": "q54",
+      "src": 54,
+      "area": "care",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "유산소 운동 강도를 회원에게 맞춰 준다"
+    },
+    {
+      "id": "q55",
+      "src": 55,
+      "area": "care",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "회원의 생일을 챙긴다"
+    },
+    {
+      "id": "q56",
+      "src": 56,
+      "area": "self",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "생활스포츠지도사(보디빌딩) 자격증이 있다"
+    },
+    {
+      "id": "q57",
+      "src": 57,
+      "area": "self",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "트레이너 관련 자격증이 있다"
+    },
+    {
+      "id": "q58",
+      "src": 58,
+      "area": "self",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "트레이닝 관련 자격증이 있다"
+    },
+    {
+      "id": "q59",
+      "src": 59,
+      "area": "self",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "다음에 딸 자격증 계획을 세워 두었다"
+    },
+    {
+      "id": "q60",
+      "src": 60,
+      "area": "self",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "웨이트 트레이닝에 쓰이는 근육 이름을 알고 있다"
+    },
+    {
+      "id": "q61",
+      "src": 61,
+      "area": "self",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "근육마다 시작하고 끝나는 곳(기시·정지)을 알고 있다"
+    },
+    {
+      "id": "q62",
+      "src": 62,
+      "area": "self",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "근육마다 하는 일을 알고 있다"
+    },
+    {
+      "id": "q64",
+      "src": 64,
+      "area": "self",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "바디프로필을 찍어 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q66",
+      "src": 66,
+      "area": "self",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "나보다 윗급 트레이너에게 레슨을 받아 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q67",
+      "src": 67,
+      "area": "self",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "트레이너 개인 명함이 있다"
+    },
+    {
+      "id": "q69",
+      "src": 69,
+      "area": "self",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "트레이너로 보이는 명찰이나 팀복을 입고 일한다"
+    },
+    {
+      "id": "q72",
+      "src": 72,
+      "area": "self",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "트레이너로 방송에 나간 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q73",
+      "src": 73,
+      "area": "self",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "트레이너로 신문 기사에 나간 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q74",
+      "src": 74,
+      "area": "self",
+      "lv": 2,
+      "preview": false,
+      "part": null,
+      "text": "트레이너로서 나만의 색깔이 있다"
+    },
+    {
+      "id": "q76",
+      "src": 76,
+      "area": "skill",
+      "lv": 2,
+      "preview": false,
+      "part": "sales-consult",
+      "text": "센터에 직접 찾아온 방문 고객을 응대할 수 있다"
+    },
+    {
+      "id": "q80",
+      "src": 80,
+      "area": "skill",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "센터 결제 시스템을 알고 있다"
+    },
+    {
+      "id": "q81",
+      "src": 81,
+      "area": "skill",
+      "lv": 3,
+      "preview": false,
+      "part": null,
+      "text": "환불 규정을 알고 회원에게 설명할 수 있다"
+    },
+    {
+      "id": "q82",
+      "src": 82,
+      "area": "skill",
+      "lv": 3,
+      "preview": false,
+      "part": "sales-rereg",
+      "text": "내 회원 재등록률이 50%가 넘는다",
+      "hint": "정확히 모르면 「아니요」."
+    },
+    {
+      "id": "q83",
+      "src": 83,
+      "area": "skill",
+      "lv": 3,
+      "preview": false,
+      "part": "sales-referral",
+      "text": "소개로 등록한 회원 비율이 20%가 넘는다",
+      "hint": "정확히 모르면 「아니요」."
+    },
+    {
+      "id": "q84",
+      "src": 84,
+      "area": "skill",
+      "lv": 3,
+      "preview": false,
+      "part": "member-online",
+      "text": "내가 직접 데려온 회원이 50%가 넘는다",
+      "hint": "정확히 모르면 「아니요」."
+    },
+    {
+      "id": "q85",
+      "src": 85,
+      "area": "skill",
+      "lv": 1,
+      "preview": false,
+      "part": "member-schedule",
+      "text": "회원 수업 소진율이 8 이상이다",
+      "hint": "소진율 = 한 달 수업 수 ÷ 회원 수. 정확히 모르면 「아니요」."
+    },
+    {
+      "id": "q87",
+      "src": 87,
+      "area": "skill",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "피트니스 대회에 나가 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q88",
+      "src": 88,
+      "area": "skill",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "피트니스 대회에서 입상한 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q89",
+      "src": 89,
+      "area": "skill",
+      "lv": 4,
+      "preview": false,
+      "part": null,
+      "text": "트레이너로 외부 강의(출강)를 나가 본 적이 있다",
+      "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q90",
+      "src": 90,
+      "area": "skill",
+      "lv": 2,
+      "preview": false,
+      "part": "member-online",
+      "text": "트레이너 포트폴리오를 만들고 있다"
+    },
+    {
+      "id": "q94",
+      "src": 94,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "소도구 위치를 알고 정리·관리한다"
+    },
+    {
+      "id": "q95",
+      "src": 95,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "출근할 때 탈의실을 확인한다"
+    },
+    {
+      "id": "q96",
+      "src": 96,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "퇴근할 때 탈의실을 확인한다"
+    },
+    {
+      "id": "q97",
+      "src": 97,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "휴게실에서 식사한 뒤 정리정돈한다"
+    },
+    {
+      "id": "q98",
+      "src": 98,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "유산소 기구의 땀자국을 닦는다"
+    },
+    {
+      "id": "q99",
+      "src": 99,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "매트를 쓴 뒤 정리·관리한다"
+    },
+    {
+      "id": "q100",
+      "src": 100,
+      "area": "center",
+      "lv": 1,
+      "preview": false,
+      "part": null,
+      "text": "센터를 돌아보며 필요한 곳을 챙긴다 (플로팅)"
     }
   ]
 }
