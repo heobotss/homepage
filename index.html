@@ -1027,7 +1027,8 @@ section[id],figure.band{scroll-margin-top:74px}
 }
 
 /* ══ FAQ ══ */
-.faq{margin-top:clamp(56px,7vw,90px); border-top:1px solid var(--paper-line); padding-top:clamp(34px,4vw,50px)}
+.faq{margin-top:0; border-top:1px solid var(--paper-line); padding-top:clamp(34px,4vw,50px)}
+.faq-sec{padding-block:clamp(40px,5vw,72px)}
 .faq-h{font-size:clamp(22px,2.8vw,30px); margin-bottom:26px}
 /* 글만 늘어놓으면 안 읽힌다 — 칸을 만들고 물음표를 붙여 눈이 걸리게 한다 */
 .faq dl{display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,1.6vw,18px)}
@@ -1409,7 +1410,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <span class="k">01</span>
         <h3>내 블로그 순위판</h3>
         <p>내 글이 어느 키워드에서 몇 위인지 매주 재서 보여 줍니다.</p>
-        <div class="st st-open">무료 플랜 · 웹</div>
+        <div class="st st-sub">유료 플랜 · 웹</div>
       </article>
       <article class="tcard">
         <span class="k">02</span>
@@ -2093,28 +2094,6 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     </div>
 
     <p class="plan-note">유료 플랜은 준비 중이며 프로그램이 더 열리면 값이 바뀔 수 있습니다. 부가세 별도.</p>
-
-    <div class="faq">
-      <h3 class="faq-h">먼저 물어보실 것들</h3>
-      <dl>
-        <div><dt>지금 당장 쓸 수 있는 건 뭡니까?</dt>
-          <dd>무료 진단 두 가지입니다. 나머지는 차례로 엽니다.</dd></div>
-        <div><dt>저는 관리자가 아니라 트레이너인데 쓸 수 있습니까?</dt>
-          <dd>됩니다. 센터 진단도 지금 일하시는 센터 주소로 받아 보실 수 있습니다.</dd></div>
-        <div><dt>한 달만 써 보고 그만둘 수 있습니까?</dt>
-          <dd>됩니다. 약정이 없습니다.</dd></div>
-        <div><dt>센터 계정 비밀번호를 넘겨야 합니까?</dt>
-          <dd>아닙니다. 계정을 움직이는 도구는 쓰시는 컴퓨터에서만 돕니다.</dd></div>
-        <div><dt>설치형 도구를 쓰려면 뭐가 필요합니까?</dt>
-          <dd>윈도우 컴퓨터 한 대면 됩니다. 도는 동안 켜져 있어야 합니다.</dd></div>
-        <div><dt>진단 결과가 우리 센터에만 유리하게 나오는 건 아닙니까?</dt>
-          <dd>같은 기준선을 전국 28,200곳에 똑같이 적용합니다.</dd></div>
-        <div><dt>우리 센터 정보를 다른 데 쓰십니까?</dt>
-          <dd>아닙니다. <b>이미 공개돼 있는 정보</b>만 쓰고, 개별 센터를 남에게 보여드리지 않습니다.</dd></div>
-        <div><dt>경쟁 센터도 이걸 쓰면 소용없는 것 아닙니까?</dt>
-          <dd>모두가 하고 있는 일이 아니라, 대부분이 멈춰 있는 일입니다.</dd></div>
-      </dl>
-    </div>
   </div>
 </section>
 
@@ -2137,7 +2116,6 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
           <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
           <dt>정원</dt><dd>12명 · 결제 순 마감</dd>
-          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
         </dl>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=seminar-10-early">신청·결제</a>
@@ -2154,7 +2132,6 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
           <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
           <dt>정원</dt><dd>12명 · 사전등록과 합산</dd>
-          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
         </dl>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=seminar-10">신청·결제</a>
@@ -2187,6 +2164,33 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <a class="btn btn-line btn-sm" href="#" data-link="youtube">유튜브</a>
         <a class="btn btn-line btn-sm" href="https://www.instagram.com/heobotss" target="_blank" rel="noopener">인스타그램 @heobotss</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 자주 묻는 질문 — 플랜 화면 맨 아래 (09-17) ═══════════ -->
+<section id="s-faq" data-rail="질문" class="faq-sec">
+  <div class="wrap">
+    <div class="faq">
+      <h3 class="faq-h">먼저 물어보실 것들</h3>
+      <dl>
+        <div><dt>지금 당장 쓸 수 있는 건 뭡니까?</dt>
+          <dd>무료 진단 두 가지입니다. 나머지는 차례로 엽니다.</dd></div>
+        <div><dt>저는 관리자가 아니라 트레이너인데 쓸 수 있습니까?</dt>
+          <dd>됩니다. 센터 진단도 지금 일하시는 센터 주소로 받아 보실 수 있습니다.</dd></div>
+        <div><dt>한 달만 써 보고 그만둘 수 있습니까?</dt>
+          <dd>됩니다. 약정이 없습니다.</dd></div>
+        <div><dt>센터 계정 비밀번호를 넘겨야 합니까?</dt>
+          <dd>아닙니다. 계정을 움직이는 도구는 쓰시는 컴퓨터에서만 돕니다.</dd></div>
+        <div><dt>설치형 도구를 쓰려면 뭐가 필요합니까?</dt>
+          <dd>윈도우 컴퓨터 한 대면 됩니다. 도는 동안 켜져 있어야 합니다.</dd></div>
+        <div><dt>진단 결과가 우리 센터에만 유리하게 나오는 건 아닙니까?</dt>
+          <dd>같은 기준선을 전국 28,200곳에 똑같이 적용합니다.</dd></div>
+        <div><dt>우리 센터 정보를 다른 데 쓰십니까?</dt>
+          <dd>아닙니다. <b>이미 공개돼 있는 정보</b>만 쓰고, 개별 센터를 남에게 보여드리지 않습니다.</dd></div>
+        <div><dt>경쟁 센터도 이걸 쓰면 소용없는 것 아닙니까?</dt>
+          <dd>모두가 하고 있는 일이 아니라, 대부분이 멈춰 있는 일입니다.</dd></div>
+      </dl>
     </div>
   </div>
 </section>
