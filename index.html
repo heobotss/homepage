@@ -325,6 +325,11 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* 휴대폰에서 12px 밑으로 내려가는 라벨·번호를 12~12.5px 로 올린다 (09-17) */
+@media (max-width:760px){
+  .label,.p-fig i,.p-t,.pcard .tag,.tag-soon,.tag-now,.tag-pick,.mk,.m-lab,.vfree-tag,.viz .note,.can-list .t{font-size:12.5px !important}
+  .mc span,.tool .no,.shot figcaption em,.p-k,.tcard .k,.plan .who,.gt-k,.viz em,.ends em,.m-n small{font-size:12px !important}
+}
 @media (max-width:980px){
   .lane-dots{display:flex; justify-content:center; gap:8px; margin-top:14px}
   .lane-dots button{width:6px; height:6px; padding:0; border:0; border-radius:3px; background:#3A3A3A; transition:width .25s, background .25s; cursor:pointer}
@@ -1176,7 +1181,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
       </article>
       <article class="lane">
-        <p class="lane-k">프로그램 16개 · 지금 열린 것 14개</p>
+        <p class="lane-k">만들어 둔 프로그램 16개 · 무료 진단 바로 가능</p>
         <h2>프로그램</h2>
         <p class="lane-d">트레이너·센터 진단표는 무료, 나머지는 플랜으로 엽니다</p>
         <p class="lane-pr"><b>0</b>원 무료 진단 <span>플랜 준비 중 · 월 9,900원부터</span></p>
@@ -1202,7 +1207,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="sec-head ghosted rv">
       <span class="ghost" aria-hidden="true">30초</span>
       <p class="label">30초 자가 진단</p>
-      <h2 class="h-lg">지금 넣어 보십시오.<br>전국에서 상위 몇 %인지 바로 나옵니다.</h2>
+      <h2 class="h-lg">지금 넣어 보세요.<br>전국에서 상위 몇 %인지 바로 나옵니다.</h2>
       <p class="lede">가입·저장·결제 수단 없이, <b>넣는 순간 화면에서 바로 계산됩니다.</b></p>
     </div>
 
@@ -1217,7 +1222,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     </div>
 
     <div class="gauge rv">
-      <div class="gauge-tabs" role="tablist" aria-label="무엇을 재시겠습니까">
+      <div class="gauge-tabs" role="tablist" aria-label="무엇을 잴까요">
         <button type="button" role="tab" class="on" data-mode="center" aria-selected="true">
           <span class="gt-k">CENTER</span><span class="gt-t">우리 센터를 잽니다</span>
           <span class="gt-n">28,200곳</span>
@@ -1354,7 +1359,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <li><span class="mk">03</span><strong>내 이름이 적힌 리뷰 ○건</strong>
             <em>전국에서 상위 몇 %인지</em></li>
         <li><span class="mk">04</span><strong>회원이 나에게 남긴 리뷰</strong>
-            <em>무엇이 좋았는지 적힌 문장만 골라 카드로 — 그대로 캡처해 쓰십시오</em></li>
+            <em>무엇이 좋았는지 적힌 문장만 골라 카드로 — 그대로 캡처해 쓰시면 됩니다</em></li>
         <li><span class="mk">05</span><strong>마지막으로 적힌 게 ○일 전</strong>
             <em>멈춰 있으면 지금이 손댈 때입니다</em></li>
         <li><span class="mk">06</span><strong>우리 센터 글을 한 달에 ○건 쓰고 있다</strong>
@@ -1397,7 +1402,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="lede"><b>센터는 바뀌어도 내 이름은 남습니다.</b></p>
       </div>
       <div class="railtools">
-        <p class="railhint">옆으로 넘겨 보십시오 <span aria-hidden="true">→</span></p>
+        <p class="railhint">옆으로 넘겨 보세요 <span aria-hidden="true">→</span></p>
         <div class="arrows" data-for="railTrainer">
         <button type="button" data-dir="-1" aria-label="이전">←</button>
         <button type="button" data-dir="1" aria-label="다음">→</button>
@@ -1505,7 +1510,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="lede">플레이스 주소만 주시면 <b>어디쯤인지와 무엇부터</b> 정리해 보내드립니다.</p>
       </div>
       <div class="railtools">
-        <p class="railhint">옆으로 넘겨 보십시오 <span aria-hidden="true">→</span></p>
+        <p class="railhint">옆으로 넘겨 보세요 <span aria-hidden="true">→</span></p>
         <div class="arrows" data-for="railCards">
         <button type="button" data-dir="-1" aria-label="이전 카드">←</button>
         <button type="button" data-dir="1" aria-label="다음 카드">→</button>
@@ -1516,16 +1521,16 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="hrail rv" id="railCards">
       <figure class="shot"><span class="sh"><img src="img/card-01.webp" alt="진단 카드 1 — 표지" loading="lazy" width="720" height="960"></span><figcaption><em>01</em>우리 센터 한 줄 요약</figcaption></figure>
       <figure class="shot lock"><span class="sh"><img src="img/card-02.webp" alt="진단 카드 2 — 지금 어디쯤인가" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>02</em>13개 지표, 지금 어디쯤</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-03.webp" alt="진단 카드 3 — 지금 어디쯤인가 이어서" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>03</em>어디가 위고 어디가 아래인가</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-04.webp" alt="진단 카드 4" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>04</em>같은 동네와 견주면</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-05.webp" alt="진단 카드 5 — 목표" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>05</em>석 달 뒤 목표치</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-06.webp" alt="진단 카드 6 — 누가 쓰고 있나" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>06</em>이 글은 누가 쓰고 있나</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-07.webp" alt="진단 카드 7" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>07</em>한 사람에게 몰려 있나</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-08.webp" alt="진단 카드 8 — 잘하고 계신 것" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>08</em>이미 잘되고 있는 것</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-09.webp" alt="진단 카드 9 — 지금 안 보이는 위험" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>09</em>지금 안 보이는 위험</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-10.webp" alt="진단 카드 10 — 오늘 할 것" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>10</em>오늘 30분이면 되는 것</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-11.webp" alt="진단 카드 11 — 다음 행동" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>11</em>이번 달에 할 것</figcaption></figure>
-      <figure class="shot lock"><span class="sh"><img src="img/card-12.webp" alt="진단 카드 12 — 이 판정의 근거" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>12</em>이 판정의 근거</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-03.webp" alt="진단 카드 3 — 지금 어디쯤인가 이어서" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>03</em>어디가 위고 어디가 아래인가</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-04.webp" alt="진단 카드 4" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>04</em>같은 동네와 견주면</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-05.webp" alt="진단 카드 5 — 목표" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>05</em>석 달 뒤 목표치</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-06.webp" alt="진단 카드 6 — 누가 쓰고 있나" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>06</em>이 글은 누가 쓰고 있나</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-07.webp" alt="진단 카드 7" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>07</em>한 사람에게 몰려 있나</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-08.webp" alt="진단 카드 8 — 잘하고 계신 것" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>08</em>이미 잘되고 있는 것</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-09.webp" alt="진단 카드 9 — 지금 안 보이는 위험" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>09</em>지금 안 보이는 위험</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-10.webp" alt="진단 카드 10 — 오늘 할 것" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>10</em>오늘 30분이면 되는 것</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-11.webp" alt="진단 카드 11 — 다음 행동" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>11</em>이번 달에 할 것</figcaption></figure>
+      <figure class="shot lock"><span class="sh"><img src="img/card-12.webp" alt="진단 카드 12 — 이 판정의 근거" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"></span></span><figcaption><em>12</em>이 판정의 근거</figcaption></figure>
     </div>
 
     <div class="diag-cta rv">
@@ -1550,7 +1555,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="lede">제 센터에서 매일 돌리고 있는 것만 엽니다.</p>
       </div>
       <div class="railtools">
-        <p class="railhint">옆으로 넘겨 보십시오 <span aria-hidden="true">→</span></p>
+        <p class="railhint">옆으로 넘겨 보세요 <span aria-hidden="true">→</span></p>
         <div class="arrows" data-for="railTools">
         <button type="button" data-dir="-1" aria-label="이전">←</button>
         <button type="button" data-dir="1" aria-label="다음">→</button>
@@ -1759,7 +1764,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <p class="label">지금 시작</p>
     <h2 class="h-lg">지금 무료로 확인해 보세요</h2>
     <p class="tier-note" data-tier-note hidden></p>
-    <p class="fin-say">내 쪽을 고르십시오. 둘 다 무료이고, 결제 정보를 넣지 않습니다.</p>
+    <p class="fin-say">둘 다 무료이고, 결제 정보는 넣지 않아도 됩니다.</p>
     <div class="fin-two">
       <a class="btn btn-solid" href="#" data-link="formT">트레이너 진단 받기</a>
       <a class="btn btn-solid" href="#" data-link="form">센터 진단 받기</a>
@@ -2010,7 +2015,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <p class="lede">무료 진단은 계속 무료입니다. 유료는 <b>매달 다시 재서 무엇이 변했는지</b> 봅니다.</p>
     </div>
 
-    <p class="plans-hint rv">옆으로 넘겨 견줘 보십시오 <span aria-hidden="true">→</span></p>
+    <p class="plans-hint rv">옆으로 넘겨 비교해 보세요 <span aria-hidden="true">→</span></p>
     <div class="plans rv">
       <div class="plan">
         <div class="flag"><span class="tag-now">지금 열림</span></div>
@@ -2018,7 +2023,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <h3>무료</h3>
         <div class="price">0<small>원</small></div>
         <p class="yr">계속 무료입니다</p>
-        <p class="sub">먼저 받아 보고 정하십시오.</p>
+        <p class="sub">먼저 받아 보고 정하셔도 됩니다.</p>
         <div class="meter"><span class="m-n">프로그램 <b>2</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="on" title="01 센터 진단표"></i><i class="on" title="02 트레이너 진단표"></i><i class="" title="03 마케팅용 수업일지"></i><i class="" title="04 내 블로그 순위판"></i><i class="" title="05 블로그 검수기"></i><i class="" title="06 키워드 순위 추적기"></i><i class="" title="07 상위 글 어시스트"></i><i class="" title="08 블로그 체급 판정"></i><i class="" title="09 유입경로 추적기"></i><i class="" title="10 재등록·VIP 추적기"></i><i class="" title="11 회원 리포트"></i><i class="" title="12 이웃 모집기"></i><i class="" title="13 체험단 모집기"></i><i class="" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 2개를 엽니다</span></div>
         <ul>
           <li><b>센터 진단표</b><span>동네에서 몇 번째인지 · 어디가 비었는지 카드 12장</span></li>
@@ -2107,7 +2112,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     </div>
     <div class="shop rv">
       <article class="pcard pick">
-        <span class="tag">사전등록 · 기간 한정</span>
+        <span class="tag">사전등록</span>
         <h3>4T 트레이너 마케팅 세미나 10기</h3>
         <p class="opt">사전등록가</p>
         <div class="pr">390,000<small>원</small></div>
@@ -2147,7 +2152,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 <figure class="band">
   <img src="img/band.webp" alt="세미나에서 강의 중인 허재윤 — 두 장면" loading="lazy" width="1720" height="1101">
   <figcaption>
-    <p>재고, 세고, 비교하는 일은 프로그램이 합니다.<br><em>남는 시간은 회원에게 쓰십시오.</em></p>
+    <p>재고, 세고, 비교하는 일은 프로그램이 합니다.<br><em>남는 시간은 회원에게 쓰세요.</em></p>
   </figcaption>
 </figure>
 
@@ -2174,21 +2179,21 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="faq">
       <h3 class="faq-h">먼저 물어보실 것들</h3>
       <dl>
-        <div><dt>지금 당장 쓸 수 있는 건 뭡니까?</dt>
+        <div><dt>지금 바로 쓸 수 있는 건 뭔가요?</dt>
           <dd>무료 진단 두 가지입니다. 나머지는 차례로 엽니다.</dd></div>
-        <div><dt>저는 관리자가 아니라 트레이너인데 쓸 수 있습니까?</dt>
+        <div><dt>관리자가 아니라 트레이너인데 써도 되나요?</dt>
           <dd>됩니다. 센터 진단도 지금 일하시는 센터 주소로 받아 보실 수 있습니다.</dd></div>
-        <div><dt>한 달만 써 보고 그만둘 수 있습니까?</dt>
+        <div><dt>한 달만 써 보고 그만둬도 되나요?</dt>
           <dd>됩니다. 약정이 없습니다.</dd></div>
-        <div><dt>센터 계정 비밀번호를 넘겨야 합니까?</dt>
+        <div><dt>센터 계정 비밀번호를 알려 드려야 하나요?</dt>
           <dd>아닙니다. 계정을 움직이는 도구는 쓰시는 컴퓨터에서만 돕니다.</dd></div>
-        <div><dt>설치형 도구를 쓰려면 뭐가 필요합니까?</dt>
+        <div><dt>설치형 도구는 뭐가 필요한가요?</dt>
           <dd>윈도우 컴퓨터 한 대면 됩니다. 도는 동안 켜져 있어야 합니다.</dd></div>
-        <div><dt>진단 결과가 우리 센터에만 유리하게 나오는 건 아닙니까?</dt>
+        <div><dt>진단 결과가 우리 센터에만 유리하게 나오는 건 아닌가요?</dt>
           <dd>같은 기준선을 전국 28,200곳에 똑같이 적용합니다.</dd></div>
-        <div><dt>우리 센터 정보를 다른 데 쓰십니까?</dt>
+        <div><dt>우리 센터 정보를 다른 데 쓰나요?</dt>
           <dd>아닙니다. <b>이미 공개돼 있는 정보</b>만 쓰고, 개별 센터를 남에게 보여드리지 않습니다.</dd></div>
-        <div><dt>경쟁 센터도 이걸 쓰면 소용없는 것 아닙니까?</dt>
+        <div><dt>경쟁 센터도 쓰면 소용없지 않나요?</dt>
           <dd>모두가 하고 있는 일이 아니라, 대부분이 멈춰 있는 일입니다.</dd></div>
       </dl>
     </div>
@@ -2387,6 +2392,51 @@ VIEWS.forEach(function(v){
   });
 })();
 
+/* 맺음 단추를 화면에 맞춘다 — 강의를 고르던 사람에게 무료 진단을 권하지 않는다 (09-17) */
+function endFor(key, slot){
+  var CFG = {
+    trainer: { label: "트레이너", h: "내 이름으로 회원이 오는지, 무료로 재 보세요",
+      say: "이름과 센터 주소 두 줄이면 됩니다. 결제 정보는 넣지 않아도 됩니다.",
+      btns: [["트레이너 진단 받기", "formT", ""], ["나는 몇 점짜리 트레이너일까", "", "score/"]] },
+    center: { label: "센터", h: "우리 센터 마케팅, 무료로 재 보세요",
+      say: "플레이스 주소만 주시면 됩니다. 결제 정보는 넣지 않아도 됩니다.",
+      btns: [["센터 진단 받기", "form", ""], ["트레이너 진단 받기", "formT", ""]] },
+    tools: { label: "프로그램", h: "무료 진단부터 받아 보세요",
+      say: "진단표 두 가지는 계속 무료입니다. 나머지 프로그램은 플랜으로 엽니다.",
+      btns: [["무료 진단 받기", "form", ""], ["플랜 보기", "", "#/price"]] },
+    vod: { label: "강의", h: "한 번에 전부 보려면, 올패스",
+      say: "ATC 트레이너 가이드부터 4T 마스터·해부학·모의고사·창업까지 12개월 동안 봅니다.",
+      btns: [["올패스 결제", "", "pay/?p=vod-allpass"], ["이미 구매했다면 강의실", "", "vod/"]] },
+    price: { label: "지금 시작", h: "지금 신청할 수 있는 것부터",
+      say: "유료 플랜은 준비 중입니다. 세미나 10기는 지금 신청할 수 있어요.",
+      btns: [["세미나 10기 신청", "", "pay/?p=seminar-10-early"], ["무료 진단 받기", "form", ""]],
+      news: "플랜이 열리면 알림 받기" }
+  };
+  var c = CFG[key]; if (!c) return;
+  var lab = $(".label", slot), h = $("h2", slot), say = $(".fin-say", slot), two = $(".fin-two", slot);
+  if (lab) lab.textContent = c.label;
+  if (h) h.textContent = c.h;
+  if (say) say.textContent = c.say;
+  if (two) {
+    two.innerHTML = "";
+    c.btns.forEach(function(b, i){
+      var a = document.createElement("a");
+      a.className = "btn " + (i === 0 ? "btn-solid" : "btn-line");
+      a.textContent = b[0];
+      if (b[1]) { a.setAttribute("data-link", b[1]); a.href = (typeof LINKS !== "undefined" && LINKS[b[1]]) || "#";
+                  if (/^https?:/.test(a.href)) { a.target = "_blank"; a.rel = "noopener"; } }
+      else a.href = b[2];
+      two.appendChild(a);
+    });
+  }
+  if (c.news && two) {
+    var n = document.createElement("a");
+    n.className = "fin-news"; n.textContent = c.news; n.setAttribute("data-link", "news");
+    n.href = (typeof LINKS !== "undefined" && LINKS.news) || "#"; n.target = "_blank"; n.rel = "noopener";
+    two.parentNode.insertBefore(n, two.nextSibling);
+  }
+}
+
 (function router(){
   var nav = $("#nav"), cur = null;
 
@@ -2396,7 +2446,7 @@ VIEWS.forEach(function(v){
     nav.appendChild(a);
     /* 화면마다 같은 맺음 단추를 붙인다 — 어디서 멈추든 신청으로 이어진다 */
     var slot = $(".endcta", v.el);
-    if (slot) slot.appendChild($("#ctaTpl").content.cloneNode(true));
+    if (slot) { slot.appendChild($("#ctaTpl").content.cloneNode(true)); endFor(v.key, slot); }
   });
 
   function parse(){
