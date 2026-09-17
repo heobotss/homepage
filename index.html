@@ -262,6 +262,25 @@ section[id],figure.band{scroll-margin-top:74px}
 .hero-fine{margin-top:20px; font-size:13.5px; color:var(--warm)}
 .hero-fine a{color:var(--brass-lt)}
 
+/* ══ 첫 화면 장면 — 실제 센터 점수 + 실제 리뷰 키워드로 구운 14초 반복 영상 (09-17) ══
+   캔버스를 쓰지 않는다(카톡·iOS 흰 칸). 영상이 안 돌면 포스터 한 장이 그대로 완성본이다 */
+.gx{position:relative; margin:0 -40px 0 0}
+.gx-v{display:block; width:100%; height:auto; aspect-ratio:1240/1100; background:#0A0A0A;
+  -webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);
+          mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);
+  -webkit-mask-size:100% 100%; mask-size:100% 100%}
+.gx-pin{position:absolute; left:calc(50% + 34px); top:calc(47.2% - 10px); display:flex; align-items:center; gap:10px; color:var(--bone)}
+.gx-pin i{display:block; width:56px; height:1px; background:var(--brass)}
+.gx-pin span{font-size:14px; font-weight:700; letter-spacing:-.02em; white-space:nowrap; text-shadow:0 0 6px #0A0A0A, 0 0 14px #0A0A0A, 0 0 24px #0A0A0A}
+.gx-pin:hover span{text-decoration:underline; text-underline-offset:4px}
+.gx-cap{margin:-18px 40px 0 0; font-size:12px; color:var(--warm); text-align:right; line-height:1.6}
+@media (max-width:980px){
+  .gx{margin:0 -16px}
+  .gx-pin{left:50%; top:calc(47.2% - 74px); transform:translateX(-50%); flex-direction:column-reverse; gap:6px}
+  .gx-pin i{width:1px; height:34px} .gx-pin span{font-size:13px}
+  .gx-cap{margin:-10px 16px 0; text-align:left}
+}
+
 /* ══ 판매 3칸 — 메인에서 바로 고르고 바로 결제한다 (09-17) ══ */
 .hero{padding-top:clamp(84px,10vh,120px); padding-bottom:clamp(48px,6vw,80px)}
 .hero h1{margin:14px 0 16px; max-width:none; font-size:clamp(34px,4.2vw,60px)}
@@ -533,6 +552,16 @@ section[id],figure.band{scroll-margin-top:74px}
 .rg-empty{fill:none; stroke:rgba(238,238,238,.16); stroke-width:1; stroke-dasharray:4 5; vector-effect:non-scaling-stroke}
 .rg-wait{font-family:var(--sans); font-size:11.5px; fill:#828282; letter-spacing:.02em}
 
+/* 트레이너 100점 자가진단(/score/) 으로 가는 줄 — 계기판 밑에 괘선 한 줄 */
+.score-link{display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:clamp(28px,4vw,44px);
+  padding:clamp(18px,2.4vw,26px) 0; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2);
+  color:var(--bone); text-decoration:none; transition:border-color .2s}
+.score-link:hover{border-color:var(--bone-2)}
+.score-link .sl-t{display:flex; flex-direction:column; gap:4px; word-break:keep-all}
+.score-link b{font-size:clamp(19px,2.2vw,24px); font-weight:900; letter-spacing:-.03em; line-height:1.35}
+.score-link .sl-s{font-size:15px; color:var(--bone-2)}
+.score-link .sl-go{flex:none; font-size:15px; font-weight:700; color:var(--bone); white-space:nowrap}
+.score-link .sl-go i{font-style:normal; color:var(--brass); margin-left:6px}
 .check-foot{padding:17px clamp(16px,2vw,26px) 21px; border-top:1px solid var(--line);
   font-size:14px; color:var(--warm); display:flex; gap:14px; align-items:center; flex-wrap:wrap}
 .check-foot a{color:var(--brass-lt); font-weight:700; display:inline-flex; align-items:center;
@@ -1073,7 +1102,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <div class="hero-say">
         <p class="label">운동 지도자와 센터를 위한 프로그램</p>
         <h1 class="h-xl">피트니스 마케팅,<br><em>여기 하나로</em> 끝냅니다</h1>
-        <p class="hero-sub">강의로 배우고, 세미나에서 같이 고치고, 프로그램으로 매일 돌립니다.</p>
+        <p class="hero-sub">전국 헬스장·PT샵·필라테스 28,200곳의 리뷰와 블로그를 한 곳씩 재서, 마케팅이 막힌 곳을 찾습니다.</p>
         <ul class="hero-proof" aria-label="이 페이지의 바탕">
           <li><b>28,200</b><span>곳 전수 수집</span></li>
           <li><b>17</b><span>개 시도 전부</span></li>
@@ -1084,19 +1113,15 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </div>
 
       <div class="cloudbox">
-      <div class="cloud" id="cloudWrap">
-        <canvas id="cloudCanvas" role="img"
-                aria-label="전국 센터를 세 축(방문자 리뷰·밖에서 쓴 글·글의 최신성)에 흩은 3차원 점 구름"></canvas>
-      </div>
-      <div class="cloud-foot">
-        <p class="cloud-ax">
-          <span><b>가로</b> 방문자 리뷰</span>
-          <span><b>세로</b> 밖에서 쓴 글</span>
-          <span><b>깊이</b> 지금도 올라오는가</span>
-        </p>
-        <p class="cloud-cap">시도별 곳수만큼 점을 놓은 그림입니다 — 개별 센터의 위치가 아니라 <b>지역별 밀도</b>를 나타냅니다</p>
-
-      </div>
+        <figure class="gx">
+          <video class="gx-v" autoplay muted loop playsinline preload="auto" poster="media/hero-reviews-poster.webp"
+                 aria-label="전국 헬스장·PT샵·필라테스를 점 하나씩 띄운 장면. 가운데로 갈수록 리뷰와 블로그가 살아 있는 센터이고, 플레이스 순위·블로그 상위 노출·인스타그램 같은 마케팅 말이 떠오른다">
+            <source src="media/hero-reviews.webm" type="video/webm">
+            <source src="media/hero-reviews.mp4" type="video/mp4">
+          </video>
+          <a class="gx-pin" href="#/check"><i aria-hidden="true"></i><span>우리 센터 마케팅은 어디쯤?</span></a>
+          <figcaption class="gx-cap">점 하나가 센터 하나 · 가운데로 갈수록 리뷰·블로그가 살아 있는 곳</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -1178,6 +1203,11 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="check-foot" id="checkFoot">한 칸만 넣어도 바로 보여드립니다.</p>
       </form>
     </div>
+
+    <a class="score-link rv" href="score/">
+      <span class="sl-t"><b>나는 몇 점짜리 트레이너일까요</b><span class="sl-s">숫자 대신 체크로 재는 진단 — 예·아니요 30문항, 여섯 영역 100점</span></span>
+      <span class="sl-go">3분 진단<i aria-hidden="true">→</i></span>
+    </a>
   </div>
 </section>
 
@@ -2504,6 +2534,16 @@ function rank(m, v){
    점은 백분위 곡선에서 되살린 분포다. 특정 센터를 가리키지는 않는다.
      x 방문자 리뷰 · y 밖에서 쓴 글 · z 그 글이 지금도 올라오는가
    ══════════════════════════════════════════════════════════ */
+(function heroVideo(){
+  var v = document.querySelector(".gx-v"); if (!v) return;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); return; }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function(es){ es.forEach(function(e){
+      if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function(){}); } else { v.pause(); }
+    }); }, {threshold: 0.05}).observe(v);
+  }
+})();
+
 (function cloud(){
   var host = $("#cloudWrap"), cv = $("#cloudCanvas");
   if (!host || !cv) return;
