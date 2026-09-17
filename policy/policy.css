@@ -1,6 +1,6 @@
 @font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/pretendard-400.woff2') format('woff2')}
 @font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/pretendard-700.woff2') format('woff2')}
-:root{color-scheme:dark;--ink:#0B121B;--ink-2:#111C2A;--bone:#EAEFF5;--bone-2:#B7C5D8;--warm:#8295AF;--line:#18263B;--brass:#6D9FDA;--brass-lt:#9BC1ED;--bad:#E07A6B}
+:root{color-scheme:dark;--ink:#060911;--ink-2:#090E1A;--bone:#EAEFF5;--bone-2:#B7C5D8;--warm:#8295AF;--line:#131E35;--brass:#588AEF;--brass-lt:#8EB2FA;--bad:#E07A6B}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ink);color:var(--bone);font-family:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;font-size:15.5px;line-height:1.8;word-break:keep-all;-webkit-font-smoothing:antialiased}
 a{color:var(--brass-lt)}
