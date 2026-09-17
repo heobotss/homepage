@@ -2406,6 +2406,8 @@ VIEWS.forEach(function(v){
     var box = document.getElementById("vodPick"); if (!box) return;
     var part = new URLSearchParams(qs || "").get("part");
     if (!part) { box.hidden = true; return; }
+    /* 09-17 밤부터 강의마다 소개 페이지가 있다 — 그쪽으로 보낸다 */
+    if (/^(sales|coach|member)-[\w]+$/.test(part)) { location.replace("vod/" + part.slice(part.indexOf("-") + 1) + "/?from=old-link"); return; }
     var e = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
     var w = function(n){ return n.toLocaleString("ko-KR"); };
     fetch("score/questions.json").then(function(r){ return r.json(); }).then(function(d){

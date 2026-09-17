@@ -461,7 +461,12 @@ input[type=email].err{border-color:var(--bad)}
     }
     $("#recPrice").innerHTML = prod.name + " · " + prod.count + "편<b>" + won(prod.price) + "원</b>";
     $("#recBuy").href = "../pay/?p=" + prodId;
-    $("#recView").href = P ? "../#/vod?part=" + result.rec : "../#/vod";
+    if (P) {
+      // 강의 소개 페이지로 — 이 강의와 이어진 「아니요」 문항 번호를 같이 넘긴다
+      var b = bits(), no = [];
+      QS.forEach(function (q, i) { if (q.part === result.rec && b[i] === "0") no.push(q.src); });
+      $("#recView").href = "../vod/" + result.rec.slice(result.rec.indexOf("-") + 1) + "/?from=score&no=" + no.join(",");
+    } else $("#recView").href = "../#/vod";
 
     show("result");
   }

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>식단 시스템 — 4T 회원관리 | 허봇스</title>
+<meta name="description" content="빼기 → 더하기 → 칼로리 계산, 회원이 원하는 만큼만 올라가는 식단 가이드">
+<link rel="icon" href="../../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="허봇스">
+<meta property="og:title" content="식단 시스템 — 4T 회원관리">
+<meta property="og:description" content="빼기 → 더하기 → 칼로리 계산, 회원이 원하는 만큼만 올라가는 식단 가이드">
+<meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
+<meta property="og:url" content="https://heobotss.com/vod/diet/">
+<link rel="canonical" href="https://heobotss.com/vod/diet/">
+<link rel="preconnect" href="https://i.ytimg.com">
+<style>
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../../fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/bahn-700.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--line:#222222;--line-2:#2F2F2F;--blue:#4F86F7;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;--tech:"Bahn","Bahnschrift",var(--sans)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.85;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--bone)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:var(--tech);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top .all{font-size:.9375rem;color:var(--warm);text-decoration:none}
+.top .all:hover{color:var(--bone)}
+main{max-width:640px;margin:0 auto;padding:0 clamp(16px,4vw,28px)}
+.head{padding:clamp(40px,8vw,80px) 0 0}
+.crumb{margin:0;font-size:.9375rem;color:var(--warm)}
+.crumb b{color:var(--bone-2);font-weight:700}
+h1{word-break:keep-all;font-size:clamp(2.1rem,7.6vw,3.2rem);line-height:1.2;letter-spacing:-.045em;font-weight:900;margin:6px 0 0}
+.lede{font-size:clamp(1.0625rem,2.8vw,1.1875rem);color:var(--bone-2);margin:16px 0 0;max-width:32em}
+.mine{margin:28px 0 0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.mine p{margin:0;font-size:.9375rem;color:var(--warm)}
+.mine ul{margin:8px 0 0;padding:0;list-style:none}
+.mine li{font-size:1rem;font-weight:700;padding:3px 0}
+.mine li::before{content:"아니요";display:inline-block;font-size:.8125rem;font-weight:700;color:var(--blue);border:1px solid rgba(79,134,247,.5);border-radius:4px;padding:0 6px;margin-right:8px;vertical-align:1px;line-height:1.6}
+.mine .then{margin-top:8px;color:var(--bone-2)}
+.prev{margin:clamp(28px,6vw,40px) 0 0;display:flex;gap:clamp(16px,4vw,28px);align-items:flex-end;flex-wrap:wrap}
+.pv{position:relative;width:min(240px,58vw);aspect-ratio:9/16;border:0;padding:0;border-radius:14px;overflow:hidden;background:var(--ink-3);cursor:pointer;flex:none}
+.pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pv::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 45%)}
+.pv .play{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(10,10,10,.72);border:1px solid rgba(255,255,255,.35);z-index:1}
+.pv .play::before{content:"";position:absolute;left:26px;top:20px;border-style:solid;border-width:12px 0 12px 19px;border-color:transparent transparent transparent #fff}
+.pv .len{position:absolute;left:12px;bottom:10px;z-index:1;font-size:.8125rem;font-weight:700;color:#fff}
+.pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pvnote{flex:1;min-width:180px;margin:0;font-size:.9375rem;color:var(--warm)}
+.pvnote b{display:block;color:var(--bone);font-size:1rem;margin-bottom:4px}
+.buy{margin:clamp(28px,6vw,40px) 0 0;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.price{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.price span{font-size:.9375rem;color:var(--bone-2)}
+.price b{font-family:var(--tech);font-size:1.75rem;letter-spacing:-.01em}
+.price b small{font-family:var(--sans);font-size:.9375rem;color:var(--warm);font-weight:400;margin-left:2px}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:15px 22px;font-size:1rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none;transition:background .15s}
+.btn:hover{background:#fff}
+.btn.line{background:transparent;color:var(--bone);border:1px solid var(--line-2)}
+.btn.line:hover{border-color:var(--bone-2)}
+.acts .btn{flex:1 1 200px}
+.refund{margin:12px 0 0;font-size:.8125rem;color:var(--warm)}
+.refund a{color:var(--warm)}
+h2{word-break:keep-all;font-size:clamp(1.375rem,4.2vw,1.625rem);line-height:1.4;letter-spacing:-.035em;font-weight:900;margin:0}
+.learn{margin-top:clamp(64px,12vw,112px)}
+.learn ul{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--line)}
+.learn li{padding:14px 0;border-bottom:1px solid var(--line);font-size:1.0625rem;font-weight:700;letter-spacing:-.015em;line-height:1.6}
+.scene{margin-top:clamp(48px,9vw,72px)}
+.scene p{margin:10px 0 0;font-size:1.25rem;font-weight:700;letter-spacing:-.03em;line-height:1.6;color:var(--bone-2)}
+.scene p::before{content:"";display:block;width:32px;height:2px;background:var(--blue);margin-bottom:14px}
+.bundle{margin-top:clamp(72px,13vw,128px)}
+.bundle .sub{margin:6px 0 0;font-size:.9375rem;color:var(--warm)}
+.bundle ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--line)}
+.bundle li a,.bundle li span.here{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);text-decoration:none;font-size:1rem}
+.bundle li a:hover{color:#fff}
+.bundle li a em{font-style:normal;font-family:var(--tech);color:var(--warm)}
+.bundle li span.here{color:var(--bone);font-weight:700}
+.bundle li span.here em{font-style:normal;font-size:.8125rem;color:var(--blue);font-weight:700}
+.end{margin:clamp(56px,10vw,96px) 0 0}
+.master{margin:14px 0 0;font-size:.9375rem;color:var(--warm)}
+.master a{color:var(--bone-2)}
+.legal{margin-top:56px;font-size:.8125rem;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding:16px 0 32px}
+.legal a{color:var(--warm)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../../">허봇스<small>HEOBOTSS</small></a>
+  <a class="all" href="../../#/vod">강의 전체</a>
+</header>
+
+<main>
+  <section class="head">
+    <p class="crumb"><b>4T 회원관리</b> · 4편 중 2번째 · 10분 34초</p>
+    <h1>식단 시스템</h1>
+    <p class="lede">빼기 → 더하기 → 칼로리 계산, 회원이 원하는 만큼만 올라가는 식단 가이드</p>
+
+    <div class="mine" id="mine" hidden>
+      <p>자가진단에서 「아니요」라고 답하신 것</p>
+      <ul id="mineList"></ul>
+      <p class="then">이 강의에서 다루는 부분입니다.</p>
+    </div>
+
+    <div class="prev">
+      <button class="pv" id="pv" type="button" data-id="9fyzopJ_cIY" aria-label="맛보기 영상 재생 (1:00)">
+        <img src="https://i.ytimg.com/vi/9fyzopJ_cIY/hqdefault.jpg" alt="" loading="eager" width="480" height="360">
+        <span class="play" aria-hidden="true"></span>
+        <span class="len">맛보기 1:00</span>
+      </button>
+      <p class="pvnote"><b>이 강의 주제로 만든 짧은 영상입니다</b>유튜브에 공개된 쇼츠입니다. 강의 본편은 구매 후 강의실에서 봅니다.</p>
+    </div>
+  </section>
+
+  <div class="buy">
+      <p class="price"><span>4T 회원관리 · 4편 · 12개월 열람</span><b>89,000<small>원</small></b></p>
+      <div class="acts">
+        <a class="btn" data-ev="buy" href="../../pay/?p=vod-4t-member">4T 회원관리 구매하기</a>
+        <a class="btn line" data-ev="owned" href="../?c=vod-4t-member&t=식단 시스템">이미 구매했다면 바로 보기</a>
+      </div>
+    <p class="refund">결제 후 7일 안이고 한 편도 재생하지 않았다면 전액 환불합니다 · <a href="../../policy/refund.html">환불 규정</a></p>
+  </div>
+
+  <section class="learn">
+    <h2>이 강의에서 배우는 것</h2>
+    <ul><li>빼기·더하기·완성, 회원 니즈별 3단계 식단 접근</li><li>야식·당분·밀가루 등 5가지만 절반 줄이게 하는 법</li><li>총 칼로리·목표 칼로리·영양소 배분 계산 순서</li></ul>
+  </section>
+
+  <section class="scene">
+    <h2>이럴 때 꺼내 보는 강의</h2>
+    <p>회원이 「식단 관리 좀 도와주세요」라고 요청할 때</p>
+  </section>
+
+  <section class="bundle">
+    <h2>4T 회원관리에 함께 들어 있는 강의</h2>
+    <p class="sub">한 번 구매로 4편을 모두 봅니다.</p>
+    <ol><li><a href="../personal/">개인운동 시스템 <em>5:07</em></a></li><li><span class="here">식단 시스템 <em>지금 보는 강의</em></span></li><li><a href="../schedule/">스케줄 시스템 <em>5:23</em></a></li><li><a href="../online/">온라인 마케팅 시스템 <em>10:40</em></a></li></ol>
+  </section>
+
+  <div class="end buy">
+      <p class="price"><span>4T 회원관리 · 4편 · 12개월 열람</span><b>89,000<small>원</small></b></p>
+      <div class="acts">
+        <a class="btn" data-ev="buy" href="../../pay/?p=vod-4t-member">4T 회원관리 구매하기</a>
+        <a class="btn line" data-ev="owned" href="../?c=vod-4t-member&t=식단 시스템">이미 구매했다면 바로 보기</a>
+      </div>
+    <p class="master">회원관리·세일즈·운동지도 15편을 한 번에 보시려면 <a data-ev="buy-master" href="../../pay/?p=vod-4t-master">4T 마스터 249,000원</a></p>
+  </div>
+
+  <footer class="legal" id="legal"></footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var D = {"v": "2026-09-17c", "part": "member-diet", "linked": [{"i": 15, "src": 49, "text": "회원에게 식단 구성 가이드를 줄 수 있다"}, {"i": 65, "src": 53, "text": "회원에게 물 마시는 양 가이드를 준다"}], "track": false};
+  var qs = new URLSearchParams(location.search);
+
+  // ── 「아니요」라고 답하신 것 — ?no=79,44 가 먼저, 없으면 같은 브라우저의 자가진단 기록 ──
+  var no = (qs.get("no") || "").split(",").filter(Boolean);
+  var picked = D.linked.filter(function (q) { return no.indexOf(String(q.src)) >= 0; });
+  if (!picked.length) {
+    try {
+      var s = JSON.parse(localStorage.getItem("heobotss-score") || "null");
+      if (s && s.v === D.v && s.a) picked = D.linked.filter(function (q) { return s.a[q.i] === "0"; });
+    } catch (err) {}
+  }
+  if (picked.length) {
+    var ul = document.getElementById("mineList");
+    picked.forEach(function (q) { var li = document.createElement("li"); li.textContent = q.text; ul.appendChild(li); });
+    document.getElementById("mine").hidden = false;
+  }
+
+  // ── 측정: 방문 → 맛보기 재생 → 구매 버튼 (funnel_events) ──
+  var FROM = qs.get("from") || (document.referrer.indexOf("/score/") >= 0 ? "score" : "");
+  function vid() {
+    try { var k = "heobotss-vid", v = localStorage.getItem(k); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(k, v); } return v; } catch (err) { return ""; }
+  }
+  function track(ev) {
+    if (!D.track) return;
+    try {
+      fetch("https://kpubgeejyiupdvbbdxwt.supabase.co/rest/v1/funnel_events", {
+        method: "POST", keepalive: true,
+        headers: { "Content-Type": "application/json", apikey: "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD", Prefer: "return=minimal" },
+        body: JSON.stringify({ event: ev, page: "vod/" + D.part, source: FROM || null, visitor: vid(), mine: picked.length })
+      }).catch(function () {});
+    } catch (err) {}
+  }
+  track("view");
+  document.querySelectorAll("[data-ev]").forEach(function (a) { a.addEventListener("click", function () { track(a.getAttribute("data-ev")); }); });
+
+  // ── 맛보기: 누를 때만 유튜브를 불러온다 (자동재생 없음) ──
+  var pv = document.getElementById("pv");
+  pv.addEventListener("click", function () {
+    if (pv.querySelector("iframe")) return;
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + pv.getAttribute("data-id") + "?autoplay=1&playsinline=1&rel=0";
+    f.allow = "autoplay; encrypted-media; picture-in-picture";
+    f.allowFullscreen = true;
+    f.title = "맛보기 영상";
+    pv.innerHTML = ""; pv.appendChild(f); pv.style.cursor = "default";
+    track("preview");
+  });
+
+  fetch("../../policy/legal.txt").then(function (r) { return r.ok ? r.text() : ""; }).then(function (t) { if (t) document.getElementById("legal").innerHTML = t.replace(/\.\.\/policy\//g, "../../policy/"); }).catch(function () {});
+})();
+</script>
+</body>
+</html>
