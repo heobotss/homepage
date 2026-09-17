@@ -95,7 +95,7 @@ button,select,input{font-family:inherit}
 .wrap{max-width:var(--maxw); margin:0 auto; padding-inline:var(--pad)}
 @media (min-width:1080px){ .wrap{padding-left:calc(var(--rail) + var(--pad))} }
 
-section{padding-block:clamp(80px,10vw,150px); position:relative; isolation:isolate}
+section{padding-block:clamp(56px,6.5vw,100px); position:relative; isolation:isolate}
 section[id],figure.band{scroll-margin-top:74px}
 
 /* 구간마다 은은한 황동 빛 — 평면을 벗어나게 하는 첫 장치 */
@@ -853,7 +853,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .risks span{font-size:13.5px; color:var(--warm)}
 
 /* ══ 판매 중인 상품 ══ */
-#s-shop{padding-block:clamp(64px,8vw,120px)}
+#s-shop{padding-block:clamp(52px,6vw,90px)}
 .shop{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(16px,2vw,22px); margin-top:clamp(28px,3.4vw,40px)}
 @media (max-width:820px){ .shop{grid-template-columns:1fr} }
 .pcard{position:relative; display:flex; flex-direction:column; padding:clamp(24px,2.8vw,34px);
@@ -1149,8 +1149,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <span class="ghost" aria-hidden="true">30초</span>
       <p class="label">30초 자가 진단</p>
       <h2 class="h-lg">지금 넣어 보십시오.<br>전국에서 상위 몇 %인지 바로 나옵니다.</h2>
-      <p class="lede">네이버에 이미 공개돼 있는 숫자입니다. 가입도, 저장도, 결제 수단도 없습니다.
-         <b>넣는 순간 화면에서 바로 계산됩니다.</b></p>
+      <p class="lede">가입·저장·결제 수단 없이, <b>넣는 순간 화면에서 바로 계산됩니다.</b></p>
     </div>
 
     <div class="gauge rv">
@@ -1189,7 +1188,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <div class="t">
         <p class="label">전국 실측</p>
         <h2 class="h-md">전국 28,200곳을 한 장에 펼쳐 놓았습니다</h2>
-        <p class="plot-note" style="margin-top:6px">한 곳 한 곳을 전부 읽어 만든 분포입니다. <b>이런 자료는 어디서도 살 수 없습니다.</b> 가로로 커서를 옮기면 그 값이 상위 몇 %인지 바로 읽힙니다.</p>
+        <p class="plot-note" style="margin-top:6px">가로로 커서를 옮기면 그 값이 상위 몇 %인지 바로 읽힙니다.</p>
       </div>
       <div class="metrics" id="metrics" role="group" aria-label="지표 고르기"></div>
     </div>
@@ -1222,8 +1221,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <span class="ghost" aria-hidden="true">05</span>
       <p class="label">회원이 오는 길</p>
       <h2 class="h-lg">회원이 오는 트레이너는<br>무엇이 다른지 보여드립니다</h2>
-      <p class="lede">회원은 네 칸을 차례로 밟고 옵니다. <b>어느 칸에서 끊기는지</b> 알면
-         무엇부터 손댈지가 정해집니다. 그 네 칸을 재 드립니다.</p>
+      <p class="lede">회원은 네 칸을 차례로 밟고 옵니다. <b>어느 칸에서 끊기는지</b> 재 드립니다.</p>
     </div>
 
     <ol class="path rv" aria-label="회원이 트레이너에게 오기까지의 네 칸">
@@ -1231,34 +1229,28 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <span class="p-k">01</span>
         <span class="p-fig ok"><b>키워드 순위 추적기</b><i>이 칸을 맡는 프로그램</i></span>
         <strong>동네에서 보인다</strong>
-        <span class="p-m">「우리 동네 PT」 검색에서 <em>내 글이 몇 위인지</em> 매주 재서 보내 드립니다.
-          올랐는지 떨어졌는지가 한 줄로 보입니다 — 안 보이면 그다음 칸은 시작도 안 됩니다</span>
+        <span class="p-m">「우리 동네 PT」 검색에서 <em>내 글이 몇 위인지</em> 매주 재서 보내 드립니다</span>
         <span class="p-t on">키워드 순위 추적기 · 유료 플랜</span>
       </li>
       <li>
         <span class="p-k">02</span>
         <span class="p-fig"><b>상위 글 어시스트</b><i>이 칸을 맡는 프로그램</i></span>
         <strong>글이 남아 있다</strong>
-        <span class="p-m">내가 노리는 검색어의 <em>상위 글 열 편을 뜯어</em> 글자 수·사진 수·제목 짜임을
-          한 줄로 정리해 줍니다. 뭘 어떻게 써야 하는지 알고 시작합니다
-          — 주 1회만 써도 <em>상위 10%</em> 안쪽입니다</span>
+        <span class="p-m">노리는 검색어의 <em>상위 글 열 편을 뜯어</em> 뭘 어떻게 쓸지 한 줄로 정리합니다</span>
         <span class="p-t on">상위 글 어시스트 · 유료 플랜</span>
       </li>
       <li>
         <span class="p-k">03</span>
         <span class="p-fig ok"><b>트레이너 진단표</b><i>이 칸을 맡는 프로그램 · 무료</i></span>
         <strong>내 이름이 적힌다</strong>
-        <span class="p-m">리뷰 100건 중 <em>사람 이름이 적히는 건 10건</em>뿐입니다.
-          내 이름이 몇 번 적혔는지, 우리 센터에서 몇 번째인지 세어 카드로 보내 드립니다
-          — 내 이름이 적힌 리뷰는 <em>센터를 옮겨도 따라옵니다</em></span>
+        <span class="p-m">리뷰에 내 이름이 몇 번 적혔는지 세어 카드로 보내 드립니다 — <em>센터를 옮겨도 따라옵니다</em></span>
         <span class="p-t on">트레이너 진단표 · 무료 플랜</span>
       </li>
       <li class="blank">
         <span class="p-k">04</span>
         <span class="p-fig none"><b>유입경로 추적기</b><i>이 칸을 맡을 프로그램 · 준비 중</i></span>
         <strong>문의가 오고, 등록이 된다</strong>
-        <span class="p-m">어디를 보고 연락했는지 모르면 <em>어디에 힘을 쏟을지</em>도 모릅니다.
-          블로그에서 왔는지 플레이스에서 왔는지 갈라 세고, 문의 몇 건이 등록으로 이어졌는지까지 봅니다</span>
+        <span class="p-m">블로그에서 왔는지 플레이스에서 왔는지 갈라 세고, <em>등록까지 이어졌는지</em> 봅니다</span>
         <span class="p-t">유입경로 추적기 · 준비 중</span>
       </li>
     </ol>
@@ -1268,9 +1260,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="label">진단에서 뺀 것</p>
         <div class="cuts"><span>좋아요</span><span>저장</span><span>공유</span><span>도달</span><span>팔로워 수</span></div>
       </div>
-      <p>전국으로 퍼지는 글일수록 올라가는 숫자입니다. <b>다른 동네 사람 1,000명이 저장해도
-         우리 동네 회원 한 명이 되지 않습니다.</b> 잘 나가는 계정과 회원이 차는 계정은 다릅니다.
-         그래서 이 다섯은 지표에서 뺐습니다 — 올라가도 통장은 그대로이기 때문입니다.</p>
+      <p><b>다른 동네 사람 1,000명이 저장해도 우리 동네 회원 한 명이 되지 않습니다.</b> 그래서 뺐습니다.</p>
     </div>
   </div>
 </section>
@@ -1282,27 +1272,24 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <span class="ghost" aria-hidden="true">무료</span>
       <p class="label">트레이너에게 드리는 것</p>
       <h2 class="h-lg">우리 센터에서<br>나는 몇 번째일까</h2>
-      <p class="lede" style="margin-top:6px"><b>회원이 남긴 말로 잽니다.</b> 이름과 지금 일하는 센터 주소만 주시면 됩니다.
-         네이버에 <b>이미 공개된 글</b>만 봅니다 — 비밀번호도, 결제 수단도 받지 않습니다.</p>
+      <p class="lede" style="margin-top:6px">이름과 센터 주소만 주시면 <b>회원이 남긴 말로</b> 잽니다.</p>
 
     </div>
 
     <div class="mine rv">
       <ol class="mine-list" aria-label="리포트에 들어가는 여섯 장">
         <li class="hi"><span class="mk">01</span><strong>우리 센터 안에서 나는 몇 번째</strong>
-            <em>같은 센터 선생님들 중 내 자리. 다른 분 이름은 싣지 않고 수만 셉니다</em></li>
+            <em>다른 분 이름은 싣지 않고 수만 셉니다</em></li>
         <li class="hi"><span class="mk">02</span><strong>회원이 본 나 — 한 줄</strong>
-            <em>「○○한 사람」으로 맺어 드립니다. 소개할 때 그대로 쓰실 수 있습니다</em></li>
+            <em>소개할 때 그대로 쓰는 한 줄</em></li>
         <li><span class="mk">03</span><strong>내 이름이 적힌 리뷰 ○건</strong>
-            <em>전국에서 상위 몇 %인지. 센터를 옮겨도 따라오는 내 자산입니다</em></li>
+            <em>전국에서 상위 몇 %인지</em></li>
         <li><span class="mk">04</span><strong>회원이 나에게 남긴 리뷰</strong>
-            <em>내 이름이 나온 문장만 그대로 옮깁니다. 「○○쌤 최고」처럼 이름만 부른 건 빼고,
-            무엇이 어떻게 좋았는지 적힌 것만 골라 카드로 만들어 드립니다 — 그대로 캡처해 쓰실 수 있습니다</em></li>
+            <em>무엇이 좋았는지 적힌 문장만 골라 카드로 — 그대로 캡처해 쓰십시오</em></li>
         <li><span class="mk">05</span><strong>마지막으로 적힌 게 ○일 전</strong>
-            <em>이름은 있는데 멈춰 있는지. 멈춰 있으면 지금이 손댈 때입니다</em></li>
+            <em>멈춰 있으면 지금이 손댈 때입니다</em></li>
         <li><span class="mk">06</span><strong>우리 센터 글을 한 달에 ○건 쓰고 있다</strong>
-            <em>블로그 필명을 주시면, 그 필명으로 <b>우리 센터에 대해 쓴 글</b>을 찾아
-            첫 글부터 마지막 글까지의 개월 수로 나눕니다. 전국 분포 위에 얹어 드립니다</em></li>
+            <em>블로그 필명을 주시면 전국 분포 위에 얹어 드립니다</em></li>
       </ol>
 
       <figure class="mine-mock" aria-label="리포트 04장 「회원이 본 선생님」 예시 모양">
@@ -1338,8 +1325,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <div class="t ghosted">
                 <p class="label">트레이너</p>
         <h2 class="h-lg">트레이너를 위한 프로그램을<br>따로 만들어 두었습니다</h2>
-        <p class="lede"><b>센터는 바뀌어도 내 이름은 남습니다.</b> 그 이름 위에 회원이 계속 붙도록
-           — 글 순위를 보고, 수업 기록을 남기고, 내 이름이 적힌 리뷰를 모읍니다.</p>
+        <p class="lede"><b>센터는 바뀌어도 내 이름은 남습니다.</b></p>
       </div>
       <div class="railtools">
         <p class="railhint">옆으로 넘겨 보십시오 <span aria-hidden="true">→</span></p>
@@ -1354,36 +1340,31 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <article class="tcard">
         <span class="k">01</span>
         <h3>내 블로그 순위판</h3>
-        <p>내가 쓴 블로그 글이 어느 키워드에서 몇 위인지 매주 재서 내 개인 페이지로 만듭니다.
-           새 글이 올라오면 10분 안에 반영됩니다.</p>
+        <p>내 글이 어느 키워드에서 몇 위인지 매주 재서 보여 줍니다.</p>
         <div class="st st-open">무료 플랜 · 웹</div>
       </article>
       <article class="tcard">
         <span class="k">02</span>
         <h3>마케팅용 수업일지</h3>
-        <p>폰으로 회원별 세트·무게·특이사항을 남기고 지난 바퀴와 바로 비교합니다.
-           노쇼 기록과 주간 브리핑까지 나옵니다.</p>
+        <p>폰으로 세트·무게를 남기면 그대로 글감이 됩니다.</p>
         <div class="st st-sub">유료 플랜 · 웹</div>
       </article>
       <article class="tcard">
         <span class="k">03</span>
         <h3>블로그 검수기</h3>
-        <p>글 주소를 넣으면 85가지 기준으로 자동 대조합니다.
-           어디가 걸렸는지와 어떻게 고치는지를 같이 냅니다.</p>
+        <p>글 주소를 넣으면 85가지 기준으로 걸린 곳과 고칠 법을 냅니다.</p>
         <div class="st st-sub">유료 플랜 · 웹</div>
       </article>
       <article class="tcard">
         <span class="k">04</span>
         <h3>인스타 팔로우 관리기</h3>
-        <p>하루 한도를 지키며 팔로우와 정리를 대신합니다.
-           내 계정으로, 내 컴퓨터에서만 돕니다.</p>
+        <p>하루 한도를 지키며 팔로우와 정리를 대신합니다.</p>
         <div class="st st-sub">유료 플랜 · 설치</div>
       </article>
       <article class="tcard">
         <span class="k">05</span>
         <h3>상위 글 어시스트</h3>
-        <p>내가 노리는 키워드의 상위 10개 글을 실측합니다 — 글자 수·사진 수·제목 구조·블로그 체급.
-           공략 포인트를 한 줄로 냅니다.</p>
+        <p>상위 10개 글을 실측해 공략 포인트를 한 줄로 냅니다.</p>
         <div class="st st-sub">유료 플랜 · 웹</div>
       </article>
     </div>
@@ -1400,8 +1381,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="sec-head rv">
       <p class="label">센터</p>
       <h2 class="h-lg">회원이 끊기지 않게<br>만들어 드립니다</h2>
-      <p class="lede">회원은 네 칸을 차례로 밟고 옵니다. <b>비어 있는 칸 하나가 문의를 통째로 막습니다.</b>
-         아래 프로그램으로 그 칸을 찾아 채우십시오. <b>센터와 선생님들이 같이 잘 만들 수 있도록 도와드립니다.</b></p>
+      <p class="lede"><b>비어 있는 칸 하나가 문의를 통째로 막습니다.</b> 그 칸을 찾아 채웁니다.</p>
     </div>
 
     <ol class="path pale rv" aria-label="회원이 센터에 오기까지의 네 칸">
@@ -1409,33 +1389,28 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <span class="p-k">01</span>
         <span class="p-fig ok"><b>센터 진단표</b><i>이 칸을 맡는 프로그램 · 무료</i></span>
         <strong>검색에서 발견</strong>
-        <span class="p-m">동네 이름 + 운동 이름 검색에서 <em>우리가 몇 위인지</em> 재 드립니다.
-          여기서 안 보이면 뒤 세 칸은 아예 시작되지 않습니다</span>
+        <span class="p-m">동네 이름 + 운동 이름 검색에서 <em>우리가 몇 위인지</em> 재 드립니다</span>
         <span class="p-t on">센터 진단표 · 무료 플랜</span>
       </li>
       <li>
         <span class="p-k">02</span>
         <span class="p-fig ok"><b>센터 진단표</b><i>이 칸도 같은 프로그램이 맡습니다</i></span>
         <strong>플레이스에서 확인</strong>
-        <span class="p-m">사진·가격·길 안내가 비면 「여기 하는 곳 맞나」로 읽힙니다.
-          <em>열 칸 중 어디가 비었는지 카드 12장으로 찍어 드립니다</em> — 채우는 데 드는 돈은 0원입니다</span>
+        <span class="p-m"><em>열 칸 중 어디가 비었는지</em> 카드로 찍어 드립니다</span>
         <span class="p-t on">센터 진단표 · 무료 플랜</span>
       </li>
       <li>
         <span class="p-k">03</span>
         <span class="p-fig"><b>이웃·체험단 모집기</b><i>이 칸을 맡는 프로그램</i></span>
         <strong>리뷰에서 확신</strong>
-        <span class="p-m">열 곳 중 <em>여섯 곳이 여기서 멈춥니다</em> — 최근 30일 새 리뷰 0건.
-          글 써 줄 이웃을 찾아 말을 걸고, 체험단을 뽑아 이행까지 지켜봅니다.
-          손으로 하면 하루가 걸리는 일입니다</span>
+        <span class="p-m">글 써 줄 이웃을 찾고, 체험단을 뽑아 <em>이행까지</em> 지켜봅니다</span>
         <span class="p-t on">이웃 모집기 · 체험단 모집기 · 유료 플랜</span>
       </li>
       <li class="blank">
         <span class="p-k">04</span>
         <span class="p-fig none"><b>유입경로 추적기</b><i>이 칸을 맡을 프로그램 · 준비 중</i></span>
         <strong>그제야 연락</strong>
-        <span class="p-m">상담은 여기서 시작됩니다. <em>앞의 세 칸은 상담 전에 이미 끝나 있습니다</em> —
-          어느 칸이 상담을 만들어 냈는지 갈라 세면, 힘을 어디에 쏟을지가 정해집니다</span>
+        <span class="p-m">어느 칸이 상담을 만들었는지 갈라 셉니다</span>
         <span class="p-t">유입경로 추적기 · 준비 중</span>
       </li>
     </ol>
@@ -1446,8 +1421,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </div>
       <p>센터가 아무리 채워도 <b>리뷰에 사람 이름을 적는 건 선생님이 만든 관계</b>입니다.
          그래서 선생님이 한 편이라도 직접 쓰는 센터는 방문자 리뷰가 나머지의 <b>2.3배</b>입니다.</p>
-      <p class="more">센터용과 트레이너용 프로그램을 <b>따로, 그리고 같이</b> 쓰실 수 있게 만든 이유입니다 —
-         선생님이 쌓으면 센터가 차고, 센터가 열어 주면 선생님이 남습니다.</p>
+      
     </div>
   </div>
 </section>
@@ -1459,8 +1433,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <div class="t">
         <p class="label">지금 열려 있는 것</p>
         <h2 class="h-lg">센터 진단 — 카드 12장.</h2>
-        <p class="lede">네이버 플레이스 주소만 주시면 됩니다. 전국의 같은 업종 전부와 같은 잣대로 재서,
-           지금 어디쯤인지와 무엇부터 손대야 하는지를 정리해 보내드립니다.</p>
+        <p class="lede">플레이스 주소만 주시면 <b>어디쯤인지와 무엇부터</b> 정리해 보내드립니다.</p>
       </div>
       <div class="railtools">
         <p class="railhint">옆으로 넘겨 보십시오 <span aria-hidden="true">→</span></p>
@@ -1486,14 +1459,6 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <figure class="shot lock"><span class="sh"><img src="img/card-12.webp" alt="진단 카드 12 — 이 판정의 근거" loading="lazy" width="720" height="960"><span class="veil" aria-hidden="true"><b>신청하시면</b><i>이 자리에 우리 숫자가 들어갑니다</i></span></span><figcaption><em>12</em>이 판정의 근거</figcaption></figure>
     </div>
 
-    <ol class="steps rv">
-      <li><strong>지금 어디쯤인가</strong><span>리뷰·밖에서 쓴 글·필자 구조를 전국 분포 위에 올립니다</span></li>
-      <li><strong>잘하고 계신 것</strong><span>이미 되고 있는 건 건드리지 않게 먼저 짚습니다</span></li>
-      <li><strong>지금 안 보이는 위험</strong><span>한 숫자만 봐서는 안 보이는, 지표 두 개가 어긋난 지점</span></li>
-      <li><strong>오늘 할 것 · 이번 달 할 것</strong><span>대표 사진을 다섯 장으로 채우는 일처럼, 오늘 30분이면 끝나는 것부터</span></li>
-      <li><strong>이 판정의 근거</strong><span>무엇을 무엇과 비교했는지 마지막 장에 전부 적습니다</span></li>
-    </ol>
-
     <div class="diag-cta rv">
       <a class="btn btn-solid" href="#" data-link="form">무료 진단 신청하기</a>
       <span class="fine">신청하신 순서대로 굽습니다 · 보통 하루 안에 갑니다</span>
@@ -1510,12 +1475,10 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
   <div class="wrap">
     <div class="railhead rv">
       <div class="t ghosted">
-        <span class="ghost" aria-hidden="true">15</span>
+        <span class="ghost" aria-hidden="true">16</span>
         <p class="label">도구 색인</p>
         <h2 class="h-lg">만들어 둔 프로그램</h2>
-        <p class="lede">제 센터에서 매일 돌리고 있는 것만 엽니다. 여기 있는 하나하나가
-           <b>손으로 두 시간 걸리던 일을 5분으로 줄인 것</b>들입니다.
-           쓸 만하다고 확인된 순서대로, 남의 계정을 건드리지 않는 것부터 엽니다.</p>
+        <p class="lede">제 센터에서 매일 돌리고 있는 것만 엽니다.</p>
       </div>
       <div class="railtools">
         <p class="railhint">옆으로 넘겨 보십시오 <span aria-hidden="true">→</span></p>
@@ -1546,14 +1509,14 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <button type="button" class="mc mc-soon" data-go="16" title="16 영상 편집 자동화"><span>16</span></button>
       </div>
       <dl class="tm-key">
-        <div><dt class="k-open">지금 열림</dt><dd>3</dd></div>
-        <div><dt class="k-sub">구독 예정</dt><dd>10</dd></div>
+        <div><dt class="k-open">무료 플랜</dt><dd>2</dd></div>
+        <div><dt class="k-sub">유료 플랜</dt><dd>12</dd></div>
         <div><dt class="k-soon">준비 중</dt><dd>2</dd></div>
       </dl>
     </div>
 
     <div class="filters rv" role="group" aria-label="도구 거르기">
-      <button data-f="all" aria-pressed="true">전체 15</button>
+      <button data-f="all" aria-pressed="true">전체 16</button>
       <button data-f="open" aria-pressed="false">무료 플랜 2</button>
       <button data-f="trainer" aria-pressed="false">트레이너</button>
       <button data-f="center" aria-pressed="false">센터</button>
@@ -1563,112 +1526,96 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <article class="tool" data-state="open" data-cat="center">
         <span class="no">01</span>
         <h3>센터 진단표</h3>
-        <p>플레이스 주소를 넣으면 전국의 같은 업종 전부와 같은 잣대로 재서 카드 12장을 굽습니다. 전국 백분위와 동네 백분위를 같이 봅니다.</p>
         <p class="gain">우리가 동네에서 몇 번째인지, 어디를 고치면 올라가는지 <b>하루 안에</b> 압니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-open">무료 플랜</span></div>
       </article>
       <article class="tool" data-state="open" data-cat="trainer">
         <span class="no">02</span>
         <h3>트레이너 진단표</h3>
-        <p>이름과 지금 일하는 센터 주소만 주시면, 회원 리뷰에 내 이름이 몇 번 적혔는지 세어 카드로 보내드립니다. 우리 센터 안에서 몇 번째인지도 같이 나옵니다.</p>
         <p class="gain">내 이름이 센터 안에서 몇 번째인지 알고, <b>회원이 남긴 문장을 그대로 소개 자료로</b> 씁니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-open">무료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer center">
         <span class="no">03</span>
         <h3>마케팅용 수업일지</h3>
-        <p>폰으로 회원별 세트·무게·특이사항을 남기고 지난 바퀴와 바로 비교합니다. 노쇼 기록과 주간 브리핑까지 나옵니다.</p>
         <p class="gain">수업 끝나고 <b>30초</b>면 기록이 끝나고, 그 기록이 <b>그대로 글감</b>이 됩니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer">
         <span class="no">04</span>
         <h3>내 블로그 순위판</h3>
-        <p>내 블로그 글의 키워드 순위를 매주 재서 개인 페이지로 만듭니다. 새 글이 올라오면 10분 안에 반영됩니다.</p>
         <p class="gain">글을 쓴 뒤 <b>올랐는지 떨어졌는지</b>가 매주 눈에 보입니다. 헛수고를 멈출 수 있습니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer">
         <span class="no">05</span>
         <h3>블로그 검수기</h3>
-        <p>글 주소를 넣으면 85가지 기준으로 자동 대조합니다. 어디가 걸렸는지와 어떻게 고치는지를 같이 냅니다.</p>
         <p class="gain">올리기 전에 걸리는 곳을 먼저 잡습니다. 글 한 편에 <b>20분</b>을 아낍니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer center">
         <span class="no">06</span>
         <h3>키워드 순위 추적기</h3>
-        <p>키워드별 검색량·블로그 30위·플레이스 순위를 매주 수집해 쌓습니다. 다음에 뭘 쓸지 글감 브리핑까지 붙습니다.</p>
         <p class="gain">어떤 검색어로 손님이 오는지 알고, <b>다음에 뭘 쓸지</b>까지 정해 줍니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer center">
         <span class="no">07</span>
         <h3>상위 글 어시스트</h3>
-        <p>키워드 상위 10개 글의 글자 수·사진 수·제목 구조·블로그 체급을 실측해 공략 포인트를 한 줄로 냅니다.</p>
         <p class="gain"><b>1위 글을 어떻게 넘길지</b> 알고 시작합니다. 감으로 쓰지 않아도 됩니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer center">
         <span class="no">08</span>
         <h3>블로그 체급 판정</h3>
-        <p>블로그 아이디를 넣으면 약함·보통·강함 세 단으로 판정합니다. 정답지 289개로 보정했습니다.</p>
         <p class="gain"><b>이길 수 있는 검색어인지</b> 먼저 가립니다. 안 될 싸움에 시간을 안 씁니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="center">
         <span class="no">09</span>
         <h3>유입경로 추적기</h3>
-        <p>신규 문의가 어느 채널에서 왔는지 폼 두 개로 받아 쌓고, 월간·분기 리포트를 자동으로 만듭니다.</p>
         <p class="gain">광고비와 시간을 <b>어디에 쏟을지</b> 숫자로 정합니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="center">
         <span class="no">10</span>
         <h3>재등록 · VIP 추적</h3>
-        <p>결제 내역을 한 달에 한 번 부으면 재등록률·객단가·유치율·소진율을 트레이너별로 계산합니다. 연락할 회원 명단까지 나옵니다.</p>
         <p class="gain">월말에 계산기 두드리던 일이 사라지고, <b>연락할 회원 명단</b>이 나옵니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="center">
         <span class="no">11</span>
         <h3>회원 리포트 · 대시보드</h3>
-        <p>위 숫자들을 한 화면으로 발행합니다. 대표용(금액 포함)과 선생님 공유용(금액 제거) 두 벌로 나옵니다.</p>
         <p class="gain">선생님들에게 <b>보여 줄 자료</b>가 저절로 만들어집니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="center">
         <span class="no">12</span>
         <h3>이웃 모집기</h3>
-        <p>센터 블로그의 서로이웃을 우리 상권의 잠재 고객으로 늘립니다. 상권 역산부터 후보 선별·신청·정리까지 돕니다.</p>
         <p class="gain">우리 동네 사람들에게 글이 닿습니다. <b>리뷰가 멈춘 60%</b>에서 빠져나옵니다.</p>
         <div class="meta"><span class="wh">설치</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="center">
         <span class="no">13</span>
         <h3>체험단 모집기</h3>
-        <p>지역 블로거를 찾아 거주를 확인하고 체급을 나눈 뒤 제안을 보냅니다. 키워드를 배정하고 글이 실제로 올라왔는지까지 지켜봅니다.</p>
         <p class="gain"><b>돈 주고 글이 안 올라오는 일</b>이 없어집니다. 이행까지 지켜봅니다.</p>
         <div class="meta"><span class="wh">설치</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="sub" data-cat="trainer">
         <span class="no">14</span>
         <h3>인스타 팔로우 관리기</h3>
-        <p>하루 한도를 지키며 팔로우와 정리를 대신합니다. 내 계정으로, 내 컴퓨터에서만 돕니다.</p>
         <p class="gain">하루 <b>30분</b> 걸리던 일을 대신합니다. 계정은 내 컴퓨터에 그대로 둡니다.</p>
         <div class="meta"><span class="wh">설치</span><span class="st st-sub">유료 플랜</span></div>
       </article>
       <article class="tool" data-state="soon" data-cat="center">
         <span class="no">15</span>
         <h3>플레이스 신호 판독기</h3>
-        <p>스마트플레이스의 유입·예약·리뷰 통계와 키워드 순위를 매일 모아 쌓고, 월요일 아침에 한 통으로 보냅니다.</p>
         <p class="gain">월요일 아침에 <b>지난주 무엇이 달라졌는지</b> 한 통으로 받습니다.</p>
         <div class="meta"><span class="wh">설치</span><span class="st st-soon">준비 중</span></div>
       </article>
       <article class="tool" data-state="soon" data-cat="trainer center">
         <span class="no">16</span>
         <h3>영상 편집 자동화</h3>
-        <p>촬영본을 넣으면 무음·잔말·NG를 잘라내고 자막을 얹은 편집본 초안을 만듭니다. 마무리만 손으로 합니다.</p>
         <p class="gain">편집 <b>세 시간이 30분</b>이 됩니다. 마무리만 손으로 하면 됩니다.</p>
         <div class="meta"><span class="wh">설치</span><span class="st st-soon">준비 중</span></div>
       </article>
@@ -1678,7 +1625,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="open-note two rv">
       <div class="on-t">
         <strong>무료 플랜 둘은 <b>신청서 한 장</b>이면 보내드립니다</strong>
-        <span>이름과 센터 주소 두 줄이면 됩니다 · 결제 수단을 넣지 않습니다 · 보내 드린 뒤에는 남기지 않습니다</span>
+        <span>이름과 센터 주소 두 줄 · 결제 수단 없음</span>
       </div>
       <div class="on-two">
         <a class="btn btn-solid" href="#" data-link="formT">트레이너 진단표 신청 <span aria-hidden="true">→</span></a>
@@ -1698,15 +1645,14 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="tracks rv">
       <div class="track">
         <div class="tk-h">
-          <span class="tk-n">10<small>개</small></span>
+          <span class="tk-n">11<small>개</small></span>
           <div>
             <p class="label">쓰는 방식 1</p>
             <h3>웹 <small>여기서 바로 씁니다 — 깔 것도, 켜 둘 것도 없습니다</small></h3>
           </div>
         </div>
-        <p class="tk-one">로그인하고 그대로 돌립니다. <b>깔 것도, 켜 둘 것도 없습니다.</b></p>
         <div class="chips">
-          <span>센터 진단</span><span>마케팅용 수업일지</span><span>내 블로그 순위판</span><span>블로그 검수기</span>
+          <span>센터 진단</span><span>트레이너 진단</span><span>마케팅용 수업일지</span><span>내 블로그 순위판</span><span>블로그 검수기</span>
           <span>체급 판정</span><span>순위 추적</span><span>상위 글 어시스트</span><span>유입경로</span>
           <span>재등록 VIP</span><span>회원 리포트</span>
         </div>
@@ -1720,7 +1666,6 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
             <h3>설치 <small>내 컴퓨터에서만 돕니다 — 계정이 밖으로 나가지 않습니다</small></h3>
           </div>
         </div>
-        <p class="tk-one">네이버·인스타 계정을 직접 움직이는 도구는 <b>서버로 올리지 않습니다.</b></p>
         <div class="risks">
           <div><b>비밀번호</b><span>남에게 맡기지 않습니다</span></div>
           <div><b>계정 보호</b><span>서버 아이피로 묶이지 않습니다</span></div>
@@ -1761,9 +1706,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <span class="ghost" aria-hidden="true">14</span>
       <p class="label">검증</p>
       <h2 class="h-lg">어디를 고치면<br>회원이 늘어나는지 찾았습니다</h2>
-      <p class="lede">「이렇게 하면 플레이스 순위가 오르고 회원이 생긴다」는 말들을 전국 28,200곳에 대고 하나씩 검증했습니다.
-         같은 지역·같은 업종 안에서만 비교하고, 비율 지표는 분모를 맞춰 놓고 봤습니다.
-         절반 가까이는 근거가 없었고, 일부는 방향이 반대였습니다.</p>
+      <p class="lede">흔한 조언들을 전국 28,200곳에 대고 하나씩 검증했습니다. <b>절반 가까이는 근거가 없었습니다.</b></p>
     </div>
 
     <div class="facts">
@@ -1777,8 +1720,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>최근 30일 안에 새 리뷰가 <b>한 건도 없던 곳</b></h3>
-          <p>그중에서도 <b>전체의 네 곳 중 하나</b>는 반년이 넘도록 멈춰 있습니다.
-             잘되는 곳과의 차이는 재능이 아니라 멈춤이었습니다.</p>
+          <p>그중 <b>전체의 네 곳 중 하나</b>는 반년이 넘도록 멈춰 있습니다.</p>
         </div>
       </article>
 
@@ -1793,11 +1735,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>선생님이 <b>한 편이라도</b> 직접 글을 쓰는 센터</h3>
-          <p>나머지 네 곳은 <b>센터 계정이 혼자 쓰거나(60%)</b>, 한 번 쓰고 다시 안 오는 사람들이 채웁니다(<b>23%</b>).
-             그런데 선생님이 한 편이라도 쓰는 이 5,349곳은 방문자 리뷰가 나머지의 <b>2.3배</b>였습니다.
-             글을 몇 편 쓰느냐가 아니라 <b>누가 쓰느냐</b>가 갈림길이었습니다.</p>
-          <p class="more">그래서 이 페이지는 두 사람을 부릅니다 —
-             <b>쓰는 트레이너</b>와, <b>쓰게 만드는 센터</b>.</p>
+          <p>이 5,349곳은 방문자 리뷰가 나머지의 <b>2.3배</b>였습니다. <b>누가 쓰느냐</b>가 갈림길이었습니다.</p>
         </div>
       </article>
 
@@ -1813,8 +1751,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>리뷰에 답글을 <b>한 번도 달지 않은 센터</b></h3>
-          <p>답글을 다는 곳도 <b>열 건 중 세 건</b>에만 답니다.
-             돈도 안 들고 오래 걸리지도 않는데, 가장 먼저 비어 있는 칸입니다.</p>
+          <p>답글을 다는 곳도 <b>열 건 중 세 건</b>에만 답니다.</p>
         </div>
       </article>
 
@@ -1829,8 +1766,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>「찾아오는 길」이 <b>비어 있습니다</b></h3>
-          <p>절반이 길 안내를 안 적어 뒀습니다. 처음 오는 사람이 제일 먼저 찾는 칸입니다.
-             <b>가격을 안 적어 둔 곳도 46%</b>였습니다.</p>
+          <p><b>가격을 안 적어 둔 곳도 46%</b>였습니다.</p>
         </div>
       </article>
 
@@ -1845,8 +1781,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>플레이스 세팅 중 <b>두 칸은 그냥 비어 있습니다</b></h3>
-          <p>메뉴·가격·길 안내·편의시설·결제수단·톡톡·예약·블로그 연결 열 칸 가운데
-             <b>넷 중 하나는 절반도 못 채웠습니다.</b> 채우는 데 드는 돈은 0원인데 말입니다.</p>
+          <p><b>넷 중 하나는 절반도 못 채웠습니다.</b> 채우는 데 드는 돈은 0원입니다.</p>
         </div>
       </article>
 
@@ -1861,9 +1796,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>블로그 글을 <b>한 번 쓰고 다시 안 씁니다</b></h3>
-          <p>돈을 주고 부른 사람은 한 번 쓰고 떠납니다. 반대로 <b>같은 사람이 계속 써 주는 센터</b>는
-             블로그 글도 방문자 리뷰도 오래 이어졌습니다. 한 번 쓰는 사람 열 명보다
-             <b>계속 쓰는 사람 한 명</b>이 셉니다.</p>
+          <p>한 번 쓰는 사람 열 명보다 <b>계속 쓰는 사람 한 명</b>이 셉니다.</p>
         </div>
       </article>
       <article class="fact rv">
@@ -1878,9 +1811,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         </div>
         <div>
           <h3>「리뷰 균형을 맞추면 순위가 오른다」 — <b>사실상 관계 없음</b></h3>
-          <p>블로그 글과 방문자 리뷰의 비율을 맞추라는 조언을 28,200곳에 대고 재 봤습니다.
-             순위 차이의 <b>99.8%는 다른 데서 옵니다.</b>
-             이런 식으로 걸러내고 남은 것만 「할 것」에 올립니다.</p>
+          <p>순위 차이의 <b>99.8%는 다른 데서 옵니다.</b> 걸러내고 남은 것만 「할 것」에 올립니다.</p>
         </div>
       </article>
     </div>
@@ -2053,8 +1984,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="sec-head rv">
       <p class="label">플랜</p>
       <h2 class="h-lg">쓸수록 손은 줄고,<br>회원은 늡니다</h2>
-      <p class="lede">무료 진단은 계속 무료입니다. 유료는 <b>매달 다시 재서 무엇이 변했는지</b> 보는 분을 위한 것입니다.
-         이번 달에 한 번 재 두면, 다음 달에는 바뀐 것과 안 바뀐 것이 갈려서 보입니다.</p>
+      <p class="lede">무료 진단은 계속 무료입니다. 유료는 <b>매달 다시 재서 무엇이 변했는지</b> 봅니다.</p>
     </div>
 
     <p class="plans-hint rv">옆으로 넘겨 견줘 보십시오 <span aria-hidden="true">→</span></p>
@@ -2140,41 +2070,27 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </div>
     </div>
 
-    <p class="plan-note">
-      쓰는 목적과 쓰는 양에 맞게 트레이너와 센터를 각각 두 단으로 나눴습니다.
-      유료 플랜은 준비 중이고, 프로그램이 더 열리면 값이 바뀔 수 있습니다.
-      연 결제는 <b>두 달 치를 서비스로 넣어 드립니다</b>. 부가세 별도.
-    </p>
+    <p class="plan-note">유료 플랜은 준비 중이며 프로그램이 더 열리면 값이 바뀔 수 있습니다. 부가세 별도.</p>
 
     <div class="faq">
       <h3 class="faq-h">먼저 물어보실 것들</h3>
       <dl>
         <div><dt>지금 당장 쓸 수 있는 건 뭡니까?</dt>
-          <dd>센터 진단입니다. 무료이고, 네이버 플레이스 주소만 주시면 됩니다.
-              마케팅용 수업일지와 내 블로그 순위판도 열려 있습니다. 나머지는 차례로 엽니다.</dd></div>
+          <dd>무료 진단 두 가지입니다. 나머지는 차례로 엽니다.</dd></div>
         <div><dt>저는 관리자가 아니라 트레이너인데 쓸 수 있습니까?</dt>
-          <dd>됩니다. 마케팅용 수업일지와 내 블로그 순위판는 트레이너 개인용입니다.
-              센터 진단도 지금 일하시는 센터 주소로 받아 보실 수 있습니다 —
-              무엇이 비어 있는지 알면 관리자에게 제안할 거리가 생깁니다.</dd></div>
+          <dd>됩니다. 센터 진단도 지금 일하시는 센터 주소로 받아 보실 수 있습니다.</dd></div>
         <div><dt>한 달만 써 보고 그만둘 수 있습니까?</dt>
-          <dd>됩니다. 약정이 없습니다. 그만두시면 다음 달부터 안 받습니다.
-              이미 받으신 진단 카드와 리포트는 그대로 가지고 계셔도 됩니다.</dd></div>
+          <dd>됩니다. 약정이 없습니다.</dd></div>
         <div><dt>센터 계정 비밀번호를 넘겨야 합니까?</dt>
-          <dd>아닙니다. 네이버·인스타 계정을 직접 움직이는 도구는 서버가 아니라
-              쓰시는 컴퓨터에서만 돕니다. 비밀번호는 그 컴퓨터 밖으로 나가지 않습니다.</dd></div>
+          <dd>아닙니다. 계정을 움직이는 도구는 쓰시는 컴퓨터에서만 돕니다.</dd></div>
         <div><dt>설치형 도구를 쓰려면 뭐가 필요합니까?</dt>
-          <dd>윈도우 컴퓨터 한 대면 됩니다. 설치 파일을 누르면 필요한 것이 같이 깔립니다.
-              도는 동안 컴퓨터가 켜져 있어야 합니다.</dd></div>
+          <dd>윈도우 컴퓨터 한 대면 됩니다. 도는 동안 켜져 있어야 합니다.</dd></div>
         <div><dt>진단 결과가 우리 센터에만 유리하게 나오는 건 아닙니까?</dt>
-          <dd>같은 기준선을 전국 28,200곳에 똑같이 적용합니다. 그리고 순위와의 관계가 실측으로
-              확인된 항목만 「할 것」에 올립니다 — 검증에서 관계가 없거나 반대로 나온 항목은 저희가 먼저 뺐습니다.</dd></div>
+          <dd>같은 기준선을 전국 28,200곳에 똑같이 적용합니다.</dd></div>
         <div><dt>우리 센터 정보를 다른 데 쓰십니까?</dt>
-          <dd>진단에 쓰는 것은 네이버 플레이스에 <b>이미 공개돼 있는 정보</b>뿐입니다.
-              비밀번호도, 회원 정보도 받지 않습니다. 기준선은 전국 데이터를 합쳐서 만들고,
-              개별 센터의 이름이나 수치를 남에게 보여드리는 일은 없습니다.</dd></div>
+          <dd>아닙니다. <b>이미 공개돼 있는 정보</b>만 쓰고, 개별 센터를 남에게 보여드리지 않습니다.</dd></div>
         <div><dt>경쟁 센터도 이걸 쓰면 소용없는 것 아닙니까?</dt>
-          <dd>지금 전국 헬스장의 60%는 최근 30일 리뷰가 0건입니다.
-              모두가 하고 있는 일이 아니라, 대부분이 멈춰 있는 일입니다.</dd></div>
+          <dd>모두가 하고 있는 일이 아니라, 대부분이 멈춰 있는 일입니다.</dd></div>
       </dl>
     </div>
   </div>
@@ -2196,10 +2112,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <p class="label">만든 사람</p>
       <blockquote>저와 저희 선생님들이<br>정말 필요로 했던 것들을,<br>그대로 만들었습니다.</blockquote>
       <p>헬스트레이너로 시작해 중간관리자를 거쳐, 지금은 센터를 운영합니다.
-         회원 기록을 손으로 옮기고, 블로그 순위를 눈으로 세고, 재등록률을 월말에 계산하던 일들이
-         하나씩 프로그램이 되었습니다.</p>
-      <p>여기 있는 도구는 전부 제 센터에서 매일 돌고 있습니다.
-         이 페이지에 적힌 숫자도 하나도 지어내지 않았습니다 — 전부 직접 수집한 데이터에서 나온 값입니다.</p>
+         여기 있는 도구는 전부 제 센터에서 매일 돌고 있습니다.</p>
       <div class="links">
         <a class="btn btn-line btn-sm" href="#" data-link="youtube">유튜브</a>
         <a class="btn btn-line btn-sm" href="https://www.instagram.com/heobotss" target="_blank" rel="noopener">인스타그램 @heobotss</a>
