@@ -49,7 +49,7 @@
   --paper-acc:#A8A8A8; --paper-acc-2:#EDEDED;
 
   --brass:#4F86F7; --brass-lt:#EDEDED; --brass-dk:#2B5FD6;
-  --sage:#8CAD84;          /* 카드의 「좋음」과 같은 색 */
+  --sage:#4F86F7;          /* 09-17 「좋음」도 브랜드 블루 — 초록을 쓰지 않는다 */
 
   /* 한글은 전부 프리텐다드 한 벌로 간다. 위계는 서체가 아니라 굵기가 만든다 */
   --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
@@ -275,7 +275,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .gx-pin:hover span{text-decoration:underline; text-underline-offset:4px}
 .gx-cap{margin:-18px 40px 0 0; font-size:12px; color:var(--warm); text-align:right; line-height:1.6}
 @media (max-width:980px){
-  .gx{margin:0 -16px}
+  .gx{margin:-34px -16px -40px}
   .gx-pin{left:50%; top:calc(47.2% - 74px); transform:translateX(-50%); flex-direction:column-reverse; gap:6px}
   .gx-pin i{width:1px; height:34px} .gx-pin span{font-size:13px}
   .gx-cap{margin:-10px 16px 0; text-align:left}
@@ -308,13 +308,27 @@ section[id],figure.band{scroll-margin-top:74px}
 .lane-more{margin-top:12px; font-size:13px; font-weight:700; color:var(--brass-lt)}
 .lane-pr{min-height:3.4em}
 @media (max-width:980px){
-  .lanes{grid-template-columns:1fr}
-  .lane-pr{min-height:0}
-  /* 휴대폰에선 판매 3칸을 그림보다 먼저 */
+  /* 휴대폰: 제목 → 장면 → 판매 3칸. 3칸은 세로로 늘어놓지 않고 옆으로 넘긴다 (09-17) */
   .hero .wrap{display:flex; flex-direction:column}
   .hero-top{display:contents}
-  .hero-say{display:contents} .hero-say>*{order:1} .lanes{order:2} .hero-say .hero-proof,.hero-say .hero-who{order:3} .hero-fine{order:3} .cloudbox{order:4; margin-top:36px}
-  .hero-say .hero-proof{margin-top:30px}
+  .hero-say{order:1} .cloudbox{order:2; margin-top:10px} .lanes{order:3} .lane-dots{order:4}
+  .lanes{display:grid; grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:84%;
+    overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    gap:10px; margin:14px -16px 0; padding:0 16px 4px; scroll-padding-left:16px; scrollbar-width:none}
+  .lanes::-webkit-scrollbar{display:none}
+  .lane{scroll-snap-align:start; padding:20px 18px}
+  .lane h2{font-size:26px; margin:8px 0 4px}
+  .lane-d{font-size:13.5px}
+  .lane-pr{min-height:0; margin-top:14px}
+  .lane-pr b{font-size:27px}
+  .lane-act{padding-top:16px}
+  .lane:hover{transform:none}
+}
+.lane-dots{display:none}
+@media (max-width:980px){
+  .lane-dots{display:flex; justify-content:center; gap:8px; margin-top:14px}
+  .lane-dots button{width:6px; height:6px; padding:0; border:0; border-radius:3px; background:#3A3A3A; transition:width .25s, background .25s; cursor:pointer}
+  .lane-dots button[aria-current="true"]{width:20px; background:var(--brass)}
 }
 @media (max-width:420px){ .lane-act .btn{font-size:14px; padding:13px 6px} }
 
@@ -536,7 +550,7 @@ section[id],figure.band{scroll-margin-top:74px}
   letter-spacing:-.01em; white-space:nowrap}
 .rw-h .vv.good{color:var(--brass-lt)}
 .rw-h .vv.bad{color:var(--bone-2)}
-.rw-h .vv.out{color:#C4695A}
+.rw-h .vv.out{color:var(--warm)}
 .ridge{display:block; width:100%; height:clamp(44px,6vw,62px); overflow:visible}
 .rg-fill{fill:rgba(141,141,141,.17)}
 .rg-line{fill:none; stroke:rgba(141,141,141,.55); stroke-width:1.2; vector-effect:non-scaling-stroke}
@@ -553,12 +567,23 @@ section[id],figure.band{scroll-margin-top:74px}
 .rg-wait{font-family:var(--sans); font-size:11.5px; fill:#828282; letter-spacing:.02em}
 
 /* 트레이너 100점 자가진단(/score/) 으로 가는 줄 — 계기판 밑에 괘선 한 줄 */
+.can{margin-top:clamp(26px,3.4vw,40px)}
+.can-h{font-size:13px; font-weight:700; color:var(--brass); letter-spacing:.02em; margin-bottom:12px}
+.can-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px}
+.can-list a{display:grid; grid-template-rows:auto auto 1fr auto; gap:6px; height:100%; padding:18px 18px 16px; border:1px solid var(--line-2); border-radius:12px; background:var(--ink-2); transition:border-color .2s, transform .2s}
+.can-list a:hover{border-color:var(--brass); transform:translateY(-2px)}
+.can-list .n{font-family:var(--tech); font-size:12px; color:var(--brass); letter-spacing:.08em}
+.can-list b{font-size:19px; font-weight:900; letter-spacing:-.03em; color:var(--bone)}
+.can-list .d{font-size:13.5px; color:var(--bone-2); line-height:1.55; word-break:keep-all}
+.can-list .t{justify-self:start; font-size:11.5px; font-weight:700; color:var(--bone); border:1px solid var(--line-2); border-radius:99px; padding:2px 9px; margin-top:6px}
+@media (max-width:900px){ .can-list{grid-template-columns:1fr 1fr} }
+@media (max-width:420px){ .can-list a{padding:14px 14px 12px} .can-list b{font-size:16.5px} .can-list .d{font-size:12.5px} }
 .score-link{display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:clamp(28px,4vw,44px);
   padding:clamp(18px,2.4vw,26px) 0; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2);
   color:var(--bone); text-decoration:none; transition:border-color .2s}
 .score-link:hover{border-color:var(--bone-2)}
 .score-link .sl-t{display:flex; flex-direction:column; gap:4px; word-break:keep-all}
-.score-link b{font-size:clamp(19px,2.2vw,24px); font-weight:900; letter-spacing:-.03em; line-height:1.35}
+.score-link b{font-size:clamp(22px,2.8vw,30px); font-weight:900; letter-spacing:-.03em; line-height:1.35}
 .score-link .sl-s{font-size:15px; color:var(--bone-2)}
 .score-link .sl-go{flex:none; font-size:15px; font-weight:700; color:var(--bone); white-space:nowrap}
 .score-link .sl-go i{font-style:normal; color:var(--brass); margin-left:6px}
@@ -602,8 +627,8 @@ section[id],figure.band{scroll-margin-top:74px}
 .p-t.on{border-color:rgba(141,141,141,.45); color:var(--brass-lt)}
 
 /* 세지 않는 것 — 빼는 이유를 앞에 둔다 */
-.path-cut{margin-top:clamp(26px,3vw,38px); border:1px solid var(--line); border-left:3px solid #6E3B33;
-  background:linear-gradient(100deg,rgba(110,59,51,.14),transparent 62%);
+.path-cut{margin-top:clamp(26px,3vw,38px); border:1px solid var(--line); border-left:3px solid #3A3A3A;
+  background:linear-gradient(100deg,rgba(255,255,255,.03),transparent 62%);
   padding:clamp(22px,2.8vw,32px) clamp(20px,2.6vw,34px); display:grid; gap:14px;
   grid-template-columns:minmax(0,1fr) minmax(0,1.5fr); align-items:start}
 .path-cut .hd{display:grid; gap:12px}
@@ -611,7 +636,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .cuts span{font-size:13px; color:#9E9E9E; border:1px solid var(--line-2); padding:5px 11px;
   position:relative}
 .cuts span::after{content:""; position:absolute; left:7px; right:7px; top:50%; height:1px;
-  background:#9E5B4E; transform:rotate(-3deg)}
+  background:#6A6A6A; transform:rotate(-3deg)}
 .path-cut p{font-size:14.5px; color:var(--warm); line-height:1.75}
 .path-cut p b{color:var(--bone-2); font-weight:700}
 @media (max-width:900px){
@@ -636,7 +661,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .path.pale .p-fig{border-bottom-color:var(--paper-line)}
 .path.pale .p-fig b{color:var(--paper-acc-2)}
 .path.pale .p-fig i{color:var(--paper-mid)}
-.path.pale .p-fig.ok b{color:#9FC79A}
+.path.pale .p-fig.ok b{color:var(--brass)}
 .path.pale .p-fig.none b{color:#676767}
 .path.pale strong{color:var(--paper-ink)}
 .path.pale .p-m{color:var(--paper-mid)}
@@ -664,14 +689,14 @@ section[id],figure.band{scroll-margin-top:74px}
 .mc span{font-family:var(--tech); font-weight:700; font-size:11px; letter-spacing:.02em}
 .mc:hover{border-color:var(--brass); color:var(--brass-lt); transform:translateY(-2px)}
 .mc:focus-visible{outline:2px solid var(--brass); outline-offset:2px}
-.mc-open{background:rgba(140,173,132,.17); border-color:rgba(140,173,132,.6); color:#B7D0B0}
+.mc-open{background:rgba(79,134,247,.14); border-color:rgba(79,134,247,.6); color:#EDEDED}
 .mc-sub{border-color:rgba(141,141,141,.34); color:#868686}
 .mc.now{transform:translateY(-2px); box-shadow:0 0 0 1px var(--brass-lt)}
 .tm-key{margin:0; display:flex; gap:clamp(12px,1.6vw,20px); flex-wrap:wrap}
 .tm-key > div{display:flex; align-items:baseline; gap:7px}
 .tm-key dt{font-size:12px; color:var(--warm); position:relative; padding-left:13px}
 .tm-key dt::before{content:""; position:absolute; left:0; top:.45em; width:7px; height:7px; border:1px solid var(--line-2)}
-.tm-key .k-open::before{background:rgba(140,173,132,.55); border-color:rgba(140,173,132,.7)}
+.tm-key .k-open::before{background:rgba(79,134,247,.55); border-color:rgba(79,134,247,.7)}
 .tm-key .k-sub::before{border-color:rgba(141,141,141,.55)}
 .tm-key dd{margin:0; font-family:var(--tech); font-weight:700; font-size:17px; color:var(--bone-2)}
 @media (max-width:720px){
@@ -686,7 +711,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .meter{display:grid; gap:8px; margin:16px 0 4px}
 .m-n{font-size:13px; color:var(--paper-ink); font-weight:700; letter-spacing:.01em}
 .m-n small{font-weight:500; color:var(--paper-mid)}
-.m-n b{font-family:var(--tech); font-weight:700; font-size:26px; color:var(--paper-acc-2); letter-spacing:-.01em}
+.m-n b{font-family:var(--tech); font-weight:700; font-size:26px; color:var(--brass); letter-spacing:-.01em}
 /* ⚠ 예전에 .m-bars 라는 같은 이름을 두 곳에서 썼다. 뒤에 있던 규칙이 이겨서
    요금표 막대가 세로로 쌓이고 글자를 덮었다. 이름을 갈라 놓는다 */
 .viz.bar10{display:flex; gap:4px; height:16px; margin-top:12px}
@@ -696,7 +721,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .plan-bars i{flex:1 1 0; width:auto; height:100%; background:var(--paper-2);
   border:1px solid var(--paper-line); transform-origin:bottom; transition:.3s}
 .plan-bars i.on{background:var(--paper-acc); border-color:var(--paper-acc)}
-.plan.hi .plan-bars i.on{background:var(--paper-acc-2); border-color:var(--paper-acc-2)}
+.plan.hi .plan-bars i.on{background:var(--brass); border-color:var(--brass)}
 
 /* ══ 실측 세 사실 ══ */
 .facts{display:grid; gap:1px; background:var(--line); border:1px solid var(--line); margin-top:clamp(40px,5vw,64px)}
@@ -706,7 +731,7 @@ section[id],figure.band{scroll-margin-top:74px}
   color:var(--bone); line-height:.92; letter-spacing:-.05em; white-space:nowrap}
 .fact h3{font-size:clamp(19px,2.3vw,26px); margin-bottom:10px}
 .fact p{color:var(--warm); font-size:16px; max-width:40em}
-.fact.bridge{background:linear-gradient(120deg,rgba(141,141,141,.09),var(--ink) 62%)}
+.fact.bridge{background:linear-gradient(120deg,rgba(79,134,247,.07),var(--ink) 62%); box-shadow:inset 2px 0 0 var(--brass)}
 .fact.bridge .n{color:var(--brass-lt)}
 .fact.bridge h3{color:var(--bone)}
 .fact .more{margin-top:14px; font-size:15px; color:var(--bone-2)}
@@ -716,7 +741,7 @@ section[id],figure.band{scroll-margin-top:74px}
 /* 큰 숫자 옆에 「무엇의 몇 %인가」를 눈으로 보인다 — 숫자만 있으면 못 읽는다 */
 .fact .fig{display:grid; gap:10px; align-content:start}
 .fact .den{font-size:13px; color:var(--warm); line-height:1.5; letter-spacing:-.01em}
-.fact .den b{color:var(--bone-2); font-weight:700}
+.fact .den b{color:var(--bone); font-weight:700}
 .fact .viz{margin-top:4px}
 .viz.dots{display:flex; gap:5px; flex-wrap:wrap; max-width:230px}
 .viz.dots i{width:15px; height:15px; border:1px solid var(--line-2); background:transparent}
@@ -736,8 +761,8 @@ section[id],figure.band{scroll-margin-top:74px}
 .viz.gauge-r .ends em{font-style:normal}
 .viz.gauge-r .note{font-size:11.5px; color:var(--warm); line-height:1.5}
 .viz.gauge-r .note b{color:var(--bone-2); font-weight:700}
-.fact .n small{font-size:.42em; font-weight:700; letter-spacing:-.02em; margin-left:.04em}
-.fact h3 b{color:var(--brass-lt); font-weight:900}
+.fact .n small{font-size:.42em; font-weight:700; letter-spacing:-.02em; margin-left:.04em; color:var(--brass)}
+.fact h3 b{color:var(--brass); font-weight:900}
 
 /* ══ 내 이름 리포트 — 트레이너 무료 ══ */
 .mine{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
@@ -974,7 +999,7 @@ section[id],figure.band{scroll-margin-top:74px}
 .plan .flag{min-height:52px; margin-bottom:12px; display:flex; align-items:flex-start; gap:6px; flex-wrap:wrap}
 .tag-soon,.tag-now,.tag-pick{display:inline-block; align-self:flex-start; font-size:11.5px; font-weight:700; padding:4px 10px; white-space:nowrap}
 .tag-soon{border:1px solid rgba(156,156,156,.45); color:var(--paper-acc)}
-.tag-now{background:var(--paper-acc); color:#0E0E0E}
+.tag-now{background:var(--brass); color:#FFFFFF}
 .tag-pick{background:var(--paper-acc); color:#0E0E0E}
 .plan .who{font-family:var(--tech); font-size:11px; letter-spacing:.14em; color:var(--paper-acc); text-transform:uppercase}
 .plan h3{font-size:clamp(20px,2vw,23px); margin:10px 0 0; letter-spacing:-.035em}
@@ -1112,14 +1137,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <div class="hero-say">
         <p class="label">운동 지도자와 센터를 위한 프로그램</p>
         <h1 class="h-xl">피트니스 마케팅,<br><em>여기 하나로</em> 끝냅니다</h1>
-        <p class="hero-sub">전국 헬스장·PT샵·필라테스 28,200곳의 리뷰와 블로그를 한 곳씩 재서, 마케팅이 막힌 곳을 찾습니다.</p>
-        <ul class="hero-proof" aria-label="이 페이지의 바탕">
-          <li><b>28,200</b><span>곳 전수 수집</span></li>
-          <li><b>17</b><span>개 시도 전부</span></li>
-          <li><b>16</b><span>개 프로그램</span></li>
-          <li><b>14</b><span>개 지표 검증</span></li>
-        </ul>
-        <p class="hero-who"><span class="k">만든 사람</span><span class="v">10년째 현장에서 수업하고 센터를 운영합니다.</span></p>
+        <p class="hero-sub">전국 헬스장·PT샵·필라테스를 분석하고,<br>마케팅이 막힌 곳을 찾아 드립니다.</p>
       </div>
 
       <div class="cloudbox">
@@ -1135,7 +1153,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </div>
     </div>
 
-    <div class="lanes" aria-label="판매 중인 것">
+    <div class="lanes" id="lanes" aria-label="판매 중인 것">
       <article class="lane">
         <p class="lane-k">영상 강의 · 구매 후 12개월</p>
         <h2>강의</h2>
@@ -1168,7 +1186,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <a class="lane-more" href="#/price">플랜 보기 <span aria-hidden="true">→</span></a>
       </article>
     </div>
-    <p class="hero-fine">결제는 토스페이먼츠 · 강의는 결제 후 7일 안, 한 편도 재생하지 않았다면 전액 환불 · <a href="policy/refund.html">환불 규정</a></p>
+    <div class="lane-dots" id="laneDots" aria-label="판매 칸 넘기기"><button type="button" aria-label="강의" aria-current="true"></button><button type="button" aria-label="세미나"></button><button type="button" aria-label="프로그램"></button></div>
   </div>
 </section>
 
@@ -1185,6 +1203,16 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <p class="label">30초 자가 진단</p>
       <h2 class="h-lg">지금 넣어 보십시오.<br>전국에서 상위 몇 %인지 바로 나옵니다.</h2>
       <p class="lede">가입·저장·결제 수단 없이, <b>넣는 순간 화면에서 바로 계산됩니다.</b></p>
+    </div>
+
+    <div class="can rv">
+      <p class="can-h">이 화면에서 바로 해볼 수 있는 것</p>
+      <ol class="can-list">
+        <li><a href="#s-check" data-can="center"><span class="n">01</span><b>센터 진단</b><span class="d">우리 센터 마케팅은 전국에서 몇 %?</span><span class="t">30초</span></a></li>
+        <li><a href="#s-check" data-can="trainer"><span class="n">02</span><b>트레이너 진단</b><span class="d">내 블로그 글은 전국 운동 지도자 중 몇 %?</span><span class="t">30초</span></a></li>
+        <li><a href="score/"><span class="n">03</span><b>트레이너 점수 확인</b><span class="d">나는 몇 점짜리 트레이너일까 — 체크리스트 100문항</span><span class="t">3분</span></a></li>
+        <li><a href="#s-dist"><span class="n">04</span><b>전국 실측 분포</b><span class="d">전국 28,200곳 한가운데 우리 마케팅은 어디쯤?</span><span class="t">바로</span></a></li>
+      </ol>
     </div>
 
     <div class="gauge rv">
@@ -1973,54 +2001,6 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 
 <div class="screen" id="v-요금" data-view="요금" data-slug="price" data-label="플랜">
 <!-- ═══════════ 요금 (밝은 면) ═══════════ -->
-<!-- ═══════════ 판매 중인 상품 ═══════════ -->
-<section id="s-shop" data-rail="상품">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <p class="label">지금 신청할 수 있는 것</p>
-      <h2 class="h-lg">판매 중인 상품</h2>
-      <p class="lede">결제하면 바로 등록되고, 확인 메일이 갑니다. 날짜·장소가 정해지면 같은 메일로 안내드립니다.</p>
-    </div>
-    <div class="shop rv">
-      <article class="pcard pick">
-        <span class="tag">사전등록 · 기간 한정</span>
-        <h3>4T 트레이너 마케팅 세미나 10기</h3>
-        <p class="opt">사전등록가</p>
-        <div class="pr">390,000<small>원</small></div>
-        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
-        <dl>
-          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
-          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
-          <dt>정원</dt><dd>12명 · 결제 순 마감</dd>
-          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
-        </dl>
-        <div class="acts">
-          <a class="btn btn-solid" href="pay/?p=seminar-10-early">신청·결제</a>
-          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
-        </div>
-      </article>
-      <article class="pcard">
-        <span class="tag plain">일반</span>
-        <h3>4T 트레이너 마케팅 세미나 10기</h3>
-        <p class="opt">일반가</p>
-        <div class="pr">590,000<small>원</small></div>
-        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
-        <dl>
-          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
-          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
-          <dt>정원</dt><dd>12명 · 사전등록과 합산</dd>
-          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
-        </dl>
-        <div class="acts">
-          <a class="btn btn-solid" href="pay/?p=seminar-10">신청·결제</a>
-          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
-        </div>
-      </article>
-    </div>
-    <p class="shop-note rv">결제는 토스페이먼츠로 처리되며 카드 정보는 저희가 보관하지 않습니다. 문의 010-8245-5022 · gjwodbs77@gmail.com</p>
-  </div>
-</section>
-
 <section class="paper" id="s-plans" data-rail="플랜">
   <div class="wrap">
     <div class="sec-head rv">
@@ -2135,6 +2115,54 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <dd>모두가 하고 있는 일이 아니라, 대부분이 멈춰 있는 일입니다.</dd></div>
       </dl>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════ 판매 중인 상품 ═══════════ -->
+<section id="s-shop" data-rail="상품">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="label">지금 신청할 수 있는 것</p>
+      <h2 class="h-lg">판매 중인 상품</h2>
+      <p class="lede">결제하면 바로 등록되고, 확인 메일이 갑니다. 날짜·장소가 정해지면 같은 메일로 안내드립니다.</p>
+    </div>
+    <div class="shop rv">
+      <article class="pcard pick">
+        <span class="tag">사전등록 · 기간 한정</span>
+        <h3>4T 트레이너 마케팅 세미나 10기</h3>
+        <p class="opt">사전등록가</p>
+        <div class="pr">390,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
+        <dl>
+          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
+          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
+          <dt>정원</dt><dd>12명 · 결제 순 마감</dd>
+          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
+        </dl>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=seminar-10-early">신청·결제</a>
+          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">일반</span>
+        <h3>4T 트레이너 마케팅 세미나 10기</h3>
+        <p class="opt">일반가</p>
+        <div class="pr">590,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
+        <dl>
+          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
+          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
+          <dt>정원</dt><dd>12명 · 사전등록과 합산</dd>
+          <dt>환불</dt><dd>결제 후 7일 안 전액 · <a href="policy/refund.html">규정 전문</a></dd>
+        </dl>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=seminar-10">신청·결제</a>
+          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
+        </div>
+      </article>
+    </div>
+    <p class="shop-note rv">결제는 토스페이먼츠로 처리되며 카드 정보는 저희가 보관하지 않습니다. 문의 010-8245-5022 · gjwodbs77@gmail.com</p>
   </div>
 </section>
 
@@ -2572,6 +2600,29 @@ function rank(m, v){
    점은 백분위 곡선에서 되살린 분포다. 특정 센터를 가리키지는 않는다.
      x 방문자 리뷰 · y 밖에서 쓴 글 · z 그 글이 지금도 올라오는가
    ══════════════════════════════════════════════════════════ */
+(function laneDots(){
+  var rail = document.getElementById("lanes"), dots = document.getElementById("laneDots");
+  if (!rail || !dots) return;
+  var bs = [].slice.call(dots.querySelectorAll("button")), cards = [].slice.call(rail.children);
+  function now(){
+    var x = rail.scrollLeft, best = 0, d = 1e9;
+    cards.forEach(function(c, i){ var v = Math.abs(c.offsetLeft - cards[0].offsetLeft - x); if (v < d){ d = v; best = i; } });
+    bs.forEach(function(b, i){ b.setAttribute("aria-current", i === best ? "true" : "false"); });
+  }
+  rail.addEventListener("scroll", function(){ window.requestAnimationFrame(now); }, {passive:true});
+  bs.forEach(function(b, i){ b.addEventListener("click", function(){
+    rail.scrollTo({left: cards[i].offsetLeft - cards[0].offsetLeft, behavior:"smooth"}); }); });
+})();
+
+(function canList(){
+  [].slice.call(document.querySelectorAll("[data-can]")).forEach(function(a){
+    a.addEventListener("click", function(){
+      var m = a.getAttribute("data-can");
+      setTimeout(function(){ if (window.__gauge) window.__gauge(m); }, 60);
+    });
+  });
+})();
+
 (function heroVideo(){
   var v = document.querySelector(".gx-v"); if (!v) return;
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); return; }

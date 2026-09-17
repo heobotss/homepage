@@ -6,7 +6,7 @@
 :root{
   color-scheme:dark;
   --ink:#0A0A0A; --ink-2:#111111; --ink-3:#171717; --bone:#F2F2F2; --bone-2:#BDBDBD; --warm:#8E8E8E;
-  --line:#222222; --line-2:#2F2F2F; --brass:#4F86F7; --brass-lt:#EDEDED; --sage:#8CAD84; --bad:#E07A6B;
+  --line:#222222; --line-2:#2F2F2F; --brass:#4F86F7; --brass-lt:#EDEDED; --sage:#4F86F7; --bad:#E07A6B;
   --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
   --tech:"Bahn","Bahnschrift",var(--sans);
 }
@@ -50,7 +50,7 @@ input.err{border-color:var(--bad)}
 .legal{margin-top:34px;font-size:12px;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
 .legal a{color:var(--warm)}
 /* 완료 화면 */
-.done-icon{width:54px;height:54px;border-radius:50%;background:rgba(140,173,132,.14);color:var(--sage);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
+.done-icon{width:54px;height:54px;border-radius:50%;background:rgba(79,134,247,.14);color:var(--sage);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
 .done-icon.bad{background:rgba(224,122,107,.14);color:var(--bad)}
 table.kv{width:100%;border-collapse:collapse;font-size:14.5px}
 table.kv td{padding:7px 0;border-bottom:1px solid var(--line);vertical-align:top}
