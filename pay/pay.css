@@ -5,8 +5,8 @@
 @font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/bahn-700.woff2') format('woff2')}
 :root{
   color-scheme:dark;
-  --ink:#060911; --ink-2:#090E1A; --ink-3:#121E34; --bone:#EAEFF5; --bone-2:#B7C5D8; --warm:#8295AF;
-  --line:#131E35; --line-2:#192949; --brass:#588AEF; --brass-lt:#8EB2FA; --sage:#8CAD84; --bad:#E07A6B;
+  --ink:#0A0A0A; --ink-2:#111111; --ink-3:#171717; --bone:#F2F2F2; --bone-2:#BDBDBD; --warm:#8E8E8E;
+  --line:#222222; --line-2:#2F2F2F; --brass:#4F86F7; --brass-lt:#EDEDED; --sage:#8CAD84; --bad:#E07A6B;
   --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
   --tech:"Bahn","Bahnschrift",var(--sans);
 }
@@ -37,10 +37,10 @@ input:focus{border-color:var(--brass)}
 input.err{border-color:var(--bad)}
 .agree{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--bone-2);margin-top:16px;line-height:1.55}
 .agree input{margin-top:4px;accent-color:var(--brass)}
-.btn{display:block;width:100%;border:0;border-radius:10px;padding:16px;font:inherit;font-size:16.5px;font-weight:700;cursor:pointer;background:#2F63D8;color:#FFFFFF;box-shadow:inset 0 1px 0 rgba(255,255,255,.18);transition:.15s}
-.btn:hover{background:#3D72E8}
+.btn{display:block;width:100%;border:0;border-radius:10px;padding:16px;font:inherit;font-size:16.5px;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;box-shadow:inset 0 1px 0 rgba(255,255,255,.18);transition:.15s}
+.btn:hover{background:#FFFFFF}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-.btn.line{background:rgba(100,145,236,.06);color:var(--brass-lt);border:1px solid rgba(100,145,236,.55);box-shadow:none}
+.btn.line{background:rgba(147,147,147,.06);color:var(--brass-lt);border:1px solid rgba(147,147,147,.55);box-shadow:none}
 .msg{margin:12px 0 0;font-size:13.5px;color:var(--bad);min-height:1.4em}
 .note{font-size:12.5px;color:var(--warm);margin-top:14px;line-height:1.6}
 .refund{font-size:13.5px;color:var(--bone-2)}

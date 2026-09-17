@@ -31,12 +31,12 @@ h2.sec{font-size:13px;color:var(--warm);letter-spacing:.02em;margin:30px 0 12px;
 .ptitle{font-size:18px;font-weight:700;margin:14px 0 2px}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:22px 0 10px}
 .tabs button{border:1px solid var(--line-2);background:transparent;color:var(--bone-2);border-radius:99px;padding:7px 14px;font:inherit;font-size:13.5px;cursor:pointer}
-.tabs button.on{background:rgba(100,145,236,.14);border-color:var(--brass);color:var(--brass-lt)}
+.tabs button.on{background:rgba(147,147,147,.14);border-color:var(--brass);color:var(--brass-lt)}
 .list{border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .list button{display:flex;width:100%;gap:12px;align-items:center;justify-content:space-between;padding:13px 16px;border:0;border-top:1px solid var(--line);background:var(--ink-2);color:var(--bone);font:inherit;font-size:15px;text-align:left;cursor:pointer}
 .list button:first-child{border-top:0}
 .list button:hover{background:var(--ink-3)}
-.list button.on{background:rgba(100,145,236,.1);color:var(--brass-lt)}
+.list button.on{background:rgba(147,147,147,.1);color:var(--brass-lt)}
 .list .n{color:var(--warm);font-size:12.5px;min-width:26px}
 .list .len{color:var(--warm);font-size:12.5px;font-variant-numeric:tabular-nums}
 .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -134,7 +134,7 @@ function home(){
   if (rest.length) {
     h += '<h2 class="sec">더 볼 수 있는 강의</h2><div class="grid">';
     h += BUNDLES.filter(function(b){ return !state.access[b.id]; }).map(function(b){
-      return '<div class="course locked" style="border-color:rgba(100,145,236,.45)"><span class="t">'+esc(b.name)+'</span><span class="d">'+esc(b.desc)+'</span><span class="s">'+won(b.price)+'</span><a class="buy" href="../pay/?p='+b.id+'">구매하기 →</a></div>';
+      return '<div class="course locked" style="border-color:rgba(147,147,147,.45)"><span class="t">'+esc(b.name)+'</span><span class="d">'+esc(b.desc)+'</span><span class="s">'+won(b.price)+'</span><a class="buy" href="../pay/?p='+b.id+'">구매하기 →</a></div>';
     }).join("");
     h += rest.map(function(c){
       return '<div class="course locked"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+won(c.price)+' · 12개월</span><a class="buy" href="../pay/?p='+c.id+'">구매하기 →</a></div>';
