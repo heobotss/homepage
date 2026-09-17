@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>강의실 — 허봇스</title>
+<link rel="icon" href="../favicon.png">
+<link rel="stylesheet" href="../pay/pay.css">
+<style>
+main{max-width:980px}
+.who{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 22px}
+.who .me{color:var(--warm);font-size:14px}
+.who a{font-size:13.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.course{display:flex;flex-direction:column;gap:6px;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:var(--ink-2);cursor:pointer;text-align:left;color:inherit;font:inherit;transition:border-color .15s}
+.course:hover{border-color:var(--brass)}
+.course .t{font-weight:700;font-size:16.5px;line-height:1.4}
+.course .d{font-size:13px;color:var(--warm)}
+.course .s{font-size:12.5px;color:var(--sage);margin-top:4px}
+.course.locked{cursor:default;opacity:.8}
+.course.locked .s{color:var(--warm)}
+.course .buy{margin-top:8px;align-self:flex-start;font-size:13.5px;font-weight:700;color:var(--brass-lt)}
+h2.sec{font-size:13px;color:var(--warm);letter-spacing:.02em;margin:30px 0 12px;font-weight:700}
+.player{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:16/9;max-height:74vh;margin:0 auto}
+.player video{width:100%;height:100%;display:block;background:#000;object-fit:contain}
+.player .mark{position:absolute;left:8%;top:12%;pointer-events:none;user-select:none;font-size:clamp(11px,1.4vw,15px);color:rgba(255,255,255,.28);text-shadow:0 0 2px rgba(0,0,0,.6);white-space:nowrap;transition:left 1.2s ease,top 1.2s ease}
+.player .fs{position:absolute;right:10px;top:10px;border:0;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;font:inherit;font-size:12.5px;padding:6px 10px;cursor:pointer;opacity:.75}
+.player .fs:hover{opacity:1}
+.player:fullscreen{max-height:none;border-radius:0}
+.ptitle{font-size:18px;font-weight:700;margin:14px 0 2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:22px 0 10px}
+.tabs button{border:1px solid var(--line-2);background:transparent;color:var(--bone-2);border-radius:99px;padding:7px 14px;font:inherit;font-size:13.5px;cursor:pointer}
+.tabs button.on{background:rgba(199,154,78,.14);border-color:var(--brass);color:var(--brass-lt)}
+.list{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.list button{display:flex;width:100%;gap:12px;align-items:center;justify-content:space-between;padding:13px 16px;border:0;border-top:1px solid var(--line);background:var(--ink-2);color:var(--bone);font:inherit;font-size:15px;text-align:left;cursor:pointer}
+.list button:first-child{border-top:0}
+.list button:hover{background:var(--ink-3)}
+.list button.on{background:rgba(199,154,78,.1);color:var(--brass-lt)}
+.list .n{color:var(--warm);font-size:12.5px;min-width:26px}
+.list .len{color:var(--warm);font-size:12.5px;font-variant-numeric:tabular-nums}
+.files{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.files button{border:1px solid var(--line-2);background:var(--ink-2);color:var(--bone);border-radius:9px;padding:9px 13px;font:inherit;font-size:13.5px;cursor:pointer}
+.files button:hover{border-color:var(--brass)}
+.back{display:inline-block;margin-bottom:14px;font-size:13.5px}
+.auth{max-width:440px;margin:0 auto}
+.auth h2{font-size:18px;color:var(--bone);text-transform:none;letter-spacing:-.01em}
+.muted{color:var(--warm);font-size:13.5px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
+<script src="auth.js"></script>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
+  <a class="back" style="margin:0" href="../#/vod">← 강의 목록</a>
+</header>
+<main>
+  <h1>강의실</h1>
+  <p class="sub" id="lead">구매한 강의를 12개월 동안 볼 수 있습니다.</p>
+  <div id="app"><p class="muted"><span class="spin"></span>불러오는 중</p></div>
+  <footer class="legal" id="legal"></footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+var sb = HB.sb, esc = HB.esc, FN = HB.SB_URL + "/functions/v1/";
+var $app = document.getElementById("app");
+fetch("../policy/legal.txt").then(function(r){return r.ok?r.text():"";}).then(function(t){ if(t) document.getElementById("legal").innerHTML=t; }).catch(function(){});
+
+/* 상품 — 가격은 결제 페이지가 서버에서 다시 읽는다. 여기 값은 안내용 */
+var COURSES = [
+  { id:"vod-atc-guide", name:"ATC 온라인 트레이너 가이드", desc:"상담·인바디·시퀀스·점수 체크리스트·연차별 체크리스트·인스타그램·식단", price:390000 },
+  { id:"vod-4t-member", name:"4T 회원관리", desc:"개인운동·식단·스케줄·온라인 마케팅", price:89000 },
+  { id:"vod-4t-sales",  name:"4T 세일즈", desc:"재등록·OT&체험수업·회원 소개·상담·인바디", price:109000 },
+  { id:"vod-4t-coach",  name:"4T 운동지도", desc:"정적·동적평가·맞춤 운동·스몰토크·티칭 오류·2:1 PT", price:129000 },
+  { id:"vod-anatomy",   name:"4T 실전해부학", desc:"1~3부", price:149000 },
+  { id:"vod-mock-exam", name:"4T 모의고사", desc:"문제지 8종 + 레벨별·영역별 해설", price:99000 },
+  { id:"vod-startup",   name:"트레이너 창업 (창업 전)", desc:"단독 강의", price:49000 }
+];
+var BUNDLES = [
+  { id:"vod-allpass",   name:"전체 올패스", desc:"위 강의 전부 · 12개월", price:590000 },
+  { id:"vod-4t-master", name:"4T 마스터", desc:"4T 회원관리·세일즈·운동지도 15편 · 12개월", price:249000 }
+];
+var won = function(n){ return n.toLocaleString("ko-KR") + "원"; };
+var ymd = function(d){ var x=new Date(d); return x.getFullYear()+"."+(x.getMonth()+1)+"."+x.getDate(); };
+var mmss = function(s){ if(!s) return ""; var h=Math.floor(s/3600), m=Math.floor(s%3600/60); return h? h+"시간 "+m+"분" : m+"분"; };
+
+var state = { session:null, access:{}, videos:[], files:[], course:null, coll:null, videoId:null, hls:null };
+
+async function authed(url, body){
+  var s = await HB.session();
+  var r = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", apikey:HB.SB_KEY, Authorization:"Bearer "+(s? s.access_token : HB.SB_KEY) }, body: JSON.stringify(body) });
+  return r;
+}
+
+async function boot(){
+  state.session = await HB.session();
+  if (!state.session) {
+    document.getElementById("lead").textContent = "로그인하면 구매한 강의가 보입니다.";
+    HB.mountAuth($app, function(){ boot(); });
+    return;
+  }
+  document.getElementById("lead").textContent = "구매한 강의를 12개월 동안 볼 수 있습니다.";
+  var r1 = await sb.rpc("vod_my_access");
+  state.access = {}; (r1.data||[]).forEach(function(a){ state.access[a.product_id] = a.expires_at; });
+  var r2 = await sb.from("vod_videos").select("*").eq("free", false).order("sort");
+  state.videos = r2.data || [];
+  var r3 = await sb.from("vod_files").select("*").order("sort");
+  state.files = r3.data || [];
+  var q = new URLSearchParams(location.search).get("c");
+  if (q && state.access[q]) openCourse(q); else home();
+}
+
+function whoBar(){
+  var u = state.session.user;
+  return '<div class="who"><span class="me">'+esc((u.user_metadata&&u.user_metadata.name)||"")+' '+esc(u.email)+'</span><a href="#" id="logout">로그아웃</a></div>';
+}
+function bindWho(){ var a=document.getElementById("logout"); if(a) a.onclick=async function(e){ e.preventDefault(); await sb.auth.signOut(); location.href=location.pathname; }; }
+
+function home(){
+  stopPlayer(); state.course=null;
+  history.replaceState(null, "", location.pathname);
+  var mine = COURSES.filter(function(c){ return state.access[c.id]; });
+  var rest = COURSES.filter(function(c){ return !state.access[c.id]; });
+  var h = whoBar();
+  h += '<h2 class="sec">내 강의 ' + mine.length + '</h2>';
+  if (!mine.length) h += '<p class="muted">아직 구매한 강의가 없습니다. 아래에서 고르거나 <a href="../#/vod">무료 강의</a>부터 보세요.</p>';
+  else h += '<div class="grid">' + mine.map(function(c){
+    return '<button class="course" data-c="'+c.id+'"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+ymd(state.access[c.id])+'까지 볼 수 있음</span></button>';
+  }).join("") + '</div>';
+  if (rest.length) {
+    h += '<h2 class="sec">더 볼 수 있는 강의</h2><div class="grid">';
+    h += BUNDLES.filter(function(b){ return !state.access[b.id]; }).map(function(b){
+      return '<div class="course locked" style="border-color:rgba(199,154,78,.45)"><span class="t">'+esc(b.name)+'</span><span class="d">'+esc(b.desc)+'</span><span class="s">'+won(b.price)+'</span><a class="buy" href="../pay/?p='+b.id+'">구매하기 →</a></div>';
+    }).join("");
+    h += rest.map(function(c){
+      return '<div class="course locked"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+won(c.price)+' · 12개월</span><a class="buy" href="../pay/?p='+c.id+'">구매하기 →</a></div>';
+    }).join("") + '</div>';
+  }
+  $app.innerHTML = h; bindWho();
+  $app.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ openCourse(b.getAttribute("data-c")); }; });
+}
+
+function openCourse(id){
+  var c = COURSES.filter(function(x){ return x.id===id; })[0]; if(!c) return home();
+  state.course = id;
+  history.replaceState(null, "", location.pathname + "?c=" + id);
+  var vids = state.videos.filter(function(v){ return v.product_id===id; });
+  var colls = []; vids.forEach(function(v){ if (colls.indexOf(v.collection)<0) colls.push(v.collection); });
+  var files = state.files.filter(function(f){ return f.product_id===id; });
+  state.coll = colls[0];
+  var h = whoBar() + '<a href="#" class="back" id="toHome">← 내 강의</a>';
+  h += '<div class="player" id="player"><video id="vid" controls playsinline controlslist="nodownload nofullscreen" disablepictureinpicture></video><span class="mark" id="mark"></span><button class="fs" id="fs" type="button">전체화면</button></div>';
+  h += '<p class="ptitle" id="ptitle">'+esc(c.name)+'</p><p class="muted" id="pmsg">목록에서 영상을 고르세요 · '+ymd(state.access[id])+'까지</p>';
+  if (colls.length>1) h += '<div class="tabs" id="tabs">'+colls.map(function(n,i){ return '<button data-k="'+esc(n)+'" class="'+(i?'':'on')+'">'+esc(label(n))+'</button>'; }).join("")+'</div>';
+  else h += '<div style="height:18px"></div>';
+  h += '<div class="list" id="list"></div>';
+  if (files.length) h += '<h2 class="sec">문제지 내려받기</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+' PDF</button>'; }).join("")+'</div>';
+  if (!vids.length) h += '<p class="muted" style="margin-top:14px">영상을 준비하고 있습니다.</p>';
+  $app.innerHTML = h; bindWho();
+  document.getElementById("toHome").onclick = function(e){ e.preventDefault(); home(); };
+  document.getElementById("fs").onclick = function(){ var p=document.getElementById("player"); if (document.fullscreenElement) document.exitFullscreen(); else if (p.requestFullscreen) p.requestFullscreen(); else document.getElementById("vid").webkitEnterFullscreen && document.getElementById("vid").webkitEnterFullscreen(); };
+  var tabs = document.getElementById("tabs");
+  if (tabs) tabs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ tabs.querySelectorAll("button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); state.coll=b.getAttribute("data-k"); drawList(); }; });
+  $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
+  drawList();
+  var first = vids.filter(function(v){ return v.collection===state.coll; })[0];
+  if (first) play(first.id, false);
+}
+function label(n){
+  if (/나눠 보기/.test(n)) return "LV별로 나눠 보기";
+  if (/트레이너 가이드/.test(n)) return "전체 강의";
+  if (/레벨별/.test(n)) return "레벨별 해설";
+  if (/영역별/.test(n)) return "영역별 해설";
+  return n;
+}
+function drawList(){
+  var vids = state.videos.filter(function(v){ return v.product_id===state.course && v.collection===state.coll; });
+  document.getElementById("list").innerHTML = vids.map(function(v,i){
+    return '<button data-v="'+v.id+'" class="'+(v.id===state.videoId?'on':'')+'"><span class="n">'+(i+1)+'</span><span style="flex:1">'+esc(v.title)+'</span><span class="len">'+mmss(v.length_sec)+'</span></button>';
+  }).join("");
+  document.querySelectorAll("#list [data-v]").forEach(function(b){ b.onclick=function(){ play(b.getAttribute("data-v"), true); }; });
+}
+
+var markTimer = null;
+function stopPlayer(){ if (state.hls) { state.hls.destroy(); state.hls=null; } clearInterval(markTimer); }
+async function play(videoId, auto){
+  stopPlayer(); state.videoId = videoId; drawList();
+  var msg = document.getElementById("pmsg"), video = document.getElementById("vid");
+  msg.textContent = "영상 준비 중…";
+  var r = await authed(FN + "vod-play", { videoId: videoId });
+  var d = await r.json().catch(function(){ return {}; });
+  if (!d.ok) { msg.textContent = d.message || "재생할 수 없습니다"; return; }
+  document.getElementById("ptitle").textContent = d.title;
+  msg.textContent = "";
+  var mark = document.getElementById("mark"); mark.textContent = d.mark;
+  var move = function(){ mark.style.left = (4 + Math.random()*58) + "%"; mark.style.top = (6 + Math.random()*80) + "%"; };
+  move(); markTimer = setInterval(move, 15000);
+  var key = "hb-pos-" + videoId;
+  video.onloadedmetadata = function(){
+    try { var p = +localStorage.getItem(key); if (p > 5 && p < video.duration - 10) video.currentTime = p; } catch(e){}
+    var ar = video.videoWidth && video.videoHeight ? video.videoWidth / video.videoHeight : 16/9;
+    document.getElementById("player").style.aspectRatio = ar < 1 ? "4/5" : (video.videoWidth + "/" + video.videoHeight);
+    if (auto) video.play().catch(function(){});
+  };
+  video.ontimeupdate = function(){ try { localStorage.setItem(key, Math.floor(video.currentTime)); } catch(e){} };
+  if (video.canPlayType("application/vnd.apple.mpegurl")) { video.src = d.hls; }
+  else if (window.Hls && Hls.isSupported()) { state.hls = new Hls({ maxBufferLength: 30 }); state.hls.loadSource(d.hls); state.hls.attachMedia(video);
+    state.hls.on(Hls.Events.ERROR, function(_, e){ if (e.fatal) msg.textContent = "재생 중 문제가 생겼습니다. 새로고침해 주세요. (" + e.details + ")"; }); }
+  else msg.textContent = "이 브라우저는 재생을 지원하지 않습니다. 크롬이나 사파리로 열어 주세요.";
+}
+
+async function download(key, btn){
+  var t = btn.textContent; btn.disabled = true; btn.textContent = "만드는 중…";
+  try {
+    var r = await authed(FN + "vod-file", { key: key });
+    if (!r.ok) { var e = await r.json().catch(function(){ return {}; }); throw new Error(e.message || "내려받지 못했습니다"); }
+    var blob = await r.blob(); var cd = r.headers.get("Content-Disposition") || "";
+    var m = cd.match(/filename\*=UTF-8''([^;]+)/); var name = m ? decodeURIComponent(m[1]) : "문제지.pdf";
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  } catch (e) { alert(e.message); }
+  btn.disabled = false; btn.textContent = t;
+}
+
+sb.auth.onAuthStateChange(function(ev){ if (ev === "SIGNED_OUT") location.href = location.pathname; });
+boot();
+})();
+</script>
+</body>
+</html>

@@ -839,6 +839,33 @@ section[id],figure.band{scroll-margin-top:74px}
 .shop-note{margin-top:18px; font-size:13.5px; color:var(--warm)}
 .shop-note a{color:var(--brass-lt)}
 
+/* ══ 강의 (VOD) ══ */
+.vfree{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.6vw,18px); margin-top:clamp(24px,3vw,34px)}
+@media (max-width:900px){ .vfree{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .vfree{grid-template-columns:1fr} }
+.vthumb{display:block; width:100%; border:1px solid var(--line); background:var(--ink-2); padding:0; cursor:pointer; text-align:left; color:inherit; font:inherit; transition:border-color .2s, transform .2s}
+.vthumb:hover{border-color:var(--brass); transform:translateY(-2px)}
+.vthumb .im{display:block; position:relative; aspect-ratio:16/9; background:#000 center/cover no-repeat}
+.vthumb .im::after{content:"▶"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:30px; color:rgba(255,255,255,.9); background:linear-gradient(transparent 55%,rgba(0,0,0,.55))}
+.vthumb .im .ln{position:absolute; right:8px; bottom:8px; z-index:1; font-size:12px; color:#fff; background:rgba(0,0,0,.7); padding:2px 6px; border-radius:4px}
+.vthumb .tt{display:block; padding:12px 14px 14px; font-size:15px; font-weight:700; line-height:1.45; color:var(--bone)}
+.vfree-tag{display:inline-block; font-size:11.5px; font-weight:700; color:var(--sage); margin-bottom:6px}
+.vmodal{position:fixed; inset:0; z-index:90; background:rgba(0,0,0,.82); display:flex; align-items:center; justify-content:center; padding:18px}
+.vmodal .in{width:min(1100px,100%)}
+.vmodal .fr{position:relative; aspect-ratio:16/9; background:#000}
+.vmodal iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.vmodal .x{display:block; margin:0 0 10px auto; border:0; background:transparent; color:#fff; font-size:15px; cursor:pointer}
+.vpaid{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(14px,1.8vw,20px); margin-top:clamp(24px,3vw,34px)}
+@media (max-width:820px){ .vpaid{grid-template-columns:1fr} }
+.vpaid .pcard .list{margin:16px 0 0; padding:0; list-style:none; font-size:14px; color:var(--bone-2)}
+.vpaid .pcard .list li{padding:5px 0; border-top:1px solid var(--line)}
+.vpaid .pcard .list li:first-child{border-top:0}
+.vpaid .pcard.wide{grid-column:1/-1}
+.vpaid .sub3{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+.vpaid .sub3 a{font-size:13px; padding:7px 11px; border:1px solid var(--line-2); border-radius:8px; color:var(--bone-2)}
+.vpaid .sub3 a:hover{border-color:var(--brass); color:var(--brass-lt)}
+.vcert{margin-top:10px; font-size:12px; color:var(--warm)}
+
 /* ══ 사진 띠 ══ */
 .band{position:relative; margin:0; overflow:hidden; background:var(--ink-2)}
 .band img{display:block; width:100%; aspect-ratio:21/9; object-fit:cover; object-position:50% 24%; filter:contrast(1.03)}
@@ -1852,6 +1879,110 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
   <div class="endcta" data-cta></div>
 </div>
 
+<!-- ═══════════ 강의 ═══════════ -->
+<div class="screen" id="v-강의" data-view="강의" data-slug="vod" data-label="강의">
+
+<section id="s-vfree" data-rail="무료">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="label">혼자 보면서 따라 하는 쪽</p>
+      <h2 class="h-lg">강의</h2>
+      <p class="lede">무료 강의는 가입 없이 바로 봅니다. 유료 강의는 구매한 날부터 12개월 동안 강의실에서 봅니다.
+        이미 구매하셨다면 <a href="vod/" style="color:var(--brass-lt)">강의실로 가기 →</a></p>
+    </div>
+    <span class="vfree-tag rv">무료 · 바로 재생</span>
+    <div class="vfree rv">
+        <button class="vthumb" type="button" data-yt="Ps5DpbGXc0k"><span class="im" style="background-image:url(https://i.ytimg.com/vi/Ps5DpbGXc0k/hqdefault.jpg)"><span class="ln">40:40</span></span><span class="tt">2025 피트니스 트레이너 가이드 (4T 부트캠프)</span></button>
+        <button class="vthumb" type="button" data-yt="JmF_ejuPOsE"><span class="im" style="background-image:url(https://i.ytimg.com/vi/JmF_ejuPOsE/hqdefault.jpg)"><span class="ln">44:12</span></span><span class="tt">ATC 사전 강의</span></button>
+        <button class="vthumb" type="button" data-yt="PJZh0OEL2xo"><span class="im" style="background-image:url(https://i.ytimg.com/vi/PJZh0OEL2xo/hqdefault.jpg)"><span class="ln">11:11</span></span><span class="tt">4T 성과분석표 작성 안내</span></button>
+        <button class="vthumb" type="button" data-yt="l0FxWOTkY-k"><span class="im" style="background-image:url(https://i.ytimg.com/vi/l0FxWOTkY-k/hqdefault.jpg)"><span class="ln">5:43</span></span><span class="tt">ATC 온라인 시작하기 앞서</span></button>
+        <button class="vthumb" type="button" data-yt="lVqL_nunBCU"><span class="im" style="background-image:url(https://i.ytimg.com/vi/lVqL_nunBCU/hqdefault.jpg)"><span class="ln">5:07</span></span><span class="tt">ATC 교육 가이드</span></button>
+        <button class="vthumb" type="button" data-yt="m8QkaDTWoKY"><span class="im" style="background-image:url(https://i.ytimg.com/vi/m8QkaDTWoKY/hqdefault.jpg)"><span class="ln">4:27</span></span><span class="tt">ATC 교육 과정 안내</span></button>
+    </div>
+  </div>
+</section>
+
+<section id="s-vpaid" data-rail="유료">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="label">유료 강의</p>
+      <h2 class="h-md">배운 것을 그대로 센터에 옮기는 강의</h2>
+      <p class="lede">결제하면 바로 열립니다. 결제 후 7일 안이고 한 편도 재생하지 않았다면 전액 환불합니다 · <a href="policy/refund.html" style="color:var(--brass-lt)">환불 규정</a></p>
+    </div>
+    <div class="vpaid rv">
+      <article class="pcard pick wide">
+        <span class="tag">한 번에 전부</span>
+        <h3>전체 올패스</h3>
+        <div class="pr">590,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
+        <ul class="list"><li>ATC 온라인 트레이너 가이드 (약 7시간)</li><li>4T 마스터 — 회원관리·세일즈·운동지도 15편</li><li>4T 실전해부학 1~3부</li><li>4T 모의고사 — 문제지 8종 + 해설</li><li>트레이너 창업 (창업 전)</li><li>따로 사면 936,000원</li></ul>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=vod-allpass">구매하기</a>
+          <a class="btn btn-line" href="vod/?c=vod-allpass">강의실</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">본강의</span>
+        <h3>ATC 온라인 트레이너 가이드</h3>
+        <div class="pr">390,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
+        <ul class="list"><li>상담 · 인바디 · 시퀀스 가이드</li><li>트레이너 점수 체크리스트</li><li>연차별 체크리스트 (LV1~4 나눠 보기 포함)</li><li>인스타그램 · 식단 가이드</li><li>7편 · 약 7시간</li></ul><p class="vcert">ATC(Actual Trainer Certificate) · 민간자격 등록번호 2024-002428 · 관리기관 대한트레이닝교육협회 · 주무부처 문화체육관광부</p>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=vod-atc-guide">구매하기</a>
+          <a class="btn btn-line" href="vod/?c=vod-atc-guide">강의실</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">4T 시스템</span>
+        <h3>4T 마스터</h3>
+        <div class="pr">249,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
+        <ul class="list"><li>회원관리 4편 · 세일즈 5편 · 운동지도 6편</li><li>재등록·상담·인바디·OT부터 평가·티칭까지</li><li>15편 · 1시간 53분</li></ul><div class="sub3"><a href="pay/?p=vod-4t-member">회원관리만 89,000</a><a href="pay/?p=vod-4t-sales">세일즈만 109,000</a><a href="pay/?p=vod-4t-coach">운동지도만 129,000</a></div>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=vod-4t-master">구매하기</a>
+          <a class="btn btn-line" href="vod/?c=vod-4t-master">강의실</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">지식</span>
+        <h3>4T 실전해부학</h3>
+        <div class="pr">149,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
+        <ul class="list"><li>1부 · 2부 · 3부</li><li>3시간 30분</li></ul>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=vod-anatomy">구매하기</a>
+          <a class="btn btn-line" href="vod/?c=vod-anatomy">강의실</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">자가 점검</span>
+        <h3>4T 모의고사</h3>
+        <div class="pr">99,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
+        <ul class="list"><li>문제지 8종 PDF (VOL 1~4 · 영역별 4)</li><li>레벨별 해설 · 영역별 해설</li><li>해설 약 1시간 45분</li></ul>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=vod-mock-exam">구매하기</a>
+          <a class="btn btn-line" href="vod/?c=vod-mock-exam">강의실</a>
+        </div>
+      </article>
+      <article class="pcard">
+        <span class="tag plain">단독</span>
+        <h3>트레이너 창업 (창업 전)</h3>
+        <div class="pr">49,000<small>원</small></div>
+        <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
+        <ul class="list"><li>창업을 고민할 때 먼저 볼 것</li><li>52분</li></ul>
+        <div class="acts">
+          <a class="btn btn-solid" href="pay/?p=vod-startup">구매하기</a>
+          <a class="btn btn-line" href="vod/?c=vod-startup">강의실</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+  <div class="endcta" data-cta></div>
+</div>
+
 <div class="screen" id="v-요금" data-view="요금" data-slug="price" data-label="플랜">
 <!-- ═══════════ 요금 (밝은 면) ═══════════ -->
 <!-- ═══════════ 판매 중인 상품 ═══════════ -->
@@ -2238,6 +2369,21 @@ var SEC2VIEW = {};
 VIEWS.forEach(function(v){
   $$("section[id]", v.el).forEach(function(sec){ SEC2VIEW[sec.id] = v.key; });
 });
+
+/* ══ 강의 — 무료 영상은 눌렀을 때만 유튜브를 불러온다 ══ */
+(function(){
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("[data-yt]"); if (!b) return;
+    var id = b.getAttribute("data-yt");
+    var m = document.createElement("div"); m.className = "vmodal"; m.setAttribute("role","dialog");
+    m.innerHTML = '<div class="in"><button class="x" type="button">닫기 ✕</button><div class="fr"><iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="강의"></iframe></div></div>';
+    var close = function(){ m.remove(); document.removeEventListener("keydown", esc); };
+    var esc = function(ev){ if (ev.key === "Escape") close(); };
+    m.addEventListener("click", function(ev){ if (ev.target === m || ev.target.classList.contains("x")) close(); });
+    document.addEventListener("keydown", esc);
+    document.body.appendChild(m);
+  });
+})();
 
 (function router(){
   var nav = $("#nav"), cur = null;

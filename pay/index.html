@@ -8,6 +8,8 @@
 <link rel="icon" href="../favicon.png">
 <link rel="stylesheet" href="pay.css">
 <script src="https://js.tosspayments.com/v2/standard"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script src="../vod/auth.js"></script>
 </head>
 <body>
 <header class="top">
@@ -28,6 +30,7 @@
     <div class="seat" id="seat"></div>
   </section>
 
+  <div id="authBox" hidden></div>
   <form class="card" id="form" autocomplete="on" novalidate>
     <h2>신청자</h2>
     <label for="name">이름</label>
@@ -38,7 +41,12 @@
     <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
     <details class="refund" style="margin-top:18px">
       <summary>환불 규정 보기</summary>
-      <ul>
+      <ul id="rfVod" hidden>
+        <li>결제 후 7일 안이고 강의를 한 편도 재생하지 않았으면 전액 환불</li>
+        <li>일부 재생했다면 7일 안에 한해 재생한 강의분을 뺀 나머지 환불</li>
+        <li>7일이 지났거나 절반 이상 재생하면 환불이 어렵습니다</li>
+      </ul>
+      <ul id="rfSem">
         <li>결제 후 7일 안이면 이유 없이 전액 환불</li>
         <li>날짜 확정 뒤 8일 전까지 전액 · 7일~3일 전 70% 또는 다음 기수 이월</li>
         <li>2일 전~전날은 다음 기수 이월만 · 당일·불참은 환불 없음</li>
@@ -88,6 +96,19 @@ async function loadProduct() {
   $("#pName").textContent = product.name;
   $("#pDesc").textContent = product.description || "";
   $("#pPrice").innerHTML = won(product.price) + "<small>부가세 포함</small>";
+  if (product.kind === "vod") {
+    $("#rfVod").hidden = false; $("#rfSem").hidden = true;
+    $("#sub").textContent = "결제하면 이 계정의 강의실에서 12개월 동안 바로 볼 수 있습니다.";
+    var ses = await HB.session();
+    if (!ses) {
+      $("#form").hidden = true; $("#payBtn").hidden = true; $("#authBox").hidden = false;
+      HB.mountAuth($("#authBox"), function(){ location.reload(); }, { lead: "강의는 계정에 붙어서 열립니다. 로그인하거나 1분 만에 가입한 뒤 결제하세요." });
+      return;
+    }
+    $("#email").value = ses.user.email; $("#email").readOnly = true;
+    var nm = ses.user.user_metadata && ses.user.user_metadata.name; if (nm && !$("#name").value) $("#name").value = nm;
+    $("#note-email") && ($("#note-email").textContent = "");
+  }
   document.title = product.name + " — 허봇스";
   if (product.capacity) {
     const t = await fetch(SB_URL + "/rest/v1/rpc/pay_taken", { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_event: product.event_key }) }).then(r => r.ok ? r.json() : null).catch(() => null);
@@ -128,7 +149,8 @@ $("#payBtn").addEventListener("click", async () => {
 
   $("#payBtn").disabled = true; $("#payBtn").innerHTML = '<span class="spin"></span>주문 만드는 중';
   try {
-    const r = await fetch(FN + "pay-create", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY },
+    const ses = (product.kind === "vod") ? await HB.session() : null;
+    const r = await fetch(FN + "pay-create", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + (ses ? ses.access_token : SB_KEY) },
       body: JSON.stringify({ product_id: product.id, name, phone, email, agree }) });
     const o = await r.json();
     if (!o.ok) throw new Error(o.message || "주문을 만들지 못했습니다");

@@ -68,8 +68,17 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
       $("#okTitle").textContent = "입금 계좌를 안내드립니다";
       $("#okSub").textContent = "아래 계좌로 기한 안에 입금하시면 등록이 확정되고 확인 메일이 갑니다.";
     }
-    const rows = [["주문번호", o.orderId], ["상품", o.orderName], ["금액", '<span class="amt">' + won(o.amount) + "</span>"], ["결제수단", o.method || "-"],
+    const vod = o.kind === "vod";
+    const rows = vod
+      ? [["주문번호", o.orderId], ["강의", o.orderName], ["금액", '<span class="amt">' + won(o.amount) + "</span>"], ["결제수단", o.method || "-"], ["열람", "오늘부터 " + (o.accessDays || 365) + "일"], ["계정", o.buyerEmail]]
+      : [["주문번호", o.orderId], ["상품", o.orderName], ["금액", '<span class="amt">' + won(o.amount) + "</span>"], ["결제수단", o.method || "-"],
       ["일시", kst(o.startsAt)], ["장소", o.place || "확정 후 안내"], ["신청자", o.buyerName + " · " + o.buyerEmail]];
+    if (vod) {
+      $("#okTitle").textContent = "구매가 완료됐습니다";
+      $("#okSub").textContent = "강의실에서 바로 보실 수 있습니다. 확인 메일도 보냈습니다.";
+      const go = document.createElement("a"); go.className = "btn"; go.href = "../vod/?c=" + (o.productId || ""); go.textContent = "강의실 열기"; go.style.marginBottom = "10px";
+      $("#receipt").before(go);
+    }
     if (waiting && o.virtualAccount) rows.push(["입금 계좌", (o.virtualAccount.bankCode || "") + " " + (o.virtualAccount.accountNumber || "") + "<br>예금주 " + (o.virtualAccount.customerName || "") + " · 기한 " + kst(o.virtualAccount.dueDate)]);
     $("#kv").innerHTML = rows.map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
     if (o.receiptUrl) { $("#receipt").href = o.receiptUrl; $("#receipt").hidden = false; }
