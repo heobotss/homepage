@@ -129,6 +129,9 @@ input[type=email].err{border-color:var(--bad)}
 .agree input{margin-top:5px;accent-color:var(--blue);width:16px;height:16px;flex:none}
 .agree a{color:var(--bone-2)}
 .agree small{display:block;color:var(--warm);font-size:.8125rem}
+.agree.sub{margin-left:26px}
+.agree input:disabled+span{opacity:.45}
+.agree-note{font-size:.8125rem;color:var(--warm);margin:10px 0 0;line-height:1.6}
 .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .send{margin-top:28px}
 .msg{margin:12px 0 0;font-size:.9375rem;color:var(--bad);min-height:1.5em}
@@ -238,8 +241,10 @@ input[type=email].err{border-color:var(--bad)}
         <div class="trap" aria-hidden="true"><label>웹사이트<input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label></div>
 
         <div class="field">
-          <label class="agree"><input type="checkbox" id="agree"><span>결과를 보내기 위해 메일·연차·일하는 곳과 응답을 받고 1년 동안 보관하는 데 동의합니다. <a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></label>
-          <label class="agree"><input type="checkbox" id="mkt"><span>새 강의·도구 소식도 받겠습니다<small>선택 · 언제든 답장 한 줄로 끊을 수 있습니다</small></span></label>
+          <label class="agree"><input type="checkbox" id="agree"><span>[필수] 결과를 보내기 위해 메일·연차·일하는 곳과 응답을 받고 1년 동안 보관하는 데 동의합니다. <a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></label>
+          <label class="agree"><input type="checkbox" id="mkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>받는 정보: 메일 주소 · 보관: 동의를 끊을 때까지 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+          <label class="agree sub"><input type="checkbox" id="night" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다<small>야간 수신 동의 · 문자·카카오톡 알림에 적용됩니다</small></span></label>
+          <p class="agree-note">선택 항목은 동의하지 않아도 결과 메일을 그대로 받으실 수 있습니다.</p>
         </div>
 
         <button class="btn wide send" id="send" type="submit">결과 메일로 받기</button>
@@ -278,6 +283,7 @@ input[type=email].err{border-color:var(--bad)}
   <footer class="legal" id="legal"></footer>
 </div>
 
+<script src="../t.js"></script>
 <script>
 (function () {
   "use strict";
@@ -496,7 +502,7 @@ input[type=email].err{border-color:var(--bad)}
     fetch(FN, {
       method: "POST",
       headers: { "Content-Type": "application/json", apikey: SB_KEY },
-      body: JSON.stringify({ email: email, years: picked("years"), center: picked("center"), marketing: $("#mkt").checked, v: D.v, answers: bits(), website: $("#website").value })
+      body: JSON.stringify({ email: email, years: picked("years"), center: picked("center"), marketing: $("#mkt").checked, night: $("#mkt").checked && $("#night").checked, v: D.v, answers: bits(), website: $("#website").value, visitor: window.HBT ? HBT.visitor() : null, utm: window.HBT ? HBT.utm() : null })
     }).then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
       .then(function (d) {
         if (d && d.ok) { $("#mailForm").hidden = true; $("#done").hidden = false; return; }
@@ -510,9 +516,13 @@ input[type=email].err{border-color:var(--bad)}
   }
 
   // ── 연결 ──
+  var started = false;
+  function markStart() { if (!started && window.HBT) { started = true; HBT.event("start", "score"); } }   // 주간 표: 진단 시작 → 연락처
   $("#start").addEventListener("click", function () {
+    markStart();
     ans = QS.map(function () { return null; }); wipe(); begin("preview");
   });
+  $("#mkt").addEventListener("change", function () { $("#night").disabled = !this.checked; if (!this.checked) $("#night").checked = false; });
   $("#resume").addEventListener("click", function () {
     var p = filled("preview"), r = filled("rest");
     if (p < NP) begin("preview");

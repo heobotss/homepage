@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>수신 거부 — 허봇스</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<style>
+/* 광고 메일 수신 거부 (2026-09-18) — 메일의 「수신 거부」 링크가 여기로 온다. 누르는 순간 바로 처리한다(한 번 더 묻지 않는다) */
+@font-face{font-family:'Pretend';font-weight:400;font-display:swap;src:url('/fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-weight:700;font-display:swap;src:url('/fonts/pretendard-700.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--line:#222222;--bad:#E07A6B;--blue:#4F86F7}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:"Pretend","Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.85;word-break:keep-all}
+main{max-width:560px;margin:0 auto;padding:clamp(56px,12vw,112px) clamp(16px,4vw,28px) 48px}
+h1{font-size:clamp(1.7rem,6vw,2.4rem);line-height:1.25;letter-spacing:-.04em;margin:0}
+p{color:var(--bone-2);margin:16px 0 0}
+a{color:var(--bone)}
+.small{font-size:.875rem;color:var(--warm);margin-top:40px;padding-top:16px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="t">수신 거부를 처리하고 있습니다…</h1>
+  <p id="p">잠시만 기다려 주세요.</p>
+  <noscript><p>자바스크립트가 꺼져 있어 처리하지 못했습니다. 받은 메일에 「그만」이라고 답장해 주시면 바로 끊어 드립니다.</p></noscript>
+  <p class="small">허봇스 · 대표 허재윤 · 사업자등록번호 636-04-03949 · 010-8245-5022 · gjwodbs77@gmail.com<br><a href="/">홈으로</a></p>
+</main>
+<script>
+(function () {
+  "use strict";
+  var t = new URLSearchParams(location.search).get("t") || "";
+  var T = document.getElementById("t"), P = document.getElementById("p");
+  function day(iso) { var d = new Date(iso); return d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일"; }
+  if (!/^[0-9a-f-]{36}$/i.test(t)) { T.textContent = "링크가 올바르지 않습니다"; P.textContent = "받은 메일에 「그만」이라고 답장해 주시면 바로 끊어 드립니다."; return; }
+  fetch("https://kpubgeejyiupdvbbdxwt.supabase.co/functions/v1/mail-unsub", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: t })
+  }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok && d.ok, d: d }; }); })
+    .then(function (x) {
+      if (!x.ok) throw new Error(x.d && x.d.message);
+      T.textContent = "수신 거부가 처리됐습니다";
+      P.textContent = day(x.d.at) + "부터 허봇스의 강의·무료 자료 안내 메일(야간 포함)을 보내지 않습니다. 결제 확인처럼 직접 신청하신 일에 대한 메일은 계속 갈 수 있습니다. 처리 결과는 메일로도 보내 드렸습니다.";
+    })
+    .catch(function () {
+      T.textContent = "처리하지 못했습니다";
+      P.textContent = "잠시 뒤 다시 눌러 주시거나, 받은 메일에 「그만」이라고 답장해 주시면 바로 끊어 드립니다.";
+    });
+})();
+</script>
+</body>
+</html>

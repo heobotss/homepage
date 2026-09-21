@@ -10,6 +10,7 @@
 <script src="https://js.tosspayments.com/v2/standard"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
 <script src="../vod/auth.js"></script>
+<script src="../t.js"></script>
 </head>
 <body>
 <header class="top">
@@ -46,6 +47,11 @@
         <li>그 밖에는 열람 기간(12개월) 안이면 재생하지 않은 강의분 환불</li>
         <li>열람 기간이 끝난 뒤에는 환불되지 않습니다</li>
       </ul>
+      <ul id="rfApp" hidden>
+        <li>결제 후 7일 안이면 이유 없이 전액 환불</li>
+        <li>7일이 지나면 남은 기간을 날짜로 나눠 환불</li>
+        <li>자동으로 다시 결제되지 않습니다 — 기간이 끝나면 새 기록 저장만 멈추고, 쌓인 기록은 계속 볼 수 있습니다</li>
+      </ul>
       <ul id="rfSem">
         <li>결제 후 7일 안이면 이유 없이 전액 환불</li>
         <li>날짜 확정 뒤 8일 전까지 전액 · 7일~3일 전 70% 또는 다음 기수 이월</li>
@@ -54,6 +60,9 @@
       </ul>
       <p style="margin:8px 0 0"><a href="../policy/refund.html" target="_blank" rel="noopener">전문 보기</a></p>
     </details>
+    <!-- 광고 동의 두 칸은 pay-create 새 판(연락처 창고 저장)을 올릴 때 style="display:none" 을 지운다 — 옛 함수는 이 값을 버려서, 보이면 저장되는 척만 한다 (09-22, 카드사 심사 뒤 배포) -->
+    <label class="agree" style="display:none"><input type="checkbox" id="adOk"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다 <span style="color:var(--warm)">(동의하지 않아도 결제할 수 있습니다 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다)</span></span></label>
+    <label class="agree" style="margin-left:26px;display:none"><input type="checkbox" id="nightOk" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다 <span style="color:var(--warm)">(문자·카카오톡 알림에 적용)</span></span></label>
     <label class="agree"><input type="checkbox" id="agree"><span>환불 규정과 <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>·<a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>을 확인했고 동의합니다.</span></label>
   </form>
 
@@ -96,13 +105,16 @@ async function loadProduct() {
   $("#pName").textContent = product.name;
   $("#pDesc").textContent = product.description || "";
   $("#pPrice").innerHTML = won(product.price) + "<small>부가세 포함</small>";
-  if (product.kind === "vod") {
-    $("#rfVod").hidden = false; $("#rfSem").hidden = true;
-    $("#sub").textContent = "결제하면 이 계정의 강의실에서 12개월 동안 바로 볼 수 있습니다.";
+  if (product.kind === "vod" || product.kind === "app") {
+    const isApp = product.kind === "app";
+    $(isApp ? "#rfApp" : "#rfVod").hidden = false; $("#rfSem").hidden = true;
+    $("#sub").textContent = isApp ? "수업일지에 쓰는 계정으로 결제하면 바로 30일이 더해집니다. 남은 기간이 있으면 그 뒤에 이어 붙습니다."
+                                  : "결제하면 이 계정의 강의실에서 12개월 동안 바로 볼 수 있습니다.";
     var ses = await HB.session();
     if (!ses) {
       $("#form").hidden = true; $("#payBtn").hidden = true; $("#authBox").hidden = false;
-      HB.mountAuth($("#authBox"), function(){ location.reload(); }, { lead: "강의는 계정에 붙어서 열립니다. 로그인하거나 1분 만에 가입한 뒤 결제하세요." });
+      HB.mountAuth($("#authBox"), function(){ location.reload(); }, { lead: isApp ? "이용권은 수업일지 계정에 붙습니다. 수업일지에 로그인하던 메일과 비밀번호로 로그인하세요."
+                                                                              : "강의는 계정에 붙어서 열립니다. 로그인하거나 1분 만에 가입한 뒤 결제하세요." });
       return;
     }
     $("#email").value = ses.user.email; $("#email").readOnly = true;
@@ -149,9 +161,10 @@ $("#payBtn").addEventListener("click", async () => {
 
   $("#payBtn").disabled = true; $("#payBtn").innerHTML = '<span class="spin"></span>주문 만드는 중';
   try {
-    const ses = (product.kind === "vod") ? await HB.session() : null;
+    const ses = (product.kind === "vod" || product.kind === "app") ? await HB.session() : null;
+    const pk = window.HBT ? HBT.pack() : { visitor: null, utm: null };
     const r = await fetch(FN + "pay-create", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + (ses ? ses.access_token : SB_KEY) },
-      body: JSON.stringify({ product_id: product.id, name, phone, email, agree }) });
+      body: JSON.stringify({ product_id: product.id, name, phone, email, agree, ad: $("#adOk").checked, night: $("#adOk").checked && $("#nightOk").checked, visitor: pk.visitor, utm: pk.utm }) });
     const o = await r.json();
     if (!o.ok) throw new Error(o.message || "주문을 만들지 못했습니다");
     sessionStorage.setItem("hb_order", JSON.stringify({ orderId: o.orderId, amount: o.amount, orderName: o.orderName }));
@@ -166,6 +179,7 @@ $("#payBtn").addEventListener("click", async () => {
     $("#payBtn").disabled = false; $("#payBtn").textContent = "결제하기";
   }
 });
+$("#adOk").addEventListener("change", function () { $("#nightOk").disabled = !this.checked; if (!this.checked) $("#nightOk").checked = false; });
 $("#phone").addEventListener("input", (e) => {
   const v = e.target.value.replace(/[^0-9]/g, "").slice(0, 11);
   e.target.value = v.replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");

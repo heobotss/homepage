@@ -88,7 +88,9 @@ var won = function(n){ return n.toLocaleString("ko-KR") + "원"; };
 var ymd = function(d){ var x=new Date(d); return x.getFullYear()+"."+(x.getMonth()+1)+"."+x.getDate(); };
 var mmss = function(s){ if(!s) return ""; var h=Math.floor(s/3600), m=Math.floor(s%3600/60); return h? h+"시간 "+m+"분" : m+"분"; };
 
-var state = { session:null, access:{}, videos:[], files:[], course:null, coll:null, videoId:null, hls:null };
+var state = { session:null, access:{}, part:{}, videos:[], files:[], course:null, coll:null, videoId:null, hls:null };
+// part[상품] = 무료 열람권으로 열린 영상 id 목록 (09-18). 없으면 상품 전체를 볼 수 있다
+function canPlay(v){ var p = state.part[v.product_id]; return !p || p.indexOf(v.id) >= 0; }
 
 async function authed(url, body){
   var s = await HB.session();
@@ -105,7 +107,8 @@ async function boot(){
   }
   document.getElementById("lead").textContent = "구매한 강의를 12개월 동안 볼 수 있습니다.";
   var r1 = await sb.rpc("vod_my_access");
-  state.access = {}; (r1.data||[]).forEach(function(a){ state.access[a.product_id] = a.expires_at; });
+  state.access = {}; state.part = {};
+  (r1.data||[]).forEach(function(a){ state.access[a.product_id] = a.expires_at; if (a.videos) state.part[a.product_id] = a.videos; });
   var r2 = await sb.from("vod_videos").select("*").eq("free", false).order("sort");
   state.videos = r2.data || [];
   var r3 = await sb.from("vod_files").select("*").order("sort");
@@ -129,7 +132,8 @@ function home(){
   h += '<h2 class="sec">내 강의 ' + mine.length + '</h2>';
   if (!mine.length) h += '<p class="muted">아직 구매한 강의가 없습니다. 아래에서 고르거나 <a href="../#/vod">무료 강의</a>부터 보세요.</p>';
   else h += '<div class="grid">' + mine.map(function(c){
-    return '<button class="course" data-c="'+c.id+'"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+ymd(state.access[c.id])+'까지 볼 수 있음</span></button>';
+    var pt = state.part[c.id];
+    return '<button class="course" data-c="'+c.id+'"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+(pt ? '무료 열람 '+pt.length+'편 · ' : '')+ymd(state.access[c.id])+'까지 볼 수 있음</span></button>';
   }).join("") + '</div>';
   if (rest.length) {
     h += '<h2 class="sec">더 볼 수 있는 강의</h2><div class="grid">';
@@ -151,7 +155,7 @@ function openCourse(id, want){
   history.replaceState(null, "", location.pathname + "?c=" + id);
   var vids = state.videos.filter(function(v){ return v.product_id===id; });
   var colls = []; vids.forEach(function(v){ if (colls.indexOf(v.collection)<0) colls.push(v.collection); });
-  var files = state.files.filter(function(f){ return f.product_id===id; });
+  var files = state.part[id] ? [] : state.files.filter(function(f){ return f.product_id===id; });   // 무료 열람권은 문제지 제외
   var wv = want ? vids.filter(function(v){ return v.title === want; })[0] : null;
   state.coll = wv ? wv.collection : colls[0];
   var h = whoBar() + '<a href="#" class="back" id="toHome">← 내 강의</a>';
@@ -160,6 +164,7 @@ function openCourse(id, want){
   if (colls.length>1) h += '<div class="tabs" id="tabs">'+colls.map(function(n,i){ return '<button data-k="'+esc(n)+'" class="'+(n===state.coll?'on':'')+'">'+esc(label(n))+'</button>'; }).join("")+'</div>';
   else h += '<div style="height:18px"></div>';
   h += '<div class="list" id="list"></div>';
+  if (state.part[id]) h += '<p class="muted" style="margin-top:12px">무료 열람권으로 '+state.part[id].length+'편이 열려 있습니다. 나머지는 <a href="../pay/?p='+id+'">강의를 구매</a>하면 12개월 동안 볼 수 있습니다.</p>';
   if (files.length) h += '<h2 class="sec">문제지 내려받기</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+' PDF</button>'; }).join("")+'</div>';
   if (!vids.length) h += '<p class="muted" style="margin-top:14px">영상을 준비하고 있습니다.</p>';
   $app.innerHTML = h; bindWho();
@@ -169,6 +174,7 @@ function openCourse(id, want){
   if (tabs) tabs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ tabs.querySelectorAll("button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); state.coll=b.getAttribute("data-k"); drawList(); }; });
   $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
   drawList();
+  if (!wv && state.part[id]) { wv = vids.filter(canPlay)[0] || null; if (wv) { state.coll = wv.collection; if (tabs) tabs.querySelectorAll("button").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-k")===state.coll); }); drawList(); } }
   var first = wv || vids.filter(function(v){ return v.collection===state.coll; })[0];
   if (first) play(first.id, false);
 }
@@ -182,7 +188,8 @@ function label(n){
 function drawList(){
   var vids = state.videos.filter(function(v){ return v.product_id===state.course && v.collection===state.coll; });
   document.getElementById("list").innerHTML = vids.map(function(v,i){
-    return '<button data-v="'+v.id+'" class="'+(v.id===state.videoId?'on':'')+'"><span class="n">'+(i+1)+'</span><span style="flex:1">'+esc(v.title)+'</span><span class="len">'+mmss(v.length_sec)+'</span></button>';
+    var ok = canPlay(v);
+    return '<button data-v="'+v.id+'" class="'+(v.id===state.videoId?'on':'')+'"'+(ok?'':' disabled style="opacity:.45;cursor:default"')+'><span class="n">'+(i+1)+'</span><span style="flex:1">'+esc(v.title)+'</span><span class="len">'+(ok?mmss(v.length_sec):'구매 후')+'</span></button>';
   }).join("");
   document.querySelectorAll("#list [data-v]").forEach(function(b){ b.onclick=function(){ play(b.getAttribute("data-v"), true); }; });
 }

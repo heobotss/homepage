@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>헬스트레이너 수업일지 30일 무료 — 허봇스</title>
+<meta name="description" content="지난 기록 불러오기 → 숫자만 고치기. 수업 끝나고 일지 쓰는 시간을 줄여 보세요.">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="허봇스">
+<meta property="og:title" content="헬스트레이너 수업일지 30일 무료">
+<meta property="og:description" content="지난 기록 불러오기 → 숫자만 고치기. 수업 끝나고 일지 쓰는 시간을 줄여 보세요.">
+<meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
+<meta property="og:url" content="https://heobotss.com/free/ptlog/">
+<link rel="canonical" href="https://heobotss.com/free/ptlog/">
+<style>
+/* 허봇스 0원 열람권 신청 (2026-09-18) — _무료열림굽기.py 가 free_offers 한 줄마다 이 틀로 /free/<id>/ 를 굽는다.
+   토큰은 100점 자가진단(score)과 같다. 블루는 포커스·작은 표시에만. */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('/fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/bahn-700.woff2') format('woff2')}
+:root{
+  color-scheme:dark;
+  --ink:#0A0A0A; --ink-2:#111111;
+  --bone:#F2F2F2; --bone-2:#BDBDBD; --warm:#8E8E8E;
+  --line:#222222; --line-2:#2F2F2F;
+  --blue:#4F86F7; --bad:#E07A6B;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
+  --tech:"Bahn","Bahnschrift",var(--sans);
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.85;word-break:keep-all;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+a{color:var(--bone)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:var(--tech);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top .home{font-size:.8125rem;color:var(--warm);text-decoration:none}
+.top .home:hover{color:var(--bone)}
+
+main{flex:1;width:100%;max-width:620px;margin:0 auto;padding:clamp(56px,11vw,104px) clamp(16px,4vw,28px) 0}
+.state{display:inline-block;font-size:.8125rem;color:var(--bone-2);border:1px solid var(--line-2);border-radius:999px;padding:3px 12px;margin:0 0 20px}
+.state.open{color:var(--bone);border-color:var(--blue)}
+h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.22;letter-spacing:-.045em;font-weight:900;margin:0}
+.lede{font-size:clamp(1.05rem,2.6vw,1.2rem);color:var(--bone-2);margin:20px 0 0;max-width:30em}
+
+.facts{list-style:none;margin:40px 0 0;padding:0;border-top:1px solid var(--line)}
+.facts li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.9375rem;color:var(--bone-2)}
+.facts b{color:var(--bone);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+
+form{margin-top:36px}
+.field>label{display:block;font-size:.9375rem;color:var(--bone-2);margin-bottom:8px}
+input[type=email]{width:100%;background:var(--ink-2);border:1px solid var(--line-2);border-radius:10px;color:var(--bone);font:inherit;font-size:1rem;padding:13px 15px;outline:none}
+input[type=email]:focus{border-color:var(--blue)}
+input[type=email].err{border-color:var(--bad)}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:.9375rem;color:var(--bone-2);margin-top:14px;line-height:1.6}
+.agree input{margin-top:5px;accent-color:var(--blue);width:16px;height:16px;flex:none}
+.agree a{color:var(--bone-2)}
+.agree small{display:block;color:var(--warm);font-size:.8125rem}
+.agree.sub{margin-left:26px}
+.agree input:disabled+span{opacity:.45}
+.agree-note{font-size:.8125rem;color:var(--warm);margin:10px 0 0;line-height:1.6}
+.trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:15px 26px;font-size:1rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none;transition:background .15s}
+.btn:hover{background:#FFF}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.wide{width:100%;margin-top:24px}
+.btn.line{background:transparent;color:var(--bone);border:1px solid var(--line-2)}
+.msg{margin:12px 0 0;font-size:.9375rem;color:var(--bad);min-height:1.5em}
+.done,.closed{margin-top:36px;padding:20px 0 0;border-top:1px solid var(--line)}
+.done b,.closed b{display:block;font-size:1.15rem}
+.done p,.closed p{margin:6px 0 0;color:var(--bone-2);font-size:.9375rem}
+.closed .btn{margin-top:18px}
+.legal{margin-top:64px;font-size:.8125rem;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding:16px 0 32px}
+.legal a{color:var(--warm)}
+@media (max-width:420px){.facts li{flex-direction:column;gap:0}.facts b{text-align:left}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">허봇스<small>HEOBOTSS</small></a>
+  <a class="home" href="/">홈으로</a>
+</header>
+
+<main>
+  <p class="state" id="state">곧 열립니다</p>
+  <h1>헬스트레이너 수업일지 30일 무료</h1>
+  <p class="lede">지난 기록 불러오기 → 숫자만 고치기. 수업 끝나고 일지 쓰는 시간을 줄여 보세요.</p>
+
+  <ul class="facts">
+    <li><span>열리는 것</span><b>수업일지 앱 · 기록과 저장 전부</b></li>
+    <li><span>쓸 수 있는 기간</span><b>받은 때부터 30일</b></li>
+    <li><span>신청 기간</span><b>11월 2일(월) ~ 11월 8일(일)</b></li>
+    <li><span>필요한 것</span><b>메일 주소 하나 · 카드 등록 없음</b></li>
+  </ul>
+
+  <form id="form" novalidate hidden>
+    <div class="field">
+      <label for="email">받을 메일</label>
+      <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+    </div>
+    <div class="trap" aria-hidden="true"><label>웹사이트<input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+    <label class="agree"><input type="checkbox" id="agree"><span>[필수] 이 메일 주소로 허봇스 계정(수업일지·강의실 공용)을 만들고 열기 링크를 보내는 데 동의합니다. 계정은 탈퇴하실 때까지 보관합니다. <a href="/policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></label>
+    <label class="agree"><input type="checkbox" id="mkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>받는 정보: 메일 주소 · 보관: 동의를 끊을 때까지 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+    <label class="agree sub"><input type="checkbox" id="night" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다<small>야간 수신 동의 · 문자·카카오톡 알림에 적용됩니다</small></span></label>
+    <p class="agree-note">선택 항목은 동의하지 않아도 무료 열람권을 그대로 받으실 수 있습니다. 무료 기간이 끝나도 자동으로 결제되지 않습니다.</p>
+    <button class="btn wide" id="send" type="submit">무료로 열기</button>
+    <p class="msg" id="msg" role="alert"></p>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <b>메일을 보냈습니다.</b>
+    <p>메일의 「지금 열기」를 누르면 로그인된 채로 바로 열립니다. 버튼은 1시간 동안 쓸 수 있어요. 안 보이면 스팸함도 확인해 주세요.</p>
+  </div>
+
+  <div class="closed" id="closed" >
+    <b id="closedT">11월 2일(월)에 열립니다.</b>
+    <p id="closedP">열리는 날 이 페이지에서 메일 주소만 넣으면 됩니다.</p>
+    <a class="btn line" href="/pay/?p=app-trainer-month" id="paid" hidden>이용권 보기</a>
+  </div>
+  <noscript><p class="agree-note">신청하려면 자바스크립트를 켜 주세요.</p></noscript>
+
+  <footer class="legal" id="legal"></footer>
+</main>
+
+<script src="/t.js"></script>
+<script>
+(function () {
+  "use strict";
+  const O = {"id": "ptlog", "opens_at": "2026-11-01T15:00:00+00:00", "closes_at": "2026-11-08T15:00:00+00:00", "paid_hint": "무료 기간이 끝나면 트레이너 플랜 1개월 이용권 9,900원으로 이어서 쓸 수 있습니다.", "opens_txt": "11월 2일(월)"};
+  const FN = "https://kpubgeejyiupdvbbdxwt.supabase.co/functions/v1/free-claim";
+  const $ = (s) => document.querySelector(s);
+
+  // 지금 열려 있나 — 굽는 시점이 아니라 여는 시점 기준으로 다시 판정
+  function phase() {
+    const now = Date.now();
+    if (now < Date.parse(O.opens_at)) return "early";
+    if (now >= Date.parse(O.closes_at)) return "closed";
+    return "open";
+  }
+  function show() {
+    const p = phase();
+    $("#state").className = "state" + (p === "open" ? " open" : "");
+    $("#state").textContent = p === "open" ? "지금 신청 받는 중" : p === "early" ? "곧 열립니다" : "신청 기간 끝";
+    $("#form").hidden = p !== "open";
+    $("#closed").hidden = p === "open";
+    if (p === "early") { $("#closedT").textContent = O.opens_txt + "에 열립니다."; $("#closedP").textContent = "열리는 날 이 페이지에서 메일 주소만 넣으면 됩니다."; $("#paid").hidden = true; }
+    if (p === "closed") { $("#closedT").textContent = "신청 기간이 끝났습니다."; $("#closedP").textContent = O.paid_hint || ""; $("#paid").hidden = !O.paid_hint; }
+  }
+  show();
+
+  $("#mkt").addEventListener("change", function () { $("#night").disabled = !this.checked; if (!this.checked) $("#night").checked = false; });
+
+  $("#form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const msg = $("#msg"), email = $("#email").value.trim();
+    msg.textContent = ""; $("#email").classList.remove("err");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { $("#email").classList.add("err"); msg.textContent = "메일 주소를 다시 확인해 주세요."; return; }
+    if (!$("#agree").checked) { msg.textContent = "열람권을 드리려면 필수 항목에 동의해 주세요."; return; }
+    $("#send").disabled = true; $("#send").textContent = "보내는 중…";
+    const pk = window.HBT ? HBT.pack() : { visitor: null, utm: null };
+    try {
+      const r = await fetch(FN, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ offer: O.id, email: email, agree: true, ad: $("#mkt").checked, night: $("#mkt").checked && $("#night").checked,
+          visitor: pk.visitor, utm: pk.utm, website: $("#website").value })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.ok) throw new Error(d.message || "잠시 문제가 생겼습니다. 다시 시도해 주세요.");
+      $("#form").hidden = true; $("#done").hidden = false;
+    } catch (err) {
+      msg.textContent = err.message;
+      $("#send").disabled = false; $("#send").textContent = "무료로 열기";
+    }
+  });
+
+  fetch("/policy/legal.txt").then((r) => r.ok ? r.text() : "").then((t) => { if (t) $("#legal").innerHTML = t.replace(/\.\.\/policy\//g, "/policy/"); }).catch(() => {});
+})();
+</script>
+</body>
+</html>
