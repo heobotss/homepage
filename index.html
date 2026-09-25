@@ -325,6 +325,28 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* ══ 둘러보기 — 무료부터 차례로 (09-25) ══ */
+.guide{list-style:none; margin:clamp(26px,3.4vw,40px) 0 0; padding:0; border-top:1px solid var(--line)}
+.g-item{display:grid; grid-template-columns:52px minmax(0,1fr) auto auto; align-items:center; gap:10px 20px;
+  padding:20px 4px; border-bottom:1px solid var(--line)}
+.g-n{font-family:var(--tech); font-size:15px; font-weight:700; color:var(--warm)}
+.g-free .g-n{color:var(--brass)}
+.g-t h3{font-size:clamp(19px,2.1vw,23px); letter-spacing:-.03em}
+.g-t p{margin-top:5px; font-size:14.5px; color:var(--warm); line-height:1.7; max-width:44em}
+.g-chip{font-size:12.5px; font-weight:700; color:var(--bone-2); white-space:nowrap;
+  border:1px solid var(--line-2); border-radius:99px; padding:5px 12px}
+.g-free .g-chip{color:var(--bone); border-color:rgba(79,134,247,.55)}
+.g-item .btn-sm{padding:11px 18px; border-radius:9px; white-space:nowrap}
+.g-two{display:flex; gap:8px}
+@media (max-width:820px){
+  .g-item{grid-template-columns:40px minmax(0,1fr); gap:8px 12px; padding:18px 2px}
+  .g-t{grid-column:2}
+  .g-chip{grid-column:2; justify-self:start}
+  .g-item .btn-sm,.g-two{grid-column:2; width:100%}
+  .g-two .btn{flex:1 1 0}
+  .g-t p{font-size:13.8px}
+}
+
 /* ══ 후기 — 인스타 원문 · 계정 · 스토리 사진 (09-17) ══ */
 #s-reviews{padding-block:clamp(40px,5vw,72px); border-top:1px solid var(--line)}
 .rv-head{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:6px 24px}
@@ -1188,17 +1210,28 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 
     <div class="lanes" id="lanes" aria-label="판매 중인 것">
       <article class="lane">
-        <p class="lane-k">영상 강의 · 구매 후 12개월</p>
+        <p class="lane-k">영상 강의 · 무료 6편 + 유료</p>
         <h2>강의</h2>
         <p class="lane-d">회원관리·세일즈·운동지도부터 ATC 트레이너 가이드까지</p>
-        <p class="lane-pr"><b>49,000</b>원부터 <span>올패스 590,000원</span></p>
+        <p class="lane-pr"><b>0</b>원부터 <span>무료 강의 6편 · 유료 49,000원부터 · 올패스 590,000원</span></p>
         <div class="lane-act">
-          <a class="btn btn-solid" href="#/vod">강의 고르기</a>
+          <a class="btn btn-solid" href="#/vod">무료 강의 보기</a>
           <a class="btn btn-line" href="pay/?p=vod-allpass">올패스 결제</a>
         </div>
       </article>
       <article class="lane">
-        <p class="lane-k">오프라인 · 11~12월 중 하루 · 울산</p>
+        <p class="lane-k">만들어 둔 프로그램 16개 · 무료 진단 바로 가능</p>
+        <h2>프로그램</h2>
+        <p class="lane-d">트레이너·센터 진단표는 무료, 나머지는 플랜으로 엽니다</p>
+        <p class="lane-pr"><b>0</b>원부터 <span>진단표 2종 무료 · 플랜은 준비 중(월 9,900원부터)</span></p>
+        <div class="lane-act">
+          <a class="btn btn-solid" href="#" data-link="formT">트레이너 진단</a>
+          <a class="btn btn-line" href="#" data-link="form">센터 진단</a>
+        </div>
+        <a class="lane-more" href="#/price">플랜 보기 <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="lane">
+        <p class="lane-k">오프라인 · 11~12월 중 하루 · 장소는 확정 후 안내</p>
         <h2>세미나 10기</h2>
         <p class="lane-d">4T 트레이너 마케팅 세미나 — 하루 동안 옆에 앉아서 같이 고칩니다</p>
         <p class="lane-pr"><span class="o">사전등록가</span> <b>390,000</b>원</p>
@@ -1207,19 +1240,8 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <a class="btn btn-line" href="#" data-link="seminar">자세히</a>
         </div>
       </article>
-      <article class="lane">
-        <p class="lane-k">만들어 둔 프로그램 16개 · 무료 진단 바로 가능</p>
-        <h2>프로그램</h2>
-        <p class="lane-d">트레이너·센터 진단표는 무료, 나머지는 플랜으로 엽니다</p>
-        <p class="lane-pr"><b>0</b>원 무료 진단 <span>플랜 준비 중 · 월 9,900원부터</span></p>
-        <div class="lane-act">
-          <a class="btn btn-solid" href="#" data-link="formT">트레이너 진단</a>
-          <a class="btn btn-line" href="#" data-link="form">센터 진단</a>
-        </div>
-        <a class="lane-more" href="#/price">플랜 보기 <span aria-hidden="true">→</span></a>
-      </article>
     </div>
-    <div class="lane-dots" id="laneDots" aria-label="판매 칸 넘기기"><button type="button" aria-label="강의" aria-current="true"></button><button type="button" aria-label="세미나"></button><button type="button" aria-label="프로그램"></button></div>
+    <div class="lane-dots" id="laneDots" aria-label="판매 칸 넘기기"><button type="button" aria-label="강의" aria-current="true"></button><button type="button" aria-label="프로그램"></button><button type="button" aria-label="세미나"></button></div>
   </div>
 </section>
 
@@ -1330,6 +1352,104 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
   <div class="endcta" data-cta></div>
 </div>
 
+
+<div class="screen" id="v-둘러보기" data-view="둘러보기" data-slug="guide" data-label="둘러보기">
+<section id="s-guide" data-rail="둘러보기">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="label">처음 오셨다면</p>
+      <h2 class="h-lg">이 순서대로<br>하나씩 해 보세요</h2>
+      <p class="lede">앞의 다섯 가지는 <b>돈이 들지 않습니다.</b> 먼저 재 보고, 필요하면 그다음으로 가시면 됩니다.</p>
+    </div>
+
+    <ol class="guide">
+      <li class="g-item g-free">
+        <span class="g-n">01</span>
+        <div class="g-t">
+          <h3>30초 진단</h3>
+          <p>방문자 리뷰·블로그 글 수만 넣으면 우리 마케팅이 전국에서 상위 몇 %인지 바로 나옵니다.</p>
+        </div>
+        <span class="g-chip">무료 · 30초</span>
+        <a class="btn btn-solid btn-sm" href="#/check">재 보기</a>
+      </li>
+      <li class="g-item g-free">
+        <span class="g-n">02</span>
+        <div class="g-t">
+          <h3>트레이너 점수 확인</h3>
+          <p>체크리스트 100문항으로 나는 몇 점짜리 트레이너인지, 어느 단계인지 확인합니다.</p>
+        </div>
+        <span class="g-chip">무료 · 3분</span>
+        <a class="btn btn-solid btn-sm" href="score/">풀어 보기</a>
+      </li>
+      <li class="g-item g-free">
+        <span class="g-n">03</span>
+        <div class="g-t">
+          <h3>진단표 받기</h3>
+          <p>이름과 센터 주소 두 줄이면 됩니다. 센터는 카드 12장, 트레이너는 내 이름이 적힌 리뷰를 보내 드립니다.</p>
+        </div>
+        <span class="g-chip">무료 · 하루 안에 메일</span>
+        <span class="g-two"><a class="btn btn-solid btn-sm" href="#" data-link="formT">트레이너</a><a class="btn btn-line btn-sm" href="#" data-link="form">센터</a></span>
+      </li>
+      <li class="g-item g-free">
+        <span class="g-n">04</span>
+        <div class="g-t">
+          <h3>무료 강의 6편</h3>
+          <p>가입 없이 바로 재생됩니다. 4T 부트캠프와 ATC 사전 강의를 먼저 보세요.</p>
+        </div>
+        <span class="g-chip">무료 · 바로 재생</span>
+        <a class="btn btn-solid btn-sm" href="#/vod">보러 가기</a>
+      </li>
+      <li class="g-item g-free">
+        <span class="g-n">05</span>
+        <div class="g-t">
+          <h3>수업일지 30일</h3>
+          <p>수업 기록을 30초로 줄이는 프로그램을 30일 동안 그냥 써 보세요.</p>
+        </div>
+        <span class="g-chip">무료 · 30일</span>
+        <a class="btn btn-solid btn-sm" href="free/ptlog/">열어 보기</a>
+      </li>
+      <li class="g-item">
+        <span class="g-n">06</span>
+        <div class="g-t">
+          <h3>무엇이 효과 있는지 확인</h3>
+          <p>전국 28,200곳에 대고 하나씩 검증한 결과입니다. 근거 없는 조언은 저희가 먼저 뺐습니다.</p>
+        </div>
+        <span class="g-chip">읽기</span>
+        <a class="btn btn-line btn-sm" href="#/facts">검증 보기</a>
+      </li>
+      <li class="g-item">
+        <span class="g-n">07</span>
+        <div class="g-t">
+          <h3>유료 강의</h3>
+          <p>회원관리·세일즈·운동지도부터 ATC 트레이너 가이드까지. 필요한 것만 고르거나 올패스로 전부 봅니다.</p>
+        </div>
+        <span class="g-chip">49,000원부터 · 올패스 590,000원</span>
+        <a class="btn btn-line btn-sm" href="#/vod">강의 고르기</a>
+      </li>
+      <li class="g-item">
+        <span class="g-n">08</span>
+        <div class="g-t">
+          <h3>프로그램·플랜</h3>
+          <p>진단표 2종은 계속 무료입니다. 매달 다시 재고 자동으로 도는 프로그램은 플랜으로 엽니다.</p>
+        </div>
+        <span class="g-chip">무료 2종 · 플랜 준비 중</span>
+        <a class="btn btn-line btn-sm" href="#/price">플랜 보기</a>
+      </li>
+      <li class="g-item">
+        <span class="g-n">09</span>
+        <div class="g-t">
+          <h3>세미나 10기</h3>
+          <p>하루 동안 옆에 앉아서 같이 고칩니다. 11~12월 중 하루, 장소는 확정 후 안내드립니다.</p>
+        </div>
+        <span class="g-chip">사전등록가 390,000원</span>
+        <a class="btn btn-line btn-sm" href="pay/?p=seminar-10-early">신청·결제</a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+  <div class="endcta" data-cta></div>
+</div>
 
 <div class="screen" id="v-진단" data-view="진단" data-slug="check" data-label="30초 진단">
 <!-- ═══════════ 자가 진단 — 두 갈래 ═══════════ -->
@@ -2250,7 +2370,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
         <dl>
           <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
-          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
+          <dt>장소</dt><dd>확정 후 메일 안내</dd>
           <dt>정원</dt><dd>12명 · 결제 순 마감</dd>
         </dl>
         <div class="acts">
@@ -2266,7 +2386,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
         <dl>
           <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
-          <dt>장소</dt><dd>울산 (확정 후 안내)</dd>
+          <dt>장소</dt><dd>확정 후 메일 안내</dd>
           <dt>정원</dt><dd>12명 · 사전등록과 합산</dd>
         </dl>
         <div class="acts">
