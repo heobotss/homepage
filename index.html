@@ -325,6 +325,31 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* ══ 강의 화면 손질 (09-27) ══ */
+.v-gain{margin-top:12px; padding-top:12px; border-top:1px dashed rgba(79,134,247,.3); font-size:14px; color:var(--bone-2); line-height:1.6; word-break:keep-all}
+.v-gain b{color:var(--brass); font-weight:700}
+.v-list{margin-top:14px; border-top:1px solid var(--line); padding-top:12px}
+.v-list summary{cursor:pointer; font-size:13.5px; font-weight:700; color:var(--brass); list-style:none}
+.v-list summary::-webkit-details-marker{display:none}
+.v-list summary::after{content:" ▾"}
+.v-list[open] summary::after{content:" ▴"}
+.v-list ul{margin:12px 0 0; padding:0; list-style:none; display:grid; gap:1px; background:var(--line); border:1px solid var(--line)}
+.v-list li a{display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:10px 12px; background:var(--ink-2)}
+.v-list li a:hover{background:var(--ink-3)}
+.v-list li b{font-size:13.5px; font-weight:600; color:var(--bone)}
+.v-list li span{font-size:11.5px; color:var(--warm); white-space:nowrap}
+.v-note{margin-top:20px; font-size:13px; color:var(--warm); line-height:1.8}
+.v-note a{color:var(--bone); border-bottom:1px solid var(--line-2)}
+@media (max-width:760px){
+  /* 무료 6편은 세로로 쌓지 않고 옆으로 넘긴다 */
+  .vfree{display:grid !important; grid-auto-flow:column; grid-template-columns:none; grid-auto-columns:72%;
+    overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain;
+    gap:10px; margin:10px -16px 0; padding:0 16px 8px; scroll-padding-left:16px; scrollbar-width:none}
+  .vfree::-webkit-scrollbar{display:none}
+  .vfree .vthumb{scroll-snap-align:start}
+  .v-list li a{flex-direction:column; gap:2px}
+}
+
 /* ══ 수강생 결과 — 인스타 성과 캡처 (09-27) ══ */
 #s-results{padding-block:clamp(40px,5vw,72px); border-top:1px solid var(--line)}
 .rs-head h2{margin:6px 0 8px}
@@ -2277,11 +2302,10 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
   <div class="wrap">
     <div class="sec-head rv">
       <p class="label">혼자 보면서 따라 하는 쪽</p>
-      <h2 class="h-lg">강의</h2>
-      <p class="lede">무료 강의는 가입 없이 바로 봅니다. 유료 강의는 구매한 날부터 12개월 동안 강의실에서 봅니다.
-        이미 구매하셨다면 <a href="vod/" style="color:var(--brass-lt)">강의실로 가기 →</a></p>
+      <h2 class="h-lg">먼저 무료 6편부터<br>보셔도 됩니다</h2>
+      <p class="lede">가입도, 결제 수단도 없이 <b>지금 이 자리에서 바로 재생됩니다.</b> 유료 강의는 그다음에 정하셔도 늦지 않습니다.</p>
     </div>
-    <span class="vfree-tag rv">무료 · 바로 재생</span>
+    <span class="vfree-tag rv">무료 6편 · 바로 재생</span>
     <div class="vfree rv">
         <button class="vthumb" type="button" data-yt="Ps5DpbGXc0k"><span class="im" style="background-image:url(https://i.ytimg.com/vi/Ps5DpbGXc0k/hqdefault.jpg)"><span class="ln">40:40</span></span><span class="tt">2025 피트니스 트레이너 가이드 (4T 부트캠프)</span></button>
         <button class="vthumb" type="button" data-yt="JmF_ejuPOsE"><span class="im" style="background-image:url(https://i.ytimg.com/vi/JmF_ejuPOsE/hqdefault.jpg)"><span class="ln">44:12</span></span><span class="tt">ATC 사전 강의</span></button>
@@ -2298,20 +2322,20 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="sec-head rv">
       <p class="label">유료 강의</p>
       <h2 class="h-md">배운 것을 그대로 센터에 옮기는 강의</h2>
-      <p class="lede">결제하면 바로 열립니다. 결제 후 7일 안이고 한 편도 재생하지 않았다면 전액 환불합니다 · <a href="policy/refund.html" style="color:var(--brass-lt)">환불 규정</a></p>
+      <p class="lede">결제하면 바로 열리고, <b>구매한 날부터 12개월</b> 동안 봅니다.</p>
     </div>
     <!-- 자가진단 결과의 「강의 보기」가 #/vod?part=<파트id> 로 들어오면 여기에 그 강의를 먼저 보여 준다 -->
     <div class="vpick" id="vodPick" hidden></div>
     <div class="vpaid rv">
       <article class="pcard pick wide">
-        <span class="tag">한 번에 전부</span>
+        <span class="tag">가장 많이 고르는 것</span>
         <h3>전체 올패스</h3>
         <div class="pr">590,000<small>원</small></div>
         <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
-        <ul class="list"><li>ATC 온라인 트레이너 가이드 (약 7시간)</li><li>4T 마스터 — 회원관리·세일즈·운동지도 15편</li><li>4T 실전해부학 1~3부</li><li>4T 모의고사 — 문제지 8종 + 해설</li><li>트레이너 창업 (창업 전)</li><li>따로 사면 936,000원</li></ul>
+        <ul class="list"><li>ATC 온라인 트레이너 가이드 (약 7시간)</li><li>4T 마스터 — 회원관리·세일즈·운동지도 15편</li><li>4T 실전해부학 1~3부</li><li>4T 모의고사 — 문제지 8종 + 해설</li><li>트레이너 창업 (창업 전)</li></ul>
+        <p class="v-gain">따로 사면 936,000원 — <b>346,000원 덜 냅니다</b></p>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=vod-allpass">구매하기</a>
-          <a class="btn btn-line" href="vod/?c=vod-allpass">강의실</a>
         </div>
       </article>
       <article class="pcard">
@@ -2319,10 +2343,10 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <h3>ATC 온라인 트레이너 가이드</h3>
         <div class="pr">390,000<small>원</small></div>
         <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
-        <ul class="list"><li>상담 · 인바디 · 시퀀스 가이드</li><li>트레이너 점수 체크리스트</li><li>연차별 체크리스트 (LV1~4 나눠 보기 포함)</li><li>인스타그램 · 식단 가이드</li><li>7편 · 약 7시간</li></ul><p class="vcert">ATC(Actual Trainer Certificate) · 민간자격 등록번호 2024-002428 · 관리기관 대한트레이닝교육협회 · 주무부처 문화체육관광부</p>
+        <ul class="list"><li>상담 · 인바디 · 시퀀스 가이드</li><li>트레이너 점수 체크리스트</li><li>연차별 체크리스트 (LV1~4 나눠 보기 포함)</li><li>인스타그램 · 식단 가이드</li><li>7편 · 약 7시간</li></ul>
+        <p class="v-gain">상담·인바디·시퀀스까지 트레이너 기본기를 한 번에 정리합니다</p><p class="vcert">ATC(Actual Trainer Certificate) · 민간자격 등록번호 2024-002428 · 관리기관 대한트레이닝교육협회 · 주무부처 문화체육관광부</p>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=vod-atc-guide">구매하기</a>
-          <a class="btn btn-line" href="vod/?c=vod-atc-guide">강의실</a>
         </div>
       </article>
       <article class="pcard">
@@ -2330,10 +2354,13 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <h3>4T 마스터</h3>
         <div class="pr">249,000<small>원</small></div>
         <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
-        <ul class="list"><li>회원관리 4편 · 세일즈 5편 · 운동지도 6편</li><li>재등록·상담·인바디·OT부터 평가·티칭까지</li><li>15편 · 1시간 53분</li></ul><div class="sub3"><a href="pay/?p=vod-4t-member">회원관리만 89,000</a><a href="pay/?p=vod-4t-sales">세일즈만 109,000</a><a href="pay/?p=vod-4t-coach">운동지도만 129,000</a></div>
+        <ul class="list"><li>회원관리 4편 · 세일즈 5편 · 운동지도 6편</li><li>재등록·상담·인바디·OT부터 평가·티칭까지</li><li>15편 · 1시간 53분</li></ul>
+        <p class="v-gain">상담·OT·재등록부터 평가·티칭까지, 쓰는 말과 순서를 통째로 가져갑니다</p><div class="sub3"><a href="pay/?p=vod-4t-member">회원관리만 89,000</a><a href="pay/?p=vod-4t-sales">세일즈만 109,000</a><a href="pay/?p=vod-4t-coach">운동지도만 129,000</a></div>
+                <details class="v-list"><summary>강의 15편 자세히 보기</summary>
+          <ul><li><a href="vod/personal/"><b>개인운동 시스템</b><span>회원관리</span></a></li><li><a href="vod/diet/"><b>식단 시스템</b><span>회원관리</span></a></li><li><a href="vod/schedule/"><b>스케줄 시스템</b><span>회원관리</span></a></li><li><a href="vod/online/"><b>온라인 마케팅 시스템</b><span>회원관리</span></a></li><li><a href="vod/rereg/"><b>재등록 시스템</b><span>세일즈</span></a></li><li><a href="vod/ot/"><b>OT&체험수업 시스템</b><span>세일즈</span></a></li><li><a href="vod/referral/"><b>회원 소개 시스템</b><span>세일즈</span></a></li><li><a href="vod/consult/"><b>상담 시스템</b><span>세일즈</span></a></li><li><a href="vod/inbody/"><b>인바디 시스템</b><span>세일즈</span></a></li><li><a href="vod/static/"><b>정적평가 시스템</b><span>운동지도</span></a></li><li><a href="vod/dynamic/"><b>동적평가 시스템</b><span>운동지도</span></a></li><li><a href="vod/custom/"><b>회원 맞춤 운동 시스템</b><span>운동지도</span></a></li><li><a href="vod/smalltalk/"><b>스몰토크 시스템</b><span>운동지도</span></a></li><li><a href="vod/teaching/"><b>티칭 오류 수정 시스템</b><span>운동지도</span></a></li><li><a href="vod/2on1/"><b>2:1 PT 시스템</b><span>운동지도</span></a></li></ul>
+        </details>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=vod-4t-master">구매하기</a>
-          <a class="btn btn-line" href="vod/?c=vod-4t-master">강의실</a>
         </div>
       </article>
       <article class="pcard">
@@ -2342,9 +2369,9 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <div class="pr">149,000<small>원</small></div>
         <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
         <ul class="list"><li>1부 · 2부 · 3부</li><li>3시간 30분</li></ul>
+        <p class="v-gain">수업에서 회원에게 바로 설명할 수 있는 해부학입니다</p>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=vod-anatomy">구매하기</a>
-          <a class="btn btn-line" href="vod/?c=vod-anatomy">강의실</a>
         </div>
       </article>
       <article class="pcard">
@@ -2353,9 +2380,9 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <div class="pr">99,000<small>원</small></div>
         <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
         <ul class="list"><li>문제지 8종 PDF (VOL 1~4 · 영역별 4)</li><li>레벨별 해설 · 영역별 해설</li><li>해설 약 1시간 45분</li></ul>
+        <p class="v-gain">지금 내 수준을 문제로 확인하고 빈 곳을 찾습니다</p>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=vod-mock-exam">구매하기</a>
-          <a class="btn btn-line" href="vod/?c=vod-mock-exam">강의실</a>
         </div>
       </article>
       <article class="pcard">
@@ -2364,12 +2391,14 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <div class="pr">49,000<small>원</small></div>
         <p class="vat">결제 금액 그대로 · 구매 후 12개월 열람</p>
         <ul class="list"><li>창업을 고민할 때 먼저 볼 것</li><li>52분</li></ul>
+        <p class="v-gain">센터를 열기 전에 무엇을 준비해야 하는지 먼저 봅니다</p>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=vod-startup">구매하기</a>
-          <a class="btn btn-line" href="vod/?c=vod-startup">강의실</a>
         </div>
       </article>
     </div>
+    <p class="v-note rv">결제 후 7일 안이고 한 편도 재생하지 않았다면 전액 환불합니다 · <a href="policy/refund.html">환불 규정</a><br>
+      이미 구매하셨다면 <a href="vod/">강의실로 가기 →</a></p>
   </div>
 </section>
 
