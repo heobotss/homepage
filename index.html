@@ -325,6 +325,35 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* ══ 수강생 결과 — 인스타 성과 캡처 (09-27) ══ */
+#s-results{padding-block:clamp(40px,5vw,72px); border-top:1px solid var(--line)}
+.rs-head h2{margin:6px 0 8px}
+.rs-sub{font-size:14px; color:var(--warm); max-width:46em}
+.rs-sub b{color:var(--bone-2); font-weight:700}
+.rs-tiles{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:22px}
+.rs-tile{padding:20px 22px; border:1px solid var(--line-2); border-radius:14px; background:var(--ink-2); display:grid; gap:6px}
+.rs-tile b{font-family:var(--tech); font-size:clamp(34px,4.4vw,48px); font-weight:700; line-height:1; color:var(--bone); letter-spacing:-.02em}
+.rs-tile b small{font-family:var(--sans); font-size:.42em; font-weight:700; margin-left:3px; color:var(--brass)}
+.rs-d{font-size:14px; color:var(--bone-2); line-height:1.55; word-break:keep-all}
+.rs-a{font-size:12.5px; color:var(--warm)}
+.rs-rail{margin-top:14px; display:grid; grid-auto-flow:column; grid-auto-columns:minmax(300px,340px); gap:12px;
+  overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain; padding-bottom:10px; scrollbar-width:thin; scrollbar-color:#333 transparent}
+.rs-card{margin:0; display:grid; grid-template-columns:96px 1fr; gap:14px; align-items:start; padding:14px; border:1px solid var(--line-2); border-radius:14px; background:var(--ink-2); scroll-snap-align:start}
+.rs-shot{display:block; border-radius:10px; overflow:hidden; border:1px solid #2a2a2a}
+.rs-shot img{display:block; width:96px; height:171px; object-fit:cover}
+.rs-card figcaption{display:flex; flex-direction:column; min-height:171px}
+.rs-line{font-size:14.5px; line-height:1.6; color:var(--bone); word-break:keep-all}
+.rs-who{margin-top:auto; padding-top:10px; display:flex; flex-direction:column; gap:2px}
+.rs-who a{font-size:13px; font-weight:700; color:var(--bone)}
+.rs-per{font-size:12px; color:var(--warm)}
+@media (max-width:820px){
+  .rs-tiles{grid-template-columns:1fr; gap:8px}
+  .rs-tile{display:grid; grid-template-columns:auto 1fr; align-items:baseline; gap:4px 14px; padding:16px 18px}
+  .rs-tile b{font-size:34px}
+  .rs-d{grid-column:2} .rs-a{grid-column:2}
+  .rs-rail{grid-auto-columns:86%; margin:14px -16px 0; padding:0 16px 8px; scroll-padding-left:16px}
+}
+
 /* ══ 둘러보기 — 무료부터 차례로 (09-25) ══ */
 .guide{list-style:none; margin:clamp(26px,3.4vw,40px) 0 0; padding:0; border-top:1px solid var(--line)}
 .g-item{display:grid; grid-template-columns:52px minmax(0,1fr) auto auto; align-items:center; gap:10px 20px;
@@ -1242,6 +1271,97 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </article>
     </div>
     <div class="lane-dots" id="laneDots" aria-label="판매 칸 넘기기"><button type="button" aria-label="강의" aria-current="true"></button><button type="button" aria-label="프로그램"></button><button type="button" aria-label="세미나"></button></div>
+  </div>
+</section>
+
+<!-- ═══════════ 수강생이 보내 주신 결과 (09-27) ═══════════ -->
+<section id="s-results" data-rail="결과">
+  <div class="wrap">
+    <div class="rs-head">
+      <p class="label">수강생이 보내 주신 결과</p>
+      <h2 class="h-md">배운 대로 하면 이렇게 됩니다</h2>
+      <p class="rs-sub">교육을 들은 선생님·센터가 <b>직접 보내 주신 캡처</b>입니다. 저희가 잰 값이 아니라 그분들 화면 그대로입니다.</p>
+    </div>
+    <div class="rs-tiles">
+        <div class="rs-tile">
+          <b>94.5<small>%</small></b>
+          <span class="rs-d">블로그 글 37개 중 35개가 4위 안</span>
+          <span class="rs-a">@k_imtaeyeong</span>
+        </div>        <div class="rs-tile">
+          <b>88.6<small>%</small></b>
+          <span class="rs-d">글 35개 중 31개 상위 노출 · 평균 2.16위</span>
+          <span class="rs-a">@sheep.coach</span>
+        </div>        <div class="rs-tile">
+          <b>4.63<small>배</small></b>
+          <span class="rs-d">센터 블로그 유입 94회 → 436회 · 19일</span>
+          <span class="rs-a">@k_imtaeyeong</span>
+        </div>
+    </div>
+    <div class="rs-rail" id="rsRail">
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/tz_h.i.t/" target="_blank" rel="noopener"><img src="img/result-01.webp" alt="@tz_h.i.t 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">한 달간 신규 문의 77건</p>
+            <p class="rs-who"><a href="https://www.instagram.com/tz_h.i.t/" target="_blank" rel="noopener">@tz_h.i.t</a><span class="rs-per">2026.6.10~7.10</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/godjuuuuu_haise/" target="_blank" rel="noopener"><img src="img/result-02.webp" alt="@godjuuuuu_haise 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">광교 3개 검색어가 23위→6위 · 7위→3위 · 13위→4위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/godjuuuuu_haise/" target="_blank" rel="noopener">@godjuuuuu_haise</a><span class="rs-per">3개월</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/park_coach_h.i.t/" target="_blank" rel="noopener"><img src="img/result-03.webp" alt="@park_coach_h.i.t 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「포항pt」 플레이스 1위와 2위를 한 센터가</p>
+            <p class="rs-who"><a href="https://www.instagram.com/park_coach_h.i.t/" target="_blank" rel="noopener">@park_coach_h.i.t</a><span class="rs-per">2달</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/sheep.coach/" target="_blank" rel="noopener"><img src="img/result-04.webp" alt="@sheep.coach 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">김포 12개 검색어 전부 상위 노출 (1위 8개)</p>
+            <p class="rs-who"><a href="https://www.instagram.com/sheep.coach/" target="_blank" rel="noopener">@sheep.coach</a><span class="rs-per">교육 다음 날부터</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/shoulder_hak/" target="_blank" rel="noopener"><img src="img/result-05.webp" alt="@shoulder_hak 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">블로그 리뷰 209개 — 업체·기자단 없이</p>
+            <p class="rs-who"><a href="https://www.instagram.com/shoulder_hak/" target="_blank" rel="noopener">@shoulder_hak</a><span class="rs-per">7개월</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener"><img src="img/result-06.webp" alt="@k_imtaeyeong 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">센터 블로그 유입 94회 → 436회</p>
+            <p class="rs-who"><a href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener">@k_imtaeyeong</a><span class="rs-per">주말 빼고 19일</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener"><img src="img/result-07.webp" alt="@k_imtaeyeong 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">쓴 글 37개 중 35개가 4위 안 (94.5%)</p>
+            <p class="rs-who"><a href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener">@k_imtaeyeong</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/sheep.coach/" target="_blank" rel="noopener"><img src="img/result-08.webp" alt="@sheep.coach 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">글 35개 중 31개 상위 노출 · 평균 2.16위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/sheep.coach/" target="_blank" rel="noopener">@sheep.coach</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener"><img src="img/result-09.webp" alt="@sohyeon_h.i.t 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">블로그를 보고 온 체험 회원이 30회 등록까지</p>
+            <p class="rs-who"><a href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener">@sohyeon_h.i.t</a></p>
+          </figcaption>
+        </figure>
+    </div>
   </div>
 </section>
 
