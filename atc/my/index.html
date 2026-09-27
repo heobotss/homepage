@@ -120,6 +120,13 @@ section{margin:28px 0 0}
   border:1px solid var(--line-2);border-radius:9px;font-size:.875rem;font-weight:700;
   color:var(--bone);text-decoration:none}
 .dlgGo:hover{border-color:var(--bone-2)}
+.dlgFiles{margin:12px 0 0;display:grid;gap:8px}
+.dlgFiles a{display:block;border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none}
+.dlgFiles img{display:block;width:100%;height:auto;background:#fff}
+.dlgFiles span{display:block;padding:9px 12px;font-size:.8125rem;color:var(--warm);border-top:1px solid var(--line)}
+#dForm label{display:block;margin:14px 0 4px;font-size:.8125rem;color:var(--warm)}
+#dForm label b{color:var(--bone-2);font-family:var(--tech);margin-right:5px}
+#dForm textarea{margin:0;min-height:48px}
 
 .tail{margin:14px 0 0;text-align:center}
 .tail a{font-size:.8125rem;color:var(--warm)}
@@ -239,7 +246,9 @@ textarea{resize:vertical;min-height:64px}
     <div class="hd"><b id="dTtl">제출</b><button class="x" type="button" id="dX" aria-label="닫기">✕</button></div>
     <p class="lead" id="dLead"></p>
     <a class="dlgGo" id="dGoLink" target="_blank" rel="noopener" hidden></a>
+    <div class="dlgFiles" id="dFiles" hidden></div>
     <div class="dlgInfo" id="dInfo" hidden></div>
+    <div id="dForm" hidden></div>
     <div class="drop" id="drop" tabindex="0" role="button" hidden>사진 고르기 · 찍기</div>
     <input type="file" id="file" accept="image/*" hidden>
     <select id="dSel" hidden>
@@ -282,16 +291,32 @@ textarea{resize:vertical;min-height:64px}
       info: "푸쉬업 1회 · OHS 1회 · 레그익스텐션 BW10% 10회 · 레그컬 BW10% 10회 · 어시스트친 BW100% 10회 · " +
             "시티드로우 BW10% 10회 · 렛풀다운 BW10% 10회 · DB OHP BW5% 10회 · 체스트프레스 BW10% 10회 · 러닝 5속도 30분<br>" +
             "<b>BW</b> = 본인 체중. 영상 주소(유튜브 비공개·구글드라이브 등)를 넣어 주세요." },
-    { n: 2, t: "실전해부학 — 뼈", go: "강의 보기", lead: "강의를 다 보셨으면 완료로 표시해 주세요", note: 1,
-      href: "../../vod/", hrefT: "강의실 열기" },
-    { n: 3, t: "트레이너 점수 체크리스트", go: "진단하러 가기", lead: "입과 점수를 남겨 두면 수료할 때 전후를 비교해 드립니다", link: 1, note: 1,
-      href: "../../score/", hrefT: "100문항 진단 열기",
-      info: "다 하시면 <b>결과 화면 주소</b>나 <b>받은 점수</b>를 적어 주세요." },
-    { n: 4, t: "연차별 체크리스트 LV1", go: "체크리스트 열기", lead: "다 하셨으면 완료로 표시해 주세요", note: 1,
-      href: "../../vod/", hrefT: "강의실 열기" },
-    { n: 5, t: "식단 가이드 1주 적용", go: "기록 남기기", lead: "일주일 적용한 기록을 한 줄로", note: 1 },
-    { n: 6, t: "본인 알아가기(환경)", go: "작성하기", lead: "지금 내 환경을 적어 보는 과제입니다", note: 1,
-      info: "센터 형태 · 담당 회원 수 · 하루 수업 수 · 내가 쓰는 채널 · 지금 가장 큰 고민 — 이 다섯 가지를 적어 주세요." },
+    { n: 2, t: "실전해부학 — 뼈", go: "자료 보기", lead: "뼈 16가지를 외우시면 됩니다. 4주차 시험에 나옵니다", note: 1,
+      files: [["anatomy-bone-16.png", "뼈 16가지 (정답본)"], ["anatomy-bone-16-study.png", "뼈 16가지 (빈칸 공부용)"]],
+      info: "그림을 눌러 크게 보고 저장해 두세요. 외우셨으면 <b>완료로 표시</b>해 주세요." },
+    { n: 3, t: "트레이너 점수 체크리스트", go: "강의 보기", lead: "강의(113분)를 보고 100문항 진단까지 하시면 됩니다", link: 1, note: 1,
+      href: "../../vod/", hrefT: "강의실에서 보기",
+      info: "강의실 → <b>ATC 트레이너 가이드 → 트레이너 점수 체크리스트</b><br>" +
+            "다 보셨으면 <a href='../../score/' target='_blank' rel='noopener'>100문항 진단</a>을 하고 <b>받은 점수</b>를 적어 주세요." },
+    { n: 4, t: "연차별 체크리스트 LV1", go: "강의 보기", lead: "강의(20분)를 보고 정리 + 느낀 점을 남겨 주세요", note: 1,
+      href: "../../vod/", hrefT: "강의실에서 보기",
+      info: "강의실 → <b>ATC 연차별 체크리스트 나눠 보기 → LV1</b>" },
+    { n: 5, t: "식단 가이드 1주 적용", go: "강의 보기", lead: "강의(34분)를 보고 일주일 적용한 기록을 남겨 주세요", note: 1,
+      href: "../../vod/", hrefT: "강의실에서 보기",
+      info: "강의실 → <b>ATC 트레이너 가이드 → 트레이너 식단 가이드</b>" },
+    { n: 6, t: "본인 알아가기(환경)", go: "작성하기", lead: "지금 내 환경을 적어 보는 과제입니다. 11가지",
+      form: ["현재 나이(00년생)와 트레이너 경력 만 몇 년차",
+             "지역 / 센터명 / 현재 직급",
+             "3개월 평균 한 달 수업 개수",
+             "센터 PT 단가",
+             "센터 급여체계",
+             "현재 근무시간과 근무 시 하는 일",
+             "최근 3개월 평균 급여",
+             "집에서 센터까지 이동수단과 걸리는 시간",
+             "현 센터 직원 구성 (운영진·프리·파트·정직원·FC·인포·알바)",
+             "센터 선생님별 PT 회원 수와 평균 수업 개수",
+             "현 센터의 구조 (평수, 공간 분리)"],
+      info: "적어 주신 내용은 <b>대표만</b> 봅니다. 다른 수강생에게는 보이지 않습니다." },
     { n: 7, t: "카카오톡(+오픈톡) 정비", go: "주소 올리기", lead: "정비한 채널 주소를 넣어 주세요", link: 1, note: 1 },
     { n: 8, t: "리뷰 1회 이상", go: "리뷰 올리기", lead: "네이버 플레이스 리뷰 주소나 캡처", link: 1, photo: 1, note: 1,
       info: "① 내 <b>이름</b>이 들어가게 ② 회원과 <b>같이 찍은 사진</b> ③ 사진 1장 이상 더 ④ <b>4줄 이상</b>" }
@@ -468,11 +493,37 @@ textarea{resize:vertical;min-height:64px}
     if (o.href) { gl.href = o.href; gl.textContent = (o.hrefT || "자료 열기") + " ↗"; }
     $("#dInfo").hidden = !o.info;
     if (o.info) $("#dInfo").innerHTML = o.info;
+
+    // 과제 자료 그림 — 비공개 보관함이라 볼 수 있는 주소를 그때그때 받아 온다
+    var fb = $("#dFiles");
+    fb.hidden = !o.files; fb.innerHTML = "";
+    if (o.files) o.files.forEach(function (f) {
+      sb.storage.from("atc-proof").createSignedUrl("_files/" + f[0], 3600).then(function (r) {
+        if (!r.data) return;
+        var a = document.createElement("a");
+        a.href = r.data.signedUrl; a.target = "_blank"; a.rel = "noopener";
+        a.innerHTML = '<img alt="' + esc(f[1]) + '"><span>' + esc(f[1]) + ' — 눌러서 크게 보기</span>';
+        a.querySelector("img").src = r.data.signedUrl;
+        fb.appendChild(a);
+      });
+    });
+
+    // 여러 칸을 적는 과제(본인 알아가기 11문항)
+    var ff = $("#dForm");
+    ff.hidden = !o.form; ff.innerHTML = "";
+    if (o.form) o.form.forEach(function (q, i) {
+      var l = document.createElement("label");
+      l.innerHTML = "<b>" + (i + 1) + ".</b> " + esc(q);
+      var t = document.createElement("textarea");
+      t.setAttribute("data-q", i);
+      ff.appendChild(l); ff.appendChild(t);
+    });
+
     $("#drop").hidden = !o.photo; $("#drop").className = "drop";
     $("#drop").textContent = "사진 고르기 · 찍기"; $("#file").value = "";
     $("#dLink").hidden = !o.link; $("#dLink").value = o.link0 || "";
     $("#dSel").hidden = !o.sel;
-    $("#dNote").hidden = !o.note; $("#dNote").value = o.note0 || "";
+    $("#dNote").hidden = !o.note && !o.form ? true : !o.note; $("#dNote").value = o.note0 || "";
     $("#dNote").placeholder = o.notePh || "한 줄";
     $("#dGo").textContent = o.go || "보내기";
     $("#dMsg").textContent = "";
@@ -522,9 +573,21 @@ textarea{resize:vertical;min-height:64px}
       photo: !!m.photo, link: !!m.link, note: 1,
       link0: g.link || "", note0: g.note || "", notePh: "한 줄 (선택)",
       go: g.done ? "다시 저장" : "완료로 표시",
+      form: m.form, files: m.files,
       send: async function (up) {
+        var note = $("#dNote").value.trim();
+        if (m.form) {
+          var parts = [], miss = 0;
+          Array.prototype.forEach.call($("#dForm").querySelectorAll("textarea"), function (t, i) {
+            var v = t.value.trim();
+            if (!v) miss++;
+            parts.push((i + 1) + ". " + m.form[i] + "\n→ " + (v || "(비어 있음)"));
+          });
+          if (miss > 3) throw new Error("아직 " + miss + "칸이 비어 있습니다");
+          note = parts.join("\n\n");
+        }
         var r = await sb.rpc("atc_level_set", { p_slot: n, p_link: $("#dLink").value.trim() || up.key || null,
-          p_note: $("#dNote").value.trim() || null, p_done: true });
+          p_note: note || null, p_done: true });
         if (r.error) throw r.error;
       } });
   }
