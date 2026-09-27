@@ -257,6 +257,7 @@ textarea{resize:vertical;min-height:64px}
       <option value="personal">경조사·개인 사정</option>
     </select>
     <input type="url" id="dLink" placeholder="링크" hidden>
+    <input type="text" id="dKw" placeholder="메인 키워드 (예: 원주PT)" hidden>
     <textarea id="dNote" placeholder="한 줄"></textarea>
     <p class="msg" id="dMsg"></p>
     <button class="btn wide" type="button" id="dGo">보내기</button>
@@ -279,7 +280,7 @@ textarea{resize:vertical;min-height:64px}
   };
   var WEEK = {
     blog:      { t: "블로그 1편", go: "제출하기", lead: "키워드 3곳 · 직접 사진 · 500자 이상", link: 1, note: 1,
-                 info: "<b>키워드</b>를 제목·본문·해시태그에 한 번씩 · <b>직접 찍은 사진</b> · <b>500자 이상</b><br>내시면 검수기가 항목별로 보고 고칠 곳을 알려 드립니다. 다 맞을 때까지 고쳐서 다시 내시면 됩니다." },
+                 info: "<b>키워드</b>를 제목·본문·해시태그에 한 번씩 · <b>직접 찍은 사진</b> · <b>500자 이상</b><br>내시면 몇 분 안에 검수 결과가 옵니다. 고칠 곳을 알려 드리니 <b>고쳐서 다시 내시면</b> 됩니다. 횟수 제한 없습니다." },
     feed:      { t: "인스타 피드 1개", go: "제출하기", lead: "오운완·운동 설명·일상 무엇이든", link: 1, note: 1 },
     sequence:  { t: "시퀀스 5회 제작", go: "제출하기", lead: "만든 시퀀스를 찍어 올려 주세요", photo: 1, note: 1,
                  info: "1·2주차는 <b>센터 웨이트</b> 시퀀스, 3·4주차는 <b>센터 맨몸</b> 시퀀스입니다. 4주 동안 각 10회를 채웁니다." },
@@ -568,6 +569,7 @@ textarea{resize:vertical;min-height:64px}
     $("#drop").hidden = !o.photo; $("#drop").className = "drop";
     $("#drop").textContent = "사진 고르기 · 찍기"; $("#file").value = "";
     $("#dLink").hidden = !o.link; $("#dLink").value = o.link0 || "";
+    $("#dKw").hidden = !o.kw; $("#dKw").value = o.kw0 || "";
     $("#dSel").hidden = !o.sel;
     $("#dNote").hidden = !o.note && !o.form ? true : !o.note; $("#dNote").value = o.note0 || "";
     $("#dNote").placeholder = o.notePh || "한 줄";
@@ -601,15 +603,24 @@ textarea{resize:vertical;min-height:64px}
   }
   function openWeek(k) {
     var m = WEEK[k], cur = S.weekly[k] || {};
-    openDlg({ title: m.t, lead: m.lead, info: m.info, href: m.href, hrefT: m.hrefT,
-      photo: !!m.photo, link: !!m.link, note: 1,
+    var info = m.info;
+    if (k === "blog" && cur.status === "needs_fix" && cur.checks && cur.checks.length) {
+      info = "<b>아직 " + cur.checks.length + "가지가 남았습니다</b><br>" +
+        cur.checks.map(function (t, i) { return (i + 1) + ". " + esc(t); }).join("<br>") +
+        "<br><br>고치신 뒤 같은 주소를 <b>다시 내시면</b> 됩니다. 횟수 제한은 없습니다.";
+    }
+    openDlg({ title: m.t, lead: m.lead, info: info, href: m.href, hrefT: m.hrefT,
+      photo: !!m.photo, link: !!m.link, note: 1, kw: k === "blog", kw0: cur.kw || "",
       link0: cur.link || "", notePh: "한 줄 (선택)", go: cur.status ? "다시 내기" : m.go,
       send: async function (up) {
         var link = $("#dLink").value.trim();
         if (m.link && !link) throw new Error("주소를 넣어 주세요");
         if (m.photo && !up.key && !cur.link) throw new Error("사진을 넣어 주세요");
+        var kw = $("#dKw").value.trim();
+        if (k === "blog" && !kw) throw new Error("메인 키워드를 적어 주세요 (예: 원주PT)");
         var r = await sb.rpc("atc_submit_weekly", { p_kind: k, p_link: link || null,
-          p_photo_key: up.key, p_sha: up.sha, p_note: $("#dNote").value.trim() || null });
+          p_photo_key: up.key, p_sha: up.sha, p_note: $("#dNote").value.trim() || null,
+          p_kw: kw || null });
         if (r.error) throw r.error;
       } });
   }
