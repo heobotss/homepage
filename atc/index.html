@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>ATC LV1 4주 챌린지 — 허봇스</title>
-<meta name="description" content="ATC LV1을 4주 기수제로. 하루 과제 3개, 주간 과제, 레벨 과제 8개, 모의고사 95점. 2일 밀려도 처음부터 다시 하지 않습니다. 39,000원 · 정원 10명.">
+<meta name="description" content="ATC LV1을 4주로. 하루 과제 3개, 주간 과제, 레벨 과제 8개, 모의고사 95점. 2일 밀려도 처음부터 다시 하지 않습니다. 39,000원 · 신청한 날부터 시작.">
 <link rel="icon" href="../favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta property="og:type" content="website">
@@ -138,18 +138,18 @@ details .a{padding:0 0 16px;color:var(--bone-2);font-size:.9375rem;margin:0}
 
     <div class="price">
       <b>39,000원</b>
-      <span>4주 · 정원 10명</span>
-      <span id="when">일정 준비 중</span>
+      <span>4주 · 혼자 하는 과정</span>
+      <span id="when">신청한 날부터 시작합니다</span>
     </div>
 
-    <!-- 기수가 열리면(atc_cohorts.active=true) 아래가 신청 버튼으로 바뀐다 -->
+    <!-- 상시 시작 — 신청하면 그날이 1일차다 -->
     <div class="state" id="soon">
-      <b>1기를 준비하고 있습니다.</b>
-      <p>날짜가 정해지면 메일로 먼저 알려 드릴게요. 정원이 10명이라 자리가 금방 찹니다.</p>
+      <b>기다릴 필요가 없습니다.</b>
+      <p>정해진 시작일이 없습니다. <b>신청하신 그날이 1일차</b>가 되고, 4주 뒤에 끝납니다.</p>
     </div>
     <div class="acts">
-      <a class="btn" id="apply" href="#" hidden>1기 신청하기</a>
-      <a class="btn" id="notify" href="#" target="_blank" rel="noopener">열리면 알려 드릴게요</a>
+      <a class="btn" id="apply" href="../pay/?p=atc-lv1-01">지금 시작하기</a>
+      <a class="btn" id="notify" href="#" target="_blank" rel="noopener" hidden>열리면 알려 드릴게요</a>
       <a class="btn line" href="../score/">먼저 내 점수부터 재 보기</a>
     </div>
   </section>
@@ -247,28 +247,7 @@ details .a{padding:0 0 16px;color:var(--bone-2);font-size:.9375rem;margin:0}
 
   $("#notify").href = NEWS;
 
-  /* 기수가 열려 있으면(active=true) 그 줄이 읽힌다 — 잠겨 있으면 빈 배열이 온다.
-     날짜가 정해지는 날 서버에서 두 줄만 켜면 이 화면이 저절로 신청 화면으로 바뀐다. */
-  function fmt(d) {
-    var t = String(d || "").split("-");
-    return t.length === 3 ? (Number(t[1]) + "월 " + Number(t[2]) + "일") : "";
-  }
-  fetch(SB + "/rest/v1/atc_cohorts?select=starts_on,ends_on,capacity&id=eq." + COHORT,
-        { headers: { apikey: KEY, Authorization: "Bearer " + KEY } })
-    .then(function (r) { return r.ok ? r.json() : []; })
-    .then(function (rows) {
-      var c = rows && rows[0];
-      if (!c) return;                                  // 아직 준비 중 — 화면 그대로
-      var s = fmt(c.starts_on), e = fmt(c.ends_on);
-      if (s) $("#when").textContent = s + " 시작" + (e ? " · " + e + " 끝" : "");
-      $("#soon").hidden = true;
-      $("#notify").hidden = true;
-      var a = $("#apply");
-      a.href = "../pay/?p=" + COHORT;
-      a.hidden = false;
-    })
-    .catch(function () {});
-
+  /* 상시 시작 — 신청한 날이 1일차다. 기수 날짜를 물어볼 필요가 없다 (2026-09-28 A안) */
   fetch("../policy/legal.txt").then(function (r) { return r.ok ? r.text() : ""; })
     .then(function (t) { if (t) $("#legal").innerHTML = t; }).catch(function () {});
 })();
