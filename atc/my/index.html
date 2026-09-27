@@ -105,6 +105,21 @@ section{margin:28px 0 0}
 .rows .ok{color:var(--good)}
 .rows .warn{color:var(--warn)}
 .rows .n{font-family:var(--tech);font-size:.75rem;color:var(--warm);width:1.3em;flex:none}
+/* 줄 오른쪽의 누르는 표시 — 위 카드의 버튼과 같은 결로 보이게 한다 */
+.pill{flex:none;display:inline-flex;align-items:center;justify-content:center;
+  padding:7px 13px;border:1px solid var(--line-2);border-radius:8px;
+  font-size:.8125rem;font-weight:700;color:var(--bone);background:transparent;white-space:nowrap}
+.rows>button:hover .pill{border-color:var(--bone-2)}
+.pill.done{border-color:transparent;color:var(--good);font-weight:500;padding-right:0}
+.pill.wait{border-color:transparent;color:var(--warn);font-weight:500;padding-right:0}
+.pill.grey{border-color:transparent;color:var(--warm);font-weight:500;padding-right:0}
+.dlgInfo{margin:12px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+  background:var(--ink);font-size:.8125rem;color:var(--bone-2);line-height:1.7}
+.dlgInfo b{color:var(--bone)}
+.dlgGo{display:inline-flex;align-items:center;gap:6px;margin:12px 0 0;padding:10px 16px;
+  border:1px solid var(--line-2);border-radius:9px;font-size:.875rem;font-weight:700;
+  color:var(--bone);text-decoration:none}
+.dlgGo:hover{border-color:var(--bone-2)}
 
 .tail{margin:14px 0 0;text-align:center}
 .tail a{font-size:.8125rem;color:var(--warm)}
@@ -223,6 +238,8 @@ textarea{resize:vertical;min-height:64px}
   <form class="dlg" method="dialog">
     <div class="hd"><b id="dTtl">제출</b><button class="x" type="button" id="dX" aria-label="닫기">✕</button></div>
     <p class="lead" id="dLead"></p>
+    <a class="dlgGo" id="dGoLink" target="_blank" rel="noopener" hidden></a>
+    <div class="dlgInfo" id="dInfo" hidden></div>
     <div class="drop" id="drop" tabindex="0" role="button" hidden>사진 고르기 · 찍기</div>
     <input type="file" id="file" accept="image/*" hidden>
     <select id="dSel" hidden>
@@ -252,20 +269,32 @@ textarea{resize:vertical;min-height:64px}
     content: { t: "오늘 콘텐츠 1개",      hint: "스토리 캡처 또는 블로그 링크", photo: 1, link: 1, note: 1 }
   };
   var WEEK = {
-    blog:      { t: "블로그 1편", lead: "키워드 3곳 · 직접 사진 · 500자 이상. 주소를 넣어 주세요", link: 1, note: 1 },
-    feed:      { t: "인스타 피드 1개", lead: "오운완·운동 설명·일상 무엇이든", link: 1, note: 1 },
-    sequence:  { t: "시퀀스 5회 제작", lead: "만든 시퀀스를 찍어 올려 주세요", photo: 1, note: 1 },
-    bodycheck: { t: "바디체크", lead: "대표가 확인합니다. 90일 뒤 지워집니다", photo: 1, note: 1 }
+    blog:      { t: "블로그 1편", go: "제출하기", lead: "키워드 3곳 · 직접 사진 · 500자 이상", link: 1, note: 1,
+                 info: "<b>키워드</b>를 제목·본문·해시태그에 한 번씩 · <b>직접 찍은 사진</b> · <b>500자 이상</b><br>내시면 검수기가 항목별로 보고 고칠 곳을 알려 드립니다. 다 맞을 때까지 고쳐서 다시 내시면 됩니다." },
+    feed:      { t: "인스타 피드 1개", go: "제출하기", lead: "오운완·운동 설명·일상 무엇이든", link: 1, note: 1 },
+    sequence:  { t: "시퀀스 5회 제작", go: "제출하기", lead: "만든 시퀀스를 찍어 올려 주세요", photo: 1, note: 1,
+                 info: "1·2주차는 <b>센터 웨이트</b> 시퀀스, 3·4주차는 <b>센터 맨몸</b> 시퀀스입니다. 4주 동안 각 10회를 채웁니다." },
+    bodycheck: { t: "바디체크", go: "제출하기", lead: "2주에 한 번입니다", photo: 1, note: 1,
+                 info: "<b>대표가 확인합니다.</b> 다른 수강생에게는 보이지 않고, 과정이 끝나고 <b>90일 뒤 지워집니다</b>." }
   };
   var LV = [
-    { n: 1, t: "운동능력 10종 영상", lead: "5종 + 5종, 두 번에 나눠 내셔도 됩니다", link: 1, note: 1 },
-    { n: 2, t: "실전해부학 — 뼈",   lead: "강의를 다 보셨으면 완료로 표시해 주세요", note: 1 },
-    { n: 3, t: "트레이너 점수 체크리스트", lead: "입과·수료 두 번 합니다. 지금은 입과분", link: 1, note: 1 },
-    { n: 4, t: "연차별 체크리스트 LV1", lead: "다 하셨으면 완료로", note: 1 },
-    { n: 5, t: "식단 가이드 1주 적용", lead: "적용한 기록을 한 줄로", note: 1 },
-    { n: 6, t: "본인 알아가기(환경)", lead: "양식을 채우고 완료로", note: 1 },
-    { n: 7, t: "카카오톡(+오픈톡) 정비", lead: "정비한 채널 주소", link: 1, note: 1 },
-    { n: 8, t: "리뷰 1회 이상", lead: "리뷰 주소나 캡처", link: 1, photo: 1, note: 1 }
+    { n: 1, t: "운동능력 10종 영상", go: "영상 올리기", lead: "5종 + 5종, 두 번에 나눠 내셔도 됩니다", link: 1, note: 1,
+      info: "푸쉬업 1회 · OHS 1회 · 레그익스텐션 BW10% 10회 · 레그컬 BW10% 10회 · 어시스트친 BW100% 10회 · " +
+            "시티드로우 BW10% 10회 · 렛풀다운 BW10% 10회 · DB OHP BW5% 10회 · 체스트프레스 BW10% 10회 · 러닝 5속도 30분<br>" +
+            "<b>BW</b> = 본인 체중. 영상 주소(유튜브 비공개·구글드라이브 등)를 넣어 주세요." },
+    { n: 2, t: "실전해부학 — 뼈", go: "강의 보기", lead: "강의를 다 보셨으면 완료로 표시해 주세요", note: 1,
+      href: "../../vod/", hrefT: "강의실 열기" },
+    { n: 3, t: "트레이너 점수 체크리스트", go: "진단하러 가기", lead: "입과 점수를 남겨 두면 수료할 때 전후를 비교해 드립니다", link: 1, note: 1,
+      href: "../../score/", hrefT: "100문항 진단 열기",
+      info: "다 하시면 <b>결과 화면 주소</b>나 <b>받은 점수</b>를 적어 주세요." },
+    { n: 4, t: "연차별 체크리스트 LV1", go: "체크리스트 열기", lead: "다 하셨으면 완료로 표시해 주세요", note: 1,
+      href: "../../vod/", hrefT: "강의실 열기" },
+    { n: 5, t: "식단 가이드 1주 적용", go: "기록 남기기", lead: "일주일 적용한 기록을 한 줄로", note: 1 },
+    { n: 6, t: "본인 알아가기(환경)", go: "작성하기", lead: "지금 내 환경을 적어 보는 과제입니다", note: 1,
+      info: "센터 형태 · 담당 회원 수 · 하루 수업 수 · 내가 쓰는 채널 · 지금 가장 큰 고민 — 이 다섯 가지를 적어 주세요." },
+    { n: 7, t: "카카오톡(+오픈톡) 정비", go: "주소 올리기", lead: "정비한 채널 주소를 넣어 주세요", link: 1, note: 1 },
+    { n: 8, t: "리뷰 1회 이상", go: "리뷰 올리기", lead: "네이버 플레이스 리뷰 주소나 캡처", link: 1, photo: 1, note: 1,
+      info: "① 내 <b>이름</b>이 들어가게 ② 회원과 <b>같이 찍은 사진</b> ③ 사진 1장 이상 더 ④ <b>4줄 이상</b>" }
   ];
 
   async function boot() {
@@ -387,15 +416,13 @@ textarea{resize:vertical;min-height:64px}
     if (S.week_no % 2 === 0) keys.push("bodycheck");
     var w = "";
     keys.forEach(function (k) {
-      var it = S.weekly[k];
-      var v = !it ? "내기" :
-        it.status === "passed" ? "✓ 통과" :
-        it.status === "needs_fix" ? "! 고칠 곳 " + ((it.checks && it.checks.length) || "") + "개" :
-        it.status === "checking" ? "검사 중" : "✓ 냄";
-      var cl = !it ? "" : it.status === "passed" || it.status === "submitted" ? " ok"
-             : it.status === "needs_fix" ? " warn" : "";
-      w += '<button type="button" class="rw" data-w="' + k + '"><span class="k">' + WEEK[k].t +
-           '</span><span class="v' + cl + '">' + v + '</span></button>';
+      var it = S.weekly[k], p;
+      if (!it) p = '<span class="pill">' + WEEK[k].go + '</span>';
+      else if (it.status === "passed")    p = '<span class="pill done">✓ 통과</span>';
+      else if (it.status === "submitted") p = '<span class="pill done">✓ 냈습니다</span>';
+      else if (it.status === "checking")  p = '<span class="pill grey">검사 중</span>';
+      else p = '<span class="pill wait">! 고칠 곳 ' + ((it.checks && it.checks.length) || "") + '개</span>';
+      w += '<button type="button" data-w="' + k + '"><span class="k">' + WEEK[k].t + '</span>' + p + '</button>';
     });
     $("#weekRows").innerHTML = w;
     bind($("#weekRows"), "w", function (k) { openWeek(k); });
@@ -404,9 +431,10 @@ textarea{resize:vertical;min-height:64px}
     var L = S.level || {}, lv = "";
     LV.forEach(function (it) {
       var g = L[String(it.n)];
-      lv += '<button type="button" class="rw" data-l="' + it.n + '"><span class="n">' + it.n +
-            '</span><span class="k">' + it.t + '</span><span class="v' + (g && g.done ? " ok" : "") + '">' +
-            (g && g.done ? "✓ 완료" : "하기") + '</span></button>';
+      lv += '<button type="button" data-l="' + it.n + '"><span class="n">' + it.n +
+            '</span><span class="k">' + it.t + '</span>' +
+            (g && g.done ? '<span class="pill done">✓ 완료</span>'
+                         : '<span class="pill">' + it.go + '</span>') + '</button>';
     });
     $("#lvRows").innerHTML = lv;
     $("#lvCnt").textContent = (S.level_done || 0) + " / 8";
@@ -435,6 +463,11 @@ textarea{resize:vertical;min-height:64px}
     pick = null; send = o.send;
     $("#dTtl").textContent = o.title;
     $("#dLead").textContent = o.lead || "";
+    var gl = $("#dGoLink");
+    gl.hidden = !o.href;
+    if (o.href) { gl.href = o.href; gl.textContent = (o.hrefT || "자료 열기") + " ↗"; }
+    $("#dInfo").hidden = !o.info;
+    if (o.info) $("#dInfo").innerHTML = o.info;
     $("#drop").hidden = !o.photo; $("#drop").className = "drop";
     $("#drop").textContent = "사진 고르기 · 찍기"; $("#file").value = "";
     $("#dLink").hidden = !o.link; $("#dLink").value = o.link0 || "";
@@ -471,8 +504,9 @@ textarea{resize:vertical;min-height:64px}
   }
   function openWeek(k) {
     var m = WEEK[k], cur = S.weekly[k] || {};
-    openDlg({ title: m.t, lead: m.lead, photo: !!m.photo, link: !!m.link, note: 1,
-      link0: cur.link || "", notePh: "한 줄 (선택)",
+    openDlg({ title: m.t, lead: m.lead, info: m.info, href: m.href, hrefT: m.hrefT,
+      photo: !!m.photo, link: !!m.link, note: 1,
+      link0: cur.link || "", notePh: "한 줄 (선택)", go: cur.status ? "다시 내기" : m.go,
       send: async function (up) {
         var link = $("#dLink").value.trim();
         if (m.link && !link) throw new Error("주소를 넣어 주세요");
@@ -484,7 +518,8 @@ textarea{resize:vertical;min-height:64px}
   }
   function openLevel(n) {
     var m = LV[n - 1], g = (S.level || {})[String(n)] || {};
-    openDlg({ title: m.t, lead: m.lead, photo: !!m.photo, link: !!m.link, note: 1,
+    openDlg({ title: m.t, lead: m.lead, info: m.info, href: m.href, hrefT: m.hrefT,
+      photo: !!m.photo, link: !!m.link, note: 1,
       link0: g.link || "", note0: g.note || "", notePh: "한 줄 (선택)",
       go: g.done ? "다시 저장" : "완료로 표시",
       send: async function (up) {
