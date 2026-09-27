@@ -79,6 +79,19 @@ td b{font-family:var(--tech)}
     <div class="curve" id="curve"></div>
     <p class="note">막대 하나가 하루입니다. 높이는 그날 3개를 다 낸 사람 수 — 꺾이는 자리가 고비입니다.</p>
 
+    <h2>이번 주 한 마디</h2>
+    <p class="note">강의가 아니라 말입니다. 2~3줄이면 됩니다 — 수강생 화면 맨 위에 그 주 내내 뜹니다.</p>
+    <div style="margin:10px 0 0">
+      <select id="nWeek" style="width:auto;padding:9px 12px;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);font:inherit">
+        <option value="1">1주차</option><option value="2">2주차</option>
+        <option value="3">3주차</option><option value="4">4주차</option>
+      </select>
+      <textarea id="nBody" placeholder="이번 주에 다들 여기서 막히더군요 —" style="width:100%;margin:10px 0 0;min-height:84px;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);padding:11px 13px;font:inherit"></textarea>
+      <input type="url" id="nVideo" placeholder="영상 주소 (선택)" style="width:100%;margin:8px 0 0;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);padding:11px 13px;font:inherit">
+      <button class="btn" id="nGo" style="margin-top:10px">올리기</button>
+      <span class="note" id="nMsg" style="margin-left:10px"></span>
+    </div>
+
     <h2>확인 대기 줄 <span id="qCnt"></span></h2>
     <div class="q" id="queue"></div>
 
@@ -150,6 +163,27 @@ td b{font-family:var(--tech)}
             esc(q.who) + ' — ' + esc(q.detail) + '</span><span class="t">' + esc(q.at) + '</span></div>';
         }).join("")
       : '<div><span class="d">비어 있습니다. 볼 것이 없습니다.</span></div>';
+
+    // 이번 주 한 마디 — 쓰고 바로 올린다
+    var wk = Math.max(1, Math.min(4, Math.ceil(
+      ((new Date(B.today) - new Date(c.starts_on)) / 864e5 + 1) / 7) || 1));
+    $("#nWeek").value = String(wk);
+    async function loadNote() {
+      var r = await sb.from("atc_notes").select("body,video_url")
+        .eq("cohort_id", c.id).eq("week_no", +$("#nWeek").value).maybeSingle();
+      $("#nBody").value = (r.data && r.data.body) || "";
+      $("#nVideo").value = (r.data && r.data.video_url) || "";
+      $("#nMsg").textContent = r.data ? "이미 올라가 있습니다" : "";
+    }
+    $("#nWeek").onchange = loadNote; loadNote();
+    $("#nGo").onclick = async function () {
+      var body = $("#nBody").value.trim();
+      if (!body) { $("#nMsg").textContent = "두어 줄만 적어 주세요"; return; }
+      var r = await sb.from("atc_notes").upsert({
+        cohort_id: c.id, week_no: +$("#nWeek").value, body: body,
+        video_url: $("#nVideo").value.trim() || null }, { onConflict: "cohort_id,week_no" });
+      $("#nMsg").textContent = r.error ? "올리지 못했습니다 — " + r.error.message : "올렸습니다";
+    };
 
     $("#people").innerHTML =
       '<tr><th>사람</th><th>상태</th><th>채운 날</th><th>오늘</th><th>누락</th><th>복구</th><th>확인</th><th>주간</th><th>레벨</th></tr>' +

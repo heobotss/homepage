@@ -113,6 +113,30 @@ section{margin:28px 0 0}
 .pill.done{border-color:transparent;color:var(--good);font-weight:500;padding-right:0}
 .pill.wait{border-color:transparent;color:var(--warn);font-weight:500;padding-right:0}
 .pill.grey{border-color:transparent;color:var(--warm);font-weight:500;padding-right:0}
+/* 끝까지 하게 만드는 것들 — 비교하게 만들지 않는다. 숫자는 동행이지 순위가 아니다 */
+.streak{display:flex;align-items:baseline;gap:10px;margin:10px 0 0;padding:13px 16px;
+  border:1px solid var(--line);border-radius:12px}
+.streak b{font-family:var(--tech);font-size:1.5rem;color:var(--good)}
+.streak span{font-size:.875rem;color:var(--warm)}
+.streak em{font-style:normal;margin-left:auto;font-size:.8125rem;color:var(--warm)}
+.together{margin:10px 0 0;padding:12px 16px;border:1px solid var(--line);border-radius:12px;
+  font-size:.9375rem;color:var(--bone-2)}
+.together b{font-family:var(--tech);color:var(--bone)}
+.voice{margin:8px 0 0 28px;font-size:.8125rem;color:var(--warm);font-style:italic;line-height:1.65}
+.saying{margin:12px 0 0;padding:14px 16px;border-left:2px solid var(--blue);background:var(--ink-2);
+  border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--bone-2)}
+.saying cite{display:block;margin-top:6px;font-style:normal;font-size:.8125rem;color:var(--warm)}
+.mirror{margin:10px 0 0;padding:14px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--ink-2)}
+.mirror b{color:var(--bone)}
+.mirror q{display:block;margin:8px 0 0;color:var(--bone-2);font-size:.9375rem}
+.gift{margin:10px 0 0;padding:12px 16px;border:1px dashed var(--line-2);border-radius:12px;
+  font-size:.875rem;color:var(--bone-2)}
+.gift b{color:var(--bone)}
+.note2{margin:10px 0 0;padding:14px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--ink-2)}
+.note2 h3{margin:0 0 6px;font-size:.9375rem}
+.note2 p{margin:0;font-size:.9375rem;color:var(--bone-2);white-space:pre-wrap}
+.note2 a{display:inline-block;margin-top:10px;font-size:.875rem;color:var(--blue)}
+.goalbox textarea{margin:10px 0 0}
 .dlgInfo{margin:12px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
   background:var(--ink);font-size:.8125rem;color:var(--bone-2);line-height:1.7}
 .dlgInfo b{color:var(--bone)}
@@ -184,6 +208,14 @@ textarea{resize:vertical;min-height:64px}
         <div><span class="k">수업일지 앱 연결</span><span class="v">스케줄 알림에 씁니다</span></div>
       </div>
     </section>
+    <section class="goalbox">
+      <h2>시작 선언</h2>
+      <p class="note">4주 뒤 <b>무엇이 달라져 있으면</b> 성공인가요? 한 줄로 적어 두세요.<br>
+        수료하는 날 이 문장을 그대로 보여 드립니다.</p>
+      <textarea id="goalIn" placeholder="예) 회원 재등록을 먼저 물어보는 사람이 되어 있기"></textarea>
+      <p><button class="btn" id="goalGo" type="button">적어 두기</button>
+        <span class="note" id="goalMsg" style="margin-left:10px"></span></p>
+    </section>
     <section>
       <h2>입과 자가진단</h2>
       <p class="note">시작 점수를 남겨 두면 수료할 때 4주 전후를 비교해 드립니다.</p>
@@ -200,9 +232,14 @@ textarea{resize:vertical;min-height:64px}
       <p id="recoverTxt"></p>
     </div>
 
+    <div class="streak" id="streak" hidden></div>
+    <div id="noteBox"></div>
+    <div id="mirrorBox"></div>
+
     <section>
       <h2>오늘 할 일 <span id="todayCnt"></span></h2>
       <div id="cards"></div>
+      <div class="together" id="together" hidden></div>
       <p class="tail"><a href="#" id="excBtn">오늘 못 하는 사정이 있나요?</a></p>
     </section>
 
@@ -230,6 +267,9 @@ textarea{resize:vertical;min-height:64px}
     <section>
       <h2>합격까지</h2>
       <div class="rows" id="goalRows"></div>
+      <p class="note" id="leftTip"></p>
+      <div class="gift" id="giftBox" hidden></div>
+      <div class="saying" id="saying" hidden></div>
     </section>
   </div>
 
@@ -251,6 +291,21 @@ textarea{resize:vertical;min-height:64px}
       <h2>자가진단 전후</h2>
       <div class="rows" id="rpScore"></div>
       <p class="note" id="rpScoreNote"></p>
+    </section>
+    <section id="rpGoalBox" hidden>
+      <h2>4주 전 선언</h2>
+      <div class="mirror"><b>시작하는 날 선생님은 이렇게 적으셨습니다</b><q id="rpGoal"></q></div>
+      <p class="note">이루셨나요? 이 문장이 다음 4주의 출발점이 됩니다.</p>
+    </section>
+    <section id="rpNextBox" hidden>
+      <h2>다음</h2>
+      <div class="note2">
+        <h3>ATC 본과정 10주 — LV1 수료자 값</h3>
+        <p>LV2 · LV3 · LV4 를 이어서 합니다. 챌린지에서 낸 <b>39,000원을 빼 드립니다.</b></p>
+        <p style="margin-top:8px"><b>390,000원 → 351,000원</b></p>
+        <a href="../../pay/?p=atc-full-grad" id="rpNextLink">본과정 보기 ↗</a>
+      </div>
+      <p class="note">LV1 에서 다루지 않은 것들 — 유산소·시퀀스 30회 제작·상담 말하기·성과분석표가 LV2 부터 열립니다.</p>
     </section>
   </div>
 </main>
@@ -285,13 +340,22 @@ textarea{resize:vertical;min-height:64px}
   "use strict";
   var sb = window.HB.sb, esc = window.HB.esc;
   var $ = function (s) { return document.querySelector(s); };
-  var S = null, BUSY = false, UID = null;
+  var S = null, X = null, BUSY = false, UID = null;
 
   var KIND = {
-    workout: { t: "근력 운동 30분 이상", hint: "사진 한 장과 한 줄이면 됩니다", photo: 1, note: 1 },
-    notify:  { t: "회원 스케줄 알림",     hint: "캡처 한 장. 회원이 없으면 본인에게 보낸 알림으로", photo: 1, note: 1 },
-    content: { t: "오늘 콘텐츠 1개",      hint: "스토리 캡처 또는 블로그 링크", photo: 1, link: 1, note: 1 }
+    workout: { t: "근력 운동 30분 이상", hint: "사진 한 장과 한 줄이면 됩니다", photo: 1, note: 1,
+      why: "몸이 안 만들어진 트레이너의 말은 회원에게 닿지 않습니다. 저는 이걸 제일 늦게 알았습니다." },
+    notify:  { t: "회원 스케줄 알림",     hint: "캡처 한 장. 회원이 없으면 본인에게 보낸 알림으로", photo: 1, note: 1,
+      why: "저는 3년 차에 이걸 몰라서 재등록을 놓쳤습니다. 연락 한 번이 수업 한 달을 지킵니다." },
+    content: { t: "오늘 콘텐츠 1개",      hint: "스토리 캡처 또는 블로그 링크", photo: 1, link: 1, note: 1,
+      why: "실력이 있어도 아무도 모르면 회원이 오지 않습니다. 하루 한 개면 한 달에 서른 개입니다." }
   };
+  /* 수강생에게 보이는 「남의 말」 — 인스타 후기에서 가져온 실제 문장 (계정 사용 허락 09-17) */
+  var SAYINGS = [
+    ["처음엔 하루 세 개도 많다고 생각했는데, 2주 지나니까 안 하면 허전하더라고요.", "수강 트레이너"],
+    ["블로그를 한 번도 안 써 봤는데 고칠 곳을 짚어 주니까 두 번째 글부터 달라졌습니다.", "수강 트레이너"],
+    ["회원한테 먼저 연락하는 게 이렇게 큰 줄 몰랐습니다.", "수강 트레이너"]
+  ];
   var WEEK = {
     blog:      { t: "블로그 1편", go: "제출하기", lead: "키워드 3곳 · 직접 사진 · 500자 이상", link: 1, note: 1,
                  info: "<b>키워드</b>를 제목·본문·해시태그에 한 번씩 · <b>직접 찍은 사진</b> · <b>500자 이상</b><br>내시면 몇 분 안에 검수 결과가 옵니다. 고칠 곳을 알려 드리니 <b>고쳐서 다시 내시면</b> 됩니다. 횟수 제한 없습니다." },
@@ -373,6 +437,8 @@ textarea{resize:vertical;min-height:64px}
         if (!again.error) S = again.data;
       }
     }
+    var ex = await sb.rpc("atc_extra");
+    X = (!ex.error && ex.data && ex.data.ok) ? ex.data : null;
     // 레벨 과제의 「적어 둔 답」까지 같이 받아 둔다 (여러 칸짜리 과제를 이어서 쓰려면 필요)
     var lv = await sb.rpc("atc_my_level");
     if (!lv.error && lv.data) S.level = lv.data;
@@ -404,6 +470,13 @@ textarea{resize:vertical;min-height:64px}
 
   function drawBefore() {
     $("#before").hidden = false;
+    if (X && X.goal) { $("#goalIn").value = X.goal; $("#goalMsg").textContent = "적어 두셨습니다"; }
+    $("#goalGo").onclick = async function () {
+      var v = $("#goalIn").value.trim();
+      if (!v) { $("#goalMsg").textContent = "한 줄만 적어 주세요"; return; }
+      var r = await sb.rpc("atc_set_goal", { p_goal: v });
+      $("#goalMsg").textContent = r.error ? "저장하지 못했습니다" : "적어 두었습니다 — 수료하는 날 꺼내 드릴게요";
+    };
     var c = S.cohort || {};
     if (S.dday === null || S.dday === undefined) {
       $("#bTitle").textContent = "곧 시작합니다";
@@ -420,6 +493,26 @@ textarea{resize:vertical;min-height:64px}
     $("#dayNo").textContent = S.day_no + "일차";
     $("#dayMeta").textContent = "전체 " + total + "일 · 남은 날 " + S.days_left + "일";
     $("#track").style.width = Math.min(100, Math.round(S.day_no / total * 100)) + "%";
+
+    // 연속 일수 — 끊겨도 「최고 기록」은 남는다
+    if (X && X.streak) {
+      var st = X.streak;
+      $("#streak").hidden = false;
+      $("#streak").innerHTML = '<b>' + (st.now || 0) + '일</b><span>연속으로 3개를 채우는 중</span>' +
+        (st.best > 0 ? '<em>최고 기록 ' + st.best + '일</em>' : '');
+    }
+    // 운영자 한 마디 — 강의가 아니라 말
+    if (X && X.note && X.note.body) {
+      $("#noteBox").innerHTML = '<div class="note2"><h3>' + S.week_no + '주차 · 운영자 한 마디</h3>' +
+        '<p>' + esc(X.note.body) + '</p>' +
+        (X.note.video ? '<a href="' + esc(X.note.video) + '" target="_blank" rel="noopener">영상 보기 ↗</a>' : '') +
+        '</div>';
+    } else { $("#noteBox").innerHTML = ""; }
+    // 3주차 거울 — 시작할 때 본인이 쓴 문장을 다시 보여 준다
+    if (X && X.mirror && X.mirror.goal && S.week_no >= 3) {
+      $("#mirrorBox").innerHTML = '<div class="mirror"><b>3주 전, 선생님은 이렇게 적으셨습니다</b>' +
+        '<q>' + esc(X.mirror.goal) + '</q></div>';
+    } else { $("#mirrorBox").innerHTML = ""; }
 
     $("#recover").hidden = !(S.member.recover_due > 0);
     if (S.member.recover_due > 0)
@@ -439,7 +532,9 @@ textarea{resize:vertical;min-height:64px}
           ? '<p class="memo">' + (d.source === "app" ? "수업일지에서 자동으로 채워졌습니다"
               : esc(d.note || "") + (d.link ? ' · <a href="' + esc(d.link) + '" target="_blank" rel="noopener">링크</a>' : "")) + '</p>' +
             (warn ? '<p class="flag">' + why(d.why) + '</p><div class="acts"><button class="btn sm line" data-d="' + k + '">사진 바꾸기</button></div>' : "")
-          : '<p class="memo">' + meta.hint + '</p><div class="acts"><button class="btn sm" data-d="' + k + '">제출하기</button></div>') +
+          : '<p class="memo">' + meta.hint + '</p>' +
+            (meta.why ? '<p class="voice">— ' + esc(meta.why) + '</p>' : "") +
+            '<div class="acts"><button class="btn sm" data-d="' + k + '">제출하기</button></div>') +
         '</div>';
     });
     box.innerHTML = html;
@@ -498,6 +593,33 @@ textarea{resize:vertical;min-height:64px}
       row("습관 칸 3주", "이번 주 " + S.habit_week + " / 5", S.habit_week >= 5) +
       row("레벨 과제 8개", (S.level_done || 0) + " / 8", S.level_done >= 8) +
       row("모의고사 95점", "4주차에 열립니다", false);
+
+    // 동행 숫자 — 이름도 순위도 없다. 「나만 하는 게 아니구나」 하나만 준다
+    if (X && X.together && X.together.total > 1) {
+      $("#together").hidden = false;
+      $("#together").innerHTML = X.together.done > 0
+        ? '오늘 <b>' + X.together.total + '명</b> 중 <b>' + X.together.done + '명</b>이 세 개를 다 채웠습니다.'
+        : '오늘은 아직 아무도 다 못 채웠습니다. <b>먼저 채우셔도 됩니다.</b>';
+    }
+    // 남은 칸 — 끝이 보이게
+    var left = [];
+    if ((S.submitted_days || 0) < 24) left.push("하루 과제 " + (24 - S.submitted_days) + "일");
+    if ((S.level_done || 0) < 8) left.push("레벨 과제 " + (8 - S.level_done) + "개");
+    $("#leftTip").textContent = left.length
+      ? left.join(" · ") + "만 더 하면 관문이 채워집니다."
+      : "관문을 다 채우셨습니다. 4주차 시험만 남았습니다.";
+    // 상호성 — 시작할 때 이미 받은 것을 한 번 세어 보여 준다
+    if (X && X.gift && X.gift.videos > 0) {
+      $("#giftBox").hidden = false;
+      $("#giftBox").innerHTML = '이 과정에 들어오시면서 <b>강의 3편(약 ' + X.gift.minutes +
+        '분)</b>과 <b>실전해부학 자료</b>, <b>100문항 진단</b>이 함께 열렸습니다. 다 쓰고 가세요.';
+    }
+    // 남의 말 — 3일 이상 하신 분에게만 (처음부터 들이대지 않는다)
+    if ((S.submitted_days || 0) >= 3) {
+      var q = SAYINGS[(S.day_no + S.week_no) % SAYINGS.length];
+      $("#saying").hidden = false;
+      $("#saying").innerHTML = '“' + esc(q[0]) + '”<cite>— ' + esc(q[1]) + '</cite>';
+    }
   }
   function row(k, v, ok) {
     return '<div><span class="k">' + k + '</span><span class="v' + (ok ? " ok" : "") + '">' + v + '</span></div>';
@@ -553,6 +675,9 @@ textarea{resize:vertical;min-height:64px}
       row("습관 칸 채운 날", N.habit + "일") +
       row("레벨 과제", N.level_done + " / 8", N.level_done >= 8) +
       (N.exam ? row("모의고사", N.exam + "점", N.exam >= 95) : "");
+
+    if (X && X.goal) { $("#rpGoalBox").hidden = false; $("#rpGoal").textContent = X.goal; }
+    if (R.passed) $("#rpNextBox").hidden = false;
 
     var S2 = R.score || {};
     if (S2.in != null) {
