@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATC 기수 관리 — 허봇스</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.png" type="image/png">
+<style>
+/* 기수 관리 — 대표님만. 주 1회 30분, 「확인 대기 줄」 하나를 보는 화면이다. */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/pretendard-500.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../../fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/bahn-700.woff2') format('woff2')}
+:root{color-scheme:dark;
+  --ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;
+  --line:#222222;--line-2:#2F2F2F;--blue:#4F86F7;--bad:#E07A6B;--good:#5FBF8A;--warn:#E0A85F;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
+  --tech:"Bahn","Bahnschrift",var(--sans)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.7;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--bone)}button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px clamp(16px,4vw,32px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.05rem;color:var(--bone);text-decoration:none}
+.logo small{font-family:var(--tech);font-size:.625rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+main{max-width:840px;margin:0 auto;padding:0 clamp(16px,4vw,24px) 56px}
+h2{font-size:.8125rem;font-family:var(--tech);letter-spacing:.12em;color:var(--warm);font-weight:700;margin:32px 0 10px;text-transform:uppercase}
+.note{font-size:.875rem;color:var(--warm)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 0}
+.kpi div{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-family:var(--tech);font-size:1.75rem;line-height:1.2}
+.kpi span{font-size:.8125rem;color:var(--warm)}
+.curve{display:flex;align-items:flex-end;gap:3px;height:76px;margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
+.curve i{flex:1;background:var(--line-2);border-radius:2px 2px 0 0;min-height:2px}
+.curve i.now{background:var(--blue)}
+table{width:100%;border-collapse:collapse;margin:10px 0 0;font-size:.875rem}
+th,td{text-align:left;padding:10px 8px;border-top:1px solid var(--line);white-space:nowrap}
+th{color:var(--warm);font-weight:500;font-size:.75rem}
+td.em{white-space:normal;color:var(--bone-2)}
+td b{font-family:var(--tech)}
+.ok{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.q{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:10px 0 0}
+.q>div{display:flex;gap:12px;align-items:baseline;padding:12px 16px;border-top:1px solid var(--line);font-size:.9375rem}
+.q>div:first-child{border-top:0}
+.q .w{font-size:.75rem;color:var(--warm);font-family:var(--tech);flex:none;width:6.5em}
+.q .d{flex:1;color:var(--bone-2);word-break:break-all}
+.q .t{font-size:.75rem;color:var(--warm);font-family:var(--tech);flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:9px;padding:11px 18px;font-size:.9375rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none}
+.btn.line{background:transparent;color:var(--bone);border:1px solid var(--line-2)}
+.gate{max-width:420px;margin:0 auto;padding:48px 0}
+.auth h2{font-size:1.25rem;font-family:var(--sans);letter-spacing:-.02em;color:var(--bone);text-transform:none;margin:0 0 4px}
+.auth label{display:block;margin:12px 0 5px;font-size:.8125rem;color:var(--warm)}
+.auth input{width:100%;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);padding:11px 13px;font:inherit}
+.auth .btn{margin-top:16px;width:100%}
+.auth .msg{color:var(--bad)}
+.card.auth{background:transparent;border:0;padding:0}
+@media (max-width:640px){ .kpi{grid-template-columns:repeat(2,1fr)} .wrap{overflow-x:auto} }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../../">허봇스<small>ATC 관리</small></a>
+  <a class="note" href="../my/" style="text-decoration:none">내 과정</a>
+</header>
+<main>
+  <div class="gate" id="gate"><p class="note" id="gateMsg">확인하는 중…</p><div id="authBox"></div></div>
+  <div id="board" hidden>
+    <h2 id="cohortName">기수</h2>
+    <div class="kpi" id="kpi"></div>
+
+    <h2>며칠째에 빠지는가</h2>
+    <div class="curve" id="curve"></div>
+    <p class="note">막대 하나가 하루입니다. 높이는 그날 3개를 다 낸 사람 수 — 꺾이는 자리가 고비입니다.</p>
+
+    <h2>확인 대기 줄 <span id="qCnt"></span></h2>
+    <div class="q" id="queue"></div>
+
+    <h2>사람별</h2>
+    <div class="wrap"><table id="people"></table></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script src="../../vod/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var sb = window.HB.sb, esc = window.HB.esc;
+  var $ = function (s) { return document.querySelector(s); };
+
+  async function boot() {
+    var s = await window.HB.session();
+    if (!s) {
+      $("#gateMsg").hidden = true;
+      window.HB.mountAuth($("#authBox"), function () { location.reload(); }, { lead: "관리자 계정으로 로그인하세요." });
+      return;
+    }
+    var r = await sb.rpc("atc_admin_board", { p_cohort: "atc-lv1-01" });
+    if (r.error) {
+      $("#gateMsg").hidden = false;
+      $("#gateMsg").innerHTML = (r.error.message || "").indexOf("not-admin") >= 0
+        ? "이 계정은 관리자가 아닙니다.<br><br><a class=\"btn line\" href=\"../my/\">내 과정으로</a>"
+        : "불러오지 못했습니다 — " + esc(r.error.message);
+      return;
+    }
+    draw(r.data);
+  }
+
+  function draw(B) {
+    $("#gate").hidden = true; $("#board").hidden = false;
+    var c = B.cohort || {}, P = B.people || [], Q = B.queue || [];
+    $("#cohortName").textContent = (c.id || "") + " · " + (c.starts_on || "날짜 미정") +
+      (c.ends_on ? " ~ " + c.ends_on : "") + (c.active ? "" : " · 잠김");
+
+    var days = c.days || 28;
+    var full = P.filter(function (p) { return p.days_ok >= 24; }).length;
+    var alive = P.filter(function (p) { return p.status === "running" || p.status === "completed"; }).length;
+    $("#kpi").innerHTML =
+      k(P.length, "등록") + k(alive, "진행 중") + k(full, "24일 채움") + k(Q.length, "확인 대기", Q.length ? "warn" : "");
+
+    var mx = 1;
+    (B.drop_curve || []).forEach(function (d) { if (d.ok > mx) mx = d.ok; });
+    $("#curve").innerHTML = (B.drop_curve || []).map(function (d) {
+      var today = c.starts_on && B.today ?
+        (Math.round((new Date(B.today) - new Date(c.starts_on)) / 864e5) + 1 === d.day) : false;
+      return '<i class="' + (today ? "now" : "") + '" style="height:' +
+        Math.max(2, Math.round(d.ok / mx * 100)) + '%" title="' + d.day + '일차 · ' + d.ok + '명"></i>';
+    }).join("");
+
+    $("#qCnt").textContent = Q.length ? Q.length + "건" : "";
+    $("#queue").innerHTML = Q.length
+      ? Q.map(function (q) {
+          return '<div><span class="w">' + esc(q.what) + '</span><span class="d">' +
+            esc(q.who) + ' — ' + esc(q.detail) + '</span><span class="t">' + esc(q.at) + '</span></div>';
+        }).join("")
+      : '<div><span class="d">비어 있습니다. 볼 것이 없습니다.</span></div>';
+
+    $("#people").innerHTML =
+      '<tr><th>사람</th><th>상태</th><th>채운 날</th><th>오늘</th><th>누락</th><th>복구</th><th>확인</th><th>주간</th><th>레벨</th></tr>' +
+      (P.length ? P.map(function (p) {
+        return '<tr><td class="em">' + esc(p.email) + '</td>' +
+          '<td>' + esc(p.status) + '</td>' +
+          '<td><b class="' + (p.days_ok >= 24 ? "ok" : "") + '">' + p.days_ok + '</b> / 24</td>' +
+          '<td><b>' + p.today_done + '</b> / 3</td>' +
+          '<td><b class="' + (p.miss > 0 ? "warn" : "") + '">' + p.miss + '</b></td>' +
+          '<td><b class="' + (p.recover_due > 0 ? "bad" : "") + '">' + p.recover_due + '</b></td>' +
+          '<td><b class="' + (p.review > 0 ? "warn" : "") + '">' + p.review + '</b></td>' +
+          '<td><b>' + p.weekly_passed + '</b></td>' +
+          '<td><b>' + p.level_done + '</b> / 8</td></tr>';
+      }).join("") : '<tr><td class="em" colspan="9">아직 등록한 사람이 없습니다.</td></tr>');
+  }
+  function k(v, label, cls) {
+    return '<div><b class="' + (cls || "") + '">' + v + '</b><span>' + label + '</span></div>';
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
