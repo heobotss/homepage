@@ -325,6 +325,10 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* 둘러보기 — 무료 단계는 흰 단추 그대로, 가장 약했던 마지막(세미나)만 또렷하게 (09-27) */
+.g-item:last-child .btn-line{background:#F2F2F2; color:#0A0A0A; border-color:#F2F2F2}
+.g-item:last-child .btn-line:hover{background:#FFFFFF; border-color:#FFFFFF}
+
 /* ══ 휴대폰 메뉴 — 세 줄 버튼 + 서랍 (09-27) ══
    전에는 로고 옆 작은 선택 상자였다. 화면이 9개가 되면서 메뉴로 읽히지 않았다 */
 .mbtn{display:none; pointer-events:auto; width:42px; height:42px; margin-left:-6px; padding:0;
@@ -458,7 +462,8 @@ body.drawer-on{overflow:hidden}
 
 /* 휴대폰에서 12px 밑으로 내려가는 라벨·번호를 12~12.5px 로 올린다 (09-17) */
 @media (max-width:760px){
-  .label,.p-fig i,.p-t,.pcard .tag,.tag-soon,.tag-now,.tag-pick,.mk,.m-lab,.vfree-tag,.viz .note,.can-list .t{font-size:12.5px !important}
+  .label,.p-fig i,.p-t,.pcard .tag,.tag-soon,.tag-now,.tag-pick,.mk,.m-lab,.vfree-tag,.viz .note,.can-list .t,.v-list li span,.v-list summary,.rs-a,.rs-per,.rv-who span{font-size:12.5px !important}
+  .pcard .vat,.vcert,.vpaid .sub3 a{font-size:12.5px !important}
   .mc span,.tool .no,.shot figcaption em,.p-k,.tcard .k,.plan .who,.gt-k,.viz em,.ends em,.m-n small{font-size:12px !important}
 }
 @media (max-width:980px){
@@ -1027,7 +1032,7 @@ body.drawer-on{overflow:hidden}
 .tk-n{font-family:var(--tech); font-weight:700; font-size:13px; line-height:1; padding:6px 10px; align-self:flex-start;
   border:1px solid rgba(141,141,141,.45); color:var(--brass-lt); letter-spacing:.06em;
   letter-spacing:-.03em; color:var(--brass-lt)}
-.tk-n small{font-size:.33em; margin-left:.08em; color:var(--warm); letter-spacing:0}
+.tk-n small{font-size:11.5px; margin-left:.08em; color:var(--warm); letter-spacing:0}
 .tk-h .label{margin-bottom:5px}
 .tk-h h3{font-size:clamp(34px,4vw,48px); letter-spacing:-.045em; line-height:1.05}
 .tk-h h3 small{display:block; font-size:15px; font-weight:500; letter-spacing:-.01em; color:var(--warm); margin-top:8px}
@@ -1247,6 +1252,15 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 .paper :focus-visible{outline-color:var(--paper-acc-2)}
 .skip{position:absolute; left:-9999px}
 .skip:focus{left:16px; top:12px; z-index:99; background:var(--bone); color:var(--ink); padding:10px 18px}
+
+/* ══ 전체 점검 뒤 손질 — 맨 끝에 둔다(앞선 규칙을 덮어야 한다) 09-27 ══ */
+.path{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1100px){ .path{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:640px){ .path{grid-template-columns:1fr} }
+@media (max-width:760px){ .vfree{grid-template-columns:none !important} .arrows{display:none !important} }
+.ghost{top:-.16em; opacity:.75}
+@media (max-width:999px){ .ghost{display:none} }
+.st-soon{color:var(--bone-2) !important}
 </style>
 
 <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -1697,7 +1711,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <div class="t">
         <p class="label">전국 실측</p>
         <h2 class="h-md">전국 28,200곳을 한 장에 펼쳐 놓았습니다</h2>
-        <p class="plot-note" style="margin-top:6px">가로로 커서를 옮기면 그 값이 상위 몇 %인지 바로 읽힙니다.</p>
+        <p class="plot-note" style="margin-top:6px">가로로 쓸어 보면 그 값이 상위 몇 %인지 바로 읽힙니다.</p>
       </div>
       <div class="metrics" id="metrics" role="group" aria-label="지표 고르기"></div>
     </div>
@@ -1903,7 +1917,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       </li>
       <li>
         <span class="p-k">02</span>
-        <span class="p-fig ok"><b>센터 진단표</b><i>이 칸도 같은 프로그램이 맡습니다</i></span>
+        <span class="p-fig ok"><b>센터 진단표 — 플레이스 편</b><i>이 칸도 같은 프로그램이 맡습니다</i></span>
         <strong>플레이스에서 확인</strong>
         <span class="p-m"><em>열 칸 중 어디가 비었는지</em> 카드로 찍어 드립니다</span>
         <span class="p-t on">센터 진단표 · 무료 플랜</span>
@@ -2236,7 +2250,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <article class="fact bridge rv">
         <div class="fig">
           <div class="n">19.7<small>%</small></div>
-          <p class="den">전국 <b>28,200곳 중 5,349곳</b> · 다섯 곳 중 하나</p>
+          <p class="den">밖에서 쓴 글이 있는 <b>27,139곳 중 5,349곳</b> · 다섯 곳 중 하나</p>
           <div class="viz sliver" aria-hidden="true">
             <span class="lit"></span>
             <em>5,349</em>
@@ -2555,30 +2569,14 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <h3>4T 트레이너 마케팅 세미나 10기</h3>
         <p class="opt">사전등록가</p>
         <div class="pr">390,000<small>원</small></div>
-        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
+        <p class="vat">결제 금액 그대로 · 추가 비용 없음 · 일반가 590,000원</p>
         <dl>
           <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
           <dt>장소</dt><dd>확정 후 메일 안내</dd>
-          <dt>정원</dt><dd>12명 · 결제 순 마감</dd>
+          <dt>정원</dt><dd>12명 (오프라인 좌석 수)</dd>
         </dl>
         <div class="acts">
           <a class="btn btn-solid" href="pay/?p=seminar-10-early">신청·결제</a>
-          <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
-        </div>
-      </article>
-      <article class="pcard">
-        <span class="tag plain">일반</span>
-        <h3>4T 트레이너 마케팅 세미나 10기</h3>
-        <p class="opt">일반가</p>
-        <div class="pr">590,000<small>원</small></div>
-        <p class="vat">결제 금액 그대로 · 추가 비용 없음</p>
-        <dl>
-          <dt>일정</dt><dd>2026년 11~12월 중 하루 (확정 후 메일 안내)</dd>
-          <dt>장소</dt><dd>확정 후 메일 안내</dd>
-          <dt>정원</dt><dd>12명 · 사전등록과 합산</dd>
-        </dl>
-        <div class="acts">
-          <a class="btn btn-solid" href="pay/?p=seminar-10">신청·결제</a>
           <a class="btn btn-line" href="#" data-link="seminar">세미나 자세히</a>
         </div>
       </article>
@@ -2649,10 +2647,12 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
     <div class="foot-row">
       <span class="mark">허봇스<span>HEOBOTSS</span></span>
       <span class="links">
-        <a href="#s-trainer">트레이너</a>
-        <a href="#s-center">센터</a>
-        <a href="#s-tools">프로그램</a>
-        <a href="#s-plans">플랜</a>
+        <a href="#/guide">둘러보기</a>
+        <a href="#/check">30초 진단</a>
+        <a href="#/vod">강의</a>
+        <a href="#/facts">검증</a>
+        <a href="#/tools">프로그램</a>
+        <a href="#/price">플랜</a>
         <a href="https://www.instagram.com/heobotss" target="_blank" rel="noopener">Instagram</a>
       </span>
     </div>
