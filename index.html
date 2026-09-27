@@ -1293,6 +1293,27 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 .viz.hund .note{font-size:11.5px; color:var(--warm); line-height:1.5}
 .viz.hund .note b{color:var(--bone); font-weight:700}
 @media (max-width:760px){ .viz.hund .note{font-size:12.5px} }
+
+/* 성과 칸 — 나머지 캡처는 한 줄 띠로 양만 보여 준다 (09-27)
+   격자로 펼쳤더니 86장이 성과 칸을 통째로 덮었다. 읽을 것이 아니라 양을 보는 자리다 */
+.rs-more{margin-top:24px; padding-top:18px; border-top:1px solid var(--line);
+  display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.rs-more-h{font-size:13px; font-weight:700; color:var(--bone-2)}
+.rs-more-f{font-size:13px}
+.rs-more-f a{color:var(--bone); border-bottom:1px solid var(--brass)}
+.rs-strip{position:relative; margin-top:10px; display:flex; gap:5px; overflow-x:auto;
+  overscroll-behavior-x:contain; scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 86%,transparent 100%);
+          mask-image:linear-gradient(90deg,#000 0,#000 86%,transparent 100%)}
+.rs-strip::-webkit-scrollbar{display:none}
+.rs-strip img{flex:none; width:46px; height:82px; object-fit:cover; object-position:top;
+  border-radius:4px; border:1px solid #232323; opacity:.6; transition:opacity .2s}
+.rs-strip img:hover{opacity:1}
+@media (max-width:760px){
+  .rs-more{margin:20px -16px 0; padding:16px 16px 0}
+  .rs-strip{margin-right:-16px; padding-right:16px}
+  .rs-strip img{width:40px; height:71px}
+}
 </style>
 
 <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -1471,7 +1492,145 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
             <p class="rs-who"><a href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener">@sohyeon_h.i.t</a></p>
           </figcaption>
         </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/broad_minded94/" target="_blank" rel="noopener"><img src="img/result-10.webp" alt="@broad_minded94 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">플레이스 순위 1위 — 딱 7일 만에</p>
+            <p class="rs-who"><a href="https://www.instagram.com/broad_minded94/" target="_blank" rel="noopener">@broad_minded94</a><span class="rs-per">7일</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener"><img src="img/result-11.webp" alt="@k_imtaeyeong 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">신당역pt 블로그 3~4위 점령 · 플레이스 1위 · 신규 유입 4.5배</p>
+            <p class="rs-who"><a href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener">@k_imtaeyeong</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/shoulder_hak/" target="_blank" rel="noopener"><img src="img/result-12.webp" alt="@shoulder_hak 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">단가 올린 지 12일, 신규 예약 8명 · 저녁 수업 마감</p>
+            <p class="rs-who"><a href="https://www.instagram.com/shoulder_hak/" target="_blank" rel="noopener">@shoulder_hak</a><span class="rs-per">12일</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/padocoach/" target="_blank" rel="noopener"><img src="img/result-13.webp" alt="@padocoach 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「강남구청역피티」 1등부터 4등까지 전부 내 블로그</p>
+            <p class="rs-who"><a href="https://www.instagram.com/padocoach/" target="_blank" rel="noopener">@padocoach</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/workout.bang/" target="_blank" rel="noopener"><img src="img/result-14.webp" alt="@workout.bang 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「회현역헬스장」 1위부터 5위까지 팀으로 장악</p>
+            <p class="rs-who"><a href="https://www.instagram.com/workout.bang/" target="_blank" rel="noopener">@workout.bang</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/workout.bang/" target="_blank" rel="noopener"><img src="img/result-15.webp" alt="@workout.bang 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">서울역·시청역 10개 검색어에서 상위권</p>
+            <p class="rs-who"><a href="https://www.instagram.com/workout.bang/" target="_blank" rel="noopener">@workout.bang</a><span class="rs-per">올해</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener"><img src="img/result-16.webp" alt="@sohyeon_h.i.t 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「포항여성pt」 1위 + 이번 주 체험 문의 2건</p>
+            <p class="rs-who"><a href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener">@sohyeon_h.i.t</a><span class="rs-per">이번 주</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener"><img src="img/result-17.webp" alt="@sohyeon_h.i.t 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">교육 다음 날 쓴 첫 글이 인기글·블로그탭 1위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener">@sohyeon_h.i.t</a><span class="rs-per">교육 다음 날</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/yeeun.12/" target="_blank" rel="noopener"><img src="img/result-18.webp" alt="@yeeun.12 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">제주 영어교육도시 필라테스 1위 + 체험 문의 1건</p>
+            <p class="rs-who"><a href="https://www.instagram.com/yeeun.12/" target="_blank" rel="noopener">@yeeun.12</a><span class="rs-per">지난주 → 이번 주</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/ssam_movement/" target="_blank" rel="noopener"><img src="img/result-19.webp" alt="@ssam_movement 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">3월에 쓴 9개 중 1위 3개 · 2위 3개</p>
+            <p class="rs-who"><a href="https://www.instagram.com/ssam_movement/" target="_blank" rel="noopener">@ssam_movement</a><span class="rs-per">2026년 3월</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/ssam_movement/" target="_blank" rel="noopener"><img src="img/result-20.webp" alt="@ssam_movement 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">글 하나에 2~3시간 걸리던 것이 3시간에 10개</p>
+            <p class="rs-who"><a href="https://www.instagram.com/ssam_movement/" target="_blank" rel="noopener">@ssam_movement</a><span class="rs-per">블로그 2달 차</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/blossom_start.t/" target="_blank" rel="noopener"><img src="img/result-21.webp" alt="@blossom_start.t 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">하단·사하구 4개 검색어 전부 1위, 2~3주 유지</p>
+            <p class="rs-who"><a href="https://www.instagram.com/blossom_start.t/" target="_blank" rel="noopener">@blossom_start.t</a><span class="rs-per">2~3주</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/k_hyuntae_im/" target="_blank" rel="noopener"><img src="img/result-22.webp" alt="@k_hyuntae_im 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">목동재활pt 등 최근 글 3개가 전부 1·2위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/k_hyuntae_im/" target="_blank" rel="noopener">@k_hyuntae_im</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/grow_do_build/" target="_blank" rel="noopener"><img src="img/result-23.webp" alt="@grow_do_build 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「천안쌍용동피티」 1·2·3위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/grow_do_build/" target="_blank" rel="noopener">@grow_do_build</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/kimdongho_classic/" target="_blank" rel="noopener"><img src="img/result-24.webp" alt="@kimdongho_classic 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">하루 만에 하위권에서 4위로</p>
+            <p class="rs-who"><a href="https://www.instagram.com/kimdongho_classic/" target="_blank" rel="noopener">@kimdongho_classic</a><span class="rs-per">하루</span></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/develop_rokssaem/" target="_blank" rel="noopener"><img src="img/result-25.webp" alt="@develop_rokssaem 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「정발산pt」 인기글 1페이지 전부 진입</p>
+            <p class="rs-who"><a href="https://www.instagram.com/develop_rokssaem/" target="_blank" rel="noopener">@develop_rokssaem</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/next_jw/" target="_blank" rel="noopener"><img src="img/result-26.webp" alt="@next_jw 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">이천피티 2위 · 이천터미널헬스장 1위 · 마장면헬스 1위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/next_jw/" target="_blank" rel="noopener">@next_jw</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/tyrannoxaurus/" target="_blank" rel="noopener"><img src="img/result-27.webp" alt="@tyrannoxaurus 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">「대구중동pt」 블로그탭·인기글 1위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/tyrannoxaurus/" target="_blank" rel="noopener">@tyrannoxaurus</a></p>
+          </figcaption>
+        </figure>
+        <figure class="rs-card">
+          <a class="rs-shot" href="https://www.instagram.com/spaworldgym_yoon/" target="_blank" rel="noopener"><img src="img/result-28.webp" alt="@spaworldgym_yoon 님이 보내 주신 결과 캡처" loading="lazy" width="360" height="640"></a>
+          <figcaption>
+            <p class="rs-line">만수동 헬스장·PT·필라테스 핵심 검색어 플레이스 1위</p>
+            <p class="rs-who"><a href="https://www.instagram.com/spaworldgym_yoon/" target="_blank" rel="noopener">@spaworldgym_yoon</a></p>
+          </figcaption>
+        </figure>
     </div>
+    <div class="rs-more rv">
+      <p class="rs-more-h">이 밖에도 계속 옵니다 — 보내 주신 순위 캡처 86장</p>
+      <p class="rs-more-f"><a href="https://www.instagram.com/heobotss/" target="_blank" rel="noopener">인스타그램에서 전부 보기 →</a></p>
+    </div>
+    <div class="rs-strip rv"><img src="img/shot-01.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-02.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-03.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-04.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-05.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-06.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-07.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-08.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-09.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-10.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-11.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-12.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-13.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-14.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-15.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-16.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-17.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-18.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-19.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-20.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-21.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-22.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-23.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-24.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-25.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-26.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-27.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-28.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-29.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-30.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-31.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-32.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-33.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-34.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-35.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-36.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-37.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-38.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-39.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-40.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-41.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-42.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-43.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-44.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-45.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-46.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-47.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-48.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-49.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-50.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-51.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-52.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-53.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-54.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-55.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-56.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-57.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-58.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-59.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-60.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-61.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-62.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-63.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-64.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-65.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-66.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-67.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-68.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-69.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-70.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-71.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-72.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-73.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-74.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-75.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-76.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-77.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-78.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-79.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-80.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-81.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-82.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-83.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-84.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-85.webp" alt="" loading="lazy" width="150" height="267"><img src="img/shot-86.webp" alt="" loading="lazy" width="150" height="267"></div>
   </div>
 </section>
 
