@@ -284,7 +284,7 @@ textarea{resize:vertical;min-height:64px}
     sequence:  { t: "시퀀스 5회 제작", go: "제출하기", lead: "만든 시퀀스를 찍어 올려 주세요", photo: 1, note: 1,
                  info: "1·2주차는 <b>센터 웨이트</b> 시퀀스, 3·4주차는 <b>센터 맨몸</b> 시퀀스입니다. 4주 동안 각 10회를 채웁니다." },
     bodycheck: { t: "바디체크", go: "제출하기", lead: "2주에 한 번입니다", photo: 1, note: 1,
-                 info: "<b>대표가 확인합니다.</b> 다른 수강생에게는 보이지 않고, 과정이 끝나고 <b>90일 뒤 지워집니다</b>." }
+                 info: "<b>운영자가 확인합니다.</b> 다른 수강생에게는 보이지 않고, 과정이 끝나고 <b>90일 뒤 지워집니다</b>." }
   };
   var LV = [
     { n: 1, t: "운동능력 10종 영상", go: "영상 올리기", lead: "5종 + 5종, 두 번에 나눠 내셔도 됩니다", link: 1, note: 1,
@@ -316,7 +316,7 @@ textarea{resize:vertical;min-height:64px}
              "현 센터 직원 구성 (운영진·프리·파트·정직원·FC·인포·알바)",
              "센터 선생님별 PT 회원 수와 평균 수업 개수",
              "현 센터의 구조 (평수, 공간 분리)"],
-      info: "적어 주신 내용은 <b>대표만</b> 봅니다. 다른 수강생에게는 보이지 않습니다." },
+      info: "적어 주신 내용은 <b>운영자만</b> 봅니다. 다른 수강생에게는 보이지 않습니다.<br>적는 대로 <b>자동으로 저장</b>되니 나눠서 채우셔도 됩니다." },
     { n: 7, t: "카카오톡(+오픈톡) 정비", go: "주소 올리기", lead: "정비한 채널 주소를 넣어 주세요", link: 1, note: 1 },
     { n: 8, t: "리뷰 1회 이상", go: "리뷰 올리기", lead: "네이버 플레이스 리뷰 주소나 캡처", link: 1, photo: 1, note: 1,
       info: "① 내 <b>이름</b>이 들어가게 ② 회원과 <b>같이 찍은 사진</b> ③ 사진 1장 이상 더 ④ <b>4줄 이상</b>" }
@@ -350,6 +350,9 @@ textarea{resize:vertical;min-height:64px}
     if (S.state === "not-enrolled" || S.state === "anon") return noCourse();
     $("#gate").hidden = true;
     $("#before").hidden = true; $("#run").hidden = true; $("#over").hidden = true;
+    // 레벨 과제의 「적어 둔 답」까지 같이 받아 둔다 (여러 칸짜리 과제를 이어서 쓰려면 필요)
+    var lv = await sb.rpc("atc_my_level");
+    if (!lv.error && lv.data) S.level = lv.data;
     if (S.state === "before") return drawBefore();
     if (S.state === "done") { $("#over").hidden = false; return; }
     drawRun();
@@ -483,7 +486,32 @@ textarea{resize:vertical;min-height:64px}
   }
 
   /* ── 모달 ── */
-  var pick = null, send = null;
+  var pick = null, send = null, saveT = null, saving = false;
+
+  /* 여러 칸짜리 과제는 적는 대로 저장한다 — 11문항을 한 번에 다 채우기 어렵다 */
+  function answersNow() {
+    var a = {};
+    Array.prototype.forEach.call($("#dForm").querySelectorAll("textarea"), function (t) {
+      var v = t.value.trim();
+      if (v) a[t.getAttribute("data-q")] = v;
+    });
+    return a;
+  }
+  function autosave(slot, now) {
+    if (saveT) clearTimeout(saveT);
+    var tip = $("#saveTip");
+    if (tip) tip.textContent = "적는 중…";
+    saveT = setTimeout(async function () {
+      if (saving) return;
+      saving = true;
+      try {
+        var r = await sb.rpc("atc_level_set",
+          { p_slot: slot, p_link: null, p_note: null, p_done: null, p_answers: answersNow() });
+        if (tip) tip.textContent = r.error ? "저장하지 못했습니다 — " + r.error.message : "저장됐습니다";
+      } catch (e) { if (tip) tip.textContent = "저장하지 못했습니다"; }
+      saving = false;
+    }, now ? 0 : 1200);
+  }
   function openDlg(o) {
     pick = null; send = o.send;
     $("#dTtl").textContent = o.title;
@@ -511,13 +539,23 @@ textarea{resize:vertical;min-height:64px}
     // 여러 칸을 적는 과제(본인 알아가기 11문항)
     var ff = $("#dForm");
     ff.hidden = !o.form; ff.innerHTML = "";
-    if (o.form) o.form.forEach(function (q, i) {
-      var l = document.createElement("label");
-      l.innerHTML = "<b>" + (i + 1) + ".</b> " + esc(q);
-      var t = document.createElement("textarea");
-      t.setAttribute("data-q", i);
-      ff.appendChild(l); ff.appendChild(t);
-    });
+    if (o.form) {
+      var saved = o.answers || {};
+      o.form.forEach(function (q, i) {
+        var l = document.createElement("label");
+        l.innerHTML = "<b>" + (i + 1) + ".</b> " + esc(q);
+        var t = document.createElement("textarea");
+        t.setAttribute("data-q", i);
+        t.value = saved[String(i)] || "";
+        t.addEventListener("input", function () { autosave(o.slot); });
+        t.addEventListener("blur", function () { autosave(o.slot, true); });
+        ff.appendChild(l); ff.appendChild(t);
+      });
+      var tip = document.createElement("p");
+      tip.className = "note"; tip.id = "saveTip"; tip.style.marginTop = "14px";
+      tip.textContent = "적는 대로 저장됩니다.";
+      ff.appendChild(tip);
+    }
 
     $("#drop").hidden = !o.photo; $("#drop").className = "drop";
     $("#drop").textContent = "사진 고르기 · 찍기"; $("#file").value = "";
@@ -573,27 +611,21 @@ textarea{resize:vertical;min-height:64px}
       photo: !!m.photo, link: !!m.link, note: 1,
       link0: g.link || "", note0: g.note || "", notePh: "한 줄 (선택)",
       go: g.done ? "다시 저장" : "완료로 표시",
-      form: m.form, files: m.files,
+      form: m.form, files: m.files, slot: n, answers: g.answers || {},
       send: async function (up) {
-        var note = $("#dNote").value.trim();
+        var ans = m.form ? answersNow() : null;
         if (m.form) {
-          var parts = [], miss = 0;
-          Array.prototype.forEach.call($("#dForm").querySelectorAll("textarea"), function (t, i) {
-            var v = t.value.trim();
-            if (!v) miss++;
-            parts.push((i + 1) + ". " + m.form[i] + "\n→ " + (v || "(비어 있음)"));
-          });
-          if (miss > 3) throw new Error("아직 " + miss + "칸이 비어 있습니다");
-          note = parts.join("\n\n");
+          var miss = m.form.length - Object.keys(ans).length;
+          if (miss > 0) throw new Error("아직 " + miss + "칸이 비어 있습니다 — 적으신 것은 이미 저장돼 있습니다");
         }
         var r = await sb.rpc("atc_level_set", { p_slot: n, p_link: $("#dLink").value.trim() || up.key || null,
-          p_note: note || null, p_done: true });
+          p_note: $("#dNote").value.trim() || null, p_done: true, p_answers: ans });
         if (r.error) throw r.error;
       } });
   }
   $("#excBtn").onclick = function (e) {
     e.preventDefault();
-    openDlg({ title: "오늘 못 하는 사정", lead: "대표가 보고 인정하면 그날은 누락에서 빠집니다", sel: 1, note: 1,
+    openDlg({ title: "오늘 못 하는 사정", lead: "운영자가 보고 인정하면 그날은 누락에서 빠집니다", sel: 1, note: 1,
       notePh: "무슨 일인지 한 줄", go: "신고하기",
       send: async function () {
         var note = $("#dNote").value.trim();
