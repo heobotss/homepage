@@ -91,10 +91,15 @@ section{margin:28px 0 0}
 .dots i.on{background:var(--good)}
 
 .rows{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:10px 0 0}
-.rows>div{display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--line);font-size:.9375rem;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;color:inherit}
-.rows>div:first-child{border-top:0}
-.rows button.rw{cursor:pointer}
-.rows button.rw:hover{background:var(--ink-2)}
+/* 줄은 <div> 이기도 하고 누를 수 있는 <button> 이기도 하다 — 둘 다에 걸어야 한다
+   (button 에만 안 걸어서 모바일에서 줄이 옆으로 흘렀다, 09-27 고침) */
+.rows>div,.rows>button{display:flex;align-items:center;gap:10px;padding:13px 16px;
+  border:0;border-top:1px solid var(--line);font:inherit;font-size:.9375rem;
+  width:100%;background:transparent;text-align:left;color:inherit}
+.rows>div:first-child,.rows>button:first-child{border-top:0}
+.rows>button{cursor:pointer;-webkit-appearance:none;appearance:none}
+.rows>button:hover{background:var(--ink-2)}
+.rows>button:active{background:var(--ink-3)}
 .rows .k{color:var(--bone-2);flex:1}
 .rows .v{color:var(--warm);font-size:.875rem;font-family:var(--tech);flex:none}
 .rows .ok{color:var(--good)}

@@ -63,7 +63,11 @@ td b{font-family:var(--tech)}
 <body>
 <header class="top">
   <a class="logo" href="../../">허봇스<small>ATC 관리</small></a>
-  <a class="note" href="../my/" style="text-decoration:none">내 과정</a>
+  <span style="display:flex;align-items:center;gap:12px;min-width:0">
+    <span class="note" id="who" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    <a class="note" href="../my/" style="text-decoration:none;flex:none">내 과정</a>
+    <a class="note" href="#" id="logout" style="text-decoration:none;flex:none" hidden>로그아웃</a>
+  </span>
 </header>
 <main>
   <div class="gate" id="gate"><p class="note" id="gateMsg">확인하는 중…</p><div id="authBox"></div></div>
@@ -98,12 +102,21 @@ td b{font-family:var(--tech)}
       window.HB.mountAuth($("#authBox"), function () { location.reload(); }, { lead: "관리자 계정으로 로그인하세요." });
       return;
     }
+    var em = (s.user && s.user.email) || "";
+    $("#who").textContent = em;
+    $("#logout").hidden = false;
+    $("#logout").onclick = async function (e) { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
+
     var r = await sb.rpc("atc_admin_board", { p_cohort: "atc-lv1-01" });
     if (r.error) {
       $("#gateMsg").hidden = false;
       $("#gateMsg").innerHTML = (r.error.message || "").indexOf("not-admin") >= 0
-        ? "이 계정은 관리자가 아닙니다.<br><br><a class=\"btn line\" href=\"../my/\">내 과정으로</a>"
+        ? "<b>" + esc(em) + "</b> 계정은 관리자가 아닙니다.<br>관리자 계정으로 로그인해 주세요." +
+          "<br><br><a class=\"btn line\" href=\"#\" id=\"swap\">다른 계정으로 로그인</a> " +
+          "<a class=\"btn line\" href=\"../my/\">내 과정으로</a>"
         : "불러오지 못했습니다 — " + esc(r.error.message);
+      var sw = $("#swap");
+      if (sw) sw.onclick = async function (e) { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
       return;
     }
     draw(r.data);
