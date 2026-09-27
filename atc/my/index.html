@@ -235,8 +235,22 @@ textarea{resize:vertical;min-height:64px}
 
   <div id="over" hidden>
     <section>
-      <h1>4주가 끝났습니다</h1>
-      <p class="note">수료 리포트를 준비하고 있습니다. 준비되면 메일로 알려 드릴게요.</p>
+      <h1 id="rpTitle">4주가 끝났습니다</h1>
+      <p class="note" id="rpWhen"></p>
+    </section>
+    <section>
+      <h2>6각형 능력치</h2>
+      <div id="rpHex"></div>
+      <p class="note">4주 동안 실제로 내신 것에서 뽑은 값입니다.</p>
+    </section>
+    <section>
+      <h2>4주 동안</h2>
+      <div class="rows" id="rpNums"></div>
+    </section>
+    <section id="rpScoreBox" hidden>
+      <h2>자가진단 전후</h2>
+      <div class="rows" id="rpScore"></div>
+      <p class="note" id="rpScoreNote"></p>
     </section>
   </div>
 </main>
@@ -363,7 +377,7 @@ textarea{resize:vertical;min-height:64px}
     var lv = await sb.rpc("atc_my_level");
     if (!lv.error && lv.data) S.level = lv.data;
     if (S.state === "before") return drawBefore();
-    if (S.state === "done") { $("#over").hidden = false; return; }
+    if (S.state === "done") return drawReport();
     drawRun();
   }
 
@@ -492,6 +506,67 @@ textarea{resize:vertical;min-height:64px}
     Array.prototype.forEach.call(box.querySelectorAll("[data-" + attr + "]"), function (b) {
       b.onclick = function () { fn(b.getAttribute("data-" + attr)); };
     });
+  }
+
+  /* ── 수료 리포트 ── */
+  async function drawReport() {
+    $("#over").hidden = false;
+    var r = await sb.rpc("atc_report");
+    if (r.error || !r.data || !r.data.ok) return;
+    var R = r.data, N = R.numbers, C = R.cohort;
+    $("#rpTitle").textContent = R.passed ? "ATC LV1 수료" : "4주가 끝났습니다";
+    $("#rpWhen").textContent = (C.starts_on || "") + " ~ " + (C.ends_on || "") + " · " + (R.who || "");
+
+    // 6각형 — 캔버스 안 쓰고 SVG 로 그린다
+    var H = R.hexagon || [], N6 = H.length || 6, cx = 150, cy = 140, rad = 96;
+    function pt(i, f) {
+      var a = -Math.PI / 2 + i * 2 * Math.PI / N6;
+      return [cx + Math.cos(a) * rad * f, cy + Math.sin(a) * rad * f];
+    }
+    var grid = "";
+    [0.25, 0.5, 0.75, 1].forEach(function (f) {
+      var p = []; for (var i = 0; i < N6; i++) p.push(pt(i, f).join(","));
+      grid += '<polygon points="' + p.join(" ") + '" fill="none" stroke="#222" stroke-width="1"/>';
+    });
+    var vp = [], labs = "";
+    H.forEach(function (h, i) {
+      var f = Math.max(0.03, (+h.v || 0) / 100);
+      vp.push(pt(i, f).join(","));
+      var L = pt(i, 1.22);
+      labs += '<text x="' + L[0].toFixed(0) + '" y="' + (L[1] + 4).toFixed(0) + '" fill="#8E8E8E" font-size="11" ' +
+              'text-anchor="middle">' + esc(h.key) + ' <tspan fill="#BDBDBD">' + (+h.v || 0) + '</tspan></text>';
+    });
+    $("#rpHex").innerHTML =
+      '<svg viewBox="0 0 300 285" width="100%" height="auto" role="img" aria-label="6각형 능력치">' +
+      grid + '<polygon points="' + vp.join(" ") + '" fill="rgba(79,134,247,.18)" stroke="#4F86F7" stroke-width="2"/>' +
+      labs + '</svg>';
+
+    $("#rpNums").innerHTML =
+      row("하루 과제를 다 채운 날", N.days_ok + " / " + N.days_total + "일", N.days_ok >= 24) +
+      row("근력 인증", N.workout + "회") +
+      row("스케줄 알림", N.notify + "회") +
+      row("콘텐츠", N.content + "개") +
+      row("블로그", N.blog + "편 냄 · " + N.blog_passed + "편 통과", N.blog_passed >= 4) +
+      row("인스타 피드", N.feed + "개") +
+      row("시퀀스 제작", N.sequence + "묶음") +
+      row("바디체크", N.bodycheck + "회") +
+      row("습관 칸 채운 날", N.habit + "일") +
+      row("레벨 과제", N.level_done + " / 8", N.level_done >= 8) +
+      (N.exam ? row("모의고사", N.exam + "점", N.exam >= 95) : "");
+
+    var S2 = R.score || {};
+    if (S2.in != null) {
+      $("#rpScoreBox").hidden = false;
+      var label = S2.mode === "full" ? "100문항판" : "30문항 미리보기";
+      $("#rpScore").innerHTML = S2.out == null
+        ? row("입과 점수", S2.in + " / " + S2.max)
+        : row("입과", S2.in + " / " + S2.max) + row("수료", S2.out + " / " + S2.max, S2.out > S2.in) +
+          row("달라진 값", (S2.out - S2.in >= 0 ? "+" : "") + (S2.out - S2.in) + "점", S2.out > S2.in);
+      $("#rpScoreNote").textContent = S2.out == null
+        ? label + " 기준입니다. 수료 진단을 한 번 더 하시면 전후 비교가 나옵니다."
+        : label + " 기준, 같은 판끼리 비교한 값입니다." +
+          (S2.same_version ? "" : " 문항 판이 바뀌어 참고로만 보세요.");
+    }
   }
 
   /* ── 모달 ── */
