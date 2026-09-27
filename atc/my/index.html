@@ -327,7 +327,10 @@ textarea{resize:vertical;min-height:64px}
           ? '<p class="memo">' + (d.source === "app"
               ? "수업일지에서 자동으로 채워졌습니다"
               : esc(d.note || "") + (d.link ? ' · <a href="' + esc(d.link) + '" target="_blank" rel="noopener">링크</a>' : "")) + '</p>'
-            + (d.auto === "review" ? '<p class="flag">확인 대기 — 그대로 진행하시면 됩니다</p>' : "")
+            + (d.auto === "review"
+                ? '<p class="flag">' + why(d.why) + '</p>' +
+                  '<div class="acts"><button class="btn sm line" data-kind="' + k + '">사진 바꾸기</button></div>'
+                : "")
           : '<p class="memo">' + meta.hint + '</p>' +
             '<div class="acts"><button class="btn sm" data-kind="' + k + '">제출하기</button></div>') +
         '</div>';
@@ -375,6 +378,14 @@ textarea{resize:vertical;min-height:64px}
   }
   function row(k, v) { return '<div><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
 
+  /* 확인 대기 이유를 사람 말로 — 왜인지 알려 주되 막지는 않는다 */
+  function why(r) {
+    r = r || "";
+    if (r.indexOf("같은 사진") >= 0) return "같은 사진입니다 — 오늘 찍은 사진으로 바꿔 주세요";
+    if (r.indexOf("촬영 시각") >= 0) return "사진에 찍힌 시각이 없습니다 — 그대로 진행하셔도 됩니다";
+    return "확인 대기 — 그대로 진행하시면 됩니다";
+  }
+
   /* ── 제출 ── */
   var cur = null, pick = null;
   function openDlg(kind) {
@@ -408,6 +419,30 @@ textarea{resize:vertical;min-height:64px}
     }).join("");
   }
 
+  /* 올리기 전에 사진을 줄인다 — 폰 사진은 3~8MB 라 밖에서 올리면 느리다.
+     긴 변 1600px · JPEG 0.8 이면 보통 200~400KB. 화면에 붙이지 않는 처리용 캔버스다.
+     못 줄이면(오래된 브라우저 등) 원본 그대로 올린다. */
+  var MAX = 1600;
+  async function shrink(file) {
+    try {
+      if (!file.type || file.type.indexOf("image/") !== 0) return file;
+      if (file.size <= 400 * 1024) return file;
+      if (!(window.createImageBitmap && document.createElement("canvas").toBlob)) return file;
+      var bmp;
+      try { bmp = await createImageBitmap(file, { imageOrientation: "from-image" }); }
+      catch (e) { bmp = await createImageBitmap(file); }
+      var w = bmp.width, h = bmp.height, s = Math.min(1, MAX / Math.max(w, h));
+      if (s >= 1) { bmp.close && bmp.close(); return file; }
+      var cv = document.createElement("canvas");
+      cv.width = Math.round(w * s); cv.height = Math.round(h * s);
+      cv.getContext("2d").drawImage(bmp, 0, 0, cv.width, cv.height);
+      bmp.close && bmp.close();
+      var blob = await new Promise(function (res) { cv.toBlob(res, "image/jpeg", 0.8); });
+      if (!blob || blob.size >= file.size) return file;
+      return blob;
+    } catch (e) { return file; }
+  }
+
   $("#dGo").onclick = async function () {
     if (BUSY) return;
     var link = $("#dLink").value.trim(), note = $("#dNote").value.trim();
@@ -416,12 +451,16 @@ textarea{resize:vertical;min-height:64px}
     try {
       var key = null, sha = null, shot = null;
       if (pick) {
-        sha = await sha256(pick);
+        sha = await sha256(pick);                       // 지문은 원본으로 — 줄인 결과가 기기마다 달라도 같은 사진은 같게 잡힌다
         shot = pick.lastModified ? new Date(pick.lastModified).toISOString() : null;
-        var ext = (pick.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+        var body = await shrink(pick);
+        var ext = body === pick
+          ? ((pick.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg")
+          : "jpg";
         var uid = (await window.HB.session()).user.id;
         key = S.cohort.id + "/" + uid + "/d" + String(S.day_no).padStart(2, "0") + "-" + cur + "-" + Date.now() + "." + ext;
-        var up = await sb.storage.from("atc-proof").upload(key, pick, { contentType: pick.type || "image/jpeg" });
+        var up = await sb.storage.from("atc-proof")
+          .upload(key, body, { contentType: body.type || "image/jpeg" });
         if (up.error) throw up.error;
       }
       var r = await sb.rpc("atc_submit_daily", {
