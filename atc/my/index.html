@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>내 과정 — ATC LV1 4주 챌린지</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<style>
+/* 내 과정 홈 — 매일 들어오는 화면. 메인 홈페이지(09-17 무채색판) 토큰 그대로.
+   빨간색은 복구 과제 띠 하나뿐. 캔버스 안 쓴다. */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/pretendard-500.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../../fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/bahn-700.woff2') format('woff2')}
+:root{
+  color-scheme:dark;
+  --ink:#0A0A0A; --ink-2:#111111; --ink-3:#171717;
+  --bone:#F2F2F2; --bone-2:#BDBDBD; --warm:#8E8E8E;
+  --line:#222222; --line-2:#2F2F2F;
+  --blue:#4F86F7; --bad:#E07A6B;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
+  --tech:"Bahn","Bahnschrift",var(--sans);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.75;word-break:keep-all;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+a{color:var(--bone)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:var(--tech);font-size:.625rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top nav{display:flex;gap:14px;font-size:.8125rem;color:var(--warm)}
+.top nav a{color:var(--warm);text-decoration:none}
+.top nav a:hover{color:var(--bone)}
+
+main{flex:1;width:100%;max-width:560px;margin:0 auto;padding:0 clamp(16px,4vw,24px) 48px}
+h1{font-size:clamp(1.5rem,5vw,2rem);line-height:1.25;letter-spacing:-.04em;font-weight:900;margin:0}
+h2{font-size:.8125rem;font-family:var(--tech);letter-spacing:.12em;color:var(--warm);font-weight:700;margin:0 0 10px;text-transform:uppercase}
+p{margin:10px 0 0}
+.note{font-size:.875rem;color:var(--warm)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:13px 22px;font-size:.9375rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none;transition:background .15s,transform .15s}
+.btn:hover{background:#FFF}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.line{background:transparent;color:var(--bone);border:1px solid var(--line-2)}
+.btn.sm{padding:9px 14px;font-size:.875rem;border-radius:8px}
+.btn.wide{width:100%}
+section{margin:28px 0 0}
+
+/* 진도 띠 */
+.bar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 0 12px;border-bottom:1px solid var(--line)}
+.bar b{font-family:var(--tech);font-size:1.5rem;letter-spacing:.01em}
+.bar span{font-size:.875rem;color:var(--warm)}
+.track{height:4px;background:var(--line);border-radius:3px;overflow:hidden;margin:10px 0 0}
+.track i{display:block;height:100%;background:var(--bone-2);border-radius:3px}
+
+/* 복구 띠 — 이 화면에서 빨간색은 여기 하나뿐 */
+.recover{margin:16px 0 0;border:1px solid var(--bad);border-radius:12px;padding:14px 16px;background:rgba(224,122,107,.07)}
+.recover b{color:var(--bad)}
+.recover p{margin:4px 0 0;font-size:.875rem;color:var(--bone-2)}
+
+/* 오늘 할 일 카드 */
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0 0;background:var(--ink-2)}
+.card.done{background:transparent;border-color:var(--line)}
+.card .hd{display:flex;align-items:center;gap:10px}
+.card .tick{width:18px;height:18px;border:1px solid var(--line-2);border-radius:5px;flex:none;display:grid;place-items:center;font-size:.6875rem;color:var(--ink)}
+.card.done .tick{background:var(--bone-2);border-color:var(--bone-2);color:#0A0A0A}
+.card .ttl{font-weight:700;flex:1}
+.card.done .ttl{color:var(--bone-2);font-weight:500}
+.card .when{font-size:.75rem;color:var(--warm);font-family:var(--tech)}
+.card .memo{margin:8px 0 0 28px;font-size:.875rem;color:var(--bone-2)}
+.card .acts{margin:12px 0 0 28px;display:flex;gap:8px;flex-wrap:wrap}
+.card .flag{margin:8px 0 0 28px;font-size:.8125rem;color:var(--warm)}
+
+/* 습관 칸 */
+.habit{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0 0}
+.habit .row{display:flex;align-items:center;gap:12px;padding:7px 0}
+.habit input{width:18px;height:18px;accent-color:var(--blue);flex:none}
+.habit label{font-size:.9375rem;cursor:pointer}
+.dots{display:flex;gap:5px;margin-left:auto}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line-2)}
+.dots i.on{background:var(--bone-2)}
+
+/* 목록 줄 */
+.rows{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:10px 0 0}
+.rows div{display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--line);font-size:.9375rem}
+.rows div:first-child{border-top:0}
+.rows .k{color:var(--bone-2);flex:1}
+.rows .v{color:var(--warm);font-size:.875rem;font-family:var(--tech)}
+.rows .ok{color:var(--bone)}
+
+/* 모달 */
+dialog{border:1px solid var(--line-2);border-radius:14px;background:var(--ink-2);color:var(--bone);padding:0;width:min(440px,calc(100vw - 32px));max-height:88dvh}
+dialog::backdrop{background:rgba(0,0,0,.72)}
+.dlg{padding:18px}
+.dlg .hd{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+.dlg .hd b{font-size:1.0625rem}
+.dlg .x{background:none;border:0;color:var(--warm);font-size:1.25rem;cursor:pointer;line-height:1}
+.drop{border:1px dashed var(--line-2);border-radius:10px;padding:26px 14px;text-align:center;color:var(--warm);font-size:.9375rem;cursor:pointer}
+.drop.has{border-style:solid;padding:0;overflow:hidden}
+.drop img{display:block;width:100%;height:auto;max-height:240px;object-fit:cover}
+input[type=text],textarea{width:100%;margin:12px 0 0;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);padding:11px 13px;font:inherit;font-size:.9375rem}
+textarea{resize:vertical;min-height:64px}
+.msg{min-height:1.2em;margin:10px 0 0;font-size:.875rem;color:var(--bad)}
+
+.gate{max-width:420px;margin:0 auto;padding:40px 0}
+.auth h2{font-size:1.25rem;font-family:var(--sans);letter-spacing:-.02em;color:var(--bone);text-transform:none;margin:0 0 4px}
+.auth label{display:block;margin:12px 0 5px;font-size:.8125rem;color:var(--warm)}
+.auth input{width:100%;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);padding:11px 13px;font:inherit}
+.auth .btn{margin-top:16px;width:100%}
+.auth .msg{color:var(--bad)}
+.auth a{color:var(--bone-2);font-size:.875rem}
+.card.auth{background:transparent;border:0;padding:0}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="../../">허봇스<small>ATC LV1</small></a>
+  <nav>
+    <a href="../">과정 안내</a>
+    <a href="#" id="logout" hidden>로그아웃</a>
+  </nav>
+</header>
+
+<main>
+  <!-- 로그인 · 등록 확인 -->
+  <div class="gate" id="gate">
+    <p class="note" id="gateMsg">확인하는 중…</p>
+    <div id="authBox"></div>
+  </div>
+
+  <!-- 시작 전 -->
+  <div id="before" hidden>
+    <section>
+      <h1 id="bTitle">곧 시작합니다</h1>
+      <p class="note" id="bWhen"></p>
+    </section>
+    <section>
+      <h2>시작 전에 준비해 주세요</h2>
+      <div class="rows">
+        <div><span class="k">인스타그램 계정</span><span class="v">있으면 됩니다</span></div>
+        <div><span class="k">네이버 블로그</span><span class="v">주 1편을 올립니다</span></div>
+        <div><span class="k">수업일지 앱 연결</span><span class="v">스케줄 알림 자동 충족</span></div>
+      </div>
+      <p class="note">수업일지를 쓰시면 하루 과제 2번이 <b>캡처 없이</b> 채워집니다.</p>
+    </section>
+    <section>
+      <h2>입과 자가진단</h2>
+      <p class="note">시작 점수를 남겨 두면 수료할 때 4주 전후를 비교해 드립니다.</p>
+      <p><a class="btn line" href="../../score/">지금 해 두기</a></p>
+    </section>
+  </div>
+
+  <!-- 과정 중 -->
+  <div id="run" hidden>
+    <div class="bar">
+      <b id="dayNo">–</b>
+      <span id="dayMeta"></span>
+    </div>
+    <div class="track"><i id="track" style="width:0"></i></div>
+
+    <div class="recover" id="recover" hidden>
+      <b>복구 과제가 있습니다</b>
+      <p id="recoverTxt"></p>
+    </div>
+
+    <section>
+      <h2>오늘 할 일 <span id="todayCnt"></span></h2>
+      <div id="cards"></div>
+    </section>
+
+    <section>
+      <h2>하루 습관 칸</h2>
+      <div class="habit">
+        <div class="row">
+          <input type="checkbox" id="hFollow"><label for="hFollow">팔로잉 10~30명</label>
+          <span class="dots" id="hDots"></span>
+        </div>
+        <div class="row">
+          <input type="checkbox" id="hComment"><label for="hComment">댓글 10개</label>
+        </div>
+      </div>
+      <p class="note">손으로, 몰아치지 않고, 운동·트레이너 관련 계정만. 못 채워도 누락으로 세지 않습니다.</p>
+    </section>
+
+    <section>
+      <h2>이번 주 과제 <span id="weekNo"></span></h2>
+      <div class="rows" id="weekRows"></div>
+    </section>
+
+    <section>
+      <h2>합격까지</h2>
+      <div class="rows" id="goalRows"></div>
+    </section>
+  </div>
+
+  <!-- 끝 -->
+  <div id="over" hidden>
+    <section>
+      <h1>4주가 끝났습니다</h1>
+      <p class="note">수료 리포트를 준비하고 있습니다. 준비되면 메일로 알려 드릴게요.</p>
+    </section>
+  </div>
+</main>
+
+<!-- 제출 모달 -->
+<dialog id="dlg">
+  <form class="dlg" method="dialog" id="dlgForm">
+    <div class="hd"><b id="dTtl">제출</b><button class="x" type="button" id="dX" aria-label="닫기">✕</button></div>
+    <div class="drop" id="drop" tabindex="0" role="button">사진 고르기 · 찍기</div>
+    <input type="file" id="file" accept="image/*" hidden>
+    <input type="text" id="dLink" placeholder="링크 (블로그·게시물 주소)" hidden>
+    <textarea id="dNote" placeholder="한 줄 — 오늘 뭘 했는지"></textarea>
+    <p class="msg" id="dMsg"></p>
+    <button class="btn wide" type="button" id="dGo">보내기</button>
+  </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script src="../../vod/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var sb = window.HB.sb, esc = window.HB.esc;
+  var $ = function (s) { return document.querySelector(s); };
+  var S = null, BUSY = false;
+
+  var KIND = {
+    workout: { t: "근력 운동 30분 이상", ph: true,  link: false, hint: "사진 한 장과 한 줄이면 됩니다" },
+    notify:  { t: "회원 스케줄 알림",     ph: true,  link: false, hint: "캡처 한 장. 회원이 없으면 본인에게 보낸 알림으로" },
+    content: { t: "오늘 콘텐츠 1개",      ph: true,  link: true,  hint: "스토리 캡처 또는 블로그 링크" }
+  };
+  var WEEK = { blog: "블로그 1편", feed: "인스타 피드 1개", sequence: "시퀀스 5회 제작", bodycheck: "바디체크" };
+
+  /* ── 로그인 ── */
+  async function boot() {
+    var s = await window.HB.session();
+    if (!s) {
+      $("#gateMsg").hidden = true;
+      window.HB.mountAuth($("#authBox"), function () { location.reload(); },
+        { lead: "결제하신 계정으로 로그인하세요. 수업일지·강의실과 같은 계정입니다." });
+      return;
+    }
+    $("#logout").hidden = false;
+    $("#logout").onclick = async function (e) { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
+    await load(true);
+  }
+
+  async function load(tryEnroll) {
+    var r = await sb.rpc("atc_my_state");
+    if (r.error) { $("#gateMsg").textContent = "불러오지 못했습니다 — " + r.error.message; return; }
+    S = r.data;
+    if (S.state === "not-enrolled" && tryEnroll) {
+      var e = await sb.rpc("atc_enroll");
+      if (!e.error && e.data && e.data.ok) return load(false);
+      $("#gateMsg").innerHTML =
+        '등록된 과정이 없습니다.<br><br><a class="btn line" href="../">과정 안내 보기</a>';
+      return;
+    }
+    if (S.state === "not-enrolled") {
+      $("#gateMsg").innerHTML = '등록된 과정이 없습니다.<br><br><a class="btn line" href="../">과정 안내 보기</a>';
+      return;
+    }
+    $("#gate").hidden = true;
+    if (S.state === "before") return drawBefore();
+    if (S.state === "done")   { $("#over").hidden = false; return; }
+    drawRun();
+  }
+
+  function fmt(d) { var t = String(d || "").split("-"); return t.length === 3 ? (+t[1]) + "월 " + (+t[2]) + "일" : ""; }
+
+  function drawBefore() {
+    $("#before").hidden = false;
+    var c = S.cohort || {};
+    if (S.dday === null || S.dday === undefined) {
+      $("#bTitle").textContent = "곧 시작합니다";
+      $("#bWhen").textContent = "날짜가 정해지면 메일로 알려 드릴게요.";
+    } else {
+      $("#bTitle").textContent = S.dday === 0 ? "오늘 시작합니다" : "시작까지 D-" + S.dday;
+      $("#bWhen").textContent = fmt(c.starts_on) + " 시작 · " + fmt(c.ends_on) + " 끝";
+    }
+  }
+
+  function drawRun() {
+    $("#run").hidden = false;
+    var total = (S.cohort.days || 28) + (S.member.extend || 0);
+    $("#dayNo").textContent = S.day_no + "일차";
+    $("#dayMeta").textContent = "전체 " + total + "일 · 남은 날 " + S.days_left + "일";
+    $("#track").style.width = Math.min(100, Math.round(S.day_no / total * 100)) + "%";
+
+    if (S.member.recover_due > 0) {
+      $("#recover").hidden = false;
+      $("#recoverTxt").textContent =
+        "2일 밀려서 보강 과제 " + S.member.recover_due + "개가 나왔습니다. 이번 주말까지 내시면 레벨 그대로 이어집니다.";
+    }
+
+    // 오늘 할 일 3개
+    var box = $("#cards"), done = 0, html = "";
+    ["workout", "notify", "content"].forEach(function (k) {
+      var d = S.daily[k], meta = KIND[k];
+      if (d) done++;
+      html += '<div class="card' + (d ? " done" : "") + '">' +
+        '<div class="hd"><span class="tick">' + (d ? "✓" : "") + '</span>' +
+        '<span class="ttl">' + meta.t + '</span>' +
+        '<span class="when">' + (d ? (d.source === "app" ? "자동" : d.at) : "") + '</span></div>' +
+        (d
+          ? '<p class="memo">' + (d.source === "app"
+              ? "수업일지에서 자동으로 채워졌습니다"
+              : esc(d.note || "") + (d.link ? ' · <a href="' + esc(d.link) + '" target="_blank" rel="noopener">링크</a>' : "")) + '</p>'
+            + (d.auto === "review" ? '<p class="flag">확인 대기 — 그대로 진행하시면 됩니다</p>' : "")
+          : '<p class="memo">' + meta.hint + '</p>' +
+            '<div class="acts"><button class="btn sm" data-kind="' + k + '">제출하기</button></div>') +
+        '</div>';
+    });
+    box.innerHTML = html;
+    $("#todayCnt").textContent = done + " / 3";
+    Array.prototype.forEach.call(box.querySelectorAll("button[data-kind]"), function (b) {
+      b.onclick = function () { openDlg(b.getAttribute("data-kind")); };
+    });
+
+    // 습관 칸
+    $("#hFollow").checked = !!S.habit_today.follow;
+    $("#hComment").checked = !!S.habit_today.comment;
+    var dots = ""; for (var i = 0; i < 5; i++) dots += '<i class="' + (i < S.habit_week ? "on" : "") + '"></i>';
+    $("#hDots").innerHTML = dots;
+    $("#hFollow").onchange = $("#hComment").onchange = async function () {
+      await sb.rpc("atc_habit_set", { p_follow: $("#hFollow").checked, p_comment: $("#hComment").checked });
+      load(false);
+    };
+
+    // 이번 주
+    $("#weekNo").textContent = S.week_no + "주차";
+    var w = "";
+    ["blog", "feed", "sequence"].forEach(function (k) {
+      var it = S.weekly[k];
+      var v = !it ? "아직" :
+        it.status === "passed" ? "통과" :
+        it.status === "needs_fix" ? "고칠 곳 " + ((it.checks && it.checks.length) || "") + "개" :
+        it.status === "checking" ? "검사 중" : "냄";
+      w += '<div><span class="k">' + WEEK[k] + '</span><span class="v' + (it && it.status === "passed" ? " ok" : "") + '">' + v + '</span></div>';
+    });
+    if (S.week_no % 2 === 0) {
+      var b = S.weekly.bodycheck;
+      w += '<div><span class="k">' + WEEK.bodycheck + '</span><span class="v' + (b ? " ok" : "") + '">' + (b ? "냄" : "아직") + '</span></div>';
+    }
+    $("#weekRows").innerHTML = w;
+
+    // 합격까지
+    var need = 24, got = S.submitted_days || 0;
+    $("#goalRows").innerHTML =
+      row("하루 과제 " + need + "일", got + " / " + need) +
+      row("습관 칸 3주", S.habit_week >= 5 ? "이번 주 채움" : "이번 주 " + S.habit_week + " / 5") +
+      row("레벨 과제 8개", (S.level_done || 0) + " / 8") +
+      row("모의고사 95점", "4주차에 열립니다");
+  }
+  function row(k, v) { return '<div><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
+
+  /* ── 제출 ── */
+  var cur = null, pick = null;
+  function openDlg(kind) {
+    cur = kind; pick = null;
+    var m = KIND[kind];
+    $("#dTtl").textContent = m.t;
+    $("#dLink").hidden = !m.link; $("#dLink").value = "";
+    $("#dNote").value = ""; $("#dMsg").textContent = "";
+    $("#drop").className = "drop"; $("#drop").textContent = "사진 고르기 · 찍기";
+    $("#file").value = "";
+    $("#dlg").showModal();
+  }
+  $("#dX").onclick = function () { $("#dlg").close(); };
+  $("#drop").onclick = function () { $("#file").click(); };
+  $("#drop").onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("#file").click(); } };
+  $("#file").onchange = function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    pick = f;
+    var u = URL.createObjectURL(f);
+    $("#drop").className = "drop has";
+    $("#drop").innerHTML = '<img alt="고른 사진">';
+    $("#drop").querySelector("img").src = u;
+  };
+
+  async function sha256(file) {
+    if (!(crypto && crypto.subtle)) return null;
+    var buf = await file.arrayBuffer();
+    var h = await crypto.subtle.digest("SHA-256", buf);
+    return Array.prototype.map.call(new Uint8Array(h), function (b) {
+      return ("0" + b.toString(16)).slice(-2);
+    }).join("");
+  }
+
+  $("#dGo").onclick = async function () {
+    if (BUSY) return;
+    var link = $("#dLink").value.trim(), note = $("#dNote").value.trim();
+    if (!pick && !link) { $("#dMsg").textContent = "사진이나 링크 하나는 넣어 주세요"; return; }
+    BUSY = true; this.disabled = true; $("#dMsg").style.color = "var(--warm)"; $("#dMsg").textContent = "보내는 중…";
+    try {
+      var key = null, sha = null, shot = null;
+      if (pick) {
+        sha = await sha256(pick);
+        shot = pick.lastModified ? new Date(pick.lastModified).toISOString() : null;
+        var ext = (pick.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+        var uid = (await window.HB.session()).user.id;
+        key = S.cohort.id + "/" + uid + "/d" + String(S.day_no).padStart(2, "0") + "-" + cur + "-" + Date.now() + "." + ext;
+        var up = await sb.storage.from("atc-proof").upload(key, pick, { contentType: pick.type || "image/jpeg" });
+        if (up.error) throw up.error;
+      }
+      var r = await sb.rpc("atc_submit_daily", {
+        p_kind: cur, p_photo_key: key, p_sha: sha, p_shot_at: shot,
+        p_link: link || null, p_note: note || null
+      });
+      if (r.error) throw r.error;
+      $("#dlg").close();
+      await load(false);
+    } catch (e) {
+      $("#dMsg").style.color = "var(--bad)";
+      $("#dMsg").textContent = "보내지 못했습니다 — " + (e.message || e);
+    }
+    BUSY = false; this.disabled = false;
+  };
+
+  boot();
+})();
+</script>
+</body>
+</html>

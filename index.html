@@ -325,6 +325,34 @@ section[id],figure.band{scroll-margin-top:74px}
   .lane:hover{transform:none}
 }
 .lane-dots{display:none}
+/* ══ 휴대폰 메뉴 — 세 줄 버튼 + 서랍 (09-27) ══
+   전에는 로고 옆 작은 선택 상자였다. 화면이 9개가 되면서 메뉴로 읽히지 않았다 */
+.mbtn{display:none; pointer-events:auto; width:42px; height:42px; margin-left:-6px; padding:0;
+  background:transparent; border:0; cursor:pointer; position:relative}
+@media (max-width:999px){ .mbtn{display:block} }
+.mbtn-l, .mbtn-l::before, .mbtn-l::after{position:absolute; left:11px; width:20px; height:2px; background:var(--bone);
+  border-radius:2px; transition:transform .25s, opacity .2s}
+.mbtn-l{top:20px} .mbtn-l::before{content:""; top:-7px; left:0} .mbtn-l::after{content:""; top:7px; left:0}
+.mbtn[aria-expanded="true"] .mbtn-l{background:transparent}
+.mbtn[aria-expanded="true"] .mbtn-l::before{transform:translateY(7px) rotate(45deg)}
+.mbtn[aria-expanded="true"] .mbtn-l::after{transform:translateY(-7px) rotate(-45deg)}
+.drawer{position:fixed; inset:64px 0 0; z-index:44; background:var(--ink);
+  display:flex; flex-direction:column; justify-content:space-between; padding:14px var(--pad) calc(24px + env(safe-area-inset-bottom));
+  overflow-y:auto; animation:drIn .22s ease-out}
+@keyframes drIn{from{opacity:0; transform:translateY(-8px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){ .drawer{animation:none} }
+.dr-nav{display:grid}
+.dr-nav a{display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:16px 2px; font-size:19px; font-weight:700; letter-spacing:-.03em; color:var(--bone-2);
+  border-bottom:1px solid var(--line)}
+.dr-nav a[aria-current="page"]{color:var(--bone)}
+.dr-nav a[aria-current="page"]::after{content:""; width:7px; height:7px; border-radius:50%; background:var(--brass)}
+.dr-nav a .dr-s{font-size:12.5px; font-weight:500; color:var(--warm); letter-spacing:0}
+.dr-foot{display:grid; gap:10px; margin-top:22px}
+.dr-foot .btn{width:100%; height:52px; border-radius:9px}
+.dr-ig{justify-self:center; margin-top:6px; font-size:13px; color:var(--warm); border-bottom:1px solid var(--line-2); padding-bottom:2px}
+body.drawer-on{overflow:hidden}
+
 /* ══ 강의 화면 손질 (09-27) ══ */
 .v-gain{margin-top:12px; padding-top:12px; border-top:1px dashed rgba(79,134,247,.3); font-size:14px; color:var(--bone-2); line-height:1.6; word-break:keep-all}
 .v-gain b{color:var(--brass); font-weight:700}
@@ -1227,8 +1255,19 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
   <a class="mark" href="#top">허봇스<span>HEOBOTSS</span></a>
   <nav class="nav" id="nav" aria-label="화면 고르기"></nav>
   <div class="spacer"></div>
-  <label class="jump"><span class="sr">구간으로 이동</span><select id="jump"></select></label>
+  <button class="mbtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="drawer">
+    <span class="mbtn-l" aria-hidden="true"></span><span class="sr">메뉴 열기</span>
+  </button>
   <a class="btn btn-line btn-sm cta" href="#" data-link="form">무료 진단</a>
+</div>
+
+<div class="drawer" id="drawer" hidden>
+  <nav class="dr-nav" id="drawerNav" aria-label="화면 고르기"></nav>
+  <div class="dr-foot">
+    <a class="btn btn-solid" href="#" data-link="form">무료 진단 받기</a>
+    <a class="btn btn-line" href="vod/">강의실</a>
+    <a class="dr-ig" href="https://www.instagram.com/heobotss" target="_blank" rel="noopener">인스타그램 @heobotss</a>
+  </div>
 </div>
 
 <aside class="railbar">
@@ -2868,6 +2907,7 @@ function endFor(key, slot){
         else a.removeAttribute("aria-current");
       });
       var jp = $("#jump"); if (jp && jp.value !== v.key) jp.value = v.key;
+      if (window.__drawerMark) window.__drawerMark(v.key);
       buildRail(v.el);
       /* 새 화면은 위에서 시작한다 */
       if (!sec) window.scrollTo(0, 0);
@@ -2939,6 +2979,34 @@ function buildRail(screen){
   });
   layoutRail();
 }
+
+(function drawer(){
+  var btn = $("#menuBtn"), box = $("#drawer"), nav = $("#drawerNav");
+  if (!btn || !box || !nav) return;
+  var SUB = { home:"판매 중인 것 한눈에", guide:"처음 오셨다면 이 순서대로", check:"우리 마케팅은 전국 몇 %",
+              trainer:"내 이름으로 회원이 오게", center:"회원이 끊기지 않게", tools:"만들어 둔 프로그램 16개",
+              facts:"전국 28,200곳으로 확인한 것", vod:"무료 6편 + 유료 강의", price:"플랜과 판매 중인 상품" };
+  VIEWS.forEach(function(v){
+    var a = document.createElement("a");
+    a.href = "#/" + v.key; a.setAttribute("data-dnav", v.key);
+    a.innerHTML = '<span>' + v.label + '</span>' + (SUB[v.key] ? '<span class="dr-s">' + SUB[v.key] + '</span>' : "");
+    nav.appendChild(a);
+  });
+  wireLinks(box);
+  function open(){ box.hidden = false; btn.setAttribute("aria-expanded","true"); document.body.classList.add("drawer-on"); }
+  function close(){ box.hidden = true; btn.setAttribute("aria-expanded","false"); document.body.classList.remove("drawer-on"); }
+  btn.addEventListener("click", function(){ box.hidden ? open() : close(); });
+  box.addEventListener("click", function(e){ if (e.target.closest("a")) close(); });
+  addEventListener("keydown", function(e){ if (e.key === "Escape" && !box.hidden) close(); });
+  addEventListener("hashchange", close);
+  matchMedia("(min-width:1000px)").addEventListener("change", function(e){ if (e.matches) close(); });
+  window.__drawerMark = function(key){
+    $$("[data-dnav]", nav).forEach(function(a){
+      a.setAttribute("aria-current", a.getAttribute("data-dnav") === key ? "page" : "false");
+    });
+  };
+  window.__drawerMark(location.hash.replace("#/","").split("?")[0] || "home");
+})();
 
 /* 좁은 화면 — 구간이 아니라 **화면**을 고른다 */
 var jump = $("#jump");
