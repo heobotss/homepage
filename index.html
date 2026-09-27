@@ -3194,7 +3194,9 @@ function buildRail(screen){
 (function resultsWall(){
   var wall = $("#rsRail"), btn = $("#rsMore");
   if (!wall || !btn) return;
-  var cards = $$(".rs-card", wall), step = matchMedia("(max-width:820px)").matches ? 4 : 8, shown = step;
+  // 휴대폰에서는 캡처 한 장이 화면 한 개를 통째로 쓴다. 처음엔 두 장만 편다
+  var small = matchMedia("(max-width:820px)").matches;
+  var cards = $$(".rs-card", wall), step = small ? 6 : 16, shown = small ? 2 : 8;
   function draw(){
     cards.forEach(function(c, i){ c.hidden = i >= shown; });
     var left = cards.length - shown;
@@ -3203,7 +3205,7 @@ function buildRail(screen){
   }
   btn.addEventListener("click", function(){
     var edge = cards[shown - 1];
-    shown = Math.min(shown + step * 2, cards.length);
+    shown = Math.min(shown + step, cards.length);
     draw();
     $$("img", wall).forEach(function(i){ i.loading = "eager"; });
     if (edge) edge.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
