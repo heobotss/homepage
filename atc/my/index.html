@@ -350,6 +350,14 @@ textarea{resize:vertical;min-height:64px}
     if (S.state === "not-enrolled" || S.state === "anon") return noCourse();
     $("#gate").hidden = true;
     $("#before").hidden = true; $("#run").hidden = true; $("#over").hidden = true;
+    // 수업일지에 「오늘 스케줄 알림」이 찍혀 있으면 그 칸을 캡처 없이 채운다
+    if (S.state === "running" && !(S.daily && S.daily.notify)) {
+      var sy = await sb.rpc("atc_sync_app");
+      if (!sy.error && sy.data && sy.data.filled) {
+        var again = await sb.rpc("atc_my_state");
+        if (!again.error) S = again.data;
+      }
+    }
     // 레벨 과제의 「적어 둔 답」까지 같이 받아 둔다 (여러 칸짜리 과제를 이어서 쓰려면 필요)
     var lv = await sb.rpc("atc_my_level");
     if (!lv.error && lv.data) S.level = lv.data;
