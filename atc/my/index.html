@@ -135,6 +135,13 @@ section{margin:28px 0 0}
 .gift{margin:10px 0 0;padding:12px 16px;border:1px dashed var(--line-2);border-radius:12px;
   font-size:.875rem;color:var(--bone-2)}
 .gift b{color:var(--bone)}
+/* 수료 카드 두 장 */
+.cards2{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:560px){.cards2{grid-template-columns:1fr 1fr}}
+.card2{margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--ink-2)}
+.card2 img{display:block;width:100%;height:auto}
+.card2 .ph{display:flex;align-items:center;justify-content:center;min-height:150px;color:var(--warm);font-size:14px}
+.card2 figcaption{padding:10px 12px;font-size:13px;color:var(--warm)}
 .note2{margin:10px 0 0;padding:14px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--ink-2)}
 .note2 h3{margin:0 0 6px;font-size:.9375rem}
 .note2 p{margin:0;font-size:.9375rem;color:var(--bone-2);white-space:pre-wrap}
@@ -310,6 +317,11 @@ textarea{resize:vertical;min-height:64px}
       <div class="mirror"><b>시작하는 날 선생님은 이렇게 적으셨습니다</b><q id="rpGoal"></q></div>
       <p class="note">이루셨나요? 이 문장이 다음 4주의 출발점이 됩니다.</p>
     </section>
+    <section id="rpCardBox" hidden>
+      <h2>수료증과 성과 카드</h2>
+      <p class="note">4주를 보낸 기록입니다. 눌러서 받으신 뒤 어디에 쓰셔도 됩니다.</p>
+      <div class="cards2" id="rpCards"></div>
+    </section>
     <section id="rpNextBox" hidden>
       <h2>다음</h2>
       <div class="note2">
@@ -352,6 +364,11 @@ textarea{resize:vertical;min-height:64px}
 <script>
 (function () {
   "use strict";
+  if (!window.HB || !window.HB.sb) {          // 바깥 스크립트가 안 열렸을 때 갇히지 않게
+    document.getElementById("gateMsg").textContent =
+      "연결이 좋지 않아 화면을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.";
+    return;
+  }
   var sb = window.HB.sb, esc = window.HB.esc;
   var $ = function (s) { return document.querySelector(s); };
   var E = null;   // 시험 상태
@@ -460,7 +477,15 @@ textarea{resize:vertical;min-height:64px}
   }
   async function load2(tryEnroll) {
     var r = await sb.rpc("atc_my_state");
-    if (r.error) { $("#gateMsg").hidden = false; $("#gateMsg").textContent = "불러오지 못했습니다 — " + r.error.message; return; }
+    if (r.error) {                              // ④ 숨겨진 상자에 쓰면 아무것도 안 보인다
+      var jwt = /JWT|session|401/i.test(String(r.error.message || ""));
+      $("#gate").hidden = false;
+      $("#gateMsg").hidden = false;
+      $("#gateMsg").innerHTML = (jwt ? "로그인이 풀렸습니다. " : "불러오지 못했습니다. ") +
+        '<button class="btn sm line" id="reload2">다시 시도</button>';
+      var b2 = $("#reload2"); if (b2) b2.onclick = function () { location.reload(); };
+      return;
+    }
     S = r.data;
     if (S.state === "not-enrolled" && tryEnroll) {
       var e = await sb.rpc("atc_enroll");
@@ -495,6 +520,29 @@ textarea{resize:vertical;min-height:64px}
     if (S.state === "before") return drawBefore();
     if (S.state === "done") return drawReport();
     drawRun();
+  }
+
+  /* 수료 카드 — 굽는 데 몇 분 걸린다. 아직이면 그렇게 말한다 */
+  async function 카드보이기() {
+    var box = $("#rpCards"); if (!box) return;
+    var r = await sb.rpc("atc_my_cards");
+    var list = (!r.error && r.data) || [];
+    if (!list.length) return;
+    $("#rpCardBox").hidden = false;
+    box.innerHTML = list.map(function (c) {
+      return '<figure class="card2" data-k="' + esc(c.key) + '">' +
+             '<div class="ph">굽는 중…</div><figcaption>' + esc(c.name) + '</figcaption></figure>';
+    }).join("");
+    list.forEach(function (c) {
+      sb.storage.from("atc-proof").createSignedUrl(c.key, 3600).then(function (u) {
+        var fig = box.querySelector('[data-k="' + c.key + '"]');
+        if (!fig) return;
+        if (u.error || !u.data) { fig.querySelector(".ph").textContent = "아직 준비 중입니다"; return; }
+        fig.innerHTML = '<a href="' + u.data.signedUrl + '" download="ATC_LV1_' + c.kind + '.png">' +
+                        '<img src="' + u.data.signedUrl + '" alt="' + esc(c.name) + '"></a>' +
+                        '<figcaption>' + esc(c.name) + ' · 눌러서 받기</figcaption>';
+      });
+    });
   }
 
   async function noCourse() {
@@ -570,22 +618,27 @@ textarea{resize:vertical;min-height:64px}
     if (S.ask_goal) {
       $("#goalNowGo").onclick = async function () {
         var v = $("#goalNowIn").value.trim();
-        if (!v) return;
+        if (!v) { $("#goalNowMsg").textContent = "한 줄만 적어 주세요"; return; }
         $("#goalNowGo").disabled = true;
         var r = await sb.rpc("atc_set_goal", { p_goal: v });
         $("#goalNowGo").disabled = false;
         $("#goalNowMsg").textContent = r.error ? "저장하지 못했습니다" : "적어 두셨습니다";
-        if (!r.error) load(false);
+        // 바로 새로 그리면 칸이 사라져서 「적어 두셨습니다」를 못 읽는다
+        if (!r.error) setTimeout(function () { load(false); }, 1600);
       };
     }
 
     // 복구 과제 — 내면 그 날이 「채운 날」로 돌아온다
     $("#recover").hidden = !(S.member.recover_due > 0);
     if (S.member.recover_due > 0) {
-      $("#recoverTxt").textContent = "빠진 날을 메울 수 있는 과제가 " + S.member.recover_due +
-        "개 있습니다. 하나 낼 때마다 빠진 날 하루가 「채운 날」로 돌아옵니다. " +
-        "지금 " + (S.submitted_days || 0) + "일 · 수료까지 24일.";
-      $("#recoverGo").onclick = function () { openRecover(); };
+      $("#recoverTxt").textContent = "빠진 " + (S.member.miss || 0) + "일 중 " +
+        S.member.recover_due + "일을 지금 되돌릴 수 있습니다. 하나 낼 때마다 하루가 「채운 날」로 돌아옵니다. " +
+        "지금 채운 날 " + (S.submitted_days || 0) + "일 · 수료 기준 24일.";
+      $("#recoverGo").onclick = async function () {
+        if ($("#dlg").open) return;               // 연타로 창이 두 번 열리지 않게
+        $("#recoverGo").disabled = true;
+        try { await openRecover(); } finally { $("#recoverGo").disabled = false; }
+      };
     }
 
     // 오늘 3개
@@ -640,10 +693,10 @@ textarea{resize:vertical;min-height:64px}
       w += '<button type="button" data-w="' + k + '"><span class="k">' + WEEK[k].t + '</span>' + p + '</button>';
     });
     // 아직 통과 못 한 지난 주 블로그 — 주가 넘어가도 계속 고칠 수 있게 여기 남긴다
-    (S.blog_open || []).forEach(function (b) {
-      var p = (b.status === "checking")
-        ? '<span class="pill grey">검사 중</span>'
-        : '<span class="pill wait">! 고칠 곳 ' + ((b.checks && b.checks.length) || "") + '개</span>';
+    (S.blog_open || []).filter(function (b) { return b.week_no !== S.week_no; }).forEach(function (b) {
+      var p = (b.status === "checking") ? '<span class="pill grey">검사 중</span>'
+            : (b.checks && b.checks.length) ? '<span class="pill wait">! 고칠 곳 ' + b.checks.length + '개</span>'
+            : '<span class="pill">아직 안 냄</span>';
       w += '<button type="button" data-w="blog@' + b.week_no + '">' +
            '<span class="k">' + b.week_no + '주차 블로그</span>' + p + '</button>';
     });
@@ -710,7 +763,7 @@ textarea{resize:vertical;min-height:64px}
   }
   // 시험 줄 — 열리면 눌러서 바로 들어간다
   function examRow() {
-    var need = (E && E.need) || 95;
+    var need = (E && E.need) || 90;
     if (!E) return row("모의고사 " + need + "점", "4주차에 열립니다", false);
     if (E.passed) return row("모의고사 " + need + "점", E.best + "점 · 합격", true);
     if (E.open) return '<a href="../exam/"><span class="k">모의고사 ' + need + '점</span>' +
@@ -771,10 +824,11 @@ textarea{resize:vertical;min-height:64px}
       row("바디체크", N.bodycheck + "회") +
       row("습관 칸 채운 날", N.habit + "일") +
       row("레벨 과제", N.level_done + " / 8", N.level_done >= 8) +
-      (N.exam ? row("모의고사", N.exam + "점", N.exam >= 95) : "");
+      (N.exam ? row("모의고사", N.exam + "점", N.exam >= ((E && E.need) || 90)) : "");
 
     if (X && X.goal) { $("#rpGoalBox").hidden = false; $("#rpGoal").textContent = X.goal; }
     if (R.passed) $("#rpNextBox").hidden = false;
+    카드보이기();
 
     var S2 = R.score || {};
     if (S2.in != null) {
@@ -792,7 +846,7 @@ textarea{resize:vertical;min-height:64px}
   }
 
   /* ── 모달 ── */
-  var pick = null, send = null, saveT = null, saving = false;
+  var pick = null, send = null, saveT = null, saving = false, pend = null;
 
   /* 여러 칸짜리 과제는 적는 대로 저장한다 — 11문항을 한 번에 다 채우기 어렵다 */
   function answersNow() {
@@ -807,17 +861,27 @@ textarea{resize:vertical;min-height:64px}
     if (saveT) clearTimeout(saveT);
     var tip = $("#saveTip");
     if (tip) tip.textContent = "적는 중…";
-    saveT = setTimeout(async function () {
-      if (saving) return;
-      saving = true;
-      try {
-        var r = await sb.rpc("atc_level_set",
-          { p_slot: slot, p_link: null, p_note: null, p_done: null, p_answers: answersNow() });
-        if (tip) tip.textContent = r.error ? "저장하지 못했습니다 — " + r.error.message : "저장됐습니다";
-      } catch (e) { if (tip) tip.textContent = "저장하지 못했습니다"; }
-      saving = false;
-    }, now ? 0 : 1200);
+    /* ① 적은 답을 지금 떠 둔다. 1.2초 뒤에 창이 닫혀 있으면 칸을 읽을 수가 없어
+          빈 답 {} 으로 여태 적어 둔 것을 덮어쓰고 있었다 */
+    pend = { slot: slot, ans: answersNow() };
+    saveT = setTimeout(보내기, now ? 0 : 1200);
   }
+  async function 보내기() {
+    saveT = null;
+    var p = pend;
+    if (!p) return;
+    if (saving) { saveT = setTimeout(보내기, 300); return; }   // 앞 저장이 도는 중이면 조금 기다린다
+    pend = null; saving = true;
+    var tip = $("#saveTip");
+    try {
+      var r = await sb.rpc("atc_level_set",
+        { p_slot: p.slot, p_link: null, p_note: null, p_done: null, p_answers: p.ans });
+      if (tip) tip.textContent = r.error ? "저장하지 못했습니다 — " + r.error.message : "저장됐습니다";
+    } catch (e) { if (tip) tip.textContent = "저장하지 못했습니다"; }
+    saving = false;
+  }
+  /* ① 창을 닫을 때 밀린 저장을 바로 보낸다 — 기다리다 사라지지 않게 */
+  function 저장정리() { if (saveT) { clearTimeout(saveT); saveT = null; } if (pend) 보내기(); }
   function openDlg(o) {
     pick = null; send = o.send;
     $("#dTtl").textContent = o.title;
@@ -877,6 +941,7 @@ textarea{resize:vertical;min-height:64px}
     $("#dlg").showModal();
   }
   $("#dX").onclick = function () { $("#dlg").close(); };
+  $("#dlg").addEventListener("close", 저장정리);   // ① X·Esc·완료 — 어느 쪽으로 닫아도
   $("#drop").onclick = function () { $("#file").click(); };
   $("#drop").onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("#file").click(); } };
   $("#file").onchange = function () {
@@ -913,6 +978,9 @@ textarea{resize:vertical;min-height:64px}
       info: "오늘 한 것으로 내셔도 됩니다. 지난 날짜에 맞출 필요 없습니다.",
       photo: 1, link: 1, note: 1, notePh: "한 줄 (선택)", go: "메우기",
       send: async function (up) {
+        // ③ 아무것도 없이 내면 복구권만 태운다
+        if (!up.key && !$("#dLink").value.trim() && !$("#dNote").value.trim())
+          throw new Error("사진이나 링크, 한 줄 중 하나는 넣어 주세요");
         var r2 = await sb.rpc("atc_submit_recover", {
           p_photo_key: up.key, p_sha: up.sha,
           p_note: $("#dNote").value.trim() || null,
@@ -959,9 +1027,10 @@ textarea{resize:vertical;min-height:64px}
       form: m.form, files: m.files, slot: n, answers: g.answers || {},
       send: async function (up) {
         var ans = m.form ? answersNow() : null;
-        if (m.form) {
-          var miss = m.form.length - Object.keys(ans).length;
-          if (miss > 0) throw new Error("아직 " + miss + "칸이 비어 있습니다 — 적으신 것은 이미 저장돼 있습니다");
+        // ② 「모르시거나 해당 없는 칸은 비워 두셔도 완료됩니다」라고 안내해 놓고
+        //    빈 칸을 막고 있었다. 1인샵·프리랜서는 못 채우는 칸이 있어 수료가 막혔다
+        if (m.form && Object.keys(ans).length === 0) {
+          throw new Error("한 칸이라도 적어 주세요");
         }
         var r = await sb.rpc("atc_level_set", { p_slot: n, p_link: $("#dLink").value.trim() || up.key || null,
           p_note: $("#dNote").value.trim() || null, p_done: true, p_answers: ans });
@@ -970,8 +1039,8 @@ textarea{resize:vertical;min-height:64px}
   }
   $("#excBtn").onclick = function (e) {
     e.preventDefault();
-    openDlg({ title: "오늘 못 하는 사정", lead: "운영자가 보고 인정하면 그날은 누락에서 빠집니다", sel: 1, note: 1,
-      notePh: "무슨 일인지 한 줄", go: "신고하기",
+    openDlg({ title: "오늘 못 하는 사정", lead: "적어 두시면 그날은 누락에서 빠지고, 과정 기간이 하루 늘어납니다 (최대 7일)", sel: 1, note: 1,
+      notePh: "무슨 일인지 한 줄", go: "적어 두기",
       send: async function () {
         var note = $("#dNote").value.trim();
         if (!note) throw new Error("한 줄만 적어 주세요");
