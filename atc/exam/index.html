@@ -152,7 +152,7 @@ section{margin:28px 0 0}
   <!-- ① 들어가기 전 -->
   <div id="intro" hidden>
     <section>
-      <h1>LV1 수료 시험</h1>
+      <h1 id="introH1">LV1 수료 시험</h1>
       <p class="note" id="introLead"></p>
     </section>
     <section>
@@ -170,14 +170,8 @@ section{margin:28px 0 0}
     </section>
     <section>
       <h2>미리 알아두실 것</h2>
-      <div class="rows">
-        <div><span class="k">한 번에 한 문항씩 나옵니다</span><span class="v">20문항</span></div>
-        <div><span class="k">고른 답은 이 기기에 바로 저장됩니다</span><span class="v">이어서 보기</span></div>
-        <div><span class="k">시간 제한 없음 · 뒤로 가서 고칠 수 있음</span><span class="v">—</span></div>
-        <div><span class="k">다시 보기</span><span class="v">횟수 제한 없음</span></div>
-      </div>
-      <p class="note">중간에 전화가 오거나 창이 닫혀도 괜찮습니다. 다시 들어오시면
-        <b>고르던 자리에서 이어집니다.</b> 걸러내려는 시험이 아니라 아실 때까지 보시라는 시험입니다.</p>
+      <div class="rows" id="introRows"></div>
+      <p class="note" id="introTail"></p>
     </section>
   </div>
 
@@ -208,6 +202,7 @@ section{margin:28px 0 0}
       <div class="acts">
         <button class="btn" id="again">다시 보기</button>
         <a class="btn line" href="../my/">내 과정으로</a>
+        <a class="btn line" id="againExam" href="./" hidden>수료 시험 보기</a>
       </div>
     </section>
   </div>
@@ -233,6 +228,11 @@ section{margin:28px 0 0}
   var sb = window.HB.sb, esc = window.HB.esc;
   var $ = function (s) { return document.querySelector(s); };
   var ST = null, QS = [], PICK = {}, CUR = 0, SENT = false;
+  // 뼈 시험은 같은 화면을 빌려 쓴다. 부르는 함수 이름만 갈아끼운다
+  var BONE = /(\?|&)bone/.test(location.search);
+  var FN = BONE
+    ? { state: "atc_bone_state", sheet: "atc_bone_sheet", submit: "atc_bone_submit" }
+    : { state: "atc_exam_state", sheet: "atc_exam_sheet", submit: "atc_exam_submit" };
 
   /* 고른 답은 바로 이 기기에 저장한다 — 전화가 와도, 창이 닫혀도 이어서 본다 */
   function key() { return "atc-exam-" + ((ST && ST.paper) || "?"); }
@@ -258,14 +258,22 @@ section{margin:28px 0 0}
 
   /* ① 들어가기 전 ------------------------------------------------ */
   function drawIntro() {
-    $("#introTitle").textContent = ST.paper ? ST.paper + " 문제지" : "문제지 준비 중";
+    $("#introH1").textContent = BONE ? "실전해부학 뼈 시험" : "LV1 수료 시험";
+    document.title = (BONE ? "뼈 시험" : "수료 시험") + " — ATC LV1 4주 챌린지";
+    $("#introTitle").textContent = ST.paper ? ST.paper + (BONE ? "" : " 문제지") : "문제지 준비 중";
     $("#introFacts").innerHTML =
       '<li>문항 <b>' + (ST.count || 0) + '</b>개</li>' +
-      '<li>합격 <b>' + ST.need + '</b>점</li>' +
+      '<li>합격 <b>' + ST.need + '</b>' + (BONE ? '개' : '점') + '</li>' +
       '<li>다시 보기 <b>제한 없음</b></li>';
 
     var open = !!ST.open, lead = "", when = "";
-    if (ST.why === "week") {
+    if (BONE && ST.passed) {
+      lead = "이미 통과하셨습니다. 레벨 과제 2번이 완료됐습니다.";
+      when = "다시 보셔도 됩니다.";
+    } else if (BONE) {
+      lead = "그림 두 장을 보고 오시면 됩니다. 언제든 보실 수 있습니다.";
+      when = kr(ST.ends_on) + "까지 몇 번이든 다시 보실 수 있습니다.";
+    } else if (ST.why === "week") {
       lead = "4주차에 열립니다.";
       when = "지금 " + ST.week_no + "주차입니다. " + kr(ST.opens_on) + "부터 보실 수 있습니다.";
     } else if (ST.why === "before") {
@@ -293,6 +301,16 @@ section{margin:28px 0 0}
     } else {
       $("#start").textContent = (ST.tries > 0) ? "다시 보기" : "시작하기";
     }
+
+    $("#introRows").innerHTML =
+      row("한 번에 한 문항씩 나옵니다", (ST.count || 0) + "문항", null) +
+      row("합격", BONE ? (ST.need + " / " + ST.count + "개") : (ST.need + "점"), null) +
+      row("고른 답은 이 기기에 바로 저장됩니다", "이어서 보기", null) +
+      row("다시 보기", "횟수 제한 없음", null);
+    $("#introTail").innerHTML = "중간에 전화가 오거나 창이 닫혀도 괜찮습니다. 다시 들어오시면 " +
+      "<b>고르던 자리에서 이어집니다.</b> " + (BONE
+        ? "통과하시면 <b>레벨 과제 2번이 자동으로 완료</b>됩니다."
+        : "걸러내려는 시험이 아니라 아실 때까지 보시라는 시험입니다.");
 
     $("#bestBox").hidden = !(ST.tries > 0);
     if (ST.tries > 0) {
@@ -324,7 +342,7 @@ section{margin:28px 0 0}
   async function startExam() {
     $("#start").disabled = true;
     try {
-      var r = await sb.rpc("atc_exam_sheet");
+      var r = await sb.rpc(FN.sheet);
       if (r.error) throw r.error;
       QS = (r.data || []).map(function (q) {
         var idx = 섞기((q.options || []).map(function (_, i) { return i + 1; }));
@@ -430,7 +448,7 @@ section{margin:28px 0 0}
     $("#next").textContent = "채점 중…";
     var res = null;
     try {
-      var r = await sb.rpc("atc_exam_submit", { p_answers: PICK });
+      var r = await sb.rpc(FN.submit, { p_answers: PICK });
       if (r.error) throw r.error;
       res = r.data;
     } catch (e) {
@@ -446,13 +464,13 @@ section{margin:28px 0 0}
     }
     drop();                                   // 채점까지 끝났으니 임시 저장은 지운다
     drawDone(res);
-    try { var s = await sb.rpc("atc_exam_state"); if (s.data) ST = s.data; } catch (e) { /* 결과는 이미 보여줬다 */ }
+    try { var s = await sb.rpc(FN.state); if (s.data) ST = s.data; } catch (e) { /* 결과는 이미 보여줬다 */ }
   }
 
   /* ③ 결과 ------------------------------------------------------- */
   function drawDone(res) {
     var ok = !!res.pass, need = (ST && ST.need) || 95;
-    $("#rScore").textContent = res.score + "점";
+    $("#rScore").textContent = BONE ? (res.score + " / " + res.total) : (res.score + "점");
     $("#rScore").className = "big " + (ok ? "ok" : "no");
     $("#rCap").textContent = res.paper + " · " + res.at;
 
@@ -479,8 +497,9 @@ section{margin:28px 0 0}
     });
 
     $("#rLead").textContent = ok
-      ? "합격입니다. 수료 조건 하나를 채우셨습니다."
-      : left + "문항이 남았습니다. 합격선은 " + need + "점입니다.";
+      ? (BONE ? "통과하셨습니다. 레벨 과제 2번이 완료됐습니다." : "합격입니다. 수료 조건 하나를 채우셨습니다.")
+      : (BONE ? left + "문항이 남았습니다. " + need + "개를 맞히시면 통과입니다."
+              : left + "문항이 남았습니다. 합격선은 " + need + "점입니다.");
     $("#rAreaNote").textContent = ok
       ? "다시 보시면 더 높은 점수를 남길 수 있습니다. 최고 점수만 기록됩니다."
       : "몇 번을 틀렸는지는 알려 드리지 않습니다. 다시 보실 수 있으니 채워지지 않은 영역을 한 번 더 훑고 오시면 됩니다.";
@@ -514,7 +533,7 @@ section{margin:28px 0 0}
         e.preventDefault(); await sb.auth.signOut(); location.reload();
       };
 
-      var r = await sb.rpc("atc_exam_state");
+      var r = await sb.rpc(FN.state);
       if (r.error) return gate("연결이 좋지 않습니다. 잠시 뒤 다시 시도해 주세요.", true);
       if (!r.data || !r.data.ok) {
         return gate(r.data && r.data.why === "not-enrolled"
