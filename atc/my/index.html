@@ -686,9 +686,12 @@ textarea{resize:vertical;min-height:64px}
     if ((S.weekly_all || 0) < 8) left.push("주간 과제 " + (8 - (S.weekly_all || 0)) + "건");
     if ((S.level_done || 0) < 8) left.push("레벨 과제 " + (8 - S.level_done) + "개");
     if (!E || !E.passed) left.push("모의고사 " + ((E && E.need) || 90) + "점");
-    $("#leftTip").textContent = left.length
-      ? left.join(" · ") + "만 더 하면 관문이 채워집니다."
-      : "관문을 다 채우셨습니다. 4주차 시험만 남았습니다.";
+    // 바로 위 표에 이미 다섯 줄이 다 있다. 여기서 또 나열하면 「아무것도 안 했다」만 크게 보인다.
+    // 남은 게 많을 땐 개수만, 두 개 이하로 줄면 그때 이름을 부른다
+    $("#leftTip").textContent =
+      left.length === 0 ? "관문을 다 채우셨습니다. 축하드립니다." :
+      left.length <= 2  ? left.join(" · ") + "만 더 하시면 됩니다." :
+                          "다섯 관문 중 " + left.length + "개가 남았습니다. 오늘 세 개부터 채우시면 됩니다.";
     // 상호성 — 시작할 때 이미 받은 것을 한 번 세어 보여 준다
     if (X && X.gift && X.gift.videos > 0) {
       $("#giftBox").hidden = false;
