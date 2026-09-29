@@ -11,7 +11,12 @@
 <style>
 /* 수료 시험 — 4주차에 열린다. 내 과정 홈과 같은 토큰(09-17 무채색판).
    정답은 이 화면에 없다. 문제·보기만 서버에서 받고 채점도 서버가 한다.
-   신호색: 초록=맞음 · 앰버=봐야 할 것. 캔버스 안 쓴다. */
+
+   한 문항씩 보여주는 이유 — 20문항이 한꺼번에 보이면 시작 전에 총량이 먼저 보인다.
+   하나씩이면 「이거 하나만」이 스무 번이 된다. 고를 때마다 점 하나가 차서 반응이 20번 생긴다.
+   고른 답은 이 기기에 바로 저장한다. 전화가 와도, 창이 닫혀도 이어서 본다.
+
+   신호색: 초록=맞음 · 앰버=봐야 할 것. 캔버스 안 쓴다(iOS 카톡 웹뷰에서 흰 칸이 된다). */
 @font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../fonts/pretendard-400.woff2') format('woff2')}
 @font-face{font-family:'Pretend';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/pretendard-500.woff2') format('woff2')}
 @font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/pretendard-700.woff2') format('woff2')}
@@ -25,6 +30,7 @@
   --blue:#4F86F7; --bad:#E07A6B; --good:#5FBF8A; --warn:#E0A85F;
   --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
   --tech:"Bahn","Bahnschrift",var(--sans);
+  --dock:78px;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -34,21 +40,25 @@ button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 [hidden]{display:none!important}
 
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px clamp(16px,4vw,40px);border-bottom:1px solid var(--line);
+     padding-left:max(clamp(16px,4vw,40px),env(safe-area-inset-left));padding-right:max(clamp(16px,4vw,40px),env(safe-area-inset-right))}
 .logo{font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none;flex:none}
 .logo small{font-family:var(--tech);font-size:.625rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
-.top nav{display:flex;align-items:center;gap:12px;font-size:.8125rem;color:var(--warm);min-width:0}
-.top nav a{color:var(--warm);text-decoration:none;flex:none}
+.top nav{display:flex;align-items:center;gap:6px;font-size:.8125rem;color:var(--warm);min-width:0}
+.top nav a{color:var(--warm);text-decoration:none;flex:none;min-height:44px;display:flex;align-items:center;padding:0 6px}
 .top nav a:hover{color:var(--bone)}
-.who{color:var(--warm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who{color:var(--warm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
 
-main{flex:1;width:100%;max-width:560px;margin:0 auto;padding:0 clamp(16px,4vw,24px) 96px}
+main{flex:1;width:100%;max-width:560px;margin:0 auto;
+     padding:0 clamp(16px,4vw,24px) calc(var(--dock) + 28px + env(safe-area-inset-bottom));
+     padding-left:max(clamp(16px,4vw,24px),env(safe-area-inset-left));
+     padding-right:max(clamp(16px,4vw,24px),env(safe-area-inset-right))}
 h1{font-size:clamp(1.5rem,5vw,2rem);line-height:1.25;letter-spacing:-.04em;font-weight:900;margin:0}
 h2{font-size:.8125rem;font-family:var(--tech);letter-spacing:.12em;color:var(--warm);font-weight:700;margin:0 0 10px;text-transform:uppercase}
 p{margin:10px 0 0}
 .note{font-size:.875rem;color:var(--warm)}
 section{margin:28px 0 0}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:13px 22px;font-size:.9375rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none;transition:background .15s,transform .15s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:13px 22px;font-size:.9375rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none;transition:background .15s,transform .15s;min-height:48px}
 .btn:hover{background:#FFF}
 .btn:active{transform:translateY(1px)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
@@ -56,35 +66,47 @@ section{margin:28px 0 0}
 .btn.line:hover{border-color:var(--bone-2)}
 .btn.wide{width:100%}
 
-/* 안내 상자 */
 .card{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:20px}
 .card h1{font-size:1.25rem}
 .facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 0;padding:0;list-style:none}
 .facts li{font-size:.875rem;color:var(--bone-2)}
 .facts b{font-family:var(--tech);color:var(--bone)}
 
-/* 문항 */
-.q{border-top:1px solid var(--line);padding:22px 0 4px}
-.q:first-of-type{border-top:0}
-.qh{display:flex;align-items:baseline;gap:10px}
-.qn{font-family:var(--tech);font-size:.8125rem;color:var(--blue);flex:none;min-width:22px}
-.qs{font-weight:700;line-height:1.55;letter-spacing:-.02em}
-.qm{display:inline-block;margin-left:6px;font-size:.6875rem;font-weight:700;color:var(--warn);border:1px solid var(--warn);border-radius:5px;padding:1px 6px;vertical-align:2px;white-space:nowrap}
-.opts{margin:12px 0 0 32px;display:flex;flex-direction:column;gap:8px}
-.opts label{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--ink-2);cursor:pointer;font-size:.9375rem;line-height:1.5;transition:border-color .15s,background .15s}
+/* 위 진행 점 — 고를 때마다 한 칸이 찬다 */
+.pin{position:sticky;top:0;z-index:5;background:linear-gradient(var(--ink) 72%,transparent);padding:12px 0 14px;margin:0 0 4px}
+.dots{display:flex;gap:3px;align-items:center}
+.dots i{flex:1;height:5px;border-radius:3px;background:var(--line);transition:background .25s}
+.dots i.on{background:var(--blue)}
+.dots i.cur{background:var(--bone)}
+.dots i.gap{flex:0 0 7px;background:transparent}
+.pinTxt{display:flex;justify-content:space-between;align-items:baseline;margin:9px 0 0;font-size:.8125rem;color:var(--warm)}
+.pinTxt b{font-family:var(--tech);color:var(--bone-2)}
+
+/* 한 문항 */
+.q{padding:10px 0 0}
+.qArea{font-family:var(--tech);font-size:.75rem;letter-spacing:.1em;color:var(--blue)}
+.qs{margin:8px 0 0;font-size:1.0625rem;font-weight:700;line-height:1.55;letter-spacing:-.02em}
+.qm{display:inline-flex;align-items:center;margin:10px 0 0;font-size:.8125rem;font-weight:700;color:var(--warn);border:1px solid var(--warn);border-radius:6px;padding:3px 9px}
+.opts{margin:16px 0 0;display:flex;flex-direction:column;gap:9px}
+.opts label{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:var(--ink-2);cursor:pointer;font-size:.9375rem;line-height:1.5;min-height:48px;transition:border-color .15s,background .15s}
 .opts label:hover{border-color:var(--line-2)}
-.opts input{margin:5px 0 0;accent-color:var(--blue);flex:none}
-.opts input:checked+span{color:var(--bone)}
+.opts input{margin:4px 0 0;accent-color:var(--blue);flex:none;width:19px;height:19px}
 .opts label:has(input:checked){border-color:var(--blue);background:var(--ink-3)}
+.opts label:has(input:checked) span{color:var(--bone)}
 .opts span{color:var(--bone-2)}
-.q.miss .qs{color:var(--warn)}
-.q.miss .opts label{border-color:var(--warn)}
+.hint{margin:12px 0 0;font-size:.8125rem;color:var(--warn)}
+
+/* 블록 끝 쉼표 */
+.blk{text-align:center;padding:38px 0 0}
+.blk b{display:block;font-family:var(--tech);font-size:2rem;color:var(--good)}
+.blk p{color:var(--bone-2)}
 
 /* 아래 고정 막대 */
-.dock{position:fixed;left:0;right:0;bottom:0;background:rgba(10,10,10,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px clamp(16px,4vw,24px) calc(12px + env(safe-area-inset-bottom))}
-.dock .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.dock .cnt{font-size:.875rem;color:var(--warm);flex:1}
-.dock .cnt b{font-family:var(--tech);color:var(--bone)}
+.dock{position:fixed;left:0;right:0;bottom:0;background:rgba(10,10,10,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);
+      padding:12px clamp(16px,4vw,24px) calc(12px + env(safe-area-inset-bottom))}
+.dock .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.dock .in .btn{flex:1}
+.dock .btn.nav{flex:0 0 auto;padding:13px 16px}
 
 /* 결과 */
 .score{text-align:center;padding:26px 0 6px}
@@ -92,13 +114,21 @@ section{margin:28px 0 0}
 .score .big.ok{color:var(--good)}
 .score .big.no{color:var(--warn)}
 .score .cap{font-size:.8125rem;color:var(--warm);margin-top:8px}
+.areas{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.areas>div{display:flex;align-items:center;gap:12px;background:var(--ink-2);padding:14px 15px;font-size:.9375rem;opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s}
+.areas>div.in{opacity:1;transform:none}
+.areas .k{flex:1;min-width:0}
+.areas .pips{display:flex;gap:4px;flex:none}
+.areas .pips i{width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+.areas .pips i.ok{background:var(--good)}
+.areas .n{font-family:var(--tech);font-size:.8125rem;color:var(--warm);flex:none;min-width:30px;text-align:right}
 .rows{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .rows>div{display:flex;align-items:center;gap:10px;background:var(--ink-2);padding:13px 15px;font-size:.9375rem}
 .rows .k{flex:1;min-width:0}
 .rows .v{font-family:var(--tech);color:var(--warm);flex:none}
 .rows .v.ok{color:var(--good)}
-.rows .v.no{color:var(--warn)}
 .msg{margin:14px 0 0;font-size:.875rem;color:var(--warn)}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
 </style>
 </head>
 <body>
@@ -107,7 +137,7 @@ section{margin:28px 0 0}
   <a class="logo" href="../../">허봇스<small>ATC LV1</small></a>
   <nav>
     <span id="who" class="who" hidden></span>
-    <a href="../my/">내 과정</a>
+    <a href="../my/" id="backLink">내 과정</a>
     <a href="#" id="logout" hidden>로그아웃</a>
   </nav>
 </header>
@@ -116,6 +146,7 @@ section{margin:28px 0 0}
   <div id="gate">
     <p class="note" id="gateMsg">확인하는 중…</p>
     <div id="authBox"></div>
+    <p id="gateRetry" hidden><button class="btn line" id="retry">다시 시도</button></p>
   </div>
 
   <!-- ① 들어가기 전 -->
@@ -130,6 +161,7 @@ section{margin:28px 0 0}
         <ul class="facts" id="introFacts"></ul>
         <p class="note" id="introWhen"></p>
         <p style="margin-top:18px"><button class="btn wide" id="start" hidden>시작하기</button></p>
+        <p class="note" id="resumeTip" hidden></p>
       </div>
     </section>
     <section id="bestBox" hidden>
@@ -139,24 +171,23 @@ section{margin:28px 0 0}
     <section>
       <h2>미리 알아두실 것</h2>
       <div class="rows">
-        <div><span class="k">문항마다 5점입니다</span><span class="v">20문항 · 100점</span></div>
-        <div><span class="k">합격선</span><span class="v">95점</span></div>
+        <div><span class="k">한 번에 한 문항씩 나옵니다</span><span class="v">20문항</span></div>
+        <div><span class="k">고른 답은 이 기기에 바로 저장됩니다</span><span class="v">이어서 보기</span></div>
+        <div><span class="k">시간 제한 없음 · 뒤로 가서 고칠 수 있음</span><span class="v">—</span></div>
         <div><span class="k">다시 보기</span><span class="v">횟수 제한 없음</span></div>
       </div>
-      <p class="note">합격선이 높습니다. 한 문항까지만 틀릴 수 있습니다.
-        대신 <b>과정이 끝나는 날까지 몇 번이든 다시</b> 보실 수 있습니다. 걸러내려는 시험이 아니라
-        아실 때까지 보시라는 시험입니다.</p>
+      <p class="note">중간에 전화가 오거나 창이 닫혀도 괜찮습니다. 다시 들어오시면
+        <b>고르던 자리에서 이어집니다.</b> 걸러내려는 시험이 아니라 아실 때까지 보시라는 시험입니다.</p>
     </section>
   </div>
 
   <!-- ② 응시 -->
   <div id="sheet" hidden>
-    <section>
-      <h1>4T 모의고사</h1>
-      <p class="note">고르신 보기는 <b>제출하기</b>를 누르기 전까지 바뀌지 않습니다. 천천히 보셔도 됩니다.</p>
-    </section>
-    <section id="qs"></section>
-    <p class="msg" id="sheetMsg" hidden></p>
+    <div class="pin">
+      <div class="dots" id="dots"></div>
+      <div class="pinTxt"><span id="pinArea"></span><span><b id="pinNo">1</b> / <b id="pinAll">20</b></span></div>
+    </div>
+    <div id="qBox"></div>
   </div>
 
   <!-- ③ 결과 -->
@@ -168,14 +199,13 @@ section{margin:28px 0 0}
       </div>
       <p class="note" id="rLead" style="text-align:center"></p>
     </section>
-    <section id="wrongBox" hidden>
-      <h2>더 보셔야 할 영역</h2>
-      <div class="rows" id="wrongRows"></div>
-      <p class="note">몇 번을 틀렸는지는 알려 드리지 않습니다. 다시 보실 수 있으니
-        영역을 한 번 더 훑고 오시면 됩니다.</p>
+    <section>
+      <h2>영역별</h2>
+      <div class="areas" id="rAreas"></div>
+      <p class="note" id="rAreaNote"></p>
     </section>
     <section>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div class="acts">
         <button class="btn" id="again">다시 보기</button>
         <a class="btn line" href="../my/">내 과정으로</a>
       </div>
@@ -185,8 +215,8 @@ section{margin:28px 0 0}
 
 <div class="dock" id="dock" hidden>
   <div class="in">
-    <span class="cnt"><b id="dCnt">0</b> / <b id="dAll">0</b> 고르셨습니다</span>
-    <button class="btn" id="send">제출하기</button>
+    <button class="btn line nav" id="prev" aria-label="앞 문항">←</button>
+    <button class="btn" id="next">다음</button>
   </div>
 </div>
 
@@ -195,20 +225,41 @@ section{margin:28px 0 0}
 <script>
 (function () {
   "use strict";
+  if (!window.HB || !window.HB.sb) {            // CDN 이 안 열렸을 때 「확인하는 중…」에 갇히지 않게
+    document.getElementById("gateMsg").textContent =
+      "연결이 좋지 않아 화면을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.";
+    return;
+  }
   var sb = window.HB.sb, esc = window.HB.esc;
   var $ = function (s) { return document.querySelector(s); };
-  var ST = null, QS = [], PICK = {};
+  var ST = null, QS = [], PICK = {}, CUR = 0, SENT = false;
+
+  /* 고른 답은 바로 이 기기에 저장한다 — 전화가 와도, 창이 닫혀도 이어서 본다 */
+  function key() { return "atc-exam-" + ((ST && ST.paper) || "?"); }
+  function keep() {
+    try { localStorage.setItem(key(), JSON.stringify({ at: Date.now(), cur: CUR, pick: PICK })); }
+    catch (e) { /* 사파리 비공개 모드 등 — 저장이 안 돼도 시험은 계속된다 */ }
+  }
+  function kept() {
+    try {
+      var v = JSON.parse(localStorage.getItem(key()) || "null");
+      if (!v || !v.pick || Object.keys(v.pick).length === 0) return null;
+      if (Date.now() - (v.at || 0) > 1000 * 60 * 60 * 24 * 3) return null;   // 사흘 지난 건 버린다
+      return v;
+    } catch (e) { return null; }
+  }
+  function drop() { try { localStorage.removeItem(key()); } catch (e) {} }
 
   function show(id) {
     ["gate", "intro", "sheet", "done"].forEach(function (k) { $("#" + k).hidden = (k !== id); });
     $("#dock").hidden = (id !== "sheet");
+    $("#backLink").hidden = (id === "sheet");     // 시험 중에 눌러서 날리는 일이 없게
   }
 
   /* ① 들어가기 전 ------------------------------------------------ */
   function drawIntro() {
-    var f = $("#introFacts");
     $("#introTitle").textContent = ST.paper ? ST.paper + " 문제지" : "문제지 준비 중";
-    f.innerHTML =
+    $("#introFacts").innerHTML =
       '<li>문항 <b>' + (ST.count || 0) + '</b>개</li>' +
       '<li>합격 <b>' + ST.need + '</b>점</li>' +
       '<li>다시 보기 <b>제한 없음</b></li>';
@@ -232,10 +283,19 @@ section{margin:28px 0 0}
     $("#introLead").textContent = lead;
     $("#introWhen").textContent = when;
     $("#start").hidden = !open;
-    $("#start").textContent = (ST.tries > 0) ? "다시 보기" : "시작하기";
 
+    var k = open ? kept() : null;
+    $("#resumeTip").hidden = !k;
+    if (k) {
+      var n = Object.keys(k.pick).length;
+      $("#start").textContent = "이어서 보기";
+      $("#resumeTip").textContent = n + "문항까지 고르신 게 남아 있습니다. 그 자리에서 이어집니다.";
+    } else {
+      $("#start").textContent = (ST.tries > 0) ? "다시 보기" : "시작하기";
+    }
+
+    $("#bestBox").hidden = !(ST.tries > 0);
     if (ST.tries > 0) {
-      $("#bestBox").hidden = false;
       $("#bestRows").innerHTML =
         row("최고 점수", ST.best + "점", ST.best >= ST.need) +
         row("응시 횟수", ST.tries + "번", null) +
@@ -245,7 +305,7 @@ section{margin:28px 0 0}
   }
   function row(k, v, ok) {
     return '<div><span class="k">' + esc(k) + '</span><span class="v' +
-      (ok === true ? " ok" : ok === false ? " no" : "") + '">' + esc(v) + '</span></div>';
+      (ok === true ? " ok" : "") + '">' + esc(v) + '</span></div>';
   }
   function kr(d) {
     if (!d) return "";
@@ -254,14 +314,29 @@ section{margin:28px 0 0}
   }
 
   /* ② 응시 ------------------------------------------------------- */
+  function 섞기(a) {                     // 다시 볼 때마다 순서가 달라진다 — 자리 외우기로 통과하지 못하게
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
   async function startExam() {
     $("#start").disabled = true;
     try {
       var r = await sb.rpc("atc_exam_sheet");
       if (r.error) throw r.error;
-      QS = r.data || [];
-      PICK = {};
-      drawSheet();
+      QS = (r.data || []).map(function (q) {
+        var idx = 섞기((q.options || []).map(function (_, i) { return i + 1; }));
+        return { no: q.no, stem: q.stem, area: q.area, multi: q.multi,
+                 opts: idx.map(function (v) { return { v: v, t: q.options[v - 1] }; }) };
+      });
+      var k = kept();
+      PICK = (k && k.pick) || {};
+      CUR = (k && typeof k.cur === "number" && k.cur < QS.length) ? k.cur : 0;
+      SENT = false;
+      drawDots();
+      drawQ();
       show("sheet");
       window.scrollTo(0, 0);
     } catch (e) {
@@ -271,119 +346,193 @@ section{margin:28px 0 0}
     }
   }
 
-  function drawSheet() {
-    $("#qs").innerHTML = QS.map(function (q) {
-      var type = q.multi ? "checkbox" : "radio";
-      var opts = (q.options || []).map(function (o, i) {
-        return '<label><input type="' + type + '" name="q' + q.no + '" value="' + (i + 1) +
-               '"><span>' + esc(o) + '</span></label>';
-      }).join("");
-      return '<div class="q" id="q' + q.no + '">' +
-        '<div class="qh"><span class="qn">' + q.no + '</span>' +
-        '<span class="qs">' + esc(q.stem) +
-        (q.multi ? '<span class="qm">모두 고르기</span>' : "") + '</span></div>' +
-        '<div class="opts">' + opts + '</div></div>';
-    }).join("");
-    $("#dAll").textContent = QS.length;
-    count();
-    $("#qs").addEventListener("change", onPick);
+  function drawDots() {
+    var h = "";
+    QS.forEach(function (q, i) {
+      if (i > 0 && i % 5 === 0) h += '<i class="gap"></i>';    // 영역 경계
+      h += '<i data-i="' + i + '"></i>';
+    });
+    $("#dots").innerHTML = h;
+    $("#pinAll").textContent = QS.length;
+  }
+  function tickDots() {
+    Array.prototype.forEach.call($("#dots").querySelectorAll("i[data-i]"), function (el) {
+      var i = +el.getAttribute("data-i");
+      el.className = (i === CUR) ? "cur" : (PICK[QS[i].no] ? "on" : "");
+    });
+    $("#pinNo").textContent = CUR + 1;
+    $("#pinArea").textContent = QS[CUR] ? (QS[CUR].area || "") : "";
   }
 
-  function onPick(e) {
-    var t = e.target;
-    if (!t || t.tagName !== "INPUT") return;
-    var no = t.name.slice(1);
-    var box = document.getElementById("q" + no);
-    box.classList.remove("miss");
-    var got = [];
-    box.querySelectorAll("input:checked").forEach(function (c) { got.push(+c.value); });
-    if (got.length) PICK[no] = got.sort(function (a, b) { return a - b; });
-    else delete PICK[no];
-    count();
+  function drawQ() {
+    var q = QS[CUR], got = PICK[q.no] || [];
+    var type = q.multi ? "checkbox" : "radio";
+    $("#qBox").innerHTML =
+      '<div class="q">' +
+        (q.multi ? '<div class="qm">정답이 여러 개입니다 — 해당하는 것을 모두 고르세요</div>' : '') +
+        '<p class="qs">' + esc(q.stem) + '</p>' +
+        '<div class="opts">' + q.opts.map(function (o) {
+          return '<label><input type="' + type + '" name="q" value="' + o.v + '"' +
+                 (got.indexOf(o.v) >= 0 ? " checked" : "") + '><span>' + esc(o.t) + '</span></label>';
+        }).join("") + '</div>' +
+        '<p class="hint" id="qHint" hidden></p>' +
+      '</div>';
+    $("#qBox").querySelector(".opts").addEventListener("change", onPick);
+    $("#prev").disabled = (CUR === 0);
+    $("#next").textContent = (CUR === QS.length - 1) ? "다 풀었습니다" : "다음";
+    tickDots();
+    window.scrollTo(0, 0);
   }
-  function count() {
-    $("#dCnt").textContent = Object.keys(PICK).length;
+
+  function onPick() {
+    var q = QS[CUR], got = [];
+    $("#qBox").querySelectorAll("input:checked").forEach(function (c) { got.push(+c.value); });
+    got.sort(function (a, b) { return a - b; });
+    if (got.length) PICK[q.no] = got; else delete PICK[q.no];
+    $("#qHint").hidden = true;
+    keep();
+    tickDots();
+    if (!q.multi && got.length) setTimeout(go(1), 220);   // 단일 정답은 고르면 바로 다음으로
+  }
+
+  function go(d) {
+    return function () {
+      var q = QS[CUR], got = PICK[q.no] || [];
+      if (d > 0) {
+        if (!got.length) return warn("하나를 골라 주세요.");
+        if (q.multi && got.length < 2) return warn("이 문항은 정답이 여러 개입니다. 해당하는 것을 모두 골라 주세요.");
+      }
+      if (CUR + d < 0) return;
+      if (CUR + d >= QS.length) return finish();
+      CUR += d; keep(); drawQ();
+    };
+  }
+  function warn(t) { $("#qHint").hidden = false; $("#qHint").textContent = t; }
+
+  function finish() {
+    var miss = QS.map(function (q, i) { return { q: q, i: i }; })
+                 .filter(function (z) {
+                   var g = PICK[z.q.no] || [];
+                   return !g.length || (z.q.multi && g.length < 2);
+                 });
+    if (miss.length) {
+      CUR = miss[0].i; drawQ();
+      warn(miss.length + "문항이 아직 비어 있습니다. 이 문항부터 채워 주세요.");
+      return;
+    }
+    sendExam();
   }
 
   async function sendExam() {
-    var missing = QS.filter(function (q) { return !PICK[q.no]; });
-    if (missing.length) {
-      QS.forEach(function (q) {
-        var b = document.getElementById("q" + q.no);
-        if (b) b.classList.toggle("miss", !PICK[q.no]);
-      });
-      $("#sheetMsg").hidden = false;
-      $("#sheetMsg").textContent = "아직 " + missing.length + "문항이 비어 있습니다. 표시해 둔 곳을 채워 주세요.";
-      var first = document.getElementById("q" + missing[0].no);
-      if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-    $("#send").disabled = true;
-    $("#send").textContent = "채점 중…";
+    if (SENT) return;
+    SENT = true;
+    $("#next").disabled = true;
+    $("#next").textContent = "채점 중…";
+    var res = null;
     try {
       var r = await sb.rpc("atc_exam_submit", { p_answers: PICK });
       if (r.error) throw r.error;
-      drawDone(r.data);
-      ST = (await sb.rpc("atc_exam_state")).data || ST;
+      res = r.data;
     } catch (e) {
-      alert("제출하지 못했습니다. 잠시 뒤 다시 해 주세요.");
+      SENT = false;
+      var m = String((e && e.message) || e);
+      alert(/JWT|session|401/i.test(m)
+        ? "로그인이 풀렸습니다. 새로고침하고 다시 로그인해 주세요. 고르신 답은 저장돼 있습니다."
+        : "제출하지 못했습니다. 잠시 뒤 다시 눌러 주세요. 고르신 답은 저장돼 있습니다.");
+      return;
     } finally {
-      $("#send").disabled = false;
-      $("#send").textContent = "제출하기";
+      $("#next").disabled = false;
+      $("#next").textContent = "다 풀었습니다";
     }
+    drop();                                   // 채점까지 끝났으니 임시 저장은 지운다
+    drawDone(res);
+    try { var s = await sb.rpc("atc_exam_state"); if (s.data) ST = s.data; } catch (e) { /* 결과는 이미 보여줬다 */ }
   }
 
   /* ③ 결과 ------------------------------------------------------- */
   function drawDone(res) {
-    var ok = !!res.pass;
+    var ok = !!res.pass, need = (ST && ST.need) || 95;
     $("#rScore").textContent = res.score + "점";
     $("#rScore").className = "big " + (ok ? "ok" : "no");
     $("#rCap").textContent = res.paper + " · " + res.at;
+
+    // 영역별로 몇 개 맞았는지 — 몇 번을 틀렸는지는 알려주지 않는다 (다시 볼 수 있으니)
+    var per = {}, order = [];
+    QS.forEach(function (q) {
+      var a = q.area || "기타";
+      if (!(a in per)) { per[a] = 0; order.push(a); }
+      per[a]++;
+    });
+    if (!order.length) { order = Object.keys(res.wrong || {}); order.forEach(function (a) { per[a] = 5; }); }
+    var wrong = res.wrong || {}, left = 0;
+    $("#rAreas").innerHTML = order.map(function (a) {
+      var tot = per[a], bad = wrong[a] || 0, good = tot - bad;
+      left += bad;
+      var pips = "";
+      for (var i = 0; i < tot; i++) pips += '<i class="' + (i < good ? "ok" : "") + '"></i>';
+      return '<div><span class="k">' + esc(a) + '</span><span class="pips">' + pips +
+             '</span><span class="n">' + good + '/' + tot + '</span></div>';
+    }).join("");
+    // 왼쪽부터 차례로 나타난다 — 결과를 알기 직전이 가장 집중되는 자리다
+    Array.prototype.forEach.call($("#rAreas").children, function (el, i) {
+      setTimeout(function () { el.classList.add("in"); }, 120 + i * 260);
+    });
+
     $("#rLead").textContent = ok
       ? "합격입니다. 수료 조건 하나를 채우셨습니다."
-      : "합격선은 " + (ST ? ST.need : 95) + "점입니다. 다시 보실 수 있습니다.";
-
-    var w = res.wrong || {}, keys = Object.keys(w);
-    $("#wrongBox").hidden = (keys.length === 0);
-    if (keys.length) {
-      $("#wrongRows").innerHTML = keys.map(function (k) {
-        return row(k, "더 보기", false);
-      }).join("");
-    }
+      : left + "문항이 남았습니다. 합격선은 " + need + "점입니다.";
+    $("#rAreaNote").textContent = ok
+      ? "다시 보시면 더 높은 점수를 남길 수 있습니다. 최고 점수만 기록됩니다."
+      : "몇 번을 틀렸는지는 알려 드리지 않습니다. 다시 보실 수 있으니 채워지지 않은 영역을 한 번 더 훑고 오시면 됩니다.";
     $("#again").textContent = ok ? "다시 보기 (점수 올리기)" : "다시 보기";
     show("done");
     window.scrollTo(0, 0);
   }
 
   /* 들어오기 ------------------------------------------------------ */
-  async function boot() {
-    var s = await window.HB.session();
-    if (!s) {
-      $("#gateMsg").hidden = true;
-      window.HB.mountAuth($("#authBox"), function () { location.reload(); },
-        { lead: "결제하신 계정으로 로그인하세요. 수업일지·강의실과 같은 계정입니다." });
-      return;
-    }
-    $("#logout").hidden = false;
-    $("#who").hidden = false;
-    $("#who").textContent = s.user.email || "";
-    $("#logout").onclick = async function (e) {
-      e.preventDefault(); await sb.auth.signOut(); location.reload();
-    };
+  function gate(msg, retry) {
+    $("#gateMsg").hidden = false;
+    $("#gateMsg").innerHTML = msg;
+    $("#gateRetry").hidden = !retry;
+    show("gate");
+  }
 
-    var r = await sb.rpc("atc_exam_state");
-    if (r.error || !r.data || !r.data.ok) {
-      $("#gateMsg").hidden = false;
-      $("#gateMsg").innerHTML = '등록된 과정이 없습니다. <a href="../">과정 안내</a>를 봐 주세요.';
-      return;
+  async function boot() {
+    try {
+      var s = await window.HB.session();
+      if (!s) {
+        $("#gateMsg").hidden = true;
+        $("#gateRetry").hidden = true;
+        window.HB.mountAuth($("#authBox"), function () { location.reload(); },
+          { lead: "결제하신 계정으로 로그인하세요. 수업일지·강의실과 같은 계정입니다." });
+        return;
+      }
+      $("#logout").hidden = false;
+      $("#who").hidden = false;
+      $("#who").textContent = s.user.email || "";
+      $("#logout").onclick = async function (e) {
+        e.preventDefault(); await sb.auth.signOut(); location.reload();
+      };
+
+      var r = await sb.rpc("atc_exam_state");
+      if (r.error) return gate("연결이 좋지 않습니다. 잠시 뒤 다시 시도해 주세요.", true);
+      if (!r.data || !r.data.ok) {
+        return gate(r.data && r.data.why === "not-enrolled"
+          ? '등록된 과정이 없습니다. <a href="../">과정 안내</a>를 봐 주세요.'
+          : "지금은 열어볼 수 없습니다. 잠시 뒤 다시 시도해 주세요.", true);
+      }
+      ST = r.data;
+      drawIntro();
+    } catch (e) {
+      gate("연결이 끊겼습니다. 다시 시도해 주세요.", true);
     }
-    ST = r.data;
-    drawIntro();
   }
 
   $("#start").onclick = startExam;
-  $("#send").onclick = sendExam;
+  $("#prev").onclick = go(-1);
+  $("#next").onclick = go(1);
   $("#again").onclick = function () { drawIntro(); window.scrollTo(0, 0); };
+  $("#retry").onclick = function () { gate("확인하는 중…", false); boot(); };
   boot();
 })();
 </script>

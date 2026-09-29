@@ -37,7 +37,7 @@ button{font:inherit;color:inherit}
 .logo{font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none;flex:none}
 .logo small{font-family:var(--tech);font-size:.625rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
 .top nav{display:flex;align-items:center;gap:12px;font-size:.8125rem;color:var(--warm);min-width:0}
-.top nav a{color:var(--warm);text-decoration:none;flex:none}
+.top nav a{color:var(--warm);text-decoration:none;flex:none;min-height:44px;display:flex;align-items:center;padding:0 6px}
 .top nav a:hover{color:var(--bone)}
 .who{color:var(--warm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
@@ -83,7 +83,7 @@ section{margin:28px 0 0}
 .card .acts{margin:12px 0 0 28px;display:flex;gap:8px;flex-wrap:wrap}
 
 .habit{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0 0}
-.habit .row{display:flex;align-items:center;gap:12px;padding:7px 0}
+.habit .row{display:flex;align-items:center;gap:12px;padding:7px 0;min-height:44px}
 .habit input{width:18px;height:18px;accent-color:var(--blue);flex:none}
 .habit label{font-size:.9375rem;cursor:pointer}
 .dots{display:flex;gap:5px;margin-left:auto}
@@ -125,7 +125,7 @@ section{margin:28px 0 0}
   font-size:.9375rem;color:var(--bone-2)}
 .together b{font-family:var(--tech);color:var(--bone)}
 #dWhy{margin-left:0}
-.voice{margin:8px 0 0 28px;font-size:.8125rem;color:var(--warm);font-style:italic;line-height:1.65}
+.voice{margin:8px 0 0 28px;font-size:.875rem;color:var(--bone-2);line-height:1.65;padding-left:10px;border-left:2px solid var(--line-2)}
 .saying{margin:12px 0 0;padding:14px 16px;border-left:2px solid var(--blue);background:var(--ink-2);
   border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--bone-2)}
 .saying cite{display:block;margin-top:6px;font-style:normal;font-size:.8125rem;color:var(--warm)}
@@ -158,7 +158,7 @@ section{margin:28px 0 0}
 .tail{margin:14px 0 0;text-align:center}
 .tail a{font-size:.8125rem;color:var(--warm)}
 
-dialog{border:1px solid var(--line-2);border-radius:14px;background:var(--ink-2);color:var(--bone);padding:0;width:min(440px,calc(100vw - 32px));max-height:88dvh}
+dialog{border:1px solid var(--line-2);border-radius:14px;background:var(--ink-2);color:var(--bone);padding:0;width:min(440px,calc(100vw - 32px));max-height:88dvh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 dialog::backdrop{background:rgba(0,0,0,.72)}
 .dlg{padding:18px}
 .dlg .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px}
@@ -435,6 +435,16 @@ textarea{resize:vertical;min-height:64px}
   }
 
   async function load(tryEnroll) {
+    try { return await load2(tryEnroll); }
+    catch (e) {                       // 신호가 끊기면 화면이 통째로 비어버리던 자리
+      $("#gate").hidden = false;
+      $("#gateMsg").hidden = false;
+      $("#gateMsg").innerHTML = '연결이 끊겼습니다. ' +
+        '<button class="btn sm line" id="reload">다시 시도</button>';
+      var b = $("#reload"); if (b) b.onclick = function () { location.reload(); };
+    }
+  }
+  async function load2(tryEnroll) {
     var r = await sb.rpc("atc_my_state");
     if (r.error) { $("#gateMsg").hidden = false; $("#gateMsg").textContent = "불러오지 못했습니다 — " + r.error.message; return; }
     S = r.data;
@@ -444,8 +454,11 @@ textarea{resize:vertical;min-height:64px}
       return noCourse();
     }
     if (S.state === "not-enrolled" || S.state === "anon") return noCourse();
-    $("#gate").hidden = true;
-    $("#before").hidden = true; $("#run").hidden = true; $("#over").hidden = true;
+    // 화면을 지우는 건 받을 걸 다 받은 뒤에 한다 — 받는 동안 빈 화면이 보이지 않게
+    var 정리 = function () {
+      $("#gate").hidden = true;
+      $("#before").hidden = true; $("#run").hidden = true; $("#over").hidden = true;
+    };
     // 수업일지에 「오늘 스케줄 알림」이 찍혀 있으면 그 칸을 캡처 없이 채운다
     if (S.state === "running" && !(S.daily && S.daily.notify)) {
       var sy = await sb.rpc("atc_sync_app");
@@ -454,14 +467,17 @@ textarea{resize:vertical;min-height:64px}
         if (!again.error) S = again.data;
       }
     }
-    var ex = await sb.rpc("atc_extra");
+    // 남은 셋은 서로 기다릴 이유가 없다 — 한 번에 받는다 (체크 하나 누를 때마다 도는 길목이다)
+    //  atc_extra      : 연속·동행·한 마디·거울
+    //  atc_my_level   : 레벨 과제에 적어 둔 답 (여러 칸짜리를 이어서 쓰려면 필요)
+    //  atc_exam_state : 시험이 열렸는지·최고점 (정답은 서버에만 있고 여기로 오지 않는다)
+    var 셋 = await Promise.all([
+      sb.rpc("atc_extra"), sb.rpc("atc_my_level"), sb.rpc("atc_exam_state")]);
+    var ex = 셋[0], lv = 셋[1], xe = 셋[2];
     X = (!ex.error && ex.data && ex.data.ok) ? ex.data : null;
-    // 레벨 과제의 「적어 둔 답」까지 같이 받아 둔다 (여러 칸짜리 과제를 이어서 쓰려면 필요)
-    var lv = await sb.rpc("atc_my_level");
     if (!lv.error && lv.data) S.level = lv.data;
-    // 시험이 열렸는지 · 지금까지 최고점 (정답은 서버에만 있고 여기로 오지 않는다)
-    var xe = await sb.rpc("atc_exam_state");
     E = (!xe.error && xe.data && xe.data.ok) ? xe.data : null;
+    정리();
     if (S.state === "before") return drawBefore();
     if (S.state === "done") return drawReport();
     drawRun();
