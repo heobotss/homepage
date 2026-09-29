@@ -544,7 +544,8 @@ textarea{resize:vertical;min-height:64px}
     // 연속 일수 — 끊겨도 「최고 기록」은 남는다
     if (X && X.streak) {
       var st = X.streak;
-      $("#streak").hidden = false;
+      // 아직 하루도 못 채운 사람에게 「0일」을 보여 줄 이유가 없다
+      $("#streak").hidden = !((st.now || 0) > 0 || (st.best || 0) > 0);
       $("#streak").innerHTML = '<b>' + (st.now || 0) + '일</b><span>연속으로 3개를 채우는 중</span>' +
         (st.best > 0 ? '<em>최고 기록 ' + st.best + '일</em>' : '');
     }
@@ -671,14 +672,20 @@ textarea{resize:vertical;min-height:64px}
     // 동행 숫자 — 이름도 순위도 없다. 「나만 하는 게 아니구나」 하나만 준다
     if (X && X.together && X.together.total > 1) {
       $("#together").hidden = false;
-      $("#together").innerHTML = X.together.done > 0
-        ? '오늘 <b>' + X.together.total + '명</b> 중 <b>' + X.together.done + '명</b>이 세 개를 다 채웠습니다.'
-        : '오늘은 아직 아무도 다 못 채웠습니다. <b>먼저 채우셔도 됩니다.</b>';
+      // 0명일 때는 아예 말하지 않는다. 「아직 아무도」는 응원이 아니라 찬물이다
+      $("#together").hidden = !(X.together.done > 0);
+      if (X.together.done > 0)
+        $("#together").innerHTML = '오늘 <b>' + X.together.total + '명</b> 중 <b>' +
+          X.together.done + '명</b>이 세 개를 다 채웠습니다.';
     }
     // 남은 칸 — 끝이 보이게
+    // 수료 판정이 보는 다섯 관문을 빠짐없이 센다. 블로그·주간을 빼먹으면 「거의 다 왔다」가 거짓이 된다
     var left = [];
     if ((S.submitted_days || 0) < 24) left.push("하루 과제 " + (24 - S.submitted_days) + "일");
+    if ((S.blog_passed || 0) < 4) left.push("블로그 " + (4 - (S.blog_passed || 0)) + "편");
+    if ((S.weekly_all || 0) < 8) left.push("주간 과제 " + (8 - (S.weekly_all || 0)) + "건");
     if ((S.level_done || 0) < 8) left.push("레벨 과제 " + (8 - S.level_done) + "개");
+    if (!E || !E.passed) left.push("모의고사 " + ((E && E.need) || 90) + "점");
     $("#leftTip").textContent = left.length
       ? left.join(" · ") + "만 더 하면 관문이 채워집니다."
       : "관문을 다 채우셨습니다. 4주차 시험만 남았습니다.";
