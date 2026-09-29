@@ -170,7 +170,7 @@ td b{font-family:var(--tech)}
     $("#nWeek").value = String(wk);
     async function loadNote() {
       var r = await sb.from("atc_notes").select("body,video_url")
-        .eq("cohort_id", c.id).eq("week_no", +$("#nWeek").value).maybeSingle();
+        .eq("level", c.level || "LV1").eq("week_no", +$("#nWeek").value).maybeSingle();
       $("#nBody").value = (r.data && r.data.body) || "";
       $("#nVideo").value = (r.data && r.data.video_url) || "";
       $("#nMsg").textContent = r.data ? "이미 올라가 있습니다" : "";
@@ -180,8 +180,8 @@ td b{font-family:var(--tech)}
       var body = $("#nBody").value.trim();
       if (!body) { $("#nMsg").textContent = "두어 줄만 적어 주세요"; return; }
       var r = await sb.from("atc_notes").upsert({
-        cohort_id: c.id, week_no: +$("#nWeek").value, body: body,
-        video_url: $("#nVideo").value.trim() || null }, { onConflict: "cohort_id,week_no" });
+        level: c.level || "LV1", week_no: +$("#nWeek").value, body: body,
+        video_url: $("#nVideo").value.trim() || null }, { onConflict: "level,week_no" });
       $("#nMsg").textContent = r.error ? "올리지 못했습니다 — " + r.error.message : "올렸습니다";
     };
 
