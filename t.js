@@ -7,6 +7,8 @@
    - 폼은 HBT.pack() 을 요청에 넣으면 된다 → { visitor, utm:{source,medium,campaign,content} } */
 (function () {
   "use strict";
+  /* 로컬 미리보기·검수에서는 세지 않는다 — 운영 통계가 더러워진다 (10-01) */
+  if (location.hostname !== "heobotss.com" && location.hostname !== "www.heobotss.com") return;
   var URL_ = "https://kpubgeejyiupdvbbdxwt.supabase.co/rest/v1/funnel_events";
   var KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";
   var DAYS = 30;

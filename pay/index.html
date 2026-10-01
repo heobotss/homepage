@@ -87,8 +87,11 @@
 
 <script>
 // ── 설정 ─────────────────────────────────────────────────────────────────
-// 테스트 키. 심사 통과 뒤 실제 클라이언트 키(live_gck_…)로 바꾼다. 시크릿 키는 여기 절대 안 둔다.
+// 라이브 클라이언트 키 (09-29 카드사 심사용으로 전환). 시크릿 키는 여기 절대 안 둔다.
 const TOSS_CLIENT_KEY = "live_gck_DnyRpQWGrN9YnaaZQB7BVKwv1M9E";
+// 2026-10-01 대표님 결정: 토스가 다 끝날 때까지 결제를 받지 않는다.
+//   true 로 바꾸면 바로 열린다. 심사원에게 결제창을 보여 줘야 하면 주소 끝에 ?open=1
+const 판매개시 = false;
 const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
 const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";   // 공개용 키 — 상품 읽기만 된다
 const FN = SB_URL + "/functions/v1/";
@@ -99,7 +102,14 @@ const won = (n) => n.toLocaleString("ko-KR") + "원";
 const params = new URLSearchParams(location.search);
 const productId = params.get("p") || DEFAULT_PRODUCT;
 let product = null, widgets = null, ready = false;
+const 열림 = 판매개시 || params.get("open") === "1";
 if (TOSS_CLIENT_KEY.startsWith("test_")) { $("#testBar").hidden = false; document.title = "[테스트] " + document.title; }
+else if (!열림) {
+  $("#testBar").innerHTML = "지금은 <b>정식 오픈 준비 중</b>입니다. 결제 수단 심사가 끝나는 대로 열립니다. " +
+    "먼저 신청하고 싶으시면 <a href=\"mailto:gjwodbs77@gmail.com\" style=\"color:#EDEDED\">gjwodbs77@gmail.com</a> 으로 알려 주세요.";
+  $("#testBar").hidden = false;
+  document.title = "[오픈 준비 중] " + document.title;
+}
 
 fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) $("#legal").innerHTML = t; }).catch(() => {});
 
@@ -142,6 +152,12 @@ async function loadProduct() {
 }
 
 async function mountWidget() {
+  if (!열림) {   // 오픈 전 — 결제창을 아예 띄우지 않는다 (상품·가격은 그대로 보인다)
+    $("#payCard").hidden = true;
+    $("#payBtn").hidden = true;
+    $("#msg").textContent = "정식 오픈 전이라 지금은 결제를 받지 않습니다.";
+    return;
+  }
   try {
     const toss = TossPayments(TOSS_CLIENT_KEY);
     widgets = toss.widgets({ customerKey: TossPayments.ANONYMOUS });

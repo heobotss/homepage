@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="허봇스">
 <meta property="og:title" content="허봇스 — 헬스트레이너를 위한 도구">
-<meta property="og:description" content="전국 헬스장·PT샵·필라테스 28,200곳을 직접 재서 만든 기준. 그 위에서 돌아가는 프로그램 16개(열린 것 14개)와 무료 진단표.">
+<meta property="og:description" content="전국 헬스장·PT샵·필라테스 28,200곳을 직접 재서 만든 기준. 지금 쓸 수 있는 무료 진단 2종과 수업일지, 그리고 트레이너 강의.">
 <meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -468,8 +468,10 @@ body.drawer-on{overflow:hidden}
 }
 @media (max-width:980px){
   .lane-dots{display:flex; justify-content:center; gap:8px; margin-top:14px}
-  .lane-dots button{width:6px; height:6px; padding:0; border:0; border-radius:3px; background:#3A3A3A; transition:width .25s, background .25s; cursor:pointer}
-  .lane-dots button[aria-current="true"]{width:20px; background:var(--brass)}
+  /* 점은 작게 보이되 누르는 칸은 44px — 엄지로 눌러야 한다 (10-01 검수) */
+  .lane-dots button{width:44px; height:44px; padding:0; border:0; background:none; position:relative; cursor:pointer; display:inline-flex; align-items:center; justify-content:center}
+  .lane-dots button::before{content:""; display:block; width:6px; height:6px; border-radius:3px; background:#3A3A3A; transition:width .25s, background .25s}
+  .lane-dots button[aria-current="true"]::before{width:20px; background:var(--brass)}
 }
 @media (max-width:420px){ .lane-act .btn{font-size:14px; padding:13px 6px} }
 
@@ -803,7 +805,7 @@ body.drawer-on{overflow:hidden}
 .path.pale .p-fig b{color:var(--paper-acc-2)}
 .path.pale .p-fig i{color:var(--paper-mid)}
 .path.pale .p-fig.ok b{color:var(--brass)}
-.path.pale .p-fig.none b{color:#676767}
+.path.pale .p-fig.none b{color:#8E8E8E}   /* 대비 3.39 → 5.26 (10-01 검수) */
 .path.pale strong{color:var(--paper-ink)}
 .path.pale .p-m{color:var(--paper-mid)}
 .path.pale .p-m em{color:var(--paper-acc-2)}
@@ -1141,7 +1143,7 @@ body.drawer-on{overflow:hidden}
 .plan .flag{min-height:52px; margin-bottom:12px; display:flex; align-items:flex-start; gap:6px; flex-wrap:wrap}
 .tag-soon,.tag-now,.tag-pick{display:inline-block; align-self:flex-start; font-size:11.5px; font-weight:700; padding:4px 10px; white-space:nowrap}
 .tag-soon{border:1px solid rgba(156,156,156,.45); color:var(--paper-acc)}
-.tag-now{background:var(--brass); color:#FFFFFF}
+.tag-now{background:#2B4C87; color:#FFFFFF}   /* 흰 글자 대비 3.45 → 7.1 (10-01 검수) */
 .tag-pick{background:var(--paper-acc); color:#0E0E0E}
 .plan .who{font-family:var(--tech); font-size:11px; letter-spacing:.14em; color:var(--paper-acc); text-transform:uppercase}
 .plan h3{font-size:clamp(20px,2vw,23px); margin:10px 0 0; letter-spacing:-.035em}
@@ -1380,11 +1382,27 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 
       <div class="cloudbox">
         <figure class="gx">
-          <video class="gx-v" autoplay muted loop playsinline preload="auto" poster="media/hero-reviews-poster.webp"
+          <!-- 2.8MB 짜리라 첫 화면에서 바로 받지 않는다 — 화면에 들어올 때 붙인다 (10-01 검수).
+               동작 줄이기를 켠 분에게는 아예 안 붙이고 포스터만 둔다 -->
+          <video class="gx-v" muted loop playsinline preload="none" poster="media/hero-reviews-poster.webp"
+                 data-src="media/hero-reviews.mp4"
                  aria-label="전국 헬스장·PT샵·필라테스를 점 하나씩 띄운 장면. 가운데로 갈수록 리뷰와 블로그가 살아 있는 센터이고, 플레이스 순위·블로그 상위 노출·인스타그램 같은 마케팅 말이 떠오른다">
-            <source src="media/hero-reviews.webm" type="video/webm">
-            <source src="media/hero-reviews.mp4" type="video/mp4">
           </video>
+          <script>
+          (function () {
+            var v = document.currentScript.previousElementSibling;
+            if (!v || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+            var 붙이기 = function () {
+              if (v.src) return;
+              v.src = v.dataset.src; v.autoplay = true; v.play().catch(function () {});
+            };
+            if (!("IntersectionObserver" in window)) { setTimeout(붙이기, 1200); return; }
+            var io = new IntersectionObserver(function (es) {
+              es.forEach(function (e) { if (e.isIntersecting) { 붙이기(); io.disconnect(); } });
+            }, { rootMargin: "200px" });
+            io.observe(v);
+          })();
+          </script>
           <a class="gx-pin" href="#/check"><i aria-hidden="true"></i><span>우리 센터 마케팅은 어디쯤?</span></a>
           <figcaption class="gx-cap">점 하나가 센터 하나 · 가운데로 갈수록 리뷰·블로그가 살아 있는 곳</figcaption>
         </figure>
@@ -1433,8 +1451,9 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
   <div class="wrap">
     <div class="rs-head">
       <p class="label">수강생이 보내 주신 결과</p>
-      <h2 class="h-md">배운 대로 하면 이렇게 됩니다</h2>
-      <p class="rs-sub">교육을 들은 선생님·센터가 <b>직접 보내 주신 캡처</b>입니다. 저희가 잰 값이 아니라 그분들 화면 그대로입니다.</p>
+      <h2 class="h-md">이런 결과를 보내 주셨습니다</h2>
+      <p class="rs-sub">교육을 들은 트레이너·센터가 <b>직접 보내 주신 캡처</b>입니다. 저희가 잰 값이 아니라 그분들 화면 그대로입니다.
+        개별 사례이고, 같은 결과를 보장하지는 않습니다.</p>
     </div>
     <div class="rs-tiles">
         <div class="rs-tile">
@@ -1662,7 +1681,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 <section id="s-reviews" data-rail="후기">
   <div class="wrap">
     <div class="rv-head">
-      <p class="label">먼저 다녀간 선생님들</p>
+      <p class="label">먼저 다녀간 트레이너들</p>
       <h2 class="h-md">직접 올려 주신 후기 144건 중에서</h2>
       <p class="rv-sub">인스타그램에 남겨 주신 글을 고치지 않고 옮겼습니다 · <a href="https://www.instagram.com/heobotss/" target="_blank" rel="noopener">후기 전체 보기 →</a></p>
     </div>
@@ -1815,11 +1834,11 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <li class="g-item g-free">
         <span class="g-n">05</span>
         <div class="g-t">
-          <h3>수업일지 30일</h3>
-          <p>수업 기록을 30초로 줄이는 프로그램을 30일 동안 그냥 써 보세요.</p>
+          <h3>마케팅용 수업일지</h3>
+          <p>수업 기록을 30초로 줄이는 프로그램입니다. 기간 제한 없이 그냥 쓰세요.</p>
         </div>
-        <span class="g-chip">무료 · 30일</span>
-        <a class="btn btn-solid btn-sm" href="free/ptlog/">열어 보기</a>
+        <span class="g-chip">무료</span>
+        <a class="btn btn-solid btn-sm" href="https://app.heobotss.com/" target="_blank" rel="noopener">열어 보기</a>
       </li>
       <li class="g-item">
         <span class="g-n">06</span>
@@ -1879,7 +1898,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <p class="can-h">이 화면에서 바로 해볼 수 있는 것</p>
       <ol class="can-list">
         <li><a href="#s-check" data-can="center"><span class="n">01</span><b>센터 진단</b><span class="d">우리 센터 마케팅은 전국에서 몇 %?</span><span class="t">30초</span></a></li>
-        <li><a href="#s-check" data-can="trainer"><span class="n">02</span><b>트레이너 진단</b><span class="d">내 블로그 글은 전국 운동 지도자 중 몇 %?</span><span class="t">30초</span></a></li>
+        <li><a href="#s-check" data-can="trainer"><span class="n">02</span><b>트레이너 진단</b><span class="d">내 블로그 글은 피트니스 글 쓰는 사람들 사이에서 몇 %?</span><span class="t">30초</span></a></li>
         <li><a href="score/"><span class="n">03</span><b>트레이너 점수 확인</b><span class="d">나는 몇 점짜리 트레이너일까 — 체크리스트 100문항</span><span class="t">3분</span></a></li>
         <li><a href="#s-dist"><span class="n">04</span><b>전국 실측 분포</b><span class="d">전국 28,200곳 한가운데 우리 마케팅은 어디쯤?</span><span class="t">바로</span></a></li>
       </ol>
