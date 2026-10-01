@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>수업 알림을 전날 보내는 헬스트레이너, 당일 알림 한 통이 노쇼를 줄이는 구조 — 허봇스 레슨 9</title>
+<meta name="description" content="전날 알림은 배려처럼 보이지만, 회원에게 「내일 가기 싫을 때 취소할 시간」을 먼저 드리는 일입니다. 그 한 칸이 비면 그 시간 수업료도 같이 비고요.">
+<link rel="icon" href="/favicon.png" type="image/png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="허봇스">
+<meta property="og:title" content="수업 알림을 전날 보내는 헬스트레이너, 당일 알림 한 통이 노쇼를 줄이는 구조">
+<meta property="og:description" content="전날 알림은 배려처럼 보이지만, 회원에게 「내일 가기 싫을 때 취소할 시간」을 먼저 드리는 일입니다. 그 한 칸이 비면 그 시간 수업료도 같이 비고요.">
+<meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
+<meta property="og:url" content="https://heobotss.com/lesson/9/">
+<link rel="canonical" href="https://heobotss.com/lesson/9/">
+<style>
+/* 허봇스 레슨 N — 글 페이지 틀 v1 (2026-10-01). _굽기.py 가 글/NN.md 를 이 틀에 붓는다. 토큰은 score·free 와 같다. 블루는 라벨·밑줄·진행 띠에만. */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/pretendard-500.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('/fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/bahn-700.woff2') format('woff2')}
+:root{
+  color-scheme:dark;
+  --ink:#0A0A0A; --ink-2:#111111; --ink-3:#171717;
+  --bone:#F2F2F2; --bone-2:#BDBDBD; --warm:#8E8E8E;
+  --line:#222222; --line-2:#2F2F2F;
+  --blue:#4F86F7;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
+  --tech:"Bahn","Bahnschrift",var(--sans);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1.0625rem;line-height:1.9;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column}
+a{color:var(--bone)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+h1,h2,h3{margin:0;font-weight:700;line-height:1.3;letter-spacing:-.03em;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter:blur(8px);z-index:5}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;text-decoration:none}
+.logo small{font-family:var(--tech);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top .home{font-size:.8125rem;color:var(--warm);text-decoration:none}
+.top .home:hover{color:var(--bone)}
+
+main{flex:1;width:100%;max-width:680px;margin:0 auto;padding:clamp(44px,8vw,80px) clamp(16px,4vw,28px) 0}
+
+.lesson-band{display:flex;align-items:center;gap:12px;font-family:var(--tech);font-size:.75rem;letter-spacing:.14em;color:var(--warm)}
+.lesson-band .dots{display:flex;gap:4px}
+.lesson-band .dots i{display:block;width:14px;height:3px;background:var(--line-2);border-radius:2px}
+.lesson-band .dots i.on{background:var(--blue)}
+.kicker{margin-top:18px;font-size:.875rem;color:var(--bone-2);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.kicker b{color:var(--bone);font-weight:700}
+.kicker .sep{color:var(--line-2)}
+.kicker .tier{font-size:.75rem;color:var(--bone-2);border:1px solid var(--line-2);border-radius:999px;padding:0 9px;line-height:1.7}
+h1{font-size:clamp(1.85rem,6.2vw,2.75rem);line-height:1.24;letter-spacing:-.045em;font-weight:900;margin-top:14px}
+.lede{font-size:clamp(1.05rem,2.6vw,1.2rem);color:var(--bone-2);margin-top:20px;max-width:32em}
+.byline{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);font-size:.8125rem;color:var(--warm);display:flex;flex-wrap:wrap;gap:6px 14px}
+.byline b{color:var(--bone-2);font-weight:500}
+
+article{margin-top:clamp(40px,7vw,64px)}
+article>p{margin-top:18px;color:var(--bone)}
+article>p.first{margin-top:0}
+article h2{font-size:clamp(1.3rem,3.6vw,1.6rem);margin-top:clamp(48px,8vw,68px)}
+article h2 .n{font-family:var(--tech);font-size:.8em;color:var(--blue);letter-spacing:.08em;margin-right:10px;vertical-align:1px}
+article h2+p{margin-top:16px}
+strong{font-weight:700;color:#fff}
+.hl{box-shadow:inset 0 -.35em 0 rgba(79,134,247,.28)}
+em{font-style:normal;color:var(--bone-2);font-weight:400}
+.lst{margin:16px 0 0;padding-left:1.3em;color:var(--bone)}
+.lst li{margin-top:6px;padding-left:.2em}
+.lst li::marker{color:var(--blue);font-family:var(--tech)}
+.tbl{width:100%;border-collapse:collapse;margin-top:22px;font-size:.9375rem;line-height:1.6}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:12px 12px 12px 0;border-bottom:1px solid var(--line)}
+.tbl th{font-weight:500;color:var(--warm);font-size:.8125rem;letter-spacing:.02em;border-bottom-color:var(--line-2);padding-top:0}
+.tbl td:first-child{color:var(--bone);font-weight:700}
+.tbl td.num{font-family:var(--tech);color:var(--blue);font-size:1.05em;width:2.4em}
+.tbl td b.base{font-family:var(--tech);color:var(--bone);font-size:1.05em;letter-spacing:.02em}
+.tbl .arrow{color:var(--warm)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.point{margin-top:30px;padding:22px 24px;border:1px solid var(--line-2);border-left:3px solid var(--blue);border-radius:0 12px 12px 0;background:var(--ink-2)}
+.point small{display:block;font-family:var(--tech);font-size:.6875rem;letter-spacing:.16em;color:var(--blue);margin-bottom:8px}
+.point p{font-size:1.0625rem;font-weight:500;color:#fff;line-height:1.75}
+.xref{color:var(--bone-2);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px}
+.xref:hover{text-decoration-color:var(--blue)}
+
+.check{margin-top:clamp(56px,9vw,80px);padding-top:36px;border-top:1px solid var(--line-2)}
+.check h2{font-size:clamp(1.4rem,4vw,1.75rem)}
+.check h2 small{display:block;font-size:.8125rem;font-weight:400;color:var(--warm);letter-spacing:0;margin-bottom:8px}
+.check ul{list-style:none;margin:22px 0 0;padding:0}
+.check li{border-bottom:1px solid var(--line)}
+.check label{display:flex;gap:14px;align-items:flex-start;padding:13px 0;cursor:pointer;font-size:1rem;line-height:1.6}
+.check input{appearance:none;flex:none;width:22px;height:22px;margin-top:4px;border:1.5px solid var(--line-2);border-radius:6px;background:var(--ink-2);display:grid;place-items:center;cursor:pointer}
+.check input:checked{border-color:var(--blue);background:var(--blue)}
+.check input:checked::after{content:"";width:6px;height:11px;border:solid #0A0A0A;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.check input:checked+span{color:var(--bone-2)}
+.tally{margin-top:18px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tally b{font-family:var(--tech);font-size:2rem;color:var(--bone);letter-spacing:.02em}
+.tally b i{font-style:normal;color:var(--warm);font-size:.55em}
+.tally p{font-size:.9375rem;color:var(--bone-2);flex:1 1 18em}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:14px 22px;font-size:.9375rem;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;text-decoration:none;transition:background .15s}
+.btn:hover{background:#FFF}
+.btn.line{background:transparent;color:var(--bone);border:1px solid var(--line-2)}
+.btn.line:hover{border-color:var(--bone-2)}
+.btn .ar{font-family:var(--tech)}
+.btn.soon{background:var(--ink-3);color:var(--bone-2);cursor:default}
+
+.next{margin-top:clamp(48px,8vw,64px);display:block;border:1px solid var(--line-2);border-radius:14px;padding:22px 24px;text-decoration:none;background:var(--ink-2);transition:border-color .15s}
+.next:hover{border-color:var(--bone-2)}
+.next small{font-family:var(--tech);font-size:.6875rem;letter-spacing:.16em;color:var(--blue)}
+.next b{display:block;font-size:1.15rem;font-weight:700;margin-top:6px;line-height:1.4}
+.next span{display:block;font-size:.8125rem;color:var(--warm);margin-top:8px}
+.next .lock,.rel .lock{display:inline-block;font-size:.6875rem;color:var(--bone-2);border:1px solid var(--line-2);border-radius:999px;padding:0 8px;margin-left:8px;vertical-align:2px;line-height:1.7}
+
+.rel{margin-top:44px}
+.rel h3{font-size:.8125rem;font-weight:500;color:var(--warm);letter-spacing:.02em}
+.rel ul{list-style:none;margin:10px 0 0;padding:0}
+.rel li{border-bottom:1px solid var(--line)}
+.rel a{display:flex;gap:14px;align-items:baseline;padding:12px 0;text-decoration:none;font-size:.9375rem;color:var(--bone-2)}
+.rel a:hover{color:var(--bone)}
+.rel a small{font-family:var(--tech);color:var(--warm);letter-spacing:.06em;flex:none;width:4.6em}
+.rel a .lock{margin-left:auto;flex:none}
+
+.member{margin-top:clamp(52px,9vw,72px);padding:30px 26px;border-radius:16px;background:linear-gradient(180deg,#141414,#0F0F0F);border:1px solid var(--line-2);text-align:center}
+.member small{font-family:var(--tech);font-size:.6875rem;letter-spacing:.16em;color:var(--blue)}
+.member b{display:block;font-size:clamp(1.2rem,3.6vw,1.45rem);font-weight:700;margin-top:10px;line-height:1.4;letter-spacing:-.02em}
+.member p{margin-top:10px;font-size:.9375rem;color:var(--bone-2)}
+.member .price{margin-top:18px;font-family:var(--tech);font-size:1.6rem;color:var(--bone);letter-spacing:.02em}
+.member .price i{font-style:normal;font-family:var(--sans);font-size:.9375rem;color:var(--warm);margin-left:6px}
+.member .btn{margin-top:18px}
+.member .fine{margin-top:12px;font-size:.8125rem;color:var(--warm)}
+
+.share{margin-top:28px;display:flex;justify-content:center}
+.share button{background:none;border:0;padding:10px 4px;color:var(--bone-2);font-size:.9375rem;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:5px}
+.share button:hover{color:var(--bone);text-decoration-color:var(--blue)}
+
+.legal{margin-top:64px;font-size:.8125rem;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding:16px 0 40px}
+.legal a{color:var(--warm)}
+@media (max-width:480px){
+  .tbl{font-size:.875rem}
+  .tbl th,.tbl td{padding:10px 10px 10px 0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">허봇스<small>HEOBOTSS</small></a>
+  <a class="home" href="/lesson/">레슨 전체</a>
+</header>
+
+<main>
+  <div class="lesson-band" aria-label="레슨 9 / 12">
+    <span>09 / 12</span>
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></span>
+  </div>
+  <p class="kicker"><b>허봇스 레슨 9</b><span class="sep">·</span>스케줄<span class="sep">·</span>2026.11.30<span class="sep">·</span><span class="tier">멤버십</span></p>
+  <h1>수업 알림을 전날 보내는 헬스트레이너, 당일 알림 한 통이 노쇼를 줄이는 구조</h1>
+  <p class="lede">전날 알림은 배려처럼 보이지만, 회원에게 「내일 가기 싫을 때 취소할 시간」을 먼저 드리는 일입니다. 그 한 칸이 비면 그 시간 수업료도 같이 비고요.</p>
+  <p class="byline"><b>피티선배 허재윤</b><span>읽는 데 4분</span><span>당일 알림 · 노쇼</span></p>
+
+  <article>
+<p class="first">수업 알림, 전날 보내세요? 당일 말고 전날 보내시는 선생님들 많죠. 회원이 깜빡할 수 있으니까 미리 알려 드려야지, 하는 배려하는 마음으로요. 그 마음은 맞는데 결과가 반대로 나옵니다. 전날 알림을 받은 회원은 내일 가기 싫을 때 취소할 시간이 생기거든요.</p>
+<p>트레이너 점수 체크리스트에도 이 문항이 있습니다. 「수업 당일, 수업 전에 회원에게 스케줄 알림을 보낸다.」 전날이 아니라 당일이에요. 오늘은 왜 당일인지, 그리고 몇 시에 뭐라고 보내는지를 드립니다.</p>
+<h2><span class="n">01</span>전날 밤 9시와 당일 오전 10시, 회원 머릿속</h2>
+<p>같은 회원이 같은 알림을 받아도 시각에 따라 다른 생각을 합니다.</p>
+<div class="tbl-wrap"><table class="tbl">
+<thead><tr><th>전날 밤 9시에 받으면</th><th>당일 오전 10시에 받으면</th></tr></thead>
+<tbody>
+<tr><td>「아, 내일 PT구나. 솔직히 가기 싫은데」</td><td>「아, 오늘 PT구나. 이미 오늘이네」</td></tr>
+<tr><td>「지금 미리 취소하면 되잖아, 하루 전이니까 괜찮겠지」</td><td>「지금 취소하면 너무 민폐일 것 같은데」</td></tr>
+<tr><td>「하루 전에 말했으니 예의는 지켰다」</td><td>「시간도 얼마 안 남았네, 그냥 가야겠다」</td></tr>
+</tbody></table></div>
+<p>전날 알림은 취소할 시간만 주는 게 아니라, 「하루 전에 말했으니 괜찮다」는 면죄부까지 같이 줘요. 반대로 당일 알림은 당일 취소가 예의 없는 행동이라는 인식이 회원 스스로에게 작동합니다. 트레이너가 뭐라고 안 해도요. <strong class="hl">노쇼의 상당 부분은 회원 성격이 아니라 알림 타이밍이 만듭니다.</strong></p>
+<h2><span class="n">02</span>몇 시에, 뭐라고</h2>
+<div class="tbl-wrap"><table class="tbl">
+<thead><tr><th></th><th>이렇게</th></tr></thead>
+<tbody>
+<tr><td>언제</td><td>그날 첫 수업이 시작되기 전 오전에, 그날 수업 전부를 한꺼번에</td></tr>
+<tr><td>왜 오전</td><td>트레이너는 아침 루틴이 되고, 회원은 운동 몇 시간 전에 여유 있게 확인한다</td></tr>
+<tr><td>문구</td><td>「OOO 회원님, 오늘 7시에 PT 수업이 있습니다.」 이게 전부</td></tr>
+<tr><td>덧붙여도 되는 것</td><td>「비 오니 조심히 오세요」 「오늘은 하체 예정입니다」</td></tr>
+</tbody></table></div>
+<p>그리고 절대 넣지 말아야 할 문구가 있어요.</p>
+<div class="tbl-wrap"><table class="tbl">
+<thead><tr><th>넣지 말 것</th><th>왜</th></tr></thead>
+<tbody>
+<tr><td><em>「혹시 오실 수 있으신가요?」</em></td><td>취소할 여지를 주는 질문</td></tr>
+<tr><td><em>「바쁘시면 말씀해 주세요」</em></td><td>취소를 권하는 것처럼 들린다</td></tr>
+<tr><td><em>「확인 부탁드려요」</em></td><td>회원에게 답장 의무를 지운다</td></tr>
+</tbody></table></div>
+<p>알림은 질문이 아니라 통보예요. 짧을수록 좋습니다. 길게 쓰면 쓸수록 회원이 답할 거리가 생기고, 답할 거리가 생기면 취소할 거리도 생겨요.</p>
+<aside class="point"><small>여기서 하나만</small><p>알림은 「오실 수 있어요?」가 아니라 「오늘 7시입니다」. 질문을 빼는 것만으로 노쇼가 줄어요.</p></aside>
+<h2><span class="n">03</span>하나 더 얹으면 세 가지를 가져갑니다</h2>
+<p>당일 알림에 지난 수업 사진을 같이 보내 보세요. 「오늘 7시 수업입니다. 지난 시간 운동 사진이에요, 개인운동할 때 참고하세요.」 이 한 통으로 스케줄 알림, 개인운동 가이드, 「이 선생님은 체계적이다」라는 인상, 셋을 동시에 가져갑니다. <a class="xref" href="/lesson/7/">레슨 7</a>에서 말한 「회원 폰에 남는 흔적」이 이거예요. 다만 사진을 부담스러워하는 회원도 있으니, 처음엔 알림만 보내고 익숙해지면 하나씩 붙이세요.</p>
+<h2><span class="n">04</span>그래도 당일 취소가 왔을 때</h2>
+<p>「선생님, 죄송한데 오늘 급한 일이 생겨서요.」 이 연락이 오면 대부분 「아, 네 괜찮습니다」 하고 끝내죠. 그리고 두 시간 뒤에 혼자 고민합니다. 처리해야 하나, 서운해하면 어쩌지. 결국 처리 안 하고 넘어가고, 회원은 그걸 학습하고, 다음에도 당일 취소를 해요. 무한 반복이죠.</p>
+<div class="tbl-wrap"><table class="tbl">
+<thead><tr><th>상황</th><th>이렇게</th></tr></thead>
+<tbody>
+<tr><td>센터에 당일 취소 규정이 있다</td><td>규정대로. 「센터 규정상 당일 취소는 회차 차감이에요. 다음엔 전날까지 말씀 주세요」</td></tr>
+<tr><td>규정이 없다</td><td>첫 수업 때 미리 말해 둔다. 「당일 취소는 수업 1회로 처리돼요」</td></tr>
+<tr><td>정말 급한 사정이 분명하다</td><td>한 번은 봐 드리되, 「이번만」을 말로 남긴다</td></tr>
+</tbody></table></div>
+<p>처리하는 게 매정한 게 아니에요. 사람은 호의를 점점 당연하게 생각하고, 안 처리하면 그게 기준이 됩니다. 규정대로 처리하는 게 오히려 회원이 더 열심히 오게 만드는 장치고, 그게 회원 몸을 위한 일입니다. 센터가 규정을 갖고 있으면 그 규정이 선생님을 지켜 주는 거고요.</p>
+<h2><span class="n">05</span>재능보다 시스템</h2>
+<p>저라고 처음부터 잘했던 게 아니에요. 블로그를 써야 된다는데, 저는 타자가 분당 백 타도 안 나왔습니다. 한 편 쓰는 데 정말 오래 걸렸어요. 근데 블로그뿐만이 아니었죠. 그럴 때마다 좌절하는 게 아니라, 방법을 직접 해보고 거기에 맞는 방법을 찾고, 빠르게 성과가 나는 것들을 구조적으로 만들었습니다. 안 되면 다른 방법을 시도하고, 성과 나온 건 데이터로 남기고. 그렇게 극복해 나가고 있어요. 재능보다 시스템이 중요합니다.</p>
+<p>당일 알림이 딱 그거예요. 회원을 설득하는 재능이 아니라, 보내는 시각 하나를 바꾸는 시스템. 내일 아침부터 하시면 됩니다.</p>
+  </article>
+
+  <section class="check" id="check">
+    <h2><small>읽고 나서 바로</small>선생님은?</h2>
+    <ul id="checkList">
+<li><label><input type="checkbox"><span>수업 당일, 수업 전에 회원에게 스케줄 알림을 보낸다</span></label></li><li><label><input type="checkbox"><span>알림은 그날 첫 수업 전에 한꺼번에 보낸다</span></label></li><li><label><input type="checkbox"><span>알림 문구가 「OOO 회원님, 오늘 X시에 PT 수업이 있습니다」 한 줄이다</span></label></li><li><label><input type="checkbox"><span>「혹시 오실 수 있으세요?」 같은 말을 알림에 넣지 않는다</span></label></li><li><label><input type="checkbox"><span>당일 취소는 센터 규정대로 처리한다</span></label></li><li><label><input type="checkbox"><span>알림에 지난 수업 사진을 같이 보낸 적이 있다</span></label></li><li><label><input type="checkbox"><span>지난달 노쇼가 몇 번이었는지 안다</span></label></li>
+    </ul>
+    <div class="tally"><b><span id="tally">0</span><i> / 7</i></b><p id="tallyMsg">세 개 밑이면 노쇼는 회원 탓이 아니라 알림 타이밍 문제일 가능성이 큽니다. 전자책에 문구와 처리 기준이 정리돼 있어요. 이번 주만 무료.</p></div>
+    <div class="btns">
+      <a class="btn" href="/free/schedule/?r=R-07">4T 스케줄 시스템 전자책 무료로 받기 <span class="ar">→</span></a>
+      <a class="btn line" href="https://www.instagram.com/heobotss" target="_blank" rel="noopener">이 레슨 릴스 다시 보기</a>
+    </div>
+  </section>
+
+  <a class="next" href="/lesson/10/"><small>NEXT · 12.4 금</small><b>레슨 10 · 노쇼·당일 취소로 수업이 비는 헬스트레이너, 한 달 수업 수를 올리는 스케줄 순서<span class="lock">멤버십</span></b><span>알림이 노쇼를 막는다면, 스케줄 「순서」는 한 달 수업 수를 올립니다. 금요일에 잡으면 늦는 이유.</span></a>
+
+  <div class="rel">
+    <h3>같이 보면 좋은 레슨</h3>
+    <ul>
+<li><a href="/lesson/10/"><small>레슨 10</small>노쇼·당일 취소로 수업이 비는 헬스트레이너, 한 달 수업 수를 올리는 스케줄 순서<span class="lock">멤버십</span></a></li><li><a href="/lesson/1/"><small>레슨 1</small>이번 달 매출을 3초 안에 못 말하는 헬스트레이너가 오늘 세어야 할 숫자 3개</a></li><li><a href="/lesson/6/"><small>레슨 6</small>종이 일지로 재등록 타이밍을 놓치는 헬스트레이너, 월요일 아침 5분으로 바꾸는 법<span class="lock">멤버십</span></a></li><li><a href="/lesson/7/"><small>레슨 7</small>선배 수업을 따라 해도 회원이 안 남는 1년차 헬스트레이너, 안 보이는 것 3가지<span class="lock">멤버십</span></a></li>
+    </ul>
+  </div>
+
+  <section class="member">
+    <small>HEOBOTSS MEMBERSHIP</small>
+    <b>이 레슨은 멤버십 레슨입니다</b>
+    <p>레슨 12편 전부 · 강의 39편 · 모의고사 문제지 · ATC 4주 챌린지 · 트레이너 프로그램</p>
+    <div class="price">9,900<i>원 / 월</i></div>
+    <span class="btn soon" aria-disabled="true">멤버십 준비 중</span>
+    <p class="fine">결제가 열리면 메일로 알려 드립니다 · 7일 안 전액 환불 · 언제든 해지</p>
+  </section>
+
+  <div class="share"><button type="button" id="shareBtn">같은 고민 하는 선생님께 이 레슨 보내기</button></div>
+
+  <footer class="legal">허봇스 · 피티선배 허재윤 · <a href="/policy/terms.html">이용약관</a> · <a href="/policy/privacy.html">개인정보처리방침</a></footer>
+</main>
+
+<script src="/t.js"></script>
+<script>
+(function(){
+  "use strict";
+  var boxes=document.querySelectorAll('#checkList input'), tally=document.getElementById('tally'), msg=document.getElementById('tallyMsg');
+  var base=msg.textContent, high="다섯 개 넘으셨으면 노쇼는 이미 잡고 계신 거예요. 다음은 한 달 수업 수를 올리는 스케줄 순서입니다. 레슨 10으로 가세요.", total=boxes.length;
+  function upd(){
+    var n=0; boxes.forEach(function(b){ if(b.checked) n++; });
+    tally.textContent=n;
+    msg.textContent = (high && n>=Math.ceil(total*0.7)) ? high : base;
+  }
+  boxes.forEach(function(b){ b.addEventListener('change',upd); });
+  var sb=document.getElementById('shareBtn'), label=sb.textContent;
+  sb.addEventListener('click',function(){
+    var d={title:document.title,text:'허봇스 레슨 9 — 수업 알림을 전날 보내는 헬스트레이너, 당일 알림 한 통이 노쇼를 줄이는 구조',url:'https://heobotss.com/lesson/9/'};
+    if(navigator.share){ navigator.share(d).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(d.url).then(function(){ sb.textContent='주소를 복사했어요'; setTimeout(function(){ sb.textContent=label; },1800); }); }
+  });
+})();
+</script>
+</body>
+</html>
