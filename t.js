@@ -30,7 +30,12 @@
     campaign: clip(q.get("utm_campaign"), 60), content: clip(q.get("utm_content"), 40)
   };
   var r = clip(q.get("r"), 40);
-  if (r && !now.source && !now.content) { now.source = "instagram"; now.medium = "reels"; now.content = r.toUpperCase(); }
+  if (r && !now.source && !now.content) {
+    now.content = r.toUpperCase();
+    /* T- 로 시작하면 트레이너 성적표 카드의 추천 링크다 (성적표인증\트레이너.json) — 「추천」 채널로 따로 센다 */
+    if (now.content.indexOf("T-") === 0) { now.source = "referral"; now.medium = "trainer"; }
+    else { now.source = "instagram"; now.medium = "reels"; }
+  }
   var hasNow = !!(now.source || now.content);
 
   if (hasNow) ls("hb-utm", JSON.stringify({ u: now, at: Date.now() }));
