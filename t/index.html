@@ -32,7 +32,8 @@ h2{font-size:1.0625rem;letter-spacing:-.01em;margin:0 0 14px}
 p{margin:0 0 12px}
 .lead{color:var(--bone-2);margin-top:14px}
 .meta{color:var(--warm);font-size:.9375rem;margin-top:6px}
-.face{width:92px;height:92px;border-radius:50%;object-fit:cover;object-position:50% 22%;border:1px solid var(--line-2);margin-bottom:18px;display:block}
+/* 인스타 프로필 사진에는 글자로 된 것도 있다 — 동그랗게 자르면 글자가 잘린다. 네모에 통째로 넣는다 */
+.face{width:104px;height:104px;border-radius:16px;object-fit:contain;background:var(--ink-3);border:1px solid var(--line-2);margin-bottom:18px;display:block}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .links a{display:inline-block;padding:9px 16px;border:1px solid var(--line-2);border-radius:999px;font-size:.9375rem;text-decoration:none;color:var(--bone-2)}
 .links a:hover{border-color:var(--bone-2);color:var(--bone)}
