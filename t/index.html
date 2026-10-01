@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>트레이너 본인 페이지 | 허봇스</title>
+<meta name="description" content="허봇스가 트레이너에게 만들어 드리는 본인 페이지입니다. 수업 기록과 자격이 달마다 쌓입니다.">
+<meta name="robots" content="noindex,follow">
+<style>
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../../fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('../../fonts/bahn-700.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--line:#333333;--line-2:#3C3C3C;--blue:#4F86F7;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;--tech:"Bahn","Bahnschrift",var(--sans)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.8;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--bone)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:var(--tech);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top .all{font-size:.9375rem;color:var(--warm);text-decoration:none}
+.preview{background:var(--ink-3);border-bottom:1px solid var(--line-2);color:var(--bone-2);font-size:.875rem;padding:11px clamp(16px,4vw,40px);text-align:center}
+main{max-width:720px;margin:0 auto;padding:0 clamp(16px,4vw,24px) 72px}
+section{padding-top:clamp(36px,7vw,56px)}
+h1{font-size:clamp(1.75rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.03em;margin:0}
+h1 .job{display:block;font-size:.875rem;font-weight:400;letter-spacing:.02em;color:var(--blue);margin-bottom:10px}
+h2{font-size:1.0625rem;letter-spacing:-.01em;margin:0 0 14px}
+p{margin:0 0 12px}
+.lead{color:var(--bone-2);margin-top:14px}
+.meta{color:var(--warm);font-size:.9375rem;margin-top:6px}
+.face{width:92px;height:92px;border-radius:50%;object-fit:cover;object-position:50% 22%;border:1px solid var(--line-2);margin-bottom:18px;display:block}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.links a{display:inline-block;padding:9px 16px;border:1px solid var(--line-2);border-radius:999px;font-size:.9375rem;text-decoration:none;color:var(--bone-2)}
+.links a:hover{border-color:var(--bone-2);color:var(--bone)}
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,4vw,26px)}
+.big{font-family:var(--tech);font-size:clamp(2.5rem,11vw,3.5rem);line-height:1;letter-spacing:-.02em}
+.big small{font-family:var(--sans);font-size:1rem;letter-spacing:0;color:var(--bone-2);margin-left:8px}
+.when{font-size:.9375rem;color:var(--warm);margin-bottom:12px}
+.src{color:var(--warm);font-size:.875rem;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.soon{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.soon li{background:var(--ink-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--bone-2);font-size:.9375rem}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:flex;align-items:center;gap:8px;background:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;padding:8px 14px;font-size:.9375rem}
+.chip b{font-weight:700}
+.chip span.d{color:var(--warm);font-size:.8125rem}
+.note{color:var(--warm);font-size:.875rem;margin-top:14px}
+footer{border-top:1px solid var(--line);margin-top:56px;padding:26px clamp(16px,4vw,40px);color:var(--warm);font-size:.875rem;text-align:center;line-height:1.9}
+footer a{color:var(--bone-2)}
+@media (max-width:520px){.soon{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="/">허봇스<small>HEOBOTSS</small></a><a class="all" href="/">허봇스 홈</a></header>
+<main><section><h1>트레이너 본인 페이지</h1><p class="lead">수업 기록과 자격이 달마다 쌓이는, 트레이너 본인의 페이지입니다. 주소는 heobotss.com/t/본인아이디 입니다. 인스타그램 프로필 링크에 걸 수 있습니다.</p><p class="meta">명단은 공개하지 않습니다. 본인 주소는 허봇스에서 안내해 드립니다.</p></section></main>
+<footer>허봇스 · 대표 허재윤 · 사업자등록번호 636-04-03949 · gjwodbs77@gmail.com<br><a href="/policy/privacy.html">개인정보 처리방침</a></footer>
+</body>
+</html>
