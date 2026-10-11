@@ -769,7 +769,7 @@ body.drawer-on{overflow:hidden}
 }
 
 /* ══ 회원이 오는 길 — 트레이너 쪽 ══ */
-.path{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line);
+.path{display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:1px; background:var(--line);
   border:1px solid var(--line); margin-top:clamp(34px,4.4vw,54px); box-shadow:var(--lift)}
 .path li{background:var(--ink-2); padding:clamp(18px,2.2vw,26px) clamp(14px,1.6vw,22px);
   display:grid; gap:11px; align-content:start}
@@ -847,7 +847,7 @@ body.drawer-on{overflow:hidden}
 .cuts.nocut span{color:var(--paper-acc-2); border-color:rgba(156,156,156,.4); font-weight:700}
 .cuts.nocut span::after{display:none}
 /* 센터 깔때기는 넷이다 — 좁은 화면 규칙(1단·2단)보다 뒤에 오므로 여기서만 건다 */
-@media (min-width:901px){ .path.pale{grid-template-columns:repeat(4,1fr)} }
+@media (min-width:901px){ .path.pale{grid-template-columns:none} }
 
 /* ══ 프로그램 계기판 — 16개가 지금 어느 상태인가 ══ */
 .toolmeter{margin-top:clamp(26px,3.2vw,36px); border:1px solid var(--line);
@@ -1285,8 +1285,8 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 .skip:focus{left:16px; top:12px; z-index:99; background:var(--bone); color:var(--ink); padding:10px 18px}
 
 /* ══ 전체 점검 뒤 손질 — 맨 끝에 둔다(앞선 규칙을 덮어야 한다) 09-27 ══ */
-.path{grid-template-columns:repeat(4,1fr)}
-@media (max-width:1100px){ .path{grid-template-columns:repeat(2,1fr)} }
+.path{grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:1fr}
+@media (max-width:1100px){ .path{grid-auto-flow:row; grid-auto-columns:auto; grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){ .path{grid-template-columns:1fr} }
 @media (max-width:760px){ .vfree{grid-template-columns:none !important} .arrows{display:none !important} }
 .ghost{top:-.16em; opacity:.75}
@@ -2178,30 +2178,23 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <p class="lede"><b>비어 있는 칸 하나가 문의를 통째로 막습니다.</b> 그 칸을 찾아 채웁니다.</p>
     </div>
 
-    <ol class="path pale rv" aria-label="회원이 센터에 오기까지의 네 칸">
+    <ol class="path pale rv" aria-label="회원이 센터에 오기까지의 세 칸">
       <li>
         <span class="p-k">01</span>
         <span class="p-fig ok"><b>센터 진단표</b><i>이 칸을 맡는 프로그램 · 무료</i></span>
-        <strong>검색에서 발견</strong>
-        <span class="p-m">동네 이름 + 운동 이름 검색에서 <em>우리가 몇 위인지</em> 재 드립니다</span>
-        <span class="p-t on">센터 진단표 · 무료 플랜</span>
+        <strong>검색과 플레이스</strong>
+        <span class="p-m">전국 28,200곳과 나란히 놓고 <em>혼자서는 못 보는 13가지</em>를 잽니다 — 다시 온 분 비율, 블로그 글을 한 사람이 쓴 몫, 같은 구 상위 10% 선까지 남은 거리까지</span>
+        <span class="p-t on">센터 진단표 · 무료</span>
       </li>
       <li>
         <span class="p-k">02</span>
-        <span class="p-fig ok"><b>센터 진단표 — 플레이스 편</b><i>이 칸도 같은 프로그램이 맡습니다</i></span>
-        <strong>플레이스에서 확인</strong>
-        <span class="p-m"><em>열 칸 중 어디가 비었는지</em> 카드로 찍어 드립니다</span>
-        <span class="p-t on">센터 진단표 · 무료 플랜</span>
-      </li>
-      <li>
-        <span class="p-k">03</span>
         <span class="p-fig"><b>이웃·체험단 모집기</b><i>이 칸을 맡는 프로그램</i></span>
         <strong>리뷰에서 확신</strong>
         <span class="p-m">글 써 줄 이웃을 찾고, 체험단을 뽑아 <em>이행까지</em> 지켜봅니다</span>
         <span class="p-t on">이웃 모집기 · 체험단 모집기 · 유료 플랜</span>
       </li>
       <li class="blank">
-        <span class="p-k">04</span>
+        <span class="p-k">03</span>
         <span class="p-fig none"><b>유입경로 추적기</b><i>이 칸을 맡을 프로그램 · 준비 중</i></span>
         <strong>그제야 연락</strong>
         <span class="p-m">어느 칸이 상담을 만들었는지 갈라 셉니다</span>
@@ -2325,7 +2318,9 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <article class="tool" data-state="open" data-cat="trainer center">
         <span class="no">03</span>
         <h3>마케팅용 수업일지</h3>
-        <p class="gain">수업 끝나고 <b>30초</b>면 기록이 끝나고, 그 기록이 <b>그대로 글감</b>이 됩니다.</p>
+        <p class="gain">수업 끝나고 <b>30초</b>면 기록이 끝나고, 그 기록이 <b>그대로 글감</b>이 됩니다.
+          A4 수업지를 인쇄해 손으로 쓰고 <b>사진 한 장</b>을 찍으면 그대로 입력됩니다.
+          월요일 아침에는 <b>재등록 타이밍과 2주 넘게 안 온 회원 명단</b>이 옵니다.</p>
         <div class="meta"><span class="wh">웹</span><span class="st st-open">무료</span></div>
       </article>
       <article class="tool" data-state="soon" data-cat="trainer">
@@ -2775,7 +2770,8 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <p class="sub">결제하면 <b>그 자리에서 전부 열립니다.</b></p>
         <div class="meter"><span class="m-n">프로그램 <b>7</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="" title="01 센터 진단표"></i><i class="" title="02 트레이너 진단표"></i><i class="" title="03 마케팅용 수업일지"></i><i class="" title="04 내 블로그 순위판"></i><i class="" title="05 블로그 검수기"></i><i class="on" title="06 키워드 순위 추적기"></i><i class="" title="07 상위 글 어시스트"></i><i class="" title="08 블로그 체급 판정"></i><i class="on" title="09 유입경로 추적기"></i><i class="on" title="10 재등록·VIP 추적기"></i><i class="on" title="11 회원 리포트"></i><i class="on" title="12 이웃 모집기"></i><i class="on" title="13 체험단 모집기"></i><i class="on" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 7개를 엽니다</span></div>
         <ul>
-          <li><b>영상 강의 39편 + 교재 15권</b><span>4T 시스템·세일즈·운동지도·ATC 가이드와 그 교재</span></li>
+          <li><b>영상 강의 39편</b><span>4T 시스템 15편 · ATC 가이드 11편 · 모의고사 해설 9편 · 해부학 3편 · 창업 1편</span></li>
+          <li><b>4T 시스템 교재 15권</b><span>강의 15편과 하나씩 짝이 되는 전자책</span></li>
           <li><b>트레이너용 프로그램 전부</b><span>수업일지는 무료, 나머지 도구는 여는 대로 바로</span></li>
           <li><b>ATC LV1 4주 챌린지 · 모의고사 문제지</b><span>하루 과제 3개로 4주 · 문제지와 해설</span></li>
         </ul>
