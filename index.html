@@ -1154,9 +1154,8 @@ body.drawer-on{overflow:hidden}
 }
 
 /* ══ 요금 ══ */
-.plans{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--paper-line);
+.plans{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--paper-line);
   border:1px solid var(--paper-line); margin-top:clamp(38px,4.4vw,56px)}
-@media (max-width:1240px){ .plans{grid-template-columns:repeat(3,1fr)} }
 @media (max-width:860px){ .plans{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:600px){
   /* 세로로 다섯 칸을 쌓으면 화면이 2,500px 더 길어진다. 옆으로 넘겨 견주게 한다 */
@@ -2757,86 +2756,54 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
         <h3>무료</h3>
         <div class="price">0<small>원</small></div>
         <p class="yr">계속 무료입니다</p>
-        <p class="sub">먼저 받아 보고 정하셔도 됩니다.</p>
-        <div class="meter"><span class="m-n">프로그램 <b>2</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="on" title="01 센터 진단표"></i><i class="on" title="02 트레이너 진단표"></i><i class="" title="03 마케팅용 수업일지"></i><i class="" title="04 내 블로그 순위판"></i><i class="" title="05 블로그 검수기"></i><i class="" title="06 키워드 순위 추적기"></i><i class="" title="07 상위 글 어시스트"></i><i class="" title="08 블로그 체급 판정"></i><i class="" title="09 유입경로 추적기"></i><i class="" title="10 재등록·VIP 추적기"></i><i class="" title="11 회원 리포트"></i><i class="" title="12 이웃 모집기"></i><i class="" title="13 체험단 모집기"></i><i class="" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 2개를 엽니다</span></div>
+        <p class="sub">기간도, 카드 등록도 없습니다.</p>
+        <div class="meter"><span class="m-n">프로그램 <b>3</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="on" title="01 센터 진단표"></i><i class="on" title="02 트레이너 진단표"></i><i class="on" title="03 마케팅용 수업일지"></i><i class="" title="04 내 블로그 순위판"></i><i class="" title="05 블로그 검수기"></i><i class="" title="06 키워드 순위 추적기"></i><i class="" title="07 상위 글 어시스트"></i><i class="" title="08 블로그 체급 판정"></i><i class="" title="09 유입경로 추적기"></i><i class="" title="10 재등록·VIP 추적기"></i><i class="" title="11 회원 리포트"></i><i class="" title="12 이웃 모집기"></i><i class="" title="13 체험단 모집기"></i><i class="" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 3개를 엽니다</span></div>
         <ul>
-          <li><b>센터 진단표</b><span>동네에서 몇 번째인지 · 어디가 비었는지 카드 12장</span></li>
-          <li><b>트레이너 진단표</b><span>센터 안에서 내가 몇 번째인지 · 회원이 남긴 리뷰</span></li>
+          <li><b>센터 진단표 · 트레이너 진단표</b><span>동네에서 몇 번째인지 · 센터 안에서 내가 몇 번째인지</span></li>
+          <li><b>마케팅용 수업일지</b><span>수업 기록 30초 · 그대로 글감이 됩니다</span></li>
+          <li><b>무료 강의 6편 · 레슨 12편</b><span>로그인 없이 바로 보고 읽습니다</span></li>
         </ul>
         <div class="go"><a class="btn btn-solid" href="#" data-link="form">무료 진단 신청</a></div>
       </div>
 
-      <div class="plan">
-        <div class="flag"><span class="tag-soon">준비 중</span></div>
-        <p class="who">trainer</p>
-        <h3>트레이너</h3>
-        <div class="price">9,900<small>원 / 월</small></div>
-        <p class="yr">연 결제 시 두 달 면제</p>
-        <p class="sub">내 것부터 정리합니다.</p>
-        <div class="meter"><span class="m-n">프로그램 <b>4</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="" title="01 센터 진단표"></i><i class="" title="02 트레이너 진단표"></i><i class="on" title="03 마케팅용 수업일지"></i><i class="on" title="04 내 블로그 순위판"></i><i class="on" title="05 블로그 검수기"></i><i class="" title="06 키워드 순위 추적기"></i><i class="" title="07 상위 글 어시스트"></i><i class="on" title="08 블로그 체급 판정"></i><i class="" title="09 유입경로 추적기"></i><i class="" title="10 재등록·VIP 추적기"></i><i class="" title="11 회원 리포트"></i><i class="" title="12 이웃 모집기"></i><i class="" title="13 체험단 모집기"></i><i class="" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 4개를 엽니다</span></div>
-        <ul>
-          <li><b>내 블로그 순위판</b><span>쓴 글이 올랐는지 매주 눈으로 확인</span></li>
-          <li><b>마케팅용 수업일지</b><span>수업 기록 30초 · 그대로 글감이 됩니다</span></li>
-          <li><b>블로그 검수기 · 체급 판정</b><span>올리기 전에 잡고, 이길 검색어만 고릅니다</span></li>
-        </ul>
-        <div class="go"><a class="btn btn-line" href="#cta" data-tier="트레이너">열리면 알려주세요</a></div>
-      </div>
-
-      <div class="plan">
-        <div class="flag"><span class="tag-soon">준비 중</span></div>
-        <p class="who">trainer pro</p>
-        <h3>트레이너 프로</h3>
-        <div class="price">19,900<small>원 / 월</small></div>
-        <p class="yr">연 결제 시 두 달 면제</p>
-        <p class="sub">정리에서 끝내지 않고 <b>밖으로 나갑니다.</b></p>
-        <div class="meter"><span class="m-n">프로그램 <b>8</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="" title="01 센터 진단표"></i><i class="" title="02 트레이너 진단표"></i><i class="on" title="03 마케팅용 수업일지"></i><i class="on" title="04 내 블로그 순위판"></i><i class="on" title="05 블로그 검수기"></i><i class="on" title="06 키워드 순위 추적기"></i><i class="on" title="07 상위 글 어시스트"></i><i class="on" title="08 블로그 체급 판정"></i><i class="" title="09 유입경로 추적기"></i><i class="" title="10 재등록·VIP 추적기"></i><i class="" title="11 회원 리포트"></i><i class="" title="12 이웃 모집기"></i><i class="" title="13 체험단 모집기"></i><i class="on" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="on" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 8개를 엽니다</span></div>
-        <ul>
-          <li><b>트레이너 플랜 전부</b><span>여기에 아래가 더 붙습니다</span></li>
-          <li><b>키워드 순위 추적기 · 상위 글 어시스트</b><span>뭘 쓸지 정해 주고, 1위 글을 어떻게 넘길지 알려 줍니다</span></li>
-          <li><b>인스타 팔로우 관리기 · 영상 편집 자동화</b><span>하루 30분, 편집 세 시간을 돌려받습니다</span></li>
-        </ul>
-        <div class="go"><a class="btn btn-line" href="#cta" data-tier="트레이너 프로">열리면 알려주세요</a></div>
-      </div>
-
       <div class="plan hi">
+        <div class="flag"><span class="tag-soon">준비 중</span></div>
+        <p class="who">membership</p>
+        <h3>멤버십</h3>
+        <div class="price">9,900<small>원 / 월</small></div>
+        <p class="yr">연 99,000원 — 두 달 면제 (PT 2회 값)</p>
+        <p class="sub">결제하면 <b>그 자리에서 전부 열립니다.</b></p>
+        <div class="meter"><span class="m-n">프로그램 <b>7</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="" title="01 센터 진단표"></i><i class="" title="02 트레이너 진단표"></i><i class="" title="03 마케팅용 수업일지"></i><i class="" title="04 내 블로그 순위판"></i><i class="" title="05 블로그 검수기"></i><i class="on" title="06 키워드 순위 추적기"></i><i class="" title="07 상위 글 어시스트"></i><i class="" title="08 블로그 체급 판정"></i><i class="on" title="09 유입경로 추적기"></i><i class="on" title="10 재등록·VIP 추적기"></i><i class="on" title="11 회원 리포트"></i><i class="on" title="12 이웃 모집기"></i><i class="on" title="13 체험단 모집기"></i><i class="on" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 7개를 엽니다</span></div>
+        <ul>
+          <li><b>영상 강의 39편 + 교재 15권</b><span>4T 시스템·세일즈·운동지도·ATC 가이드와 그 교재</span></li>
+          <li><b>트레이너용 프로그램 전부</b><span>수업일지는 무료, 나머지 도구는 여는 대로 바로</span></li>
+          <li><b>ATC LV1 4주 챌린지 · 모의고사 문제지</b><span>하루 과제 3개로 4주 · 문제지와 해설</span></li>
+        </ul>
+        <div class="go"><a class="btn btn-line" href="#cta" data-tier="멤버십">열리면 알려주세요</a></div>
+      </div>
+
+      <div class="plan">
         <div class="flag"><span class="tag-soon">준비 중</span></div>
         <p class="who">center</p>
         <h3>센터</h3>
         <div class="price">29,900<small>원 / 월</small></div>
-        <p class="yr">연 결제 시 두 달 면제</p>
-        <p class="sub">매달 1일에 다시 재서 <b>달라진 것만</b> 보내드립니다.</p>
-        <div class="meter"><span class="m-n">프로그램 <b>11</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="on" title="01 센터 진단표"></i><i class="on" title="02 트레이너 진단표"></i><i class="on" title="03 마케팅용 수업일지"></i><i class="on" title="04 내 블로그 순위판"></i><i class="on" title="05 블로그 검수기"></i><i class="on" title="06 키워드 순위 추적기"></i><i class="on" title="07 상위 글 어시스트"></i><i class="on" title="08 블로그 체급 판정"></i><i class="on" title="09 유입경로 추적기"></i><i class="on" title="10 재등록·VIP 추적기"></i><i class="on" title="11 회원 리포트"></i><i class="" title="12 이웃 모집기"></i><i class="" title="13 체험단 모집기"></i><i class="" title="14 인스타 팔로우 관리기"></i><i class="" title="15 플레이스 신호 판독기"></i><i class="" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 11개를 엽니다</span></div>
+        <p class="yr">선생님까지 함께면 49,900원 / 월</p>
+        <p class="sub">대표가 보는 숫자와, <b>신입을 가르치는 일</b>을 나눠 맡습니다.</p>
         <ul>
-          <li><b>트레이너 플랜 전부 + 매달 재진단</b><span>매달 1일에 다시 재서 달라진 것만 보내드립니다</span></li>
-          <li><b>유입경로 추적기</b><span>어디서 문의가 오는지 숫자로 — 광고비를 어디 쓸지 정합니다</span></li>
-          <li><b>재등록·VIP 추적 · 회원 리포트</b><span>월말 계산이 사라지고, 연락할 회원 명단이 나옵니다</span></li>
+          <li><b>29,900 — 대표용</b><span>매달 다시 재는 센터 진단 · 유입경로 · 재등록·VIP · 회원 리포트</span></li>
+          <li><b>49,900 — 대표용 + 선생님 5명</b><span>선생님 다섯 분께 멤버십을 똑같이 열어 드리고, 신입 4주 커리큘럼이 붙습니다</span></li>
+          <li><b>누가 어디까지 봤는지</b><span>대표 화면에서 봅니다 — 수업 횟수·연속 주수만, 회원 이름·메모는 보이지 않습니다</span></li>
         </ul>
-        <div class="go"><a class="btn btn-line" href="#cta" data-tier="센터">열리면 알려주세요</a></div>
+        <div class="go"><a class="btn btn-line" href="#cta" data-tier="센터">센터 대표 먼저 알림 받기</a></div>
       </div>
-
-      <div class="plan">
-        <div class="flag"><span class="tag-soon">준비 중</span></div>
-        <p class="who">center pro</p>
-        <h3>센터 프로</h3>
-        <div class="price">49,900<small>원 / 월</small></div>
-        <p class="yr">연 결제 시 두 달 면제</p>
-        <p class="sub">손으로 하던 일을 프로그램에 넘깁니다.</p>
-        <div class="meter"><span class="m-n">프로그램 <b>16</b>개 <small>/ 16</small></span><span class="plan-bars" aria-hidden="true"><i class="on" title="01 센터 진단표"></i><i class="on" title="02 트레이너 진단표"></i><i class="on" title="03 마케팅용 수업일지"></i><i class="on" title="04 내 블로그 순위판"></i><i class="on" title="05 블로그 검수기"></i><i class="on" title="06 키워드 순위 추적기"></i><i class="on" title="07 상위 글 어시스트"></i><i class="on" title="08 블로그 체급 판정"></i><i class="on" title="09 유입경로 추적기"></i><i class="on" title="10 재등록·VIP 추적기"></i><i class="on" title="11 회원 리포트"></i><i class="on" title="12 이웃 모집기"></i><i class="on" title="13 체험단 모집기"></i><i class="on" title="14 인스타 팔로우 관리기"></i><i class="on" title="15 플레이스 신호 판독기"></i><i class="on" title="16 영상 편집 자동화"></i></span><span class="sr">프로그램 16개 중 16개를 엽니다</span></div>
-        <ul>
-          <li><b>센터 플랜 전부</b><span>여기에 아래가 더 붙습니다</span></li>
-          <li><b>이웃 모집기 · 체험단 모집기</b><span>리뷰가 멈춘 60%에서 빠져나옵니다 — 이행까지 지켜봅니다</span></li>
-          <li><b>플레이스 신호 판독기</b><span>월요일 아침에 지난주 달라진 것을 한 통으로</span></li>
-          <li><b>설치·설정 도와드립니다</b><span>손 대실 것 없이 켜 드립니다</span></li>
-        </ul>
-        <div class="go"><a class="btn btn-line" href="#cta" data-tier="센터 프로">열리면 알려주세요</a></div>
-      </div>
+    </div>
     </div>
 
     <div class="plan-alert rv">
-      <p><b>유료 플랜 네 가지는 준비 중입니다.</b> 열리는 날 가장 먼저 알려 드릴게요.</p>
+      <p><b>멤버십과 센터 플랜은 준비 중입니다.</b> 열리는 날 가장 먼저 알려 드릴게요.</p>
       <a class="btn btn-line btn-sm" href="#" data-link="news">알림 받기</a>
     </div>
-    <p class="plan-note">유료 플랜은 준비 중이며 프로그램이 더 열리면 값이 바뀔 수 있습니다. 부가세 포함.</p>
+    <p class="plan-note">멤버십은 준비 중이며, 프로그램이 더 열리면 값이 오를 수 있습니다. 가격은 모두 부가세 포함입니다.</p>
   </div>
 </section>
 
@@ -3132,7 +3099,7 @@ function endFor(key, slot){
       say: "ATC 트레이너 가이드부터 4T 마스터·해부학·모의고사·창업까지 12개월 동안 봅니다.",
       btns: [["올패스 결제", "", "pay/?p=vod-allpass"], ["이미 구매했다면 강의실", "", "vod/"]] },
     price: { label: "지금 시작", h: "지금 신청할 수 있는 것부터",
-      say: "유료 플랜은 준비 중입니다. 세미나 10기는 지금 신청할 수 있어요.",
+      say: "멤버십은 준비 중입니다. 세미나 10기는 지금 신청할 수 있어요.",
       btns: [["세미나 10기 신청", "", "pay/?p=seminar-10-early"], ["무료 진단 받기", "form", ""]],
       news: "플랜이 열리면 알림 받기" }
   };
