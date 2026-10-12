@@ -81,9 +81,38 @@ input[type=email].err{border-color:var(--bad)}
 .legal{margin-top:64px;font-size:.8125rem;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding:16px 0 32px}
 .legal a{color:var(--warm)}
 @media (max-width:420px){.facts li{flex-direction:column;gap:0}.facts b{text-align:left}}
+.taste{margin:30px 0 0;padding:20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px}
+.taste h2{margin:0 0 4px;font-size:1.0625rem}
+.taste-say{margin:0 0 16px;color:var(--warm);font-size:.875rem;line-height:1.7}
+.taste ol{margin:0;padding:0;list-style:none;counter-reset:t}
+.taste li{margin:0 0 18px;padding:0 0 18px;border-bottom:1px solid var(--line)}
+.taste li:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.taste .q{margin:0 0 10px;font-weight:700;line-height:1.6}
+.taste .q i{font-style:normal;color:var(--warm);margin-right:7px}
+.taste .opt{display:block;width:100%;text-align:left;margin:6px 0;padding:11px 14px;border:1px solid var(--line);
+  border-radius:10px;background:rgba(0,0,0,.25);color:var(--bone-2);font:inherit;font-size:.9375rem;cursor:pointer;line-height:1.5}
+.taste .opt:hover{border-color:var(--line-2)}
+.taste .opt.ok{border-color:#3C7A5A;color:#9BD9B8;background:rgba(60,122,90,.12)}
+.taste .opt.no{border-color:#7A4038;color:#E0A79B;background:rgba(122,64,56,.12)}
+.taste .opt[disabled]{cursor:default}
+.taste .why{margin:10px 0 0;padding:12px 14px;background:rgba(0,0,0,.3);border-radius:10px;
+  color:var(--bone-2);font-size:.875rem;line-height:1.75}
+.taste .why b{color:var(--bone)}
+.taste-end{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.taste-end b{display:block;font-size:1.0625rem}
+.taste-end p{margin:6px 0 0;color:var(--bone-2);font-size:.9375rem;line-height:1.7}
+#tasteJoin .auth{margin-top:16px;padding:18px;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px}
+#tasteJoin .auth h2{margin:0 0 4px;font-size:1rem}
+#tasteJoin .auth label{display:block;font-size:.9375rem;color:var(--bone-2);margin:12px 0 6px}
+#tasteJoin .auth input{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--bone);font:inherit;padding:12px 14px;outline:none}
+#tasteJoin .auth .btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:14px;border:0;border-radius:12px;padding:13px;background:#F2F2F2;color:#0A0A0A;font-weight:700;cursor:pointer}
+#tasteJoin .auth .note{font-size:.8125rem;color:var(--warm);line-height:1.7}
+#tasteJoin .auth .note a{color:var(--bone-2)}
+#tasteJoin .auth .msg{color:#E07A6B;font-size:.875rem}
 </style>
 </head>
 <body>
+<script>window.__TASTE__ = {"head": "20문항 중 3문항, 지금 풀어 보세요", "say": "정답과 해설이 바로 나옵니다. 나머지 17문항은 여는 날 열립니다.", "total": 20, "items": [{"q": "하부 승모근을 활성화하기 위해 알맞은 운동은?", "a": ["덤벨 슈러그", "리버스 펙덱플라이", "렛풀다운", "Y 레이즈"], "ok": 3, "why": "하부 승모근은 어깨뼈를 아래로 내리면서 모으는 일을 합니다. 팔을 Y 자로 들어 올리는 Y 레이즈가 그 움직임을 그대로 씁니다. 슈러그는 상부 승모근, 리버스 펙덱플라이는 중부 승모근과 후면 삼각근 쪽입니다."}, {"q": "근육 비대의 경우 권장되는 반복 범위는?", "a": ["1~3회 반복", "4~6회 반복", "8~12회 반복", "15~20회 반복"], "ok": 2, "why": "1~6회는 최대 근력, 15회 이상은 근지구력 쪽에 가깝습니다. 근비대는 보통 8~12회 구간에서 가장 효율이 좋습니다."}, {"q": "운동 동작 시 회원이 아프다고 말한다. 이때 알맞은 조치는?", "a": ["트레이너로서 스스로를 믿고 그대로 진행시킨다", "운동을 중단하고 마사지 또는 회복 시간을 가진다", "어떤 이유에서 아픈지 확인한 뒤 올바르게 다시 진행한다", "수업 후 병원에 가보라고 말씀드린다"], "ok": 2, "why": "그대로 진행하면 다칩니다. 바로 멈추고 끝내면 회원은 「이 운동은 나한테 안 맞는다」로 기억합니다. 어디가 왜 아픈지부터 확인하고, 자세나 무게를 고쳐 다시 가는 것이 현장에서 쓰는 순서입니다."}]};</script>
 <header class="top">
   <a class="logo" href="/">허봇스<small>HEOBOTSS</small></a>
   <a class="home" href="/">홈으로</a>
@@ -100,6 +129,17 @@ input[type=email].err{border-color:var(--bad)}
     <li><span>신청 기간</span><b>12월 14일(월) ~ 12월 20일(일)</b></li>
     <li><span>필요한 것</span><b>메일 주소 하나 · 카드 등록 없음</b></li>
   </ul>
+
+  <section class="taste" id="taste" hidden>
+    <h2 id="tasteHead"></h2>
+    <p class="taste-say" id="tasteSay"></p>
+    <ol id="tasteList"></ol>
+    <div class="taste-end" id="tasteEnd" hidden>
+      <b id="tasteScore"></b>
+      <p id="tasteNext"></p>
+      <div id="tasteJoin"></div>
+    </div>
+  </section>
 
   <form id="form" novalidate hidden>
     <div class="field">
@@ -131,6 +171,75 @@ input[type=email].err{border-color:var(--bad)}
 </main>
 
 <script src="/t.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/vod/auth.js"></script>
+<script>
+/* ── 맛보기 3문항 (2026-10-12) ──
+   여는 날이 오기 전에도 손을 움직여 보게 한다. 풀어 본 사람이 여는 날 돌아온다.
+   잠금 열쇠는 회원가입 하나다 — 코드도, 결제도 없다. */
+(function () {
+  "use strict";
+  var $ = function (q) { return document.querySelector(q); };
+  var 맛 = window.__TASTE__ || null;
+  if (!맛 || !맛.items || !맛.items.length) return;
+
+  var 푼수 = 0, 맞힌수 = 0;
+  $("#tasteHead").textContent = 맛.head;
+  $("#tasteSay").textContent = 맛.say;
+  $("#taste").hidden = false;
+
+  $("#tasteList").innerHTML = 맛.items.map(function (it, i) {
+    return '<li data-i="' + i + '"><p class="q"><i>' + (i + 1) + ".</i>" + it.q + "</p>" +
+      it.a.map(function (t, k) {
+        return '<button class="opt" type="button" data-k="' + k + '">' + t + "</button>";
+      }).join("") + '<div class="why" hidden></div></li>';
+  }).join("");
+
+  $("#tasteList").addEventListener("click", function (e) {
+    var b = e.target.closest(".opt"); if (!b) return;
+    var li = b.closest("li"), i = Number(li.dataset.i), it = 맛.items[i];
+    if (li.dataset.done) return;
+    li.dataset.done = "1";
+    푼수++; if (Number(b.dataset.k) === it.ok) 맞힌수++;
+    li.querySelectorAll(".opt").forEach(function (x) {
+      x.disabled = true;
+      if (Number(x.dataset.k) === it.ok) x.classList.add("ok");
+      else if (x === b) x.classList.add("no");
+    });
+    var why = li.querySelector(".why");
+    why.innerHTML = "<b>정답 " + "①②③④".charAt(it.ok) + "</b> — " + it.why;
+    why.hidden = false;
+    if (푼수 === 맛.items.length) 끝();
+  });
+
+  async function 끝() {
+    $("#tasteEnd").hidden = false;
+    $("#tasteScore").textContent = 맛.total + "문항 중 " + 맛.items.length + "문항 · " +
+      맞힌수 + "개 맞히셨습니다";
+    var 세션 = window.HB ? await window.HB.session() : null;
+    if (세션) {
+      $("#tasteNext").textContent = "여는 날 이 페이지에서 바로 열립니다. 나머지 " +
+        (맛.total - 맛.items.length) + "문항과 전체 해설, PDF가 함께 열립니다.";
+      return;
+    }
+    $("#tasteNext").textContent = "가입해 두시면 여는 날 이 페이지에서 바로 열립니다. 나머지 " +
+      (맛.total - 맛.items.length) + "문항과 전체 해설, PDF가 함께 열립니다. 결제는 없습니다.";
+    if (!window.HB) return;
+    window.HB.mountAuth($("#tasteJoin"), function () { location.reload(); },
+      { lead: "수업일지·강의실과 같은 계정입니다. 가입은 한 번이면 됩니다." });
+    var h = $("#tasteJoin").querySelector("h2");
+    if (h) h.textContent = "가입해 두기";
+  }
+
+  /* 로그인돼 있으면 메일 칸을 미리 채운다 — 같은 걸 두 번 적지 않게 */
+  (async function () {
+    var 세션 = window.HB ? await window.HB.session() : null;
+    if (세션 && 세션.user && 세션.user.email && $("#email") && !$("#email").value) {
+      $("#email").value = 세션.user.email;
+    }
+  })();
+})();
+</script>
 <script>
 (function () {
   "use strict";
