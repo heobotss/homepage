@@ -89,9 +89,10 @@
 // ── 설정 ─────────────────────────────────────────────────────────────────
 // 라이브 클라이언트 키 (09-29 카드사 심사용으로 전환). 시크릿 키는 여기 절대 안 둔다.
 const TOSS_CLIENT_KEY = "live_gck_DnyRpQWGrN9YnaaZQB7BVKwv1M9E";
-// 2026-10-01 대표님 결정: 토스가 다 끝날 때까지 결제를 받지 않는다.
-//   true 로 바꾸면 바로 열린다. 심사원에게 결제창을 보여 줘야 하면 주소 끝에 ?open=1
-const 판매개시 = false;
+// 2026-10-01 대표님 결정: 토스가 다 끝날 때까지 결제를 받지 않는다 → 2026-10-12 해제.
+//   토스 심사원이 ?open=1 없이 들어와 잠긴 화면을 보고 「결제창 연동을 확인할 수 없다」며 보완을 요구했다.
+//   10-12 대표님 결정: 심사가 끝날 때까지 전부 연다. false 로 되돌리면 다시 잠긴다.
+const 판매개시 = true;
 const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
 const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";   // 공개용 키 — 상품 읽기만 된다
 const FN = SB_URL + "/functions/v1/";
