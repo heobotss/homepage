@@ -40,7 +40,9 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 .kakao svg{width:19px;height:19px;flex:none}
 .kakao-note{font-size:.8125rem;color:var(--warm);margin:8px 2px 0;line-height:1.6}
 
-.or{display:flex;align-items:center;gap:12px;margin:26px 0 4px;color:var(--warm);font-size:.875rem}
+.or{display:flex;align-items:center;gap:12px;margin:30px 0 4px;color:var(--bone-2);font-size:.9375rem;font-weight:700}
+.or-why{font-size:.8125rem;color:var(--warm);margin:8px 2px 0;line-height:1.7}
+.or-why b{color:var(--bone-2)}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
 
 .fld{margin-top:18px}
@@ -87,11 +89,12 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     </button>
     <p class="kakao-note" id="kakaoNote">카카오에서 받는 것: 이메일. 전화번호·출생연도는 선택이고, 동의하지 않으셔도 가입됩니다.</p>
 
-    <p class="or">또는 이메일로</p>
+    <p class="or">이메일로 가입하기</p>
+    <p class="or-why">카카오를 안 쓰시면 이쪽입니다. <b>적어 주신 이메일 주소가 그대로 아이디가 되고</b>, 다음부터는 이메일과 비밀번호로 로그인합니다.</p>
 
     <form id="form" novalidate>
       <div class="fld">
-        <label for="email">이메일</label>
+        <label for="email">이메일 <span class="opt">아이디로 씁니다</span></label>
         <input type="email" id="email" autocomplete="email" placeholder="you@example.com" required>
       </div>
       <div class="fld">
