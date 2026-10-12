@@ -147,7 +147,7 @@ h2.sec{font-size:.8125rem;color:var(--warm);font-weight:400;letter-spacing:.04em
       document.getElementById("openT").textContent = o.title || o.what;
       document.getElementById("openP").textContent = 열림
         ? "지금 열려 있습니다. 메일 주소 하나면 바로 받으실 수 있습니다."
-        : 날 + "에 열립니다. 미리 들어가 보시면 맛보기 문항을 풀어 보실 수 있습니다.";
+        : 날 + "에 열립니다. 미리 들어가 두시면 여는 날 바로 받으실 수 있습니다.";   /* 맛보기 문항은 열람권마다 있을 수도 없을 수도 있다 — 여기서 단정하지 않는다 */
       document.getElementById("openNow").href = "../free/" + o.id + "/";
     })
     .catch(function () {});
