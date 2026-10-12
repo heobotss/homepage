@@ -95,6 +95,12 @@ footer a{color:var(--bone-2)}
     </label>
 
     <label>
+      <span class="k">출생연도 <span style="color:var(--warm);font-weight:400">(선택)</span></span>
+      <span class="why">연차·연령대에 맞는 자료를 골라 드리는 데만 씁니다. 생월·생일은 받지 않습니다.</span>
+      <input type="tel" id="year" maxlength="4" inputmode="numeric" placeholder="예: 1992">
+    </label>
+
+    <label>
       <span class="k">센터 이름 <span style="color:var(--warm);font-weight:400">(선택)</span></span>
       <span class="why">같은 센터 동료가 들어오면 「우리 센터」 비교가 열립니다. 비워 두셔도 됩니다.</span>
       <input type="text" id="center" maxlength="40" placeholder="○○ 피트니스">
@@ -131,7 +137,7 @@ footer a{color:var(--bone-2)}
 (function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
-  var sb = window.HB.sb, 내메일 = "";
+  var sb = window.HB.sb, 내메일 = "", 있던줄 = false;
 
   function 보여주기(값) {
     $("#email").value = 내메일;
@@ -139,6 +145,7 @@ footer a{color:var(--bone-2)}
     $("#instagram").value = 값.instagram || "";
     $("#center").value = 값.center || "";
     $("#phone").value = 값.phone || "";
+    $("#year").value = 값.birth_year || "";
     $("#night").checked = !!값.night_consent;
   }
 
@@ -173,7 +180,8 @@ footer a{color:var(--bone-2)}
     }
     try {
       var r = await sb.from("contacts")
-        .select("name,instagram,center,phone,night_consent").eq("email", 내메일).maybeSingle();
+        .select("name,instagram,center,phone,night_consent,birth_year").eq("email", 내메일).maybeSingle();
+      있던줄 = !!(r && r.data);
       보여주기(r.data || {});
       if (!$("#name").value && 별명) $("#name").value = 별명;   /* 한 번 덜 적으시게 */
     } catch (e) { 보여주기({}); if (별명) $("#name").value = 별명; }
@@ -193,9 +201,11 @@ footer a{color:var(--bone-2)}
       email: 내메일, name: 이름, instagram: 인스타 || null,
       center: $("#center").value.trim() || null, phone: 폰 || null,
       night_consent: $("#night").checked,
-      night_consent_at: $("#night").checked ? new Date().toISOString() : null,
-      first_via: "profile"
+      night_consent_at: $("#night").checked ? new Date().toISOString() : null
     };
+    var y = parseInt($("#year").value, 10);
+    줄.birth_year = (y >= 1930 && y <= new Date().getFullYear() - 13) ? y : null;
+    if (!있던줄) 줄.first_via = "profile";   /* 처음 들어온 길은 한 번만 적는다 — 카카오로 온 기록을 지우지 않게 */
     var r = await sb.from("contacts").upsert(줄, { onConflict: "email" }).select().maybeSingle();
     $("#save").disabled = false;
     if (r.error) {
