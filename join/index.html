@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>가입하기 — 허봇스</title>
+<meta name="description" content="카카오로 3초 만에, 또는 이메일로 가입합니다. 수업일지·강의실·멤버십이 같은 계정으로 열립니다.">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="canonical" href="https://heobotss.com/join/">
+<style>
+/* 가입 화면 (2026-10-12) — 카카오로 시작 / 이메일·비밀번호 두 갈래.
+   받는 것: 이메일(필수) · 비밀번호(이메일 가입만) · 출생연도(선택) · 전화번호(선택) · 광고 수신(선택) · 야간(선택)
+   ⚠ 화면에 적힌 항목·필수/선택은 개인정보처리방침과 카카오 동의항목 신청서와 **글자까지 같아야** 심사를 통과한다 */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../fonts/pretendard-900.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;
+  --line:#333333;--line-2:#3C3C3C;--blue:#4F86F7;--good:#5FBF8A;--bad:#E07A6B;--kakao:#FEE500;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.8;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--bone)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:"Bahnschrift",var(--sans);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top nav a{color:var(--warm);text-decoration:none;font-size:.9375rem}
+main{max-width:520px;margin:0 auto;padding:clamp(40px,8vw,72px) clamp(16px,4vw,28px) 56px}
+h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;margin:0}
+.lede{color:var(--bone-2);margin:14px 0 0;font-size:1rem}
+.lede b{color:var(--bone)}
+
+.kakao{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:28px;border:0;border-radius:12px;
+  padding:16px 20px;background:var(--kakao);color:#191600;font-weight:700;font-size:1.0625rem;cursor:pointer}
+.kakao:hover{filter:brightness(1.04)}
+.kakao:disabled{opacity:.5;cursor:not-allowed}
+.kakao svg{width:19px;height:19px;flex:none}
+.kakao-note{font-size:.8125rem;color:var(--warm);margin:8px 2px 0;line-height:1.6}
+
+.or{display:flex;align-items:center;gap:12px;margin:26px 0 4px;color:var(--warm);font-size:.875rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.fld{margin-top:18px}
+.fld label{display:block;font-size:.9375rem;color:var(--bone-2);margin-bottom:7px}
+.fld label .opt{color:var(--warm);font-size:.8125rem;margin-left:5px}
+.fld input{width:100%;background:var(--ink-2);border:1px solid var(--line-2);border-radius:10px;color:var(--bone);
+  font:inherit;font-size:1rem;padding:13px 15px;outline:none}
+.fld input:focus{border-color:var(--blue)}
+.fld input.err{border-color:var(--bad)}
+.fld .why{font-size:.8125rem;color:var(--warm);margin:6px 2px 0;line-height:1.6}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:.9375rem;color:var(--bone-2);margin-top:14px;line-height:1.6}
+.agree input{margin-top:5px;accent-color:var(--blue);width:16px;height:16px;flex:none}
+.agree a{color:var(--bone-2)}
+.agree small{display:block;color:var(--warm);font-size:.8125rem}
+.agree.sub{margin-left:26px}
+.agree input:disabled+span{opacity:.45}
+.note{font-size:.8125rem;color:var(--warm);margin:12px 0 0;line-height:1.7}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:22px;border:0;border-radius:12px;
+  padding:16px 20px;background:#F2F2F2;color:#0A0A0A;font-weight:700;font-size:1.0625rem;cursor:pointer}
+.btn:hover{background:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin:12px 0 0;font-size:.9375rem;color:var(--bad);min-height:1.5em}
+.done{margin-top:28px;padding:20px 0 0;border-top:1px solid var(--line)}
+.done b{display:block;font-size:1.15rem}
+.done p{margin:6px 0 0;color:var(--bone-2);font-size:.9375rem}
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:.875rem;color:var(--warm);line-height:1.8}
+.foot a{color:var(--bone-2)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
+  <nav><a href="../">홈으로</a></nav>
+</header>
+
+<main>
+  <h1>한 번 가입하면<br>전부 같은 계정입니다</h1>
+  <p class="lede">수업일지 · 강의실 · 진단 결과가 <b>하나로 묶입니다.</b> 지금은 무료로 쓰는 것만 열려 있습니다.</p>
+
+  <div id="box">
+    <button class="kakao" id="kakao" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#191600" d="M12 3C6.9 3 2.8 6.3 2.8 10.3c0 2.6 1.7 4.8 4.3 6.1l-1 3.7c-.1.3.2.6.5.4l4.4-2.9c.3 0 .7.1 1 .1 5.1 0 9.2-3.3 9.2-7.4S17.1 3 12 3z"/></svg>
+      카카오로 3초 만에 시작하기
+    </button>
+    <p class="kakao-note" id="kakaoNote">카카오에서 받는 것: 이메일. 전화번호·출생연도는 선택이고, 동의하지 않으셔도 가입됩니다.</p>
+
+    <p class="or">또는 이메일로</p>
+
+    <form id="form" novalidate>
+      <div class="fld">
+        <label for="email">이메일</label>
+        <input type="email" id="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="fld">
+        <label for="pw">비밀번호 <span class="opt">6자 이상</span></label>
+        <input type="password" id="pw" autocomplete="new-password" required>
+      </div>
+      <div class="fld">
+        <label for="year">출생연도 <span class="opt">선택</span></label>
+        <input type="number" id="year" inputmode="numeric" placeholder="예: 1992" min="1930" max="2013">
+        <p class="why">연차·연령대에 맞는 자료를 골라 드리는 데만 씁니다. 생월·생일은 받지 않습니다.</p>
+      </div>
+      <div class="fld">
+        <label for="phone">전화번호 <span class="opt">선택</span></label>
+        <input type="tel" id="phone" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel">
+        <p class="why">세미나 자리가 나면 문자로 먼저 알려 드립니다.</p>
+      </div>
+
+      <label class="agree"><input type="checkbox" id="agree"><span>[필수] <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>과 <a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>에 동의합니다<small>만 14세 이상만 가입할 수 있습니다</small></span></label>
+      <label class="agree"><input type="checkbox" id="mkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>받는 정보: 메일 주소 · 보관: 동의를 끊을 때까지 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+      <label class="agree sub"><input type="checkbox" id="night" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다<small>야간 수신 동의 · 문자·카카오톡 알림에 적용됩니다</small></span></label>
+      <p class="note">선택 항목에 동의하지 않으셔도 가입과 이용에 아무 제한이 없습니다.</p>
+
+      <button class="btn" id="go" type="submit">가입하기</button>
+      <p class="msg" id="msg" role="alert"></p>
+    </form>
+  </div>
+
+  <div class="done" id="done" hidden>
+    <b>가입됐습니다.</b>
+    <p id="doneMsg">이어서 이름과 인스타그램 아이디를 한 번만 채워 주세요. 성적표와 혜택이 그 정보로 찾아갑니다.</p>
+    <a class="btn" href="../me/" style="text-decoration:none;margin-top:16px">내 프로필 채우기</a>
+  </div>
+
+  <p class="foot">
+    이미 계정이 있으시면 <a href="../vod/">강의실</a>이나 <a href="https://app.heobotss.com/">수업일지</a>에서 같은 메일로 로그인하시면 됩니다.<br>
+    가입하면 받는 것: 수업일지 전부 · 100점 진단 · 센터 진단 · 무료 강의 6편 · 레슨 12편.
+  </p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../vod/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var sb = window.HB.sb;
+  var $ = function (s) { return document.querySelector(s); };
+  var CONSENT_VER = "2026-10-12";
+
+  /* 이미 로그인한 분이 들어오면 가입 화면 대신 안내 */
+  window.HB.session().then(function (s) {
+    if (!s) return;
+    $("#box").hidden = true; $("#done").hidden = false;
+    $("#done").querySelector("b").textContent = "이미 로그인돼 있습니다.";
+    $("#doneMsg").textContent = s.user.email + " 계정으로 들어와 계십니다.";
+  });
+
+  /* 전화번호 하이픈 */
+  $("#phone").addEventListener("input", function (e) {
+    var v = e.target.value.replace(/[^0-9]/g, "").slice(0, 11);
+    e.target.value = v.replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
+  });
+  $("#mkt").addEventListener("change", function () {
+    $("#night").disabled = !this.checked;
+    if (!this.checked) $("#night").checked = false;
+  });
+
+  /* 가입 때 받은 선택 항목을 연락처 창고에 적는다 (본인 줄만 쓸 수 있게 정책이 걸려 있다) */
+  function 창고에(email, via) {
+    var y = parseInt($("#year").value, 10);
+    var now = new Date().toISOString();
+    var 줄 = {
+      email: email.toLowerCase(), first_via: via, join_via: via,
+      birth_year: (y >= 1930 && y <= new Date().getFullYear() - 13) ? y : null,
+      phone: $("#phone").value.replace(/[^0-9]/g, "") || null,
+      ad_consent: $("#mkt").checked, ad_consent_at: $("#mkt").checked ? now : null,
+      night_consent: $("#mkt").checked && $("#night").checked,
+      night_consent_at: ($("#mkt").checked && $("#night").checked) ? now : null,
+      consent_ver: $("#mkt").checked ? CONSENT_VER : null
+    };
+    if (window.HBT) { var p = HBT.pack(); 줄.visitor = p.visitor;
+      if (p.utm) { 줄.utm_source = p.utm.source; 줄.utm_medium = p.utm.medium; 줄.utm_campaign = p.utm.campaign; 줄.utm_content = p.utm.content; } }
+    return sb.from("contacts").upsert(줄, { onConflict: "email" });
+  }
+
+  /* 카카오 — Supabase 의 카카오 공급자로 넘긴다. 돌아오면 이 화면으로 다시 온다 */
+  $("#kakao").addEventListener("click", async function () {
+    $("#kakao").disabled = true;
+    try { sessionStorage.setItem("hb-join", JSON.stringify({ ad: $("#mkt").checked, night: $("#night").checked, year: $("#year").value, phone: $("#phone").value })); } catch (e) {}
+    var r = await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.origin + "/join/?k=1" } });
+    if (r.error) {
+      $("#kakao").disabled = false;
+      $("#msg").textContent = "카카오 로그인이 아직 열리지 않았습니다. 이메일로 가입해 주세요.";
+    }
+  });
+
+  /* 카카오에서 돌아온 뒤 — 세션이 생겼으면 창고에 적고 프로필로 */
+  if (new URLSearchParams(location.search).get("k")) {
+    setTimeout(async function () {
+      var s = await window.HB.session();
+      if (!s) return;
+      try { var v = JSON.parse(sessionStorage.getItem("hb-join") || "{}");
+        if (v.ad) { $("#mkt").checked = true; $("#night").disabled = false; }
+        if (v.night) $("#night").checked = true;
+        if (v.year) $("#year").value = v.year;
+        if (v.phone) $("#phone").value = v.phone;
+      } catch (e) {}
+      await 창고에(s.user.email, "kakao");
+      location.href = "../me/";
+    }, 600);
+  }
+
+  /* 이메일 가입 */
+  $("#form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var msg = $("#msg"), email = $("#email").value.trim(), pw = $("#pw").value;
+    msg.textContent = ""; $("#email").classList.remove("err"); $("#pw").classList.remove("err");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { $("#email").classList.add("err"); msg.textContent = "이메일을 확인해 주세요."; return; }
+    if (pw.length < 6) { $("#pw").classList.add("err"); msg.textContent = "비밀번호는 6자 이상이어야 합니다."; return; }
+    if (!$("#agree").checked) { msg.textContent = "이용약관과 개인정보 처리방침에 동의해 주세요."; return; }
+    $("#go").disabled = true; $("#go").textContent = "가입하는 중…";
+    try {
+      var r = await sb.auth.signUp({ email: email, password: pw });
+      if (r.error) throw r.error;
+      if (!r.data.session) {
+        var r2 = await sb.auth.signInWithPassword({ email: email, password: pw });
+        if (r2.error) throw r2.error;
+      }
+      await 창고에(email, "email");
+      $("#box").hidden = true; $("#done").hidden = false;
+    } catch (err) {
+      msg.textContent = window.HB.kr(err);
+      $("#go").disabled = false; $("#go").textContent = "가입하기";
+    }
+  });
+})();
+</script>
+<script src="../t.js"></script>
+</body>
+</html>
