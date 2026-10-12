@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>스토리 인증 — 허봇스</title>
+<meta name="description" content="인스타그램 아이디 한 칸만 적어 두시면, 스토리에 @heobotss 를 멘션하실 때 이달의 성적표 카드를 보내 드립니다.">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="canonical" href="https://heobotss.com/story/">
+<style>
+/* 스토리 인증 (2026-10-12) — 받는 것은 인스타그램 아이디 하나뿐이다.
+   왜 따로 있나: 스토리에 @heobotss 를 멘션해도 아이디를 모르면 누구인지 찾을 수가 없다.
+   「필요한 순간에 그 항목만」 받는 화면 — 가입 때 다 묻지 않기로 한 10-12 결정에 따른 것. */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../fonts/pretendard-900.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;
+  --line:#333333;--line-2:#3C3C3C;--blue:#4F86F7;--good:#5FBF8A;--bad:#E07A6B;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.8;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--bone)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:"Bahnschrift",var(--sans);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top nav a{color:var(--warm);text-decoration:none;font-size:.9375rem}
+main{max-width:520px;margin:0 auto;padding:clamp(40px,8vw,72px) clamp(16px,4vw,28px) 56px}
+h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;margin:0}
+.lede{color:var(--bone-2);margin:14px 0 0;font-size:1rem}
+.lede b{color:var(--bone)}
+
+.how{margin:26px 0 0;padding:18px 20px;background:var(--ink-2);border:1px solid var(--line);border-radius:14px}
+.how ol{margin:0;padding-left:20px;color:var(--bone-2);font-size:.9375rem;line-height:1.9}
+.how b{color:var(--bone)}
+
+.fld{margin-top:26px}
+.fld label{display:block;font-size:.9375rem;color:var(--bone-2);margin-bottom:7px}
+.at{display:flex;align-items:stretch;border:1px solid var(--line-2);border-radius:10px;background:var(--ink-2);overflow:hidden}
+.at:focus-within{border-color:var(--blue)}
+.at span{display:flex;align-items:center;padding:0 2px 0 15px;color:var(--warm)}
+.at input{flex:1;background:transparent;border:0;color:var(--bone);font:inherit;font-size:1rem;padding:13px 15px 13px 4px;outline:none}
+.at.err{border-color:var(--bad)}
+.why{font-size:.8125rem;color:var(--warm);margin:7px 2px 0;line-height:1.6}
+
+.btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:22px;border:0;border-radius:12px;
+  padding:16px 20px;background:#F2F2F2;color:#0A0A0A;font-weight:700;font-size:1.0625rem;cursor:pointer}
+.btn:hover{background:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin:12px 0 0;font-size:.9375rem;color:var(--bad);min-height:1.5em}
+.msg.ok{color:var(--good)}
+
+/* 로그인 상자(공용)가 이 안에 그려진다 */
+.auth{margin-top:26px;padding:22px;background:var(--ink-2);border:1px solid var(--line);border-radius:14px}
+.auth h2{margin:0 0 4px;font-size:1.15rem}
+.auth label{display:block;font-size:.9375rem;color:var(--bone-2);margin:14px 0 7px}
+.auth input{width:100%;background:var(--ink-3);border:1px solid var(--line-2);border-radius:10px;color:var(--bone);
+  font:inherit;font-size:1rem;padding:13px 15px;outline:none}
+.auth input:focus{border-color:var(--blue)}
+.auth .note{font-size:.8125rem;color:var(--warm);line-height:1.7}
+.auth .note a{color:var(--bone-2)}
+.auth .msg{color:var(--bad)}
+
+.done{margin-top:26px;padding:20px;background:var(--ink-2);border:1px solid var(--line);border-radius:14px}
+.done b{display:block;font-size:1.1rem}
+.done p{margin:6px 0 0;color:var(--bone-2);font-size:.9375rem}
+.done a{color:var(--bone-2)}
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:.875rem;color:var(--warm);line-height:1.8}
+.foot a{color:var(--bone-2)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
+  <nav><span id="who" hidden></span> <a href="../">홈으로</a></nav>
+</header>
+
+<main>
+  <h1>스토리에 올리시면<br>성적표를 보내 드립니다</h1>
+  <p class="lede">인스타그램 아이디 <b>한 칸</b>만 적어 두시면 됩니다. 멘션이 오면 그 아이디로 찾아 카드를 드립니다.</p>
+
+  <div class="how">
+    <ol>
+      <li>여기에 <b>인스타그램 아이디</b>를 적어 둡니다 (한 번만)</li>
+      <li>스토리에 <b>@heobotss</b> 를 멘션해 올립니다</li>
+      <li>그 달의 <b>성적표 카드</b>를 만들어 보내 드립니다</li>
+    </ol>
+  </div>
+
+  <div id="authBox"></div>
+
+  <form id="form" hidden>
+    <div class="fld">
+      <label for="ig">인스타그램 아이디</label>
+      <div class="at" id="atWrap"><span>@</span><input type="text" id="ig" maxlength="30" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="my_id"></div>
+      <p class="why">@ 없이 적어 주세요. 비공개 계정이어도 괜찮습니다 — 멘션은 저희 쪽으로 옵니다.</p>
+    </div>
+    <p class="msg" id="msg"></p>
+    <button class="btn" id="go" type="submit">저장하기</button>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <b id="doneT">등록돼 있습니다</b>
+    <p id="doneD"></p>
+    <p style="margin-top:12px"><a href="#" id="edit">아이디 고치기</a> · <a href="../me/">내 정보 전체 보기</a></p>
+  </div>
+
+  <p class="foot">
+    적어 주신 아이디는 멘션한 분을 찾는 데만 씁니다. 자세한 내용은 <a href="../policy/privacy.html">개인정보 처리방침</a>에 있습니다.<br>
+    언제든 이 화면에서 고치거나, <a href="../me/">내 정보</a>에서 지울 수 있습니다.
+  </p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../vod/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var sb = window.HB.sb, 내메일 = "";
+
+  function 말(t, 좋음) {
+    var m = $("#msg"); m.textContent = t; m.className = "msg" + (t && 좋음 ? " ok" : "");
+  }
+
+  function 보여주기(아이디) {
+    if (아이디) {
+      $("#form").hidden = true;
+      $("#done").hidden = false;
+      $("#doneD").textContent = "@" + 아이디 + " 로 등록돼 있습니다. 이제 스토리에 @heobotss 를 멘션해 주세요.";
+      $("#ig").value = 아이디;
+    } else {
+      $("#done").hidden = true;
+      $("#form").hidden = false;
+    }
+  }
+
+  $("#edit").onclick = function (e) { e.preventDefault(); 보여주기(""); $("#ig").focus(); };
+
+  async function boot() {
+    var s = await window.HB.session();
+    if (!s) {
+      window.HB.mountAuth($("#authBox"), function () { location.reload(); },
+        { lead: "성적표를 보내 드리려면 계정이 하나 필요합니다. 수업일지·강의실과 같은 계정입니다." });
+      return;
+    }
+    내메일 = (s.user.email || "").toLowerCase();
+    $("#authBox").hidden = true;
+    $("#who").hidden = false;
+    $("#who").textContent = 내메일;
+    try {
+      var r = await sb.from("contacts").select("instagram").eq("email", 내메일).maybeSingle();
+      보여주기((r.data && r.data.instagram) || "");
+    } catch (e) { 보여주기(""); }
+  }
+
+  $("#form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var 아이디 = $("#ig").value.trim().replace(/^@/, "").toLowerCase();
+    $("#atWrap").classList.remove("err");
+    if (!/^[a-z0-9._]{2,30}$/.test(아이디)) {
+      $("#atWrap").classList.add("err");
+      말("인스타그램 아이디를 확인해 주세요. 영문·숫자·밑줄·점만 들어갑니다.", false);
+      return;
+    }
+    $("#go").disabled = true; 말("", true);
+    try {
+      /* 있는 줄은 아이디만 고치고, 없으면 새로 만든다 — 처음 들어온 길(first_via)은 건드리지 않는다 */
+      var r = await sb.from("contacts").upsert({ email: 내메일, instagram: 아이디 }, { onConflict: "email" });
+      if (r.error) throw r.error;
+      보여주기(아이디);
+      말("", true);
+    } catch (err) {
+      말(window.HB.kr(err) || "저장하지 못했습니다. 잠시 뒤 다시 해 주세요.", false);
+    }
+    $("#go").disabled = false;
+  });
+
+  boot();
+})();
+</script>
+<script src="../t.js"></script>
+</body>
+</html>
