@@ -161,6 +161,23 @@ input[type=email].err{border-color:var(--bad)}
   .buy .acts{width:100%}
   .buy .acts .btn{flex:1}
 }
+.gate-why{margin:14px 0 0;color:var(--bone-2);font-size:.9375rem;line-height:1.7}
+.gate-why b{color:var(--bone)}
+#gateBox .auth{margin-top:14px;padding:20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;text-align:left}
+#gateBox .auth h2{margin:0 0 4px;font-size:1.05rem}
+#gateBox .auth label{display:block;font-size:.9375rem;color:var(--bone-2);margin:12px 0 6px}
+#gateBox .auth input{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--bone);font:inherit;padding:12px 14px;outline:none}
+#gateBox .auth .btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:16px;border:0;border-radius:12px;padding:14px;background:#F2F2F2;color:#0A0A0A;font-weight:700;cursor:pointer}
+#gateBox .auth .note{font-size:.8125rem;color:var(--warm);line-height:1.7}
+#gateBox .auth .note a{color:var(--bone-2)}
+#gateBox .auth .msg{color:#E07A6B;font-size:.875rem}
+.freebox{margin:22px 0 0;padding:18px 20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;text-align:left}
+.freebox h2{margin:0 0 10px;font-size:.9375rem;color:var(--bone-2);font-weight:700}
+.freebox ul{margin:0;padding:0;list-style:none}
+.freebox li{margin:8px 0}
+.freebox a{color:var(--bone);text-decoration:none;display:block;line-height:1.6;font-size:.9375rem}
+.freebox a:hover{text-decoration:underline}
+.freebox small{display:block;color:var(--warm);font-size:.8125rem;margin-top:1px}
 </style>
 </head>
 <body>
@@ -216,10 +233,18 @@ input[type=email].err{border-color:var(--bad)}
     <div class="more" id="rMore" hidden>
       <p id="rMoreSay"></p>
       <button class="btn" id="goRest" type="button">나머지 70문항 이어서 풀기</button>
+      <div id="gate" hidden>
+        <p class="gate-why">가입하면 그 자리에서 이어집니다. <b>따로 보내 드리는 것도, 결제도 없습니다.</b></p>
+        <div id="gateBox"></div>
+      </div>
     </div>
 
     <p class="weak" id="rWeak"></p>
     <ul class="areas" id="rAreas"></ul>
+    <div class="freebox" id="freeBox" hidden>
+      <h2 id="freeHead"></h2>
+      <ul id="freeList"></ul>
+    </div>
 
     <div class="mail" id="mailBox">
       <h2 id="mailHead"></h2>
@@ -284,6 +309,8 @@ input[type=email].err{border-color:var(--bad)}
 </div>
 
 <script src="../t.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../vod/auth.js"></script>
 <script>
 (function () {
   "use strict";
@@ -409,6 +436,22 @@ input[type=email].err{border-color:var(--bad)}
     show("quiz"); ask();
   }
 
+  /* 영역이 비어 있을 때 바로 볼 수 있는 무료 레슨 — 12편에서 둘씩 (10-12) */
+  var FREE = {
+    lesson:     [[2, "「수고하셨습니다」로 수업을 끝내면 서른 번 뒤에 듣는 말"],
+                 [5, "「지난번 몇 kg 들었죠?」에 머뭇거리지 않는 10초"]],
+    experience: [[3, "세트 사이에 거울만 보면 회원이 재등록 앞에서 떠올리는 장면"],
+                 [12, "「요즘 운동 오기 싫어요」에 세트부터 늘리지 않는 법"]],
+    care:       [[6, "종이 일지로 재등록 타이밍을 놓치지 않는 월요일 5분"],
+                 [9, "수업 알림 한 통이 노쇼를 줄이는 구조"]],
+    self:       [[1, "이번 달 매출을 3초 안에 말하려면 세어야 할 숫자 3개"],
+                 [4, "회원 수가 작년과 같다면 어디서 새는지 찾는 순서"]],
+    skill:      [[7, "선배 수업을 따라 해도 회원이 안 남는 이유 3가지"],
+                 [8, "하부 승모근을 틀리면 회원 어깨가 그대로인 이유"]],
+    center:     [[11, "상위 노출은 되는데 문의가 없을 때 한 순서"],
+                 [10, "노쇼·당일 취소로 비는 수업을 메우는 스케줄 순서"]]
+  };
+
   // ── 결과 ──
   function won(n) { return n.toLocaleString("ko-KR"); }
   function finish() {
@@ -432,17 +475,34 @@ input[type=email].err{border-color:var(--bad)}
       $("#rLevel").innerHTML = say;
     }
     $("#rMore").hidden = full;
-    if (!full) $("#rMoreSay").innerHTML = "나머지 70문항에 <b>70점</b>이 더 걸려 있습니다. 다 풀면 레벨(LV1~LV4)까지 나옵니다.";
+    if (!full) {
+      $("#rMoreSay").innerHTML = "나머지 70문항에 <b>70점</b>이 더 걸려 있습니다. 다 풀면 레벨(LV1~LV4)과 영역별 점수가 나옵니다.";
+      문열기();
+    }
 
     var weak = result.areas.filter(function (a) { return a.key === result.weakest; })[0];
     $("#rWeak").innerHTML = weak
-      ? (full ? "" : "지금까지 ") + "가장 약한 영역은 <em>" + weak.name + "</em>입니다."
+      ? "선생님은 <em>" + weak.name + "</em> 영역이 가장 비어 있습니다."
       : (full ? "100문항" : "30문항") + " 전부 「예」입니다.";
+
+    /* 약한 영역을 지금 바로 메울 수 있는 무료 레슨 — 100문항을 다 푼 분께만 */
+    var 레슨 = (full && weak && FREE[weak.key]) || null;
+    $("#freeBox").hidden = !레슨;
+    if (레슨) {
+      $("#freeHead").textContent = weak.name + " 영역을 지금 메우는 무료 레슨";
+      $("#freeList").innerHTML = 레슨.map(function (v) {
+        return '<li><a href="../lesson/' + v[0] + '/">' + v[1] +
+               "<small>허봇스 레슨 " + v[0] + " · 무료</small></a></li>";
+      }).join("");
+    }
     $("#rAreas").innerHTML = result.areas.map(function (a) {
       return '<li class="' + (a.key === result.weakest ? "w" : "") + '">' + a.name + "</li>";
     }).join("");
 
-    $("#mailHead").innerHTML = full ? "전체 100문항 결과를<br>메일로 보내 드립니다" : "미리 보기 결과를<br>메일로 보내 드립니다";
+    /* 미리 보기 결과에서는 메일 칸을 띄우지 않는다 — 문이 둘이면 둘 다 안 넘는다.
+       그 자리는 회원가입 하나로 둔다 (10-12). 100문항을 다 푼 분께만 메일 칸을 드린다. */
+    $("#mailBox").hidden = !full;
+    $("#mailHead").innerHTML = "전체 100문항 결과를<br>메일로 보내 드립니다";
     $("#mailForm").hidden = false; $("#done").hidden = true;
     $("#send").disabled = false; $("#send").textContent = "결과 메일로 받기"; $("#msg").textContent = "";
 
@@ -474,6 +534,7 @@ input[type=email].err{border-color:var(--bad)}
       $("#recView").href = "../vod/" + result.rec.slice(result.rec.indexOf("-") + 1) + "/?from=score&no=" + no.join(",");
     } else $("#recView").href = "../#/vod";
 
+    if (window.HBT) HBT.event(full ? "quiz100" : "quiz30", "score");
     show("result");
   }
 
@@ -515,6 +576,35 @@ input[type=email].err{border-color:var(--bad)}
       });
   }
 
+  /* ── 회원가입 문 ──
+     로그인돼 있으면 문이 없다. 없으면 그 자리에서 가입하고 바로 이어 푼다. */
+  var 로그인됨 = false, 문그렸나 = false;
+
+  async function 계정확인() {
+    if (!window.HB) return false;
+    try { 로그인됨 = !!(await window.HB.session()); } catch (e) { 로그인됨 = false; }
+    return 로그인됨;
+  }
+
+  function 문열기() {
+    if (로그인됨) {
+      $("#gate").hidden = true;
+      $("#goRest").hidden = false;
+      return;
+    }
+    $("#goRest").hidden = true;
+    $("#gate").hidden = false;
+    if (문그렸나 || !window.HB) return;
+    문그렸나 = true;
+    window.HB.mountAuth($("#gateBox"), function () {
+      로그인됨 = true;
+      if (window.HBT) HBT.event("join", "score");
+      $("#gate").hidden = true;
+      $("#goRest").hidden = false;
+      begin("rest");
+    }, { lead: "가입하면 나머지 70문항이 바로 열립니다. 수업일지·강의실과 같은 계정입니다." });
+  }
+
   // ── 연결 ──
   var started = false;
   function markStart() { if (!started && window.HBT) { started = true; HBT.event("start", "score"); } }   // 주간 표: 진단 시작 → 연락처
@@ -543,9 +633,14 @@ input[type=email].err{border-color:var(--bad)}
     else if (k === "arrowleft" || k === "backspace") { e.preventDefault(); back(); }
   });
   $("#mailForm").addEventListener("submit", submit);
+  (async function () {
+    var ss = window.HB ? await window.HB.session() : null;
+    if (ss && ss.user && ss.user.email && !$("#email").value) $("#email").value = ss.user.email;
+  })();
   chips($("#years"), YEARS, "years");
   chips($("#center"), CENTERS, "center");
 
+  계정확인();
   fetch("questions.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) {
     D = d; QS = d.questions;
     NP = QS.filter(function (q) { return q.preview; }).length;
