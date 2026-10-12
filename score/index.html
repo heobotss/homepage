@@ -161,6 +161,9 @@ input[type=email].err{border-color:var(--bad)}
   .buy .acts{width:100%}
   .buy .acts .btn{flex:1}
 }
+.gate-ad{display:flex;gap:10px;align-items:flex-start;margin:14px 2px 0;text-align:left;font-size:.875rem;color:var(--bone-2);line-height:1.6}
+.gate-ad input{margin-top:4px;accent-color:#4F86F7;width:16px;height:16px;flex:none}
+.gate-ad small{display:block;color:var(--warm);font-size:.8125rem}
 .gate-why{margin:14px 0 0;color:var(--bone-2);font-size:.9375rem;line-height:1.7}
 .gate-why b{color:var(--bone)}
 #gateBox .auth{margin-top:14px;padding:20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;text-align:left}
@@ -236,6 +239,7 @@ input[type=email].err{border-color:var(--bad)}
       <div id="gate" hidden>
         <p class="gate-why">가입하면 그 자리에서 이어집니다. <b>따로 보내 드리는 것도, 결제도 없습니다.</b></p>
         <div id="gateBox"></div>
+        <label class="agree gate-ad"><input type="checkbox" id="gateMkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>체크하지 않으셔도 가입과 70문항에 아무 제한이 없습니다 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
       </div>
     </div>
 
@@ -596,9 +600,19 @@ input[type=email].err{border-color:var(--bad)}
     $("#gate").hidden = false;
     if (문그렸나 || !window.HB) return;
     문그렸나 = true;
-    window.HB.mountAuth($("#gateBox"), function () {
+    window.HB.mountAuth($("#gateBox"), function (ses) {
       로그인됨 = true;
       if (window.HBT) HBT.event("join", "score");
+      /* 광고 수신은 가입과 별개다 — 체크하신 분만 적는다 (정보통신망법 50조) */
+      if ($("#gateMkt").checked && window.HB) {
+        try {
+          var 지금 = new Date().toISOString();
+          window.HB.sb.from("contacts").upsert(
+            { email: (ses && ses.user && ses.user.email || "").toLowerCase(),
+              ad_consent: true, ad_consent_at: 지금, consent_ver: "2026-10-12" },
+            { onConflict: "email" }).then(function () {}, function () {});
+        } catch (e) {}
+      }
       $("#gate").hidden = true;
       $("#goRest").hidden = false;
       begin("rest");
