@@ -603,6 +603,9 @@ input[type=email].err{border-color:var(--bad)}
       $("#goRest").hidden = false;
       begin("rest");
     }, { lead: "가입하면 나머지 70문항이 바로 열립니다. 수업일지·강의실과 같은 계정입니다." });
+    /* 공용 상자는 「로그인」으로 뜬다 — 여기서는 가입하러 온 분이 대부분이라 제목만 바꾼다 */
+    var 제목 = $("#gateBox").querySelector("h2");
+    if (제목) 제목.textContent = "가입하고 이어서 풀기";
   }
 
   // ── 연결 ──
