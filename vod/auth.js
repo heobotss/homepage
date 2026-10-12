@@ -24,6 +24,14 @@
       '<section class="card auth">' +
       '<h2 id="aT">로그인</h2>' +
       '<p class="note" id="aS" style="margin:-4px 0 10px">' + esc(opts.lead || "구매한 강의는 이 계정에서 봅니다. 수업일지를 쓰신다면 같은 계정으로 로그인하세요.") + '</p>' +
+      '<button type="button" id="aKk" style="display:flex;align-items:center;justify-content:center;gap:8px;' +
+      'width:100%;margin:0 0 6px;border:0;border-radius:12px;padding:15px 18px;background:#FEE500;color:#191600;' +
+      'font-weight:700;font-size:1.0625rem;cursor:pointer;font-family:inherit">' +
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="#191600" aria-hidden="true">' +
+      '<path d="M12 3C6.9 3 2.8 6.3 2.8 10.4c0 2.6 1.7 4.9 4.3 6.2l-1.1 4 4.6-2.5c.5.1 1 .1 1.4.1 5.1 0 9.2-3.3 9.2-7.8S17.1 3 12 3z"/>' +
+      '</svg>카카오로 계속하기</button>' +
+      '<p class="note" style="margin:0 0 16px;font-size:.8125rem">처음이셔도 카카오로 바로 시작됩니다. 아래는 이메일로 하는 방법입니다.<br>' +
+      '카카오로 시작하시면 <a href="/policy/terms.html">이용약관</a>과 <a href="/policy/privacy.html">개인정보 처리방침</a>에 동의하신 것으로 봅니다.</p>' +
       '<div id="aName" hidden><label for="aNm">이름</label><input type="text" id="aNm" autocomplete="name" placeholder="실명"></div>' +
       '<label for="aEm">이메일</label><input type="email" id="aEm" autocomplete="email" placeholder="you@example.com">' +
       '<div id="aPwWrap"><label for="aPw">비밀번호</label><input type="password" id="aPw" autocomplete="current-password" placeholder="6자 이상"></div>' +
@@ -44,6 +52,11 @@
       $("aPw").setAttribute("autocomplete", m === "signup" ? "new-password" : "current-password");
       $("aMsg").textContent = "";
     }
+    $("aKk").onclick = async function () {
+      $("aKk").disabled = true;
+      var r = await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.href } });
+      if (r.error) { $("aKk").disabled = false; $("aMsg").textContent = "카카오 로그인을 열지 못했습니다. 이메일로 해 주세요."; }
+    };
     $("aSw").onclick = function (e) { e.preventDefault(); set(mode === "login" ? "signup" : "login"); };
     $("aFg").onclick = function (e) { e.preventDefault(); set("forgot"); };
     $("aPw").addEventListener("keydown", function (e) { if (e.key === "Enter") $("aGo").click(); });
@@ -74,6 +87,21 @@
     };
     set(opts.mode || "login");
   }
+
+  /* 로그인·가입이 끝나면 연락처 창고에 한 줄이 있는지 보고, 없으면 만든다.
+     가입 화면을 거치지 않고 강의실·결제 화면에서 바로 시작한 분도 명단에 남게 하기 위한 것. */
+  sb.auth.onAuthStateChange(function (ev, s) {
+    if (ev !== "SIGNED_IN" || !s || !s.user || !s.user.email) return;
+    var 메일 = s.user.email.toLowerCase();
+    var 길 = (s.user.app_metadata && s.user.app_metadata.provider) || "email";
+    setTimeout(async function () {
+      try {
+        var r = await sb.from("contacts").select("email").eq("email", 메일).maybeSingle();
+        if (r.data) return;                       /* 이미 있으면 손대지 않는다 */
+        await sb.from("contacts").insert({ email: 메일, first_via: 길, join_via: 길 });
+      } catch (e) {}
+    }, 0);
+  });
 
   /* 메일의 재설정 링크로 들어오면 새 비밀번호를 받는다 */
   sb.auth.onAuthStateChange(function (ev) {

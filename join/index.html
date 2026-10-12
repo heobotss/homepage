@@ -183,6 +183,7 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
   /* 카카오 — Supabase 의 카카오 공급자로 넘긴다. 돌아오면 이 화면으로 다시 온다 */
   $("#kakao").addEventListener("click", async function () {
     $("#kakao").disabled = true;
+    try { sessionStorage.setItem("hb-next", new URLSearchParams(location.search).get("next") || "../"); } catch (e) {}
     try { sessionStorage.setItem("hb-join", JSON.stringify({ ad: $("#mkt").checked, night: $("#night").checked, year: $("#year").value, phone: $("#phone").value })); } catch (e) {}
     var r = await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.origin + "/join/?k=1" } });
     if (r.error) {
@@ -203,7 +204,11 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
         if (v.phone) $("#phone").value = v.phone;
       } catch (e) {}
       await 창고에(s.user.email, "kakao");
-      location.href = "../me/";
+      /* 프로필 화면으로 끌고 가지 않는다 — 「또 가입하라는 건가」 싶어진다.
+         원래 가려던 곳(?next=)이 있으면 거기로, 없으면 첫 화면으로 보낸다. */
+      var 갈곳 = "../";
+      try { 갈곳 = sessionStorage.getItem("hb-next") || "../"; sessionStorage.removeItem("hb-next"); } catch (e) {}
+      location.href = 갈곳;
     }, 600);
   }
 
