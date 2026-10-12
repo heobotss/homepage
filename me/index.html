@@ -36,6 +36,8 @@ label{display:block;margin-top:18px;font-size:.9375rem}
 label:first-of-type{margin-top:0}
 label .k{display:block;margin-bottom:6px}
 label .why{display:block;color:var(--warm);font-size:.8125rem;line-height:1.6;margin-bottom:8px}
+.mine{display:flex;align-items:center;gap:12px;margin:0 0 18px;color:var(--bone-2);font-size:.9375rem}
+.mine img{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--ink-3)}
 input[type=text],input[type=email],input[type=tel]{width:100%;background:var(--ink-3);border:1px solid var(--line-2);border-radius:10px;
   color:var(--bone);font:inherit;padding:12px 14px;min-height:48px}
 input:disabled{color:var(--warm)}
@@ -67,6 +69,11 @@ footer a{color:var(--bone-2)}
   <p class="lead">한 번만 채워 두면 됩니다. 성적표와 혜택이 이 정보로 찾아갑니다.</p>
 
   <div id="authBox"></div>
+
+  <div class="mine" id="mine" hidden>
+    <img id="pic" alt="" hidden>
+    <span id="nick"></span>
+  </div>
 
   <form class="card" id="form" hidden>
     <label>
@@ -155,11 +162,21 @@ footer a{color:var(--bone-2)}
     $("#logout").onclick = async function (e) {
       e.preventDefault(); await sb.auth.signOut(); location.reload();
     };
+    /* 카카오로 들어오신 분 — 받은 이름·사진을 여기에 보여 준다 (동의하신 항목만 온다) */
+    var m = s.user.user_metadata || {};
+    var 별명 = m.name || m.full_name || m.nickname || "";
+    var 사진 = m.avatar_url || m.picture || "";
+    if (별명 || 사진) {
+      $("#mine").hidden = false;
+      $("#nick").textContent = 별명 ? 별명 + " 선생님" : "";
+      if (사진) { $("#pic").src = 사진; $("#pic").hidden = false; }
+    }
     try {
       var r = await sb.from("contacts")
         .select("name,instagram,center,phone,night_consent").eq("email", 내메일).maybeSingle();
       보여주기(r.data || {});
-    } catch (e) { 보여주기({}); }
+      if (!$("#name").value && 별명) $("#name").value = 별명;   /* 한 번 덜 적으시게 */
+    } catch (e) { 보여주기({}); if (별명) $("#name").value = 별명; }
   }
 
   $("#form").addEventListener("submit", async function (e) {
