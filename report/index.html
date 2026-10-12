@@ -151,7 +151,9 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     if (!v) { $("#state").hidden = true; $("#form").hidden = false; return; }
     $("#form").hidden = true;
     $("#state").hidden = false;
-    var 언제 = (v.created_at || "").slice(0, 16).replace("T", " ");
+    var 언제 = "";                                   /* 창고는 세계 시각으로 적는다 — 우리 시각으로 바꿔 보여 준다 */
+    try { 언제 = new Date(v.created_at).toLocaleString("ko-KR", { month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" }); }
+    catch (e) { 언제 = (v.created_at || "").slice(0, 16).replace("T", " "); }
     if (v.status === "sent") {
       $("#stT").textContent = "보내 드렸습니다";
       $("#stD").textContent = 내메일 + " 로 카드를 보냈습니다. 안 보이면 스팸함도 한 번 봐 주세요.";
