@@ -51,6 +51,8 @@ td.dim{color:var(--warm)}
 .tag.failed{color:var(--bad);border-color:#4A2E2A}
 .tag.work{color:var(--amber);border-color:#4A3E24}
 .bars{padding:14px 16px}
+.note-sm{margin:10px 2px 0;color:var(--warm);font-size:.8125rem;line-height:1.7}
+.note-sm b{color:var(--bone-2)}
 .bar{display:grid;grid-template-columns:minmax(90px,170px) 1fr auto;align-items:center;gap:10px;margin:6px 0;font-size:.875rem}
 .bar i{display:block;height:8px;border-radius:999px;background:var(--blue);opacity:.75;min-width:3px}
 .bar u{text-decoration:none;color:var(--warm);font-size:.8125rem}
@@ -80,6 +82,17 @@ td.dim{color:var(--warm)}
 
   <div id="board" hidden>
     <div class="nums" id="nums"></div>
+
+    <section>
+      <h2>진단 깔때기 <small>최근 30일 · 어디서 빠지는지</small></h2>
+      <div class="box bars" id="quizBox"></div>
+    </section>
+
+    <section>
+      <h2>수업일지 앱 <small>들어온 뒤 실제로 쓰는가</small></h2>
+      <div class="nums" id="appNums" style="margin-bottom:0"></div>
+      <p class="note-sm">「14일 안 자리잡음」은 <b>가입 14일 안에 기록 5회</b>를 채운 분입니다. 기록에는 적은 시각이 없어서 보수적으로 셉니다 — 실제는 이보다 많을 수 있습니다. 앱이 처음에 넣어 주는 예시 회원(김민수)은 빼고 셉니다.</p>
+    </section>
 
     <section>
       <h2>신청 처리 <small>내 이름 리포트 · 센터 진단표</small></h2>
@@ -177,6 +190,19 @@ td.dim{color:var(--warm)}
                '<td class="dim hide">' + esc(v.utm_content || "") + "</td>" +
                "<td>" + (v.ad_consent ? "○" : "") + "</td></tr>";
       }), "아직 명단이 비어 있습니다.");
+
+    /* 진단 깔때기 — 들어온 순서 그대로 둔다. 큰 수 순으로 정렬하면 어디서 빠지는지가 안 보인다 */
+    var 깔 = d.quiz || {};
+    var 차례 = ["진단 시작", "30문항 완주", "그 자리 가입", "100문항 완주"];
+    $("#quizBox").innerHTML = 막대(차례.map(function (k) { return { 이름: k, 수: 깔[k] || 0 }; }),
+      "이름", "수", "최근 30일 기록이 없습니다.");
+
+    var 앱 = d.app || {};
+    $("#appNums").innerHTML = ["앱 쓰는 사람", "회원 등록", "기록 5회 이상", "14일 안 자리잡음"]
+      .map(function (k, i) {
+        return '<div class="num ' + (i === 3 ? "hi" : "") + '"><b>' +
+               (앱[k] == null ? "–" : 앱[k]) + "</b><span>" + k + "</span></div>";
+      }).join("");
 
     $("#viaBox").innerHTML    = 막대(d.via, "경로", "수", "아직 없습니다.");
     $("#funnelBox").innerHTML = 막대(d.funnel, "어디서", "수", "최근 30일 기록이 없습니다.");
