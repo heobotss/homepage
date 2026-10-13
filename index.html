@@ -627,6 +627,7 @@ body.drawer-on{overflow:hidden}
 .arrows button:disabled{opacity:.3; cursor:default}
 .paper .arrows button{background:rgba(0,0,0,.02); border-color:var(--paper-line); color:var(--paper-ink)}
 .paper .arrows button:hover:not(:disabled){border-color:var(--paper-acc); color:var(--paper-acc-2)}
+.tcard .tshot{display:block;width:100%;margin:14px 0 0;border:1px solid var(--line);border-radius:10px}
 .hrail{
   display:grid; grid-auto-flow:column; gap:16px; overflow-x:auto; overscroll-behavior-x:contain;
   scroll-snap-type:x proximity; padding-bottom:20px; scrollbar-width:thin;
@@ -2134,7 +2135,8 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
       <article class="tcard">
         <span class="k">01</span>
         <h3>내 블로그 순위판</h3>
-        <p>내 글이 어느 키워드에서 몇 위인지 매주 재서 보여 줍니다. 세미나 수강생이 쓰는 중이고, 일반 공개는 열리면 메일로 알려 드립니다.</p>
+        <p>내 글이 어느 키워드에서 몇 위인지 매주 재서 보여 줍니다. 세미나 수강생이 쓰는 중이고, 일반 공개는 열리면 <a href="news/">메일로 알려 드립니다</a>.</p>
+        <img class="tshot" src="img/rank-board.webp" alt="순위판 화면 — 추적 키워드·새 글 순위·성장 그래프" loading="lazy" decoding="async">
         <div class="st st-soon">수강생 사용 중 · 웹</div>
       </article>
       <article class="tcard">
