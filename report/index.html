@@ -166,7 +166,12 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
       $("#again").hidden = false;
     } else {
       $("#stT").textContent = "만들고 있습니다";
-      $("#stD").textContent = "보통 5분 안에 " + 내메일 + " 로 갑니다. 이 화면을 닫으셔도 됩니다.";
+      /* 한 건에 2~4분이 걸린다. 몰리면 순서를 기다린다 — 기다린 시간을 보고 말을 바꾼다 */
+      var 지난분 = 0;
+      try { 지난분 = Math.floor((Date.now() - Date.parse(v.created_at)) / 60000); } catch (e) {}
+      $("#stD").textContent = 지난분 > 30
+        ? "신청이 몰려 순서를 기다리고 있습니다. " + 내메일 + " 로 늦어도 내일 아침까지 보내 드립니다."
+        : "보통 5분 안에 " + 내메일 + " 로 갑니다. 신청이 몰리면 한두 시간 걸릴 수 있습니다. 이 화면을 닫으셔도 됩니다.";
       $("#stS").textContent = "신청 " + 언제;
       $("#again").hidden = true;
     }
