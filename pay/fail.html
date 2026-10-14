@@ -27,5 +27,7 @@ if (message) document.getElementById("msg").textContent = message + (code ? " ("
 try { const o = JSON.parse(sessionStorage.getItem("hb_order") || "null"); } catch {}
 fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) document.getElementById("legal").innerHTML = t; }).catch(() => {});
 </script>
+<script src="../t.js"></script>
+<script>try { window.HBT && HBT.event("pay_fail", "pay"); } catch (e) {}</script>
 </body>
 </html>

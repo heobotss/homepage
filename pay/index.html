@@ -289,6 +289,7 @@ $("#payBtn").addEventListener("click", async () => {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad("email", "이메일을 확인해 주세요");
   if (!agree) { $("#msg").textContent = "환불 규정에 동의해 주세요"; return; }
 
+  try { window.HBT && HBT.event("pay_click", "pay:" + product.id); } catch (e) {}
   $("#payBtn").disabled = true; $("#payBtn").innerHTML = '<span class="spin"></span>여는 중';
   try {
     if (product.kind === "sub") {

@@ -1372,6 +1372,19 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
 .rs-open.done{display:none}
 .me-name{margin:0 0 10px; color:var(--bone-2); font-size:15px}
 .me-name b{color:var(--bone); font-size:17px}
+
+/* ══ 10-14 글자 위계 (진단 A12) — 900은 H1 하나, 작은 글자는 모바일에서 14px 아래로 안 내려간다,
+   숫자는 Bahnschrift·글은 Pretendard. 기존 규칙을 고치지 않고 여기서 덮어쓴다 ══ */
+h2,h3,.h-lg,.h-md,.lane h2,.door h3,.tcard h3,.tool h3,.plan h3,.fact h3{font-weight:700!important; letter-spacing:-.03em!important}
+.h-xl{font-weight:900; letter-spacing:-.03em; line-height:1.15}
+.h-lg,.h-md{line-height:1.2}
+.fact .n{font-family:var(--tech)!important}
+.btn-sm{min-height:44px; padding-top:11px; padding-bottom:11px}
+@media (max-width:720px){
+  .label,.rs-a,.rs-d,.rs-sub,.lane-k,.lane-d,.lane-pr span,.vat,.note,.why,.st,.meta,.legal,.faq dd,.faq dt,
+  .sub-notice,.me-name,.hero-sign,.lede,.gain,.tcard p,.tool p,.plan li span,.v-gain,.g-chip,.rv-who,small{font-size:14px!important; line-height:1.65}
+  body{font-size:16px}
+}
 </style>
 
 <a class="skip" href="#main">본문으로 건너뛰기</a>

@@ -162,6 +162,13 @@ input[type=email].err{border-color:var(--bad)}
 
   <div class="closed" id="closed" >
     <b id="closedT">11월 16일(월)에 열립니다.</b>
+    <form id="earlyForm" novalidate hidden style="margin-top:14px">
+      <label for="earlyEmail" style="display:block;font-size:.9375rem;color:var(--bone-2);margin-bottom:6px">열리는 날 먼저 알려 드릴 메일</label>
+      <input type="email" id="earlyEmail" placeholder="you@example.com" autocomplete="email" style="width:100%;background:var(--ink-2);border:1px solid var(--line-2);border-radius:10px;color:var(--bone);font:inherit;padding:13px 15px;outline:none">
+      <label class="agree" style="margin-top:12px"><input type="checkbox" id="earlyAd"><span>[필수] 열리는 날 알림과 새 무료 자료 소식을 메일로 받는 데 동의합니다<small>받는 정보: 메일 주소 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+      <button class="btn wide" type="submit" id="earlyGo" style="margin-top:14px">열리는 날 먼저 알려 주세요</button>
+      <p class="msg" id="earlyMsg" role="alert"></p>
+    </form>
     <p id="closedP">열리는 날 이 페이지에서 메일 주소만 넣으면 됩니다.</p>
     <a class="btn line" href="/pay/?p=free-ebook-rereg" id="paid" hidden>이용권 보기</a>
   </div>
@@ -260,12 +267,28 @@ input[type=email].err{border-color:var(--bad)}
     $("#state").textContent = p === "open" ? "지금 신청 받는 중" : p === "early" ? "곧 열립니다" : "신청 기간 끝";
     $("#form").hidden = p !== "open";
     $("#closed").hidden = p === "open";
-    if (p === "early") { $("#closedT").textContent = O.opens_txt + "에 열립니다."; $("#closedP").textContent = "열리는 날 이 페이지에서 메일 주소만 넣으면 됩니다."; $("#paid").hidden = true; }
+    if (p === "early") { $("#earlyForm").hidden = false; $("#closedT").textContent = O.opens_txt + "에 열립니다."; $("#closedP").textContent = "지금 메일을 남겨 두시면 여는 날 아침에 먼저 보내 드립니다."; $("#paid").hidden = true; }
     if (p === "closed") { $("#closedT").textContent = "신청 기간이 끝났습니다."; $("#closedP").textContent = O.paid_hint || ""; $("#paid").hidden = !O.paid_hint; }
   }
   show();
 
   $("#mkt").addEventListener("change", function () { $("#night").disabled = !this.checked; if (!this.checked) $("#night").checked = false; });
+
+  /* 10-14 — 열리기 전 방문을 버리지 않는다: 메일만 받아 두고 여는 날 먼저 보낸다 (명단 contacts 에 news 경로로) */
+  $("#earlyForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var email = $("#earlyEmail").value.trim().toLowerCase(), msg = $("#earlyMsg");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { msg.textContent = "이메일을 확인해 주세요."; return; }
+    if (!$("#earlyAd").checked) { msg.textContent = "알림을 보내려면 수신 동의가 필요합니다."; return; }
+    $("#earlyGo").disabled = true;
+    var 짐 = { _email: email, _ad: true, _night: false, _ver: "2026-10-12", _content: "free-" + O.id };
+    try { if (window.HBT) { var pk = HBT.pack(); 짐._visitor = pk.visitor; if (pk.utm) { 짐._source = pk.utm.source; 짐._medium = pk.utm.medium; 짐._campaign = pk.utm.campaign; 짐._content = pk.utm.content || 짐._content; } } } catch (e2) {}
+    try {
+      var r = await window.HB.sb.rpc("news_signup", 짐);
+      if (r.error) throw r.error;
+      $("#earlyForm").innerHTML = "<b>적어 두었습니다.</b> " + email + " 로 여는 날 아침에 먼저 보내 드립니다.";
+    } catch (err) { msg.textContent = "적지 못했습니다. 잠시 뒤 다시 해 주세요."; $("#earlyGo").disabled = false; }
+  });
 
   $("#form").addEventListener("submit", async function (e) {
     e.preventDefault();

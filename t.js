@@ -70,6 +70,19 @@
   var EMPTY = { source: null, medium: null, campaign: null, content: null };
   if (!ss("hb-landed") || hasNow) { ss("hb-landed", "1"); send("land", pageName(), hasNow ? now : EMPTY); }
 
+  /* 10-14 — 수익 갈래가 결과만 남고 새는 단계가 안 보이던 것(진단 A14).
+     결제 페이지로 가는 링크는 buy, 해시 화면 열람은 view 로 남긴다. 개인정보 없음 */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="pay/?p="]');
+    if (!a) return;
+    var m = /[?&]p=([A-Za-z0-9_\-]+)/.exec(a.getAttribute("href") || "");
+    send("buy", "pay:" + (m ? m[1] : "?"), kept());
+  }, true);
+  window.addEventListener("hashchange", function () {
+    var h = (location.hash || "").replace(/^#\/?/, "").split(/[?#]/)[0];
+    if (h) send("view", "#" + h.slice(0, 40), kept());
+  });
+
   window.HBT = {
     visitor: visitor,
     utm: kept,

@@ -135,6 +135,7 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
     if (waiting && o.virtualAccount) rows.push(["입금 계좌", (o.virtualAccount.bankCode || "") + " " + (o.virtualAccount.accountNumber || "") + "<br>예금주 " + (o.virtualAccount.customerName || "") + " · 기한 " + kst(o.virtualAccount.dueDate)]);
     $("#kv").innerHTML = rows.map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
     if (o.receiptUrl) { $("#receipt").href = o.receiptUrl; $("#receipt").hidden = false; }
+    try { window.HBT && HBT.event("paid", "pay:" + (o.productId || "")); } catch (e) {}
     sessionStorage.removeItem("hb_order");
     history.replaceState(null, "", location.pathname);   // 새로고침해도 승인 요청이 다시 안 가게
     show("ok");
@@ -144,5 +145,6 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
   }
 })();
 </script>
+<script src="../t.js"></script>
 </body>
 </html>

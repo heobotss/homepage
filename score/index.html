@@ -181,6 +181,9 @@ input[type=email].err{border-color:var(--bad)}
 .freebox a{color:var(--bone);text-decoration:none;display:block;line-height:1.6;font-size:.9375rem}
 .freebox a:hover{text-decoration:underline}
 .freebox small{display:block;color:var(--warm);font-size:.8125rem;margin-top:1px}
+.bridge{margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;color:var(--bone-2);font-size:.9375rem;line-height:1.7}
+.bridge em{font-style:normal;color:var(--bone);font-weight:700}
+.bridge a{color:var(--bone)}
 </style>
 </head>
 <body>
@@ -287,6 +290,7 @@ input[type=email].err{border-color:var(--bad)}
 
     <div class="rec" id="rec">
       <h2 id="recHead">먼저 볼 강의</h2>
+      <p class="bridge" id="recArea" hidden></p>
       <p class="course" id="recCourse"></p>
       <p class="part" id="recPart"></p>
       <p class="about" id="recAbout"></p>
@@ -530,6 +534,18 @@ input[type=email].err{border-color:var(--bad)}
       $("#recMaster").textContent = "";
     }
     $("#recPrice").innerHTML = prod.name + " · " + prod.count + "편<b>" + won(prod.price) + "원</b>";
+    /* 10-14 — 결과가 상품으로 이어지지 않던 것: 가장 낮은 영역 하나 → 그 영역을 메우는 것 하나 (진단 A15) */
+    var AREA2 = { lesson: ["vod-4t-coach", "4T 운동지도 6편", 129000], experience: ["vod-4t-coach", "4T 운동지도 6편", 129000],
+                  care: ["vod-4t-member", "4T 회원관리 4편", 89000], self: ["vod-4t-member", "4T 회원관리 4편", 89000],
+                  skill: ["vod-anatomy", "4T 실전해부학 3편", 149000], center: null };
+    var ab = $("#recArea");
+    if (weak) {
+      var m = AREA2[weak.key];
+      ab.innerHTML = m
+        ? "가장 낮은 영역 <em>" + weak.name + "</em> (" + weak.yes + "/" + weak.n + ") — 잃은 점수가 <a href=\"../pay/?p=" + m[0] + "\"><em>" + m[1] + "</em></a>(" + won(m[2]) + "원)의 내용입니다. 결제하면 지금 바로 열립니다. 멤버십이 열리면 강의 구매자는 연 59,400원으로 이어집니다."
+        : "가장 낮은 영역 <em>" + weak.name + "</em> — 센터 쪽은 <a href=\"../center/\"><em>센터 진단표(무료)</em></a>부터 받아 보세요. 그걸 하루에 같이 고치는 날이 4T 트레이너 마케팅 세미나입니다.";
+      ab.hidden = false;
+    } else ab.hidden = true;
     $("#recBuy").href = "../pay/?p=" + prodId;
     if (P) {
       // 강의 소개 페이지로 — 이 강의와 이어진 「아니요」 문항 번호를 같이 넘긴다
