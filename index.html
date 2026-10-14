@@ -2777,7 +2777,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <li><b>트레이너용 프로그램 전부</b><span>수업일지는 무료, 나머지 도구는 여는 대로 바로</span></li>
           <li><b>ATC LV1 4주 챌린지 · 모의고사 문제지</b><span>하루 과제 3개로 4주 · 문제지와 해설</span></li>
         </ul>
-        <div class="go"><a class="btn btn-line" href="#cta" data-tier="멤버십">열리면 알려주세요</a></div>
+        <div class="go"><a class="btn btn-line" href="#" data-link="news" data-news-tier="멤버십">열리면 알려주세요</a></div>
       </div>
 
       <div class="plan">
@@ -2792,7 +2792,7 @@ footer{border-top:1px solid var(--line); padding-block:46px 64px; font-size:13.5
           <li><b>49,900 — 대표용 + 선생님 5명</b><span>선생님 다섯 분께 멤버십을 똑같이 열어 드리고, 신입 4주 커리큘럼이 붙습니다</span></li>
           <li><b>누가 어디까지 봤는지</b><span>대표 화면에서 봅니다 — 수업 횟수·연속 주수만, 회원 이름·메모는 보이지 않습니다</span></li>
         </ul>
-        <div class="go"><a class="btn btn-line" href="#cta" data-tier="센터">센터 대표 먼저 알림 받기</a></div>
+        <div class="go"><a class="btn btn-line" href="#" data-link="news" data-news-tier="센터">센터 대표 먼저 알림 받기</a></div>
       </div>
     </div>
     </div>
@@ -2951,7 +2951,12 @@ var missing = [];
 function wireLinks(root){
   $$("[data-link]", root).forEach(function(el){
     var k = el.getAttribute("data-link"), u = LINKS[k];
-    if (u) { el.href = u; el.target = "_blank"; el.rel = "noopener"; }
+    if (u) {
+      /* 플랜 칸에서 누른 단추는 어느 요금제를 보고 왔는지 알림 폼에 넘긴다 (10-14) */
+      var t = el.getAttribute("data-news-tier");
+      el.href = t ? u + "?tier=" + encodeURIComponent(t) : u;
+      el.target = "_blank"; el.rel = "noopener";
+    }
     else {
       el.setAttribute("aria-disabled","true");
       el.title = "주소가 아직 들어가지 않았습니다";
