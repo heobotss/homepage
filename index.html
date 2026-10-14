@@ -114,6 +114,10 @@ section[id],figure.band{scroll-margin-top:74px}
 @media (max-width:430px){ .h-xl{font-size:34px; line-height:1.12} }
 .hero-act{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px}
 .hero-act .btn{padding:14px 20px; font-size:15.5px; min-height:44px}
+.hero-doors{margin:14px 0 0; font-size:14.5px; color:var(--bone-2); line-height:1.8}
+.hero-doors a{color:var(--bone); border-bottom:1px solid var(--line-2); text-decoration:none}
+.hero-doors span{margin-left:14px}
+@media (max-width:520px){ .hero-doors span{display:block; margin-left:0} }
 .hero-sign{margin:16px 0 0; font-size:13.5px; color:var(--warm); line-height:1.7}
 .hero-sign b{color:var(--bone)}
 .h-lg{font-size:clamp(29px,4.8vw,60px); font-weight:900; line-height:1.17; letter-spacing:-.045em}
@@ -1428,6 +1432,7 @@ h2,h3,.h-lg,.h-md,.lane h2,.door h3,.tcard h3,.tool h3,.plan h3,.fact h3{font-we
           <a class="btn btn-solid" href="#/check">30초 진단 재 보기 →</a>
           <a class="btn btn-line" href="report/">내 이름 리포트 받기</a>
         </div>
+        <p class="hero-doors">트레이너이신가요? <a href="#/trainer">트레이너가 쓰는 것 →</a><span>센터 대표이신가요? <a href="#/center">센터가 쓰는 것 →</a></span></p>
         <p class="hero-sign"><b>허재윤</b> · 원주 비브레 PT/헬스 운영 · 10년간 축구선수 → 트레이너 · 4T 트레이너 마케팅 세미나 10기째</p>
       </div>
 
@@ -2522,7 +2527,7 @@ h2,h3,.h-lg,.h-md,.lane h2,.door h3,.tcard h3,.tool h3,.plan h3,.fact h3{font-we
 </section>
 </template>
 <!-- ═══════════ 세어 본 것 — 따로 한 화면 ═══════════ -->
-<div class="screen" id="v-세어본것" data-view="세어본것" data-slug="facts" data-nav="0" data-label="검증">
+<div class="screen" id="v-세어본것" data-view="세어본것" data-slug="facts" data-label="검증">
 <section id="s-facts" data-rail="실측" class="glow" style="--gx:90%;--gy:14%">
   <div class="wrap">
     <div class="sec-head ghosted rv">
