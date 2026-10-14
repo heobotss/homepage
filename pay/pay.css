@@ -37,6 +37,16 @@ input:focus{border-color:var(--brass)}
 input.err{border-color:var(--bad)}
 .agree{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--bone-2);margin-top:16px;line-height:1.55}
 .agree input{margin-top:4px;accent-color:var(--brass)}
+/* 10-14 — hidden 을 작성자 스타일이 이기면 로그인 전에 회색 결제 버튼이 떠 「고장났나」로 읽힌다 */
+.btn[hidden],[hidden]{display:none!important}
+.steps{margin:0 0 10px;color:var(--warm,#8E8E8E);font-size:14px}
+.steps b{color:#F2F2F2}
+.got{width:100%;border-collapse:collapse;margin:14px 0 0;font-size:14.5px}
+.got td{padding:8px 0;border-top:1px solid #222;vertical-align:top;line-height:1.6}
+.got td:first-child{color:#8E8E8E;white-space:nowrap;width:5.5em;padding-right:12px}
+.got ul{margin:0;padding-left:18px}
+.got li{margin:1px 0}
+.got .grp{color:#BDBDBD;font-weight:700;margin-top:4px}
 .btn{display:block;width:100%;border:0;border-radius:10px;padding:16px;font:inherit;font-size:16.5px;font-weight:700;cursor:pointer;background:#F2F2F2;color:#0A0A0A;box-shadow:inset 0 1px 0 rgba(255,255,255,.18);transition:.15s}
 .btn:hover{background:#FFFFFF}
 .btn:disabled{opacity:.45;cursor:not-allowed}

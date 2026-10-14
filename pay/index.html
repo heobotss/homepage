@@ -28,17 +28,19 @@
       <div><div class="n" id="pName"><span class="spin"></span>불러오는 중</div><div class="d" id="pDesc"></div></div>
       <div class="p" id="pPrice"></div>
     </div>
+    <table class="got" id="got" hidden></table>
     <div class="seat" id="seat"></div>
   </section>
+  <p class="steps" id="steps" hidden></p>
 
   <div id="authBox" hidden></div>
   <form class="card" id="form" autocomplete="on" novalidate>
     <h2>신청자</h2>
     <label for="name">이름</label>
     <input type="text" id="name" name="name" placeholder="실명" autocomplete="name" required>
-    <label for="phone">휴대폰</label>
-    <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" autocomplete="tel" inputmode="numeric" required>
-    <label for="email">이메일 <span style="color:var(--warm);font-weight:400">— 확인 메일과 날짜 안내가 갑니다</span></label>
+    <label for="phone">휴대폰 <span id="note-phone" style="color:var(--warm);font-weight:400"></span></label>
+    <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" autocomplete="tel" inputmode="numeric">
+    <label for="email">이메일 <span id="note-email" style="color:var(--warm);font-weight:400">— 확인 메일이 갑니다</span></label>
     <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
     <details class="refund" style="margin-top:18px">
       <summary>환불 규정 보기</summary>
@@ -69,7 +71,7 @@
     <!-- 광고 동의 두 칸은 pay-create 새 판(연락처 창고 저장)을 올릴 때 style="display:none" 을 지운다 — 옛 함수는 이 값을 버려서, 보이면 저장되는 척만 한다 (09-22, 카드사 심사 뒤 배포) -->
     <label class="agree" style="display:none"><input type="checkbox" id="adOk"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다 <span style="color:var(--warm)">(동의하지 않아도 결제할 수 있습니다 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다)</span></span></label>
     <label class="agree" style="margin-left:26px;display:none"><input type="checkbox" id="nightOk" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다 <span style="color:var(--warm)">(문자·카카오톡 알림에 적용)</span></span></label>
-    <label class="agree"><input type="checkbox" id="agree"><span>환불 규정과 <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>·<a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>을 확인했고 동의합니다.</span></label>
+    <label class="agree"><input type="checkbox" id="agree"><span><span id="agreeLead">환불 규정과 </span><a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>·<a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>을 확인했고 동의합니다.</span></label>
   </form>
 
   <section class="card" id="subCard" hidden>
@@ -137,7 +139,9 @@ async function loadProduct() {
     $("#rfApp").hidden = false; $("#rfSem").hidden = true;
     $("#sub").textContent = "카드를 한 번 등록하면 그 뒤로는 자동으로 결제됩니다. 해지는 언제든 하실 수 있습니다.";
     var ses0 = await HB.session();
+    await 받는것표(product);
     if (!ses0) {
+      $("#steps").hidden = false; $("#steps").innerHTML = "<b>① 로그인</b> → ② 카드 등록 → ③ 바로 시작 · 등록 버튼은 로그인하면 나타납니다";
       $("#form").hidden = true; $("#payBtn").hidden = true; $("#authBox").hidden = false;
       HB.mountAuth($("#authBox"), function(){ location.reload(); },
         { lead: "구독은 계정에 붙습니다. 로그인하거나 1분 만에 가입한 뒤 카드를 등록하세요." });
@@ -155,7 +159,9 @@ async function loadProduct() {
     $("#sub").textContent = isApp ? "수업일지에 쓰는 계정으로 결제하면 바로 30일이 더해집니다. 남은 기간이 있으면 그 뒤에 이어 붙습니다."
                                   : "결제하면 이 계정의 강의실에서 12개월 동안 바로 볼 수 있습니다.";
     var ses = await HB.session();
+    await 받는것표(product);
     if (!ses) {
+      $("#steps").hidden = false; $("#steps").innerHTML = "<b>① 로그인</b> → ② 결제 → ③ 바로 " + (isApp ? "수업일지" : "강의실") + " · 결제 버튼은 로그인하면 나타납니다";
       $("#form").hidden = true; $("#payBtn").hidden = true; $("#authBox").hidden = false;
       HB.mountAuth($("#authBox"), function(){ location.reload(); }, { lead: isApp ? "이용권은 수업일지 계정에 붙습니다. 수업일지에 로그인하던 메일과 비밀번호로 로그인하세요."
                                                                               : "강의는 계정에 붙어서 열립니다. 로그인하거나 1분 만에 가입한 뒤 결제하세요." });
@@ -166,6 +172,7 @@ async function loadProduct() {
     $("#note-email") && ($("#note-email").textContent = "");
   }
   document.title = product.name + " — 허봇스";
+  await 받는것표(product);
   if (product.capacity) {
     const t = await fetch(SB_URL + "/rest/v1/rpc/pay_taken", { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_event: product.event_key }) }).then(r => r.ok ? r.json() : null).catch(() => null);
     const left = product.capacity - (t || 0);
@@ -219,6 +226,56 @@ async function mountBilling(ses) {
   }
 }
 
+/* 10-14 — 결제 직전에 「무엇을·언제부터·언제까지·환불」을 접지 않고 보여 준다 (전자상거래법 17조 6항).
+   강의는 vod_videos 에서 제목을 그대로 읽어 온다. 로그인 전에도 보인다. */
+async function 받는것표(product) {
+  const k = product.kind, tbl = $("#got");
+  const esc = s => String(s == null ? "" : s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  const rows = [];
+  const 날짜 = d => d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일";
+  if (k === "vod") {
+    const ids = [product.id].concat(product.covers || []);
+    let vids = [];
+    try {
+      const r = await fetch(SB_URL + "/rest/v1/vod_videos?select=product_id,collection,ord,title,length_sec&product_id=in.(" + ids.map(encodeURIComponent).join(",") + ")&order=product_id,ord", { headers: { apikey: SB_KEY } });
+      vids = r.ok ? await r.json() : [];
+    } catch (e) {}
+    const groups = {}; vids.forEach(v => { (groups[v.collection || v.product_id] = groups[v.collection || v.product_id] || []).push(v); });
+    const secs = vids.reduce((a, v) => a + (v.length_sec || 0), 0), hh = Math.floor(secs / 3600), mm = Math.round((secs % 3600) / 60);
+    const list = Object.keys(groups).map(g => '<div class="grp">' + esc(g) + " " + groups[g].length + "편</div><ul>" + groups[g].map(v => "<li>" + esc(v.title) + "</li>").join("") + "</ul>").join("");
+    rows.push(["받는 것", (vids.length ? "영상 " + vids.length + "편" + (secs ? " · " + (hh ? hh + "시간 " : "") + mm + "분" : "") : esc(product.description || "")) + list]);
+    rows.push(["언제부터", "결제 즉시, 이 계정의 강의실에서"]);
+    const until = new Date(); until.setDate(until.getDate() + (product.access_days || 365));
+    rows.push(["언제까지", 날짜(until) + "까지 (" + Math.round((product.access_days || 365) / 30) + "개월)"]);
+    rows.push(["환불", "7일 안이고 한 편도 재생하지 않았으면 <b>전액</b> · 그 뒤에는 재생하지 않은 편수만큼 · <b>재생한 강의는 환불에서 빠집니다</b> · <a href=\"../policy/refund.html\" target=\"_blank\" rel=\"noopener\">전문</a>"]);
+    rows.push(["미리 보기", "<a href=\"../#/vod\">무료 강의 6편</a>을 먼저 보셔도 됩니다"]);
+    $("#note-email").textContent = "— 확인 메일과 강의실 링크가 갑니다";
+    $("#note-phone").textContent = "비워도 됩니다 · 환불·문의 때 연락받을 번호";
+    $("#agreeLead").innerHTML = "<b>재생한 강의는 환불에서 빠진다</b>는 것과 환불 규정을 확인했고, ";
+  } else if (k === "app") {
+    rows.push(["받는 것", "수업일지 기록·저장 30일 (남은 기간이 있으면 그 뒤에 이어 붙음)"]);
+    rows.push(["언제부터", "결제 즉시"]);
+    rows.push(["환불", "7일 안 전액 · 그 뒤에는 남은 날수만큼 · <a href=\"../policy/refund.html\" target=\"_blank\" rel=\"noopener\">전문</a>"]);
+    $("#note-email").textContent = "— 확인 메일이 갑니다"; $("#note-phone").textContent = "비워도 됩니다";
+  } else if (k === "sub") {
+    rows.push(["받는 것", esc(product.description || product.name)]);
+    rows.push(["결제", "매달 자동 결제 · 해지는 내 구독 화면에서 언제든, 다음 결제부터 멈추고 남은 기간은 끝까지"]);
+    rows.push(["환불", "회차 결제 뒤 7일 안이고 그 회차에 한 편도 재생하지 않았으면 전액 · <a href=\"../policy/refund.html\" target=\"_blank\" rel=\"noopener\">전문</a>"]);
+    $("#note-email").textContent = "— 영수 메일과 결제 안내가 갑니다"; $("#note-phone").textContent = "비워도 됩니다";
+  } else if (k === "course") {
+    rows.push(["받는 것", esc(product.description || product.name)]);
+    rows.push(["환불", "시작 전 전액 · 시작 뒤에는 남은 주차만큼 · <a href=\"../policy/refund.html\" target=\"_blank\" rel=\"noopener\">전문</a>"]);
+    $("#note-email").textContent = "— 확인 메일과 과제 안내가 갑니다"; $("#note-phone").textContent = "필수 · 과제 알림";
+  } else {
+    rows.push(["일시", product.starts_at ? esc(new Date(product.starts_at).toLocaleString("ko-KR", { month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })) : "확정되면 메일로 먼저 알려 드립니다"]);
+    rows.push(["장소", esc(product.place || "확정 후 안내")]);
+    rows.push(["환불", "날짜 확정 전 <b>전액</b> · 확정 뒤에는 남은 날수 기준 · 양도·이월 가능 · <a href=\"../policy/refund.html\" target=\"_blank\" rel=\"noopener\">전문</a>"]);
+    $("#note-email").textContent = "— 확인 메일과 날짜 안내가 갑니다"; $("#note-phone").textContent = "필수 · 날짜·장소 문자 안내";
+  }
+  tbl.innerHTML = rows.map(([a, b]) => "<tr><td>" + a + "</td><td>" + b + "</td></tr>").join("");
+  tbl.hidden = false;
+}
+
 function field(id) { const el = $("#" + id); el.classList.remove("err"); return el; }
 $("#payBtn").addEventListener("click", async () => {
   if (!ready || !product) return;
@@ -227,7 +284,8 @@ $("#payBtn").addEventListener("click", async () => {
   const agree = $("#agree").checked;
   const bad = (id, m) => { $("#" + id).classList.add("err"); $("#msg").textContent = m; $("#" + id).focus(); };
   if (name.length < 2) return bad("name", "이름을 적어 주세요");
-  if (!(product.kind === "sub" && !phone) && !/^01[016789]\d{7,8}$/.test(phone)) return bad("phone", "휴대폰 번호를 확인해 주세요");
+  var 폰필수 = (product.kind === "seminar" || product.kind === "course");
+  if ((폰필수 || phone) && !/^01[016789]\d{7,8}$/.test(phone)) return bad("phone", "휴대폰 번호를 확인해 주세요");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad("email", "이메일을 확인해 주세요");
   if (!agree) { $("#msg").textContent = "환불 규정에 동의해 주세요"; return; }
 
