@@ -60,7 +60,11 @@ async function draw() {
         (살아있음 ? "<tr><td>다음 결제일</td><td>" + 날(s.next_charge_at) + "</td></tr>"
                  : "<tr><td>이용 기간</td><td>" + 날(s.next_charge_at) + " 까지</td></tr>") +
       "</table>" +
-      (살아있음 ? '<button class="btn line" data-cancel="' + s.id + '" style="margin-top:14px">구독 해지</button>' : "") +
+      (s.status === "retry" || s.status === "locked"
+        ? '<p class="note" style="margin-top:12px">카드가 승인되지 않았습니다. 카드를 바꾸시면 바로 이어서 쓰실 수 있습니다.</p>' : "") +
+      (살아있음 || s.status === "locked"
+        ? '<a class="btn" href="index.html?p=' + encodeURIComponent(s.product_id) + '" style="margin-top:14px">카드 바꾸기</a>' : "") +
+      (살아있음 ? '<button class="btn line" data-cancel="' + s.id + '" style="margin-top:10px">구독 해지</button>' : "") +
       "</section>";
   }).join("");
 }
