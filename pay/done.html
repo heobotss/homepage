@@ -43,6 +43,8 @@
   <footer class="legal" id="legal"></footer>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script src="../vod/auth.js"></script>
 <script>
 const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
 const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";
@@ -55,6 +57,35 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
   const q = new URLSearchParams(location.search);
   const paymentKey = q.get("paymentKey"), orderId = q.get("orderId"), amount = Number(q.get("amount"));
   const show = (id) => { for (const k of ["wait", "ok", "bad"]) $("#" + k).hidden = k !== id; };
+
+  /* 구독(자동결제) 카드 등록을 마치고 돌아온 길 (2026-10-14) */
+  const subId = q.get("sub"), authKey = q.get("authKey"), customerKey = q.get("customerKey");
+  if (subId && authKey && customerKey) {
+    try {
+      const ses = await HB.session();
+      if (!ses) throw new Error("로그인이 풀렸습니다. 다시 로그인한 뒤 등록해 주세요.");
+      const r0 = await fetch(SB_URL + "/functions/v1/billing-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + ses.access_token },
+        body: JSON.stringify({ authKey, customerKey, productId: subId }),
+      });
+      const d0 = await r0.json();
+      if (!d0.ok) throw new Error(d0.message || "구독을 시작하지 못했습니다");
+      $("#okTitle").textContent = "구독이 시작됐습니다";
+      $("#okSub").textContent = "바로 쓰실 수 있습니다. 확인 메일도 보냈습니다.";
+      $("#kv").innerHTML = [
+        ["주문번호", d0.orderId],
+        ["결제 금액", '<span class="amt">' + won(d0.amount) + "</span>"],
+        ["다음 결제일", new Date(d0.nextChargeAt).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", dateStyle: "long" })],
+        ["해지", '<a href="my.html">내 구독 화면</a>에서 언제든 · 다음 결제부터 멈춥니다'],
+      ].map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
+      history.replaceState(null, "", location.pathname);
+      return show("ok");
+    } catch (e) {
+      $("#badMsg").textContent = e.message || String(e);
+      return show("bad");
+    }
+  }
   if (!paymentKey || !orderId || !amount) { $("#badMsg").textContent = "결제 정보가 없습니다."; return show("bad"); }
   try {
     const r = await fetch(SB_URL + "/functions/v1/pay-confirm", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY },

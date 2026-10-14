@@ -72,6 +72,13 @@
     <label class="agree"><input type="checkbox" id="agree"><span>환불 규정과 <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>·<a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>을 확인했고 동의합니다.</span></label>
   </form>
 
+  <section class="card" id="subCard" hidden>
+    <h2>구독 안내</h2>
+    <table class="kv" id="subKv"></table>
+    <p class="note" style="margin-top:10px">카드를 한 번 등록하면 다음부터는 자동으로 결제됩니다.
+      해지는 내 계정 화면에서 언제든 하실 수 있고, 해지하셔도 이미 결제한 기간은 끝까지 쓰십니다.</p>
+  </section>
+
   <section class="card" id="payCard" hidden>
     <h2>결제 수단</h2>
     <div id="payment-method"></div>
@@ -102,7 +109,7 @@ const $ = (s) => document.querySelector(s);
 const won = (n) => n.toLocaleString("ko-KR") + "원";
 const params = new URLSearchParams(location.search);
 const productId = params.get("p") || DEFAULT_PRODUCT;
-let product = null, widgets = null, ready = false;
+let product = null, widgets = null, billing = null, ready = false;
 const 열림 = 판매개시 || params.get("open") === "1";
 if (TOSS_CLIENT_KEY.startsWith("test_")) { $("#testBar").hidden = false; document.title = "[테스트] " + document.title; }
 else if (!열림) {
@@ -125,6 +132,22 @@ async function loadProduct() {
   if (product.kind === "course") {
     // 과정은 세미나와 환불 방식이 다르다. 날짜가 아니라 「시작했는가」로 갈린다
     $("#rfCourse").hidden = false; $("#rfSem").hidden = true;
+  }
+  if (product.kind === "sub") {
+    $("#rfApp").hidden = false; $("#rfSem").hidden = true;
+    $("#sub").textContent = "카드를 한 번 등록하면 그 뒤로는 자동으로 결제됩니다. 해지는 언제든 하실 수 있습니다.";
+    var ses0 = await HB.session();
+    if (!ses0) {
+      $("#form").hidden = true; $("#payBtn").hidden = true; $("#authBox").hidden = false;
+      HB.mountAuth($("#authBox"), function(){ location.reload(); },
+        { lead: "구독은 계정에 붙습니다. 로그인하거나 1분 만에 가입한 뒤 카드를 등록하세요." });
+      return;
+    }
+    $("#email").value = ses0.user.email; $("#email").readOnly = true;
+    var nm0 = ses0.user.user_metadata && ses0.user.user_metadata.name; if (nm0 && !$("#name").value) $("#name").value = nm0;
+    document.title = product.name + " — 허봇스";
+    await mountBilling(ses0);
+    return;
   }
   if (product.kind === "vod" || product.kind === "app") {
     const isApp = product.kind === "app";
@@ -174,6 +197,28 @@ async function mountWidget() {
   }
 }
 
+/* 구독 — 결제창 대신 카드 등록창을 띄운다 (2026-10-14, 결제_빌링.md) */
+async function mountBilling(ses) {
+  if (!열림) { $("#payBtn").hidden = true; $("#msg").textContent = "정식 오픈 전이라 지금은 결제를 받지 않습니다."; return; }
+  const 주기 = product.period === "year" ? "1년마다" : "한 달마다";
+  const 다음 = new Date();
+  if (product.period === "year") 다음.setFullYear(다음.getFullYear() + 1); else 다음.setMonth(다음.getMonth() + 1);
+  $("#subKv").innerHTML =
+    "<tr><th>결제 금액</th><td>" + won(product.price) + " (부가세 포함)</td></tr>" +
+    "<tr><th>결제 주기</th><td>" + 주기 + " 자동 결제</td></tr>" +
+    "<tr><th>첫 결제</th><td>카드 등록 즉시</td></tr>" +
+    "<tr><th>다음 결제일</th><td>" + 다음.toLocaleDateString("ko-KR", { dateStyle: "long" }) + "</td></tr>" +
+    "<tr><th>해지</th><td><a href=\"my.html\">내 구독 화면</a>에서 언제든 · 다음 결제부터 멈춥니다</td></tr>";
+  $("#subCard").hidden = false;
+  try {
+    const toss = TossPayments(TOSS_CLIENT_KEY);
+    billing = toss.payment({ customerKey: "hb_" + ses.user.id.replace(/-/g, "") });
+    ready = true; $("#payBtn").disabled = false; $("#payBtn").textContent = "카드 등록하고 시작하기";
+  } catch (e) {
+    $("#msg").textContent = "카드 등록창을 불러오지 못했습니다. 새로고침해 주세요. (" + (e.message || e) + ")";
+  }
+}
+
 function field(id) { const el = $("#" + id); el.classList.remove("err"); return el; }
 $("#payBtn").addEventListener("click", async () => {
   if (!ready || !product) return;
@@ -182,12 +227,22 @@ $("#payBtn").addEventListener("click", async () => {
   const agree = $("#agree").checked;
   const bad = (id, m) => { $("#" + id).classList.add("err"); $("#msg").textContent = m; $("#" + id).focus(); };
   if (name.length < 2) return bad("name", "이름을 적어 주세요");
-  if (!/^01[016789]\d{7,8}$/.test(phone)) return bad("phone", "휴대폰 번호를 확인해 주세요");
+  if (!(product.kind === "sub" && !phone) && !/^01[016789]\d{7,8}$/.test(phone)) return bad("phone", "휴대폰 번호를 확인해 주세요");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad("email", "이메일을 확인해 주세요");
   if (!agree) { $("#msg").textContent = "환불 규정에 동의해 주세요"; return; }
 
-  $("#payBtn").disabled = true; $("#payBtn").innerHTML = '<span class="spin"></span>주문 만드는 중';
+  $("#payBtn").disabled = true; $("#payBtn").innerHTML = '<span class="spin"></span>여는 중';
   try {
+    if (product.kind === "sub") {
+      const base0 = location.origin + location.pathname.replace(/[^/]*$/, "");
+      await billing.requestBillingAuth({
+        method: "CARD",
+        successUrl: base0 + "done.html?sub=" + encodeURIComponent(product.id),
+        failUrl: base0 + "fail.html",
+        customerEmail: email, customerName: name,
+      });
+      return;
+    }
     const ses = (product.kind === "vod" || product.kind === "app") ? await HB.session() : null;
     const pk = window.HBT ? HBT.pack() : { visitor: null, utm: null };
     const r = await fetch(FN + "pay-create", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + (ses ? ses.access_token : SB_KEY) },

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>내 구독 — 허봇스</title>
+<link rel="icon" href="../favicon.png">
+<link rel="stylesheet" href="pay.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
+  <a class="back" href="javascript:history.length>1?history.back():location.assign('../')">← 돌아가기</a>
+</header>
+<main>
+  <h1>내 구독</h1>
+  <p class="sub">지금 돌고 있는 구독과 다음 결제일입니다. 해지는 여기서 바로 하실 수 있습니다.</p>
+
+  <div id="authBox" hidden></div>
+  <div id="list"><p class="note"><span class="spin"></span>불러오는 중</p></div>
+  <p class="msg" id="msg"></p>
+
+  <footer class="legal" id="legal"></footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script src="../vod/auth.js"></script>
+<script>
+const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
+const FN = SB_URL + "/functions/v1/";
+const $ = (s) => document.querySelector(s);
+const won = (n) => n.toLocaleString("ko-KR") + "원";
+const 날 = (d) => new Date(d).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", dateStyle: "long" });
+const 상태 = { active: "결제 중", retry: "결제 실패 — 다시 시도 중", locked: "잠김", canceled: "해지됨" };
+fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) $("#legal").innerHTML = t; }).catch(() => {});
+
+async function draw() {
+  const ses = await HB.session();
+  if (!ses) {
+    $("#list").innerHTML = "";
+    $("#authBox").hidden = false;
+    HB.mountAuth($("#authBox"), function () { location.reload(); }, { lead: "구독을 산 계정으로 로그인하세요." });
+    return;
+  }
+  const r = await HB.sb.from("pay_subscriptions").select("*, pay_products(name)").order("id", { ascending: false });
+  const rows = r.data || [];
+  if (!rows.length) {
+    $("#list").innerHTML = '<section class="card"><p>아직 구독이 없습니다.</p>' +
+      '<p class="note">플랜 화면에서 멤버십이 열리면 여기에 보입니다.</p></section>';
+    return;
+  }
+  $("#list").innerHTML = rows.map(function (s) {
+    const 살아있음 = s.status === "active" || s.status === "retry";
+    return '<section class="card">' +
+      "<h2>" + (s.pay_products ? s.pay_products.name : s.product_id) + "</h2>" +
+      '<table class="kv">' +
+        "<tr><td>상태</td><td>" + (상태[s.status] || s.status) + "</td></tr>" +
+        "<tr><td>결제 금액</td><td>" + won(s.amount) + " · " + (s.period === "year" ? "1년마다" : "한 달마다") + "</td></tr>" +
+        (살아있음 ? "<tr><td>다음 결제일</td><td>" + 날(s.next_charge_at) + "</td></tr>"
+                 : "<tr><td>이용 기간</td><td>" + 날(s.next_charge_at) + " 까지</td></tr>") +
+      "</table>" +
+      (살아있음 ? '<button class="btn line" data-cancel="' + s.id + '" style="margin-top:14px">구독 해지</button>' : "") +
+      "</section>";
+  }).join("");
+}
+
+document.addEventListener("click", async function (e) {
+  const b = e.target.closest("[data-cancel]");
+  if (!b) return;
+  if (!confirm("해지하면 다음 결제부터 멈춥니다.\n이미 결제한 기간은 끝까지 쓰실 수 있습니다.\n\n해지할까요?")) return;
+  b.disabled = true; b.innerHTML = '<span class="spin"></span>해지하는 중';
+  try {
+    const ses = await HB.session();
+    const r = await fetch(FN + "billing-cancel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + ses.access_token },
+      body: JSON.stringify({ subscriptionId: Number(b.getAttribute("data-cancel")) }),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.message || "해지하지 못했습니다");
+    $("#msg").textContent = "해지했습니다. 확인 메일을 보냈습니다.";
+    await draw();
+  } catch (err) {
+    $("#msg").textContent = (err && err.message) || String(err);
+    b.disabled = false; b.textContent = "구독 해지";
+  }
+});
+
+draw();
+</script>
+<script src="../t.js"></script>
+</body>
+</html>
