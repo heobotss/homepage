@@ -120,6 +120,22 @@ details .a{padding:0 0 16px;color:var(--bone-2);font-size:.9375rem;margin:0}
   .rec div{grid-template-columns:1fr;gap:2px}
   .acts .btn{flex:1 1 100%}
 }
+/* ── 첫 화면 배경 (검정+주황 빛 센터 · AI 이미지 · 2026-10-15) ── */
+#hero{position:relative;isolation:isolate}
+#hero .label{color:#FF8A3D}
+#hero::before{content:"";position:absolute;z-index:-1;top:calc(-1 * var(--top-h, 64px));bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);
+  background:
+    linear-gradient(180deg, rgba(10,10,10,0) 55%, var(--ink) 100%),
+    radial-gradient(ellipse 44% 62% at 47% 44%, rgba(10,10,10,.9) 0%, rgba(10,10,10,.72) 50%, rgba(10,10,10,0) 100%),
+    url('hero.webp') 62% 40% / cover no-repeat}
+@media (max-width:560px){
+  #hero{padding-top:calc(56vw + 12px)}
+  #hero::before{top:calc(-1 * var(--top-h, 64px));bottom:auto;height:calc(56vw + var(--top-h, 64px) + 40px);
+    background:
+      linear-gradient(180deg, rgba(10,10,10,.2) 0%, rgba(10,10,10,0) 40%, var(--ink) 100%),
+      url('hero.webp') 64% 55% / cover no-repeat}
+}
+body{overflow-x:hidden}
 </style>
 </head>
 <body>
