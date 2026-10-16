@@ -98,9 +98,20 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
       <div class="at" id="atWrap"><span>@</span><input type="text" id="ig" maxlength="30" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="my_id"></div>
       <p class="why">@ 없이 적어 주세요. 비공개 계정이어도 괜찮습니다 — 멘션은 저희 쪽으로 옵니다.</p>
     </div>
+    <label class="agree" style="display:flex;gap:10px;align-items:flex-start;margin:14px 0 4px;font-size:15px;line-height:1.6">
+      <input type="checkbox" id="pub" style="margin-top:5px">
+      <span>올린 후기 스토리를 <b>허봇스 홈페이지·채널에 계정명과 함께</b> 실어도 좋습니다
+        <small style="display:block;color:var(--warm);margin-top:4px">강의 소개·레슨 끝·후기 벽에 쓰입니다. 원하지 않으시면 체크하지 않으셔도 인증은 그대로 됩니다.</small></span>
+    </label>
     <p class="msg" id="msg"></p>
     <button class="btn" id="go" type="submit">저장하기</button>
   </form>
+
+  <section id="gate" hidden style="margin-top:34px;border-top:1px solid var(--line);padding-top:26px">
+    <h2 style="font-size:1.25rem;margin:0 0 6px">인증하면 열리는 것</h2>
+    <p class="why" style="margin:0 0 16px">스토리에 후기를 올려 <b>@heobotss</b> 를 멘션하시면, 다음 묶음이 바로 열립니다.</p>
+    <div id="gateList"></div>
+  </section>
 
   <div class="done" id="done" hidden>
     <b id="doneT">등록돼 있습니다</b>
@@ -114,7 +125,31 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
   </p>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js">
+/* 멤버십 인증 단계 — 무엇을 올리면 무엇이 열리는지 (2026-10-16) */
+async function 그리기단계() {
+  try {
+    var g = await sb.rpc("gate_my_state");
+    var d = g.data;
+    if (!d || d.state !== "ok") return;
+    var 이름 = { vod: "강의", exam: "문제지", atc: "ATC 챌린지" };
+    var html = "";
+    (d.groups || []).forEach(function (그룹) {
+      var steps = 그룹.steps || [];
+      if (!steps.length) return;
+      html += '<div style="margin-bottom:18px"><div style="font-weight:700;margin-bottom:6px">' + (이름[그룹.kind] || 그룹.kind) + "</div>";
+      steps.forEach(function (s) {
+        var 열림 = s.open;
+        html += '<div style="display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line-2);font-size:15px">' +
+          '<span style="width:20px;color:' + (열림 ? "var(--good)" : "var(--warm)") + '">' + (열림 ? "열림" : "잠김").slice(0,2) + "</span>" +
+          "<span style='flex:1'>" + s.label + (열림 ? "" : '<small style="display:block;color:var(--warm)">올릴 내용 — ' + s.ask + "</small>") + "</span></div>";
+      });
+      html += "</div>";
+    });
+    if (html) { document.getElementById("gateList").innerHTML = html; document.getElementById("gate").hidden = false; }
+  } catch (e) { /* 멤버십이 아직 없으면 조용히 넘어간다 */ }
+}
+</script>
 <script src="../vod/auth.js"></script>
 <script>
 (function () {
@@ -152,8 +187,10 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     $("#who").hidden = false;
     $("#who").textContent = 내메일;
     try {
-      var r = await sb.from("contacts").select("instagram").eq("email", 내메일).maybeSingle();
+      var r = await sb.from("contacts").select("instagram, story_public").eq("email", 내메일).maybeSingle();
       보여주기((r.data && r.data.instagram) || "");
+      if (r.data && r.data.story_public && $("#pub")) $("#pub").checked = true;
+      그리기단계();
     } catch (e) { 보여주기(""); }
   }
 
@@ -169,7 +206,9 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     $("#go").disabled = true; 말("", true);
     try {
       /* 있는 줄은 아이디만 고치고, 없으면 새로 만든다 — 처음 들어온 길(first_via)은 건드리지 않는다 */
-      var r = await sb.from("contacts").upsert({ email: 내메일, instagram: 아이디 }, { onConflict: "email" });
+      var r = await sb.from("contacts").upsert({ email: 내메일, instagram: 아이디,
+        story_public: $("#pub") ? $("#pub").checked : false,
+        story_public_at: ($("#pub") && $("#pub").checked) ? new Date().toISOString() : null }, { onConflict: "email" });
       if (r.error) throw r.error;
       보여주기(아이디);
       말("", true);
