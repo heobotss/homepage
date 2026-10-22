@@ -98,6 +98,9 @@
 // ── 설정 ─────────────────────────────────────────────────────────────────
 // 라이브 클라이언트 키 (09-29 카드사 심사용으로 전환). 시크릿 키는 여기 절대 안 둔다.
 const TOSS_CLIENT_KEY = "live_gck_DnyRpQWGrN9YnaaZQB7BVKwv1M9E";
+// 자동결제(빌링)는 상점아이디가 따로다 (bill_heobopp7o) — 키도 따로 쓴다.
+// 2026-10-22 지금은 테스트 키. 빌링 계약이 승인되면 live_ck_ 로 바꾼다 (결제_빌링.md)
+const TOSS_BILLING_KEY = "test_ck_Ba5PzR0ArnGXNDZ07GxX8vmYnNeD";
 // 2026-10-01 대표님 결정: 토스가 다 끝날 때까지 결제를 받지 않는다 → 2026-10-12 해제.
 //   토스 심사원이 ?open=1 없이 들어와 잠긴 화면을 보고 「결제창 연동을 확인할 수 없다」며 보완을 요구했다.
 //   10-12 대표님 결정: 심사가 끝날 때까지 전부 연다. false 로 되돌리면 다시 잠긴다.
@@ -218,7 +221,7 @@ async function mountBilling(ses) {
     "<tr><th>해지</th><td><a href=\"my.html\">내 구독 화면</a>에서 언제든 · 다음 결제부터 멈춥니다</td></tr>";
   $("#subCard").hidden = false;
   try {
-    const toss = TossPayments(TOSS_CLIENT_KEY);
+    const toss = TossPayments(TOSS_BILLING_KEY);
     billing = toss.payment({ customerKey: "hb_" + ses.user.id.replace(/-/g, "") });
     ready = true; $("#payBtn").disabled = false; $("#payBtn").textContent = "카드 등록하고 시작하기";
   } catch (e) {
