@@ -155,6 +155,7 @@ h1{font-size:clamp(1.8rem,5.5vw,2.3rem);line-height:1.28;letter-spacing:-.04em;m
     try {
       var r = await sb.rpc("news_signup", 짐);
       if (r.error) throw r.error;
+      if (window.HBT) HBT.event("lead", "news" + (TIER ? ":" + TIER : ""));
       $("#form").hidden = true; $("#done").hidden = false;
       $("#doneD").textContent = (TIER === "센터")
         ? email + " 로 " + TIER + "이 열리는 날 가장 먼저 보내 드리겠습니다."

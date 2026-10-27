@@ -240,9 +240,22 @@ input[type=email].err{border-color:var(--bad)}
       <p id="rMoreSay"></p>
       <button class="btn" id="goRest" type="button">나머지 70문항 이어서 풀기</button>
       <div id="gate" hidden>
-        <p class="gate-why">가입하면 그 자리에서 이어집니다. <b>따로 보내 드리는 것도, 결제도 없습니다.</b></p>
-        <div id="gateBox"></div>
-        <label class="agree gate-ad"><input type="checkbox" id="gateMkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>체크하지 않으셔도 가입과 70문항에 아무 제한이 없습니다 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+        <p class="gate-why"><b>영역별 결과·먼저 볼 강의·나머지 70문항</b>은 메일 한 칸으로 엽니다. 비밀번호는 없습니다 — 메일의 버튼 한 번이면 바로 열립니다.</p>
+        <form id="claimForm" novalidate>
+          <div class="field">
+            <label for="cEmail">결과 받을 메일</label>
+            <input type="email" id="cEmail" placeholder="you@example.com" autocomplete="email">
+          </div>
+          <div class="trap" aria-hidden="true"><label>웹사이트<input type="text" id="cWeb" tabindex="-1" autocomplete="off"></label></div>
+          <label class="agree"><input type="checkbox" id="cAgree"><span>[필수] 결과를 보내고 계정을 만들기 위해 메일과 응답을 받고 1년 동안 보관하는 데 동의합니다. <a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a> · <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a></span></label>
+          <label class="agree gate-ad"><input type="checkbox" id="gateMkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>체크하지 않으셔도 결과와 70문항에 아무 제한이 없습니다 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+          <button class="btn wide send" id="cGo" type="submit">메일로 결과 전체 열기</button>
+          <p class="msg" id="cMsg" role="alert"></p>
+        </form>
+        <div class="done" id="cDone" hidden>
+          <b>메일을 보냈습니다.</b>
+          <p><span id="cTo"></span> 메일함에서 <b>「결과 전체 열기」</b>를 누르시면 비밀번호 없이 바로 열립니다. 안 보이면 스팸함도 봐 주세요.</p>
+        </div>
       </div>
     </div>
 
@@ -503,6 +516,9 @@ input[type=email].err{border-color:var(--bad)}
                "<small>허봇스 레슨 " + v[0] + " · 무료</small></a></li>";
       }).join("");
     }
+    /* 10-27 미리 보기 결과는 로그인 전엔 일부(총점·가장 빈 영역)만 — 나머지는 메일 한 칸으로 (대표님 결정 ③) */
+    var 일부만 = !full && !로그인됨;
+    $("#rAreas").hidden = 일부만; $("#rec").hidden = 일부만;
     $("#rAreas").innerHTML = result.areas.map(function (a) {
       return '<li class="' + (a.key === result.weakest ? "w" : "") + '">' + a.name + "</li>";
     }).join("");
@@ -544,7 +560,7 @@ input[type=email].err{border-color:var(--bad)}
       ab.innerHTML = m
         ? "가장 낮은 영역 <em>" + weak.name + "</em> (" + weak.yes + "/" + weak.n + ") — 잃은 점수가 <a href=\"../pay/?p=" + m[0] + "\"><em>" + m[1] + "</em></a>(" + won(m[2]) + "원)의 내용입니다. 결제하면 지금 바로 열립니다. 멤버십이 열리면 강의 구매자는 연 59,400원으로 이어집니다."
         : "가장 낮은 영역 <em>" + weak.name + "</em> — 센터 쪽은 <a href=\"../center/\"><em>센터 진단표(무료)</em></a>부터 받아 보세요. 그걸 하루에 같이 고치는 날이 4T 트레이너 마케팅 세미나입니다.";
-      ab.hidden = false;
+      ab.hidden = 일부만;
     } else ab.hidden = true;
     $("#recBuy").href = "../pay/?p=" + prodId;
     if (P) {
@@ -614,8 +630,10 @@ input[type=email].err{border-color:var(--bad)}
     }
     $("#goRest").hidden = true;
     $("#gate").hidden = false;
-    if (문그렸나 || !window.HB) return;
+    if (문그렸나) return;
     문그렸나 = true;
+    $("#claimForm").addEventListener("submit", 메일한칸);
+    return;
     window.HB.mountAuth($("#gateBox"), function (ses) {
       로그인됨 = true;
       if (window.HBT) HBT.event("join", "score");
@@ -636,6 +654,28 @@ input[type=email].err{border-color:var(--bad)}
     /* 공용 상자는 「로그인」으로 뜬다 — 여기서는 가입하러 온 분이 대부분이라 제목만 바꾼다 */
     var 제목 = $("#gateBox").querySelector("h2");
     if (제목) 제목.textContent = "가입하고 이어서 풀기";
+  }
+
+  /* 메일 한 칸 = 계정 — score-submit 이 결과 메일에 「비밀번호 없이 로그인」 버튼을 얹어 보낸다 */
+  function 메일한칸(e) {
+    e.preventDefault();
+    var em = $("#cEmail"), msg = $("#cMsg"), btn = $("#cGo"), email = em.value.trim();
+    msg.textContent = ""; em.classList.remove("err");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { em.classList.add("err"); em.focus(); msg.textContent = "메일 주소를 다시 확인해 주세요."; return; }
+    if (!$("#cAgree").checked) { msg.textContent = "결과를 보내려면 필수 항목에 동의해 주세요."; return; }
+    btn.disabled = true; btn.textContent = "보내는 중…";
+    var pk = window.HBT ? HBT.pack() : { visitor: null, utm: null };
+    fetch(FN, {
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY },
+      body: JSON.stringify({ email: email, marketing: $("#gateMkt").checked, night: false, v: D.v, answers: bits(),
+        website: $("#cWeb").value, link: true, visitor: pk.visitor, utm: pk.utm })
+    }).then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (d) {
+        if (d && d.ok) { $("#claimForm").hidden = true; $("#cDone").hidden = false; $("#cTo").textContent = email; return; }
+        msg.textContent = (d && d.message) || "보내지 못했습니다. 잠시 뒤 다시 시도해 주세요.";
+        btn.disabled = false; btn.textContent = "메일로 결과 전체 열기";
+      })
+      .catch(function () { msg.textContent = "연결이 끊겼습니다. 잠시 뒤 다시 시도해 주세요."; btn.disabled = false; btn.textContent = "메일로 결과 전체 열기"; });
   }
 
   // ── 연결 ──
@@ -679,6 +719,14 @@ input[type=email].err{border-color:var(--bad)}
     NP = QS.filter(function (q) { return q.preview; }).length;
     ans = QS.map(function () { return null; });
     intro();
+    var 받은답 = new URLSearchParams(location.search).get("a") || "";
+    if (받은답.length === QS.length && !/[^01-]/.test(받은답)) {
+      ans = 받은답.split("").map(function (c) { return c === "-" ? null : c; }); store();
+      계정확인().then(function () {
+        history.replaceState(null, "", location.pathname);
+        if (filled("preview") === NP) finish();
+      });
+    }
   }).catch(function () {
     $(".lede").textContent = "문항을 불러오지 못했습니다. 새로고침해 주세요.";
     $("#start").disabled = true;

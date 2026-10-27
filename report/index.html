@@ -240,6 +240,7 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     try {
       var r = await sb.from("report_requests").insert(줄).select().maybeSingle();
       if (r.error) throw r.error;
+      if (window.HBT) HBT.event("lead", "report");
       /* 이름은 연락처 명단에도 남긴다 — 다음에 또 묻지 않으려고 */
       try { await sb.from("contacts").upsert({ email: 내메일, name: 이름 }, { onConflict: "email" }); } catch (e2) {}
       상태보기(r.data || { status: "new", created_at: new Date().toISOString() });

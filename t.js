@@ -7,8 +7,10 @@
    - 폼은 HBT.pack() 을 요청에 넣으면 된다 → { visitor, utm:{source,medium,campaign,content} } */
 (function () {
   "use strict";
-  /* 로컬 미리보기·검수에서는 세지 않는다 — 운영 통계가 더러워진다 (10-01) */
-  if (location.hostname !== "heobotss.com" && location.hostname !== "www.heobotss.com") return;
+  /* 로컬 미리보기·검수에서는 세지 않는다 — 운영 통계가 더러워진다 (10-01)
+     10-27 수업일지(app.heobotss.com)도 같은 파일을 불러 센다 — 일지 축 릴스 링크가 거기로 간다 */
+  var HOST = location.hostname, APP = HOST === "app.heobotss.com";
+  if (HOST !== "heobotss.com" && HOST !== "www.heobotss.com" && !APP) return;
   var URL_ = "https://kpubgeejyiupdvbbdxwt.supabase.co/rest/v1/funnel_events";
   var KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";
   var DAYS = 30;
@@ -27,6 +29,19 @@
   }
 
   var q = new URLSearchParams(location.search);
+
+  /* 10-27 대표님 방문 구분(mine) — 시험 방문이 방문자·진단 시작·결제 클릭에 그대로 섞이던 것(전수 점검 D).
+     ?mine=1 로 한 번 들어오면 이 브라우저는 계속 「내 방문」, ?mine=0 이면 해제.
+     대표님 메일로 로그인한 적이 있는 브라우저도 저절로 「내 방문」이 된다 (메일은 보내지 않고 이 브라우저 안에서만 본다) */
+  if (q.get("mine") === "1") ls("hb-mine", "1");
+  if (q.get("mine") === "0") { try { localStorage.removeItem("hb-mine"); } catch (e) {} }
+  (function () {
+    var 내메일 = /^gjwodbs77(\+[^@]*)?@gmail\.com$|^gjwodbs7@naver\.com$/i;
+    ["hb-auth", "sb-kpubgeejyiupdvbbdxwt-auth-token"].forEach(function (k) {
+      try { var o = JSON.parse(ls(k) || "null"); var m = o && o.user && o.user.email; if (m && 내메일.test(m)) ls("hb-mine", "1"); } catch (e) {}
+    });
+  })();
+  var MINE = ls("hb-mine") === "1" ? 1 : 0;
   var now = {
     source: clip(q.get("utm_source"), 40), medium: clip(q.get("utm_medium"), 40),
     campaign: clip(q.get("utm_campaign"), 60), content: clip(q.get("utm_content"), 40)
@@ -55,7 +70,7 @@
         method: "POST", keepalive: true,
         headers: { "Content-Type": "application/json", apikey: KEY, Prefer: "return=minimal" },
         body: JSON.stringify({
-          event: ev, page: String(page).slice(0, 60), visitor: visitor(),
+          event: ev, page: String(page).slice(0, 60), visitor: visitor(), mine: MINE,
           utm_source: utm.source, utm_medium: utm.medium, utm_campaign: utm.campaign, utm_content: utm.content
         })
       }).catch(function () {});
@@ -63,6 +78,7 @@
   }
   function pageName() {
     var p = location.pathname.replace(/index\.html$/, "").replace(/^\/|\/$/g, "");
+    if (APP) return p ? "app/" + p : "app";
     return p || "home";
   }
 
@@ -82,6 +98,27 @@
     var h = (location.hash || "").replace(/^#\/?/, "").split(/[?#]/)[0];
     if (h) send("view", "#" + h.slice(0, 40), kept());
   });
+
+  /* 10-27 홈 스크롤 — 해시가 안 바뀌면 view 가 안 찍혀 「홈에서 뭘 봤는지」가 0이었다(전수 점검 D).
+     메인 페이지에서 화면마다 25·50·75·100% 를 처음 넘을 때 한 번씩 view 「#home:50%」 로 남긴다 */
+  if (!APP && /^\/(index\.html)?$/.test(location.pathname)) {
+    var 찍음 = {}, 대기 = null;
+    var 재기 = function () {
+      대기 = null;
+      var 화면 = (location.hash || "").replace(/^#\/?/, "").split(/[?#]/)[0] || "home";
+      if (화면.indexOf("s-") === 0) 화면 = "home";
+      var 높이 = document.documentElement.scrollHeight - innerHeight;
+      if (높이 < 200) return;
+      var 비율 = Math.min(100, Math.round(scrollY / 높이 * 100));
+      [25, 50, 75, 100].forEach(function (n) {
+        var k = 화면 + ":" + n;
+        if (비율 >= n - (n === 100 ? 3 : 0) && !찍음[k] && !ss("hb-sc-" + k)) {
+          찍음[k] = 1; ss("hb-sc-" + k, "1"); send("view", ("#" + 화면).slice(0, 40) + ":" + n + "%", kept());
+        }
+      });
+    };
+    addEventListener("scroll", function () { if (!대기) 대기 = setTimeout(재기, 400); }, { passive: true });
+  }
 
   window.HBT = {
     visitor: visitor,

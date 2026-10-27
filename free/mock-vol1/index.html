@@ -286,6 +286,7 @@ input[type=email].err{border-color:var(--bad)}
     try {
       var r = await window.HB.sb.rpc("news_signup", 짐);
       if (r.error) throw r.error;
+      if (window.HBT) HBT.event("lead", "free:" + O.id);
       $("#earlyForm").innerHTML = "<b>적어 두었습니다.</b> " + email + " 로 여는 날 아침에 먼저 보내 드립니다.";
     } catch (err) { msg.textContent = "적지 못했습니다. 잠시 뒤 다시 해 주세요."; $("#earlyGo").disabled = false; }
   });
@@ -306,6 +307,7 @@ input[type=email].err{border-color:var(--bad)}
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok || !d.ok) throw new Error(d.message || "잠시 문제가 생겼습니다. 다시 시도해 주세요.");
+      if (window.HBT) HBT.event("claim", "free:" + O.id);
       $("#form").hidden = true; $("#done").hidden = false;
     } catch (err) {
       msg.textContent = err.message;

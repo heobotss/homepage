@@ -125,8 +125,17 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 
   <div class="done" id="done" hidden>
     <b>가입됐습니다.</b>
-    <p id="doneMsg">이어서 이름과 인스타그램 아이디를 한 번만 채워 주세요. 성적표와 혜택이 그 정보로 찾아갑니다.</p>
-    <a class="btn" href="../me/" style="text-decoration:none;margin-top:16px">내 프로필 채우기</a>
+    <p id="doneMsg">인스타그램 아이디를 한 번만 적어 두세요. 스토리에 <b>@heobotss</b> 를 멘션하시면 성적표와 열리는 강의가 그 아이디로 찾아갑니다.</p>
+    <form id="igForm" novalidate style="margin-top:14px">
+      <label for="igId" style="display:block;font-size:.875rem;color:var(--bone-2);margin-bottom:6px">인스타그램 아이디</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="color:var(--bone-2)">@</span>
+        <input type="text" id="igId" maxlength="30" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="my_id" style="flex:1">
+        <button class="btn" id="igGo" type="submit" style="width:auto;padding:12px 18px">저장</button>
+      </div>
+      <p class="msg" id="igMsg" role="alert"></p>
+    </form>
+    <p style="margin-top:14px"><a href="../me/">이름·센터까지 내 정보 전체 채우기 →</a></p>
   </div>
 
   <p class="foot">
@@ -137,6 +146,34 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../vod/auth.js"></script>
+<script>
+/* 10-27 가입 완료 화면의 인스타 아이디 칸 — 연락처 창고 contacts.instagram 에 적는다 (/story/ 와 같은 칸) */
+(function () {
+  var f = document.getElementById("igForm"); if (!f) return;
+  var sb = window.HB.sb;
+  window.HB.session().then(function (s) {
+    if (!s || !s.user || !s.user.email) return;
+    sb.from("contacts").select("instagram").eq("email", s.user.email.toLowerCase()).maybeSingle()
+      .then(function (r) { if (r.data && r.data.instagram) document.getElementById("igId").value = r.data.instagram; }, function () {});
+  });
+  f.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var m = document.getElementById("igMsg"), id = document.getElementById("igId").value.trim().replace(/^@/, "").toLowerCase();
+    m.textContent = ""; m.className = "msg";
+    if (!/^[a-z0-9._]{2,30}$/.test(id)) { m.textContent = "아이디를 확인해 주세요. 영문·숫자·밑줄·점만 들어갑니다."; return; }
+    var s = await window.HB.session();
+    if (!s || !s.user || !s.user.email) { m.textContent = "로그인이 풀렸습니다. 새로고침 후 다시 해 주세요."; return; }
+    document.getElementById("igGo").disabled = true;
+    try {
+      var r = await sb.from("contacts").upsert({ email: s.user.email.toLowerCase(), instagram: id }, { onConflict: "email" });
+      if (r.error) throw r.error;
+      if (window.HBT) HBT.event("lead", "join-ig");
+      m.className = "msg ok"; m.textContent = "@" + id + " 로 저장했습니다. 이제 스토리에 @heobotss 를 멘션해 주세요.";
+    } catch (err) { m.textContent = window.HB.kr(err) || "저장하지 못했습니다. 잠시 뒤 다시 해 주세요."; }
+    document.getElementById("igGo").disabled = false;
+  });
+})();
+</script>
 <script>
 (function () {
   "use strict";
