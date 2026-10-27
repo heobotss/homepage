@@ -100,7 +100,7 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 
   <div id="authBox"></div>
 
-  <form id="form" hidden>
+  <form id="form">
     <div class="fld">
       <label for="nm">리뷰에 적히는 이름</label>
       <input type="text" id="nm" maxlength="20" autocomplete="name" placeholder="예: 허재민">
@@ -118,7 +118,7 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     </div>
     <p class="msg" id="msg"></p>
     <button class="btn" id="go" type="submit">무료로 받기</button>
-    <p class="why" style="margin-top:12px">결과는 로그인하신 메일 주소 <b id="mailHere"></b> 로 갑니다.</p>
+    <p class="why" style="margin-top:12px" id="mailLine">결과는 로그인하신 메일 주소 <b id="mailHere"></b> 로 갑니다.</p>
   </form>
 
   <div class="state" id="state" hidden>
@@ -141,6 +141,22 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
   var sb = window.HB.sb, 내메일 = "";
+
+  /* 10-27 칸은 로그인 앞에 — 적은 것을 하루 맡겨 두고, 받을 곳(계정)을 정하고 돌아오면 그대로 신청한다 */
+  var 맡김키 = "hb-draft-report";
+  function 맡기기(v) { try { localStorage.setItem(맡김키, JSON.stringify({ v: v, t: Date.now() })); } catch (e) {} }
+  function 찾기() {
+    try {
+      var o = JSON.parse(localStorage.getItem(맡김키) || "null"); localStorage.removeItem(맡김키);
+      return o && Date.now() - o.t < 864e5 ? o.v : null;
+    } catch (e) { return null; }
+  }
+  function 계정상자() {
+    $("#authBox").hidden = false;
+    window.HB.mountAuth($("#authBox"), function () { location.reload(); },
+      { lead: "리포트를 보내 드릴 주소가 필요합니다. 수업일지·강의실과 같은 계정입니다." });
+    $("#authBox").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   function 말(t, 좋음) {
     var m = $("#msg"); m.textContent = t; m.className = "msg" + (t && 좋음 ? " ok" : "");
@@ -184,8 +200,8 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
   async function boot() {
     var s = await window.HB.session();
     if (!s) {
-      window.HB.mountAuth($("#authBox"), function () { location.reload(); },
-        { lead: "리포트를 보내 드릴 주소가 필요합니다. 수업일지·강의실과 같은 계정입니다." });
+      $("#authBox").hidden = true; $("#form").hidden = false;
+      $("#mailLine").textContent = "「무료로 받기」를 누르면 받으실 곳(카카오 또는 이메일)만 정하고 바로 신청됩니다.";
       return;
     }
     내메일 = (s.user.email || "").toLowerCase();
@@ -202,6 +218,8 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
         .eq("email", 내메일).order("created_at", { ascending: false }).limit(1);
       상태보기(r.data && r.data[0]);
     } catch (e) { 상태보기(null); }
+    var d = 찾기();
+    if (d) { $("#state").hidden = true; $("#form").hidden = false; $("#nm").value = d.nm || ""; $("#pl").value = d.pl || ""; $("#pen").value = d.pen || ""; $("#form").requestSubmit(); }
   }
 
   $("#form").addEventListener("submit", async function (e) {
@@ -212,6 +230,7 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     if (!/^https?:\/\/[^\s]+$/.test(주소) || !/(naver)/i.test(주소)) {
       $("#pl").classList.add("err"); 말("네이버 플레이스 주소를 넣어 주세요. 네이버 지도에서 센터를 찾아 「공유 → 주소 복사」입니다.", false); return;
     }
+    if (!내메일) { 맡기기({ nm: 이름, pl: 주소, pen: 필명 }); 말("거의 다 됐습니다 — 아래에서 받으실 곳만 정해 주세요.", true); 계정상자(); return; }
     $("#go").disabled = true; $("#go").textContent = "신청하는 중…";
     var 줄 = { email: 내메일, name: 이름, place_url: 주소, pen_name: 필명 || null };
     if (window.HBT) {

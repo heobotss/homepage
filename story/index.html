@@ -92,7 +92,7 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 
   <div id="authBox"></div>
 
-  <form id="form" hidden>
+  <form id="form">
     <div class="fld">
       <label for="ig">인스타그램 아이디</label>
       <div class="at" id="atWrap"><span>@</span><input type="text" id="ig" maxlength="30" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="my_id"></div>
@@ -125,37 +125,54 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
   </p>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js">
-/* 멤버십 인증 단계 — 무엇을 올리면 무엇이 열리는지 (2026-10-16) */
-async function 그리기단계() {
-  try {
-    var g = await sb.rpc("gate_my_state");
-    var d = g.data;
-    if (!d || d.state !== "ok") return;
-    var 이름 = { vod: "강의", exam: "문제지", atc: "ATC 챌린지" };
-    var html = "";
-    (d.groups || []).forEach(function (그룹) {
-      var steps = 그룹.steps || [];
-      if (!steps.length) return;
-      html += '<div style="margin-bottom:18px"><div style="font-weight:700;margin-bottom:6px">' + (이름[그룹.kind] || 그룹.kind) + "</div>";
-      steps.forEach(function (s) {
-        var 열림 = s.open;
-        html += '<div style="display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line-2);font-size:15px">' +
-          '<span style="width:20px;color:' + (열림 ? "var(--good)" : "var(--warm)") + '">' + (열림 ? "열림" : "잠김").slice(0,2) + "</span>" +
-          "<span style='flex:1'>" + s.label + (열림 ? "" : '<small style="display:block;color:var(--warm)">올릴 내용 — ' + s.ask + "</small>") + "</span></div>";
-      });
-      html += "</div>";
-    });
-    if (html) { document.getElementById("gateList").innerHTML = html; document.getElementById("gate").hidden = false; }
-  } catch (e) { /* 멤버십이 아직 없으면 조용히 넘어간다 */ }
-}
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="../vod/auth.js"></script>
 <script>
 (function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
   var sb = window.HB.sb, 내메일 = "";
+
+  /* 10-27 칸은 로그인 앞에 — 적은 것을 하루 맡겨 두고, 받을 곳(계정)을 정하고 돌아오면 그대로 신청한다 */
+  var 맡김키 = "hb-draft-story";
+  function 맡기기(v) { try { localStorage.setItem(맡김키, JSON.stringify({ v: v, t: Date.now() })); } catch (e) {} }
+  function 찾기() {
+    try {
+      var o = JSON.parse(localStorage.getItem(맡김키) || "null"); localStorage.removeItem(맡김키);
+      return o && Date.now() - o.t < 864e5 ? o.v : null;
+    } catch (e) { return null; }
+  }
+  function 계정상자() {
+    $("#authBox").hidden = false;
+    window.HB.mountAuth($("#authBox"), function () { location.reload(); },
+      { lead: "성적표를 보내 드리려면 계정이 하나 필요합니다. 수업일지·강의실과 같은 계정입니다." });
+    $("#authBox").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /* (10-27 옮김) src 붙은 script 안에 있어 실행되지 않던 함수 — 등록된 분도 폼으로 돌아가던 원인 */
+  /* 멤버십 인증 단계 — 무엇을 올리면 무엇이 열리는지 (2026-10-16) */
+  async function 그리기단계() {
+    try {
+      var g = await sb.rpc("gate_my_state");
+      var d = g.data;
+      if (!d || d.state !== "ok") return;
+      var 이름 = { vod: "강의", exam: "문제지", atc: "ATC 챌린지" };
+      var html = "";
+      (d.groups || []).forEach(function (그룹) {
+        var steps = 그룹.steps || [];
+        if (!steps.length) return;
+        html += '<div style="margin-bottom:18px"><div style="font-weight:700;margin-bottom:6px">' + (이름[그룹.kind] || 그룹.kind) + "</div>";
+        steps.forEach(function (s) {
+          var 열림 = s.open;
+          html += '<div style="display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line-2);font-size:15px">' +
+            '<span style="width:20px;color:' + (열림 ? "var(--good)" : "var(--warm)") + '">' + (열림 ? "열림" : "잠김").slice(0,2) + "</span>" +
+            "<span style='flex:1'>" + s.label + (열림 ? "" : '<small style="display:block;color:var(--warm)">올릴 내용 — ' + s.ask + "</small>") + "</span></div>";
+        });
+        html += "</div>";
+      });
+      if (html) { document.getElementById("gateList").innerHTML = html; document.getElementById("gate").hidden = false; }
+    } catch (e) { /* 멤버십이 아직 없으면 조용히 넘어간다 */ }
+  }
 
   function 말(t, 좋음) {
     var m = $("#msg"); m.textContent = t; m.className = "msg" + (t && 좋음 ? " ok" : "");
@@ -177,11 +194,7 @@ async function 그리기단계() {
 
   async function boot() {
     var s = await window.HB.session();
-    if (!s) {
-      window.HB.mountAuth($("#authBox"), function () { location.reload(); },
-        { lead: "성적표를 보내 드리려면 계정이 하나 필요합니다. 수업일지·강의실과 같은 계정입니다." });
-      return;
-    }
+    if (!s) { $("#authBox").hidden = true; $("#done").hidden = true; $("#form").hidden = false; return; }
     내메일 = (s.user.email || "").toLowerCase();
     $("#authBox").hidden = true;
     $("#who").hidden = false;
@@ -192,6 +205,8 @@ async function 그리기단계() {
       if (r.data && r.data.story_public && $("#pub")) $("#pub").checked = true;
       그리기단계();
     } catch (e) { 보여주기(""); }
+    var d = 찾기();
+    if (d) { 보여주기(""); $("#ig").value = d.ig || ""; if ($("#pub")) $("#pub").checked = !!d.pub; $("#form").requestSubmit(); }
   }
 
   $("#form").addEventListener("submit", async function (e) {
@@ -203,6 +218,7 @@ async function 그리기단계() {
       말("인스타그램 아이디를 확인해 주세요. 영문·숫자·밑줄·점만 들어갑니다.", false);
       return;
     }
+    if (!내메일) { 맡기기({ ig: 아이디, pub: $("#pub") ? $("#pub").checked : false }); 말("거의 다 됐습니다 — 아래에서 계정만 정해 주세요.", true); 계정상자(); return; }
     $("#go").disabled = true; 말("", true);
     try {
       /* 있는 줄은 아이디만 고치고, 없으면 새로 만든다 — 처음 들어온 길(first_via)은 건드리지 않는다 */
