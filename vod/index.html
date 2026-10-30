@@ -138,6 +138,9 @@ function home(){
     var pt = state.part[c.id];
     return '<button class="course" data-c="'+c.id+'"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+(pt ? '무료 열람 '+pt.length+'편 · ' : '')+ymd(state.access[c.id])+'까지 볼 수 있음</span></button>';
   }).join("") + '</div>';
+  // 10-30: 올패스·마스터에만 딸린 자료(교재 15권 · 시청 순서 안내)는 강의 카드가 없어 안 보이던 것 → 첫 화면에 따로 보여 준다
+  var bfiles = state.files.filter(function(f){ return (f.product_id==="vod-allpass"||f.product_id==="vod-4t-master") && state.access[f.product_id]; });
+  if (bfiles.length) h += '<h2 class="sec">자료 내려받기 · 교재와 안내</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+bfiles.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
   if (rest.length) {
     h += '<h2 class="sec">더 볼 수 있는 강의</h2><div class="grid">';
     h += BUNDLES.filter(function(b){ return !state.access[b.id]; }).map(function(b){
@@ -149,6 +152,7 @@ function home(){
   }
   $app.innerHTML = h; bindWho();
   $app.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ openCourse(b.getAttribute("data-c")); }; });
+  $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
 }
 
 // want: 영상 제목 — 자가진단의 「이미 구매했다면 바로 보기」가 넘겨준다. 그 영상이 든 묶음을 열고 바로 띄운다
@@ -168,7 +172,7 @@ function openCourse(id, want){
   else h += '<div style="height:18px"></div>';
   h += '<div class="list" id="list"></div>';
   if (state.part[id]) h += '<p class="muted" style="margin-top:12px">무료 열람권으로 '+state.part[id].length+'편이 열려 있습니다. 나머지는 <a href="../pay/?p='+id+'">강의를 구매</a>하면 12개월 동안 볼 수 있습니다.</p>';
-  if (files.length) h += '<h2 class="sec">문제지 내려받기</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+' PDF</button>'; }).join("")+'</div>';
+  if (files.length) h += '<h2 class="sec">자료 내려받기</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
   if (!vids.length) h += '<p class="muted" style="margin-top:14px">영상을 준비하고 있습니다.</p>';
   $app.innerHTML = h; bindWho();
   document.getElementById("toHome").onclick = function(e){ e.preventDefault(); home(); };
