@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>트레이너 점수 체크리스트 100문항 — 허봇스</title>
-<meta name="description" content="트레이너 점수 체크리스트 100문항 중 30문항 미리 보기. 한 문항 1점, 100점 만점. 이어서 풀면 레벨까지. 로그인 없이 무료.">
+<meta name="description" content="트레이너 점수 체크리스트 100문항 중 30문항 미리 보기. 한 문항 1점, 100점 만점. 이어서 풀면 영역별 점수와 가장 약한 영역까지. 로그인 없이 무료.">
 <link rel="icon" href="../favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta property="og:type" content="website">
@@ -196,7 +196,7 @@ input[type=email].err{border-color:var(--bad)}
   <!-- ── 시작 ── -->
   <section class="view" id="intro">
     <h1>나는 몇 점짜리<br>트레이너일까요</h1>
-    <p class="lede">트레이너 점수 체크리스트 100문항 중 <b>30문항을 먼저 미리 봅니다.</b> 한 문항에 1점, 100점 만점입니다. 이어서 나머지 70문항까지 풀면 내 레벨(LV1~LV4)이 나옵니다.</p>
+    <p class="lede">트레이너 점수 체크리스트 100문항 중 <b>30문항을 먼저 미리 봅니다.</b> 한 문항에 1점, 100점 만점입니다. 이어서 나머지 70문항까지 풀면 영역별 점수와 가장 약한 영역, 그 영역을 메우는 강의가 나옵니다.</p>
 
     <div class="go">
       <button class="btn" id="start" type="button">미리 보기 30문항 시작</button>
@@ -486,22 +486,19 @@ input[type=email].err{border-color:var(--bad)}
       ? "100점 만점에 " + result.total + "점 · 100문항 중 " + result.total + "개 「예」"
       : "100점 만점에 " + result.total + "점 · 미리 보기 30문항 중 " + result.total + "개 「예」";
 
-    $("#rLevel").hidden = !full;
-    if (full) {
-      var L = result.level, say;
-      if (L === 4) say = "<em>LV4</em> 통과 — 체크리스트 마지막 단계입니다.";
-      else if (L === 3) say = "<em>LV3</em> 통과 · LV4까지 <b>" + result.left + "점</b> 남았습니다.";
-      else if (L > 0) say = "<em>LV" + L + "</em> 통과 · LV" + (L + 1) + "까지 <b>" + result.left + "문항</b> 남았습니다.";
-      else say = "아직 LV1 전 · LV1까지 <b>" + result.left + "문항</b> 남았습니다.";
-      $("#rLevel").innerHTML = say;
+    /* 10-30 레벨(LV) 표시 없앰(대표님 결정) — 대신 「다음 목표」: 가장 약한 영역의 빈 문항만 채우면 몇 점 오르는지 */
+    var weak = result.areas.filter(function (a) { return a.key === result.weakest; })[0];
+    $("#rLevel").hidden = !(full && weak);
+    if (full && weak) {
+      var 빈칸 = weak.n - weak.yes;
+      $("#rLevel").innerHTML = "다음 목표 — <em>" + weak.name + "</em> 영역 빈 문항 <b>" + 빈칸 + "개</b>만 채우면 <b>+" + 빈칸 + "점</b>입니다.";
     }
     $("#rMore").hidden = full;
     if (!full) {
-      $("#rMoreSay").innerHTML = "나머지 70문항에 <b>70점</b>이 더 걸려 있습니다. 다 풀면 레벨(LV1~LV4)과 영역별 점수가 나옵니다.";
+      $("#rMoreSay").innerHTML = "나머지 70문항에 <b>70점</b>이 더 걸려 있습니다. 다 풀면 영역별 점수와 가장 약한 영역, 그 영역을 메우는 강의가 나옵니다.";
       문열기();
     }
 
-    var weak = result.areas.filter(function (a) { return a.key === result.weakest; })[0];
     $("#rWeak").innerHTML = weak
       ? "선생님은 <em>" + weak.name + "</em> 영역이 가장 비어 있습니다."
       : (full ? "100문항" : "30문항") + " 전부 「예」입니다.";
