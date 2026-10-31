@@ -80,7 +80,7 @@ var COURSES = [
   { id:"vod-4t-sales",  name:"4T 세일즈", desc:"재등록·OT&체험수업·회원 소개·상담·인바디", price:109000 },
   { id:"vod-4t-coach",  name:"4T 운동지도", desc:"정적·동적평가·맞춤 운동·스몰토크·티칭 오류·2:1 PT", price:129000 },
   { id:"vod-anatomy",   name:"4T 실전해부학", desc:"1~3부", price:149000 },
-  { id:"vod-mock-exam", name:"4T 모의고사", desc:"문제지 8종 + 레벨별·영역별 해설", price:99000 },
+  { id:"vod-mock-exam", name:"4T 모의고사", desc:"문제지 9종(LV0 · VOL1~4 · 영역별 4) + 채점용 정답표 + 레벨별·영역별 해설", price:99000 },
   { id:"vod-startup",   name:"트레이너 창업 (창업 전)", desc:"단독 강의", price:49000 }
 ];
 var BUNDLES = [
@@ -93,6 +93,11 @@ var mmss = function(s){ if(!s) return ""; var h=Math.floor(s/3600), m=Math.floor
 
 var state = { session:null, access:{}, part:{}, videos:[], files:[], course:null, coll:null, videoId:null, hls:null };
 // part[상품] = 무료 열람권으로 열린 영상 id 목록 (09-18). 없으면 상품 전체를 볼 수 있다
+// 10-31: 4T 세일즈·회원관리·운동지도 페이지에도 짝 교재를 보여 준다(올패스·4T 마스터 구매자)
+var EBOOK_OF = { "vod-4t-sales":["ebook/rereg.pdf","ebook/ot.pdf","ebook/referral.pdf","ebook/consult.pdf","ebook/inbody.pdf"],
+  "vod-4t-member":["ebook/personal.pdf","ebook/diet.pdf","ebook/schedule.pdf","ebook/online.pdf"],
+  "vod-4t-coach":["ebook/static.pdf","ebook/dynamic.pdf","ebook/custom.pdf","ebook/smalltalk.pdf","ebook/teaching.pdf","ebook/2on1.pdf"] };
+var ASK = '<p class="muted" style="margin-top:18px">질문·문의: <a href="mailto:gjwodbs77@gmail.com">gjwodbs77@gmail.com</a> — 결제할 때 쓴 이메일로 보내 주세요.</p>';
 function canPlay(v){ var p = state.part[v.product_id]; return !p || p.indexOf(v.id) >= 0; }
 
 async function authed(url, body){
@@ -104,7 +109,7 @@ async function authed(url, body){
 async function boot(){
   state.session = await HB.session();
   if (!state.session) {
-    document.getElementById("lead").textContent = "로그인하면 구매한 강의가 보입니다.";
+    document.getElementById("lead").textContent = "결제할 때 쓴 계정(이메일)으로 로그인하면 구매한 강의가 보입니다.";
     HB.mountAuth($app, function(){ boot(); });
     return;
   }
@@ -140,7 +145,7 @@ function home(){
   }).join("") + '</div>';
   // 10-30: 올패스·마스터에만 딸린 자료(교재 15권 · 시청 순서 안내)는 강의 카드가 없어 안 보이던 것 → 첫 화면에 따로 보여 준다
   var bfiles = state.files.filter(function(f){ return (f.product_id==="vod-allpass"||f.product_id==="vod-4t-master") && state.access[f.product_id]; });
-  if (bfiles.length) h += '<h2 class="sec">자료 내려받기 · 교재와 안내</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+bfiles.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
+  if (bfiles.length) h += '<h2 class="sec">자료 내려받기 · 교재와 안내</h2><p class="muted" style="margin:-6px 0 8px">PDF는 구매하신 이메일이 쪽마다 찍혀서 내려받아집니다. 엑셀은 컴퓨터에서 여세요. 자료는 구매한 센터 안에서만 쓰세요.</p><div class="files">'+bfiles.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
   if (rest.length) {
     h += '<h2 class="sec">더 볼 수 있는 강의</h2><div class="grid">';
     h += BUNDLES.filter(function(b){ return !state.access[b.id]; }).map(function(b){
@@ -150,6 +155,7 @@ function home(){
       return '<div class="course locked"><span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+won(c.price)+' · 12개월</span><a class="buy" href="../pay/?p='+c.id+'">구매하기 →</a></div>';
     }).join("") + '</div>';
   }
+  h += ASK;
   $app.innerHTML = h; bindWho();
   $app.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ openCourse(b.getAttribute("data-c")); }; });
   $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
@@ -163,6 +169,7 @@ function openCourse(id, want){
   var vids = state.videos.filter(function(v){ return v.product_id===id; });
   var colls = []; vids.forEach(function(v){ if (colls.indexOf(v.collection)<0) colls.push(v.collection); });
   var files = state.part[id] ? [] : state.files.filter(function(f){ return f.product_id===id; });   // 무료 열람권은 문제지 제외
+  if (!state.part[id] && EBOOK_OF[id] && state.access["vod-4t-master"]) files = files.concat(state.files.filter(function(f){ return EBOOK_OF[id].indexOf(f.key)>=0; }));
   var wv = want ? vids.filter(function(v){ return v.title === want; })[0] : null;
   state.coll = wv ? wv.collection : colls[0];
   var h = whoBar() + '<a href="#" class="back" id="toHome">← 내 강의</a>';
@@ -172,8 +179,9 @@ function openCourse(id, want){
   else h += '<div style="height:18px"></div>';
   h += '<div class="list" id="list"></div>';
   if (state.part[id]) h += '<p class="muted" style="margin-top:12px">무료 열람권으로 '+state.part[id].length+'편이 열려 있습니다. 나머지는 <a href="../pay/?p='+id+'">강의를 구매</a>하면 12개월 동안 볼 수 있습니다.</p>';
-  if (files.length) h += '<h2 class="sec">자료 내려받기</h2><p class="muted" style="margin:-6px 0 8px">구매하신 이메일이 페이지마다 찍혀서 내려받아집니다.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
+  if (files.length) h += '<h2 class="sec">자료 내려받기</h2><p class="muted" style="margin:-6px 0 8px">PDF는 구매하신 이메일이 쪽마다 찍혀서 내려받아집니다. 엑셀은 컴퓨터에서 여세요. 자료는 구매한 센터 안에서만 쓰세요.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
   if (!vids.length) h += '<p class="muted" style="margin-top:14px">영상을 준비하고 있습니다.</p>';
+  h += ASK;
   $app.innerHTML = h; bindWho();
   document.getElementById("toHome").onclick = function(e){ e.preventDefault(); home(); };
   document.getElementById("fs").onclick = function(){ var p=document.getElementById("player"); if (document.fullscreenElement) document.exitFullscreen(); else if (p.requestFullscreen) p.requestFullscreen(); else document.getElementById("vid").webkitEnterFullscreen && document.getElementById("vid").webkitEnterFullscreen(); };
@@ -186,7 +194,7 @@ function openCourse(id, want){
   if (first) play(first.id, false);
 }
 function label(n){
-  if (/나눠 보기/.test(n)) return "LV별로 나눠 보기";
+  if (/나눠 보기/.test(n)) return "연차별로 나눠 보기";
   if (/트레이너 가이드/.test(n)) return "전체 강의";
   if (/레벨별/.test(n)) return "레벨별 해설";
   if (/영역별/.test(n)) return "영역별 해설";
