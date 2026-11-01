@@ -91,7 +91,7 @@ var won = function(n){ return n.toLocaleString("ko-KR") + "원"; };
 var ymd = function(d){ var x=new Date(d); return x.getFullYear()+"."+(x.getMonth()+1)+"."+x.getDate(); };
 var mmss = function(s){ if(!s) return ""; var h=Math.floor(s/3600), m=Math.floor(s%3600/60); return h? h+"시간 "+m+"분" : m+"분"; };
 
-var state = { session:null, access:{}, part:{}, videos:[], files:[], course:null, coll:null, videoId:null, hls:null };
+var state = { session:null, access:{}, part:{}, videos:[], files:[], lib:[], course:null, coll:null, videoId:null, hls:null };
 // part[상품] = 무료 열람권으로 열린 영상 id 목록 (09-18). 없으면 상품 전체를 볼 수 있다
 // 10-31: 4T 세일즈·회원관리·운동지도 페이지에도 짝 교재를 보여 준다(올패스·4T 마스터 구매자)
 var EBOOK_OF = { "vod-4t-sales":["ebook/rereg.pdf","ebook/ot.pdf","ebook/referral.pdf","ebook/consult.pdf","ebook/inbody.pdf"],
@@ -121,8 +121,11 @@ async function boot(){
   state.videos = r2.data || [];
   var r3 = await sb.from("vod_files").select("*").order("sort");
   state.files = r3.data || [];
-  var q = new URLSearchParams(location.search).get("c");
-  if (q && state.access[q]) openCourse(q, new URLSearchParams(location.search).get("t")); else home();
+  // 10-31 내 자료실 — 무료로 받은 문서형 자료(릴스 미끼). 표가 없거나 못 읽으면 빈 목록
+  var r4 = await sb.from("free_doc_access").select("offer_id, created_at, free_offers(title, what)").order("created_at", { ascending:false });
+  state.lib = r4.error ? [] : (r4.data || []);
+  var qs = new URLSearchParams(location.search), q = qs.get("c");
+  if (q && state.access[q]) openCourse(q, qs.get("t")); else if (qs.get("v") === "lib") library(); else home();
 }
 
 function whoBar(){
@@ -136,7 +139,7 @@ function home(){
   history.replaceState(null, "", location.pathname);
   var mine = COURSES.filter(function(c){ return state.access[c.id]; });
   var rest = COURSES.filter(function(c){ return !state.access[c.id]; });
-  var h = whoBar();
+  var h = whoBar() + mainTabs("home");
   h += '<h2 class="sec">내 강의 ' + mine.length + '</h2>';
   if (!mine.length) h += '<p class="muted">아직 구매한 강의가 없습니다. 아래에서 고르거나 <a href="../#/vod">무료 강의</a>부터 보세요.</p>';
   else h += '<div class="grid">' + mine.map(function(c){
@@ -156,9 +159,32 @@ function home(){
     }).join("") + '</div>';
   }
   h += ASK;
-  $app.innerHTML = h; bindWho();
+  $app.innerHTML = h; bindWho(); bindTabs();
   $app.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ openCourse(b.getAttribute("data-c")); }; });
   $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
+}
+
+// 10-31 강의실 안 탭: 「내 강의」 · 「내 자료실」
+function mainTabs(on){
+  return '<div class="tabs" id="mainTabs" role="tablist"><button type="button" role="tab" data-v="home" aria-selected="'+(on==="home")+'" class="'+(on==="home"?"on":"")+'">내 강의</button>'+
+    '<button type="button" role="tab" data-v="lib" aria-selected="'+(on==="lib")+'" class="'+(on==="lib"?"on":"")+'">내 자료실 '+state.lib.length+'</button></div>';
+}
+function bindTabs(){
+  var t=document.getElementById("mainTabs"); if(!t) return;
+  t.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ if (b.getAttribute("data-v")==="lib") library(); else home(); }; });
+}
+function library(){
+  stopPlayer(); state.course=null;
+  history.replaceState(null, "", location.pathname + "?v=lib");
+  var h = whoBar() + mainTabs("lib");
+  h += '<h2 class="sec">내 자료실 ' + state.lib.length + '</h2>';
+  if (!state.lib.length) h += '<p class="muted">아직 받은 무료 자료가 없습니다. 릴스에 나온 자료를 받으면 여기에 자동으로 모입니다.</p>';
+  else h += '<p class="muted" style="margin:-6px 0 8px">받은 자료는 기간 없이 언제든 다시 열 수 있습니다. 화면에서 바로 적고 인쇄해도 됩니다.</p><div class="grid">' + state.lib.map(function(a){
+    var o = a.free_offers || {};
+    return '<a class="course" style="text-decoration:none" href="/free/'+encodeURIComponent(a.offer_id)+'/view/"><span class="t">'+esc(o.title||a.offer_id)+'</span><span class="d">'+esc(o.what||"")+'</span><span class="s">'+ymd(a.created_at)+' 받음 · 열기 →</span></a>';
+  }).join("") + '</div>';
+  h += ASK;
+  $app.innerHTML = h; bindWho(); bindTabs();
 }
 
 // want: 영상 제목 — 자가진단의 「이미 구매했다면 바로 보기」가 넘겨준다. 그 영상이 든 묶음을 열고 바로 띄운다

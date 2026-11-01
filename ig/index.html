@@ -132,7 +132,7 @@ h2.sec{font-size:.8125rem;color:var(--warm);font-weight:400;letter-spacing:.04em
 (function () {
   var URL_ = "https://kpubgeejyiupdvbbdxwt.supabase.co/rest/v1/free_offers";
   var KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";
-  fetch(URL_ + "?select=id,title,what,opens_at,closes_at&order=opens_at.asc", { headers: { apikey: KEY, Authorization: "Bearer " + KEY } })
+  fetch(URL_ + "?select=id,title,what,opens_at,closes_at&kind=eq.video&order=opens_at.asc", { headers: { apikey: KEY, Authorization: "Bearer " + KEY } })
     .then(function (r) { return r.json(); })
     .then(function (list) {
       if (!list || !list.length) return;
