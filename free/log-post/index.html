@@ -258,7 +258,7 @@ input[type=email].err{border-color:var(--bad)}
 <script>
 (function () {
   "use strict";
-  const O = {"id": "log-post", "opens_at": "2026-10-30T15:00:00+00:00", "closes_at": "2099-12-30T15:00:00+00:00", "paid_hint": null, "kind": "doc", "always_open": true, "target_url": "https://heobotss.com/free/log-post/view/", "opens_txt": "10월 31일(토)"};
+  const O = {"id": "log-post", "opens_at": "2026-10-30T15:00:00+00:00", "closes_at": "2099-12-30T15:00:00+00:00", "paid_hint": null, "kind": "doc", "always_open": true, "target_url": "https://heobotss.com/free/log-post/view/", "opens_txt": "10월 31일(토)", "undecided": false};
   const FN = "https://kpubgeejyiupdvbbdxwt.supabase.co/functions/v1/free-claim";
   const $ = (s) => document.querySelector(s);
 
@@ -275,7 +275,7 @@ input[type=email].err{border-color:var(--bad)}
     $("#state").textContent = p === "open" ? (O.always_open ? "언제든 받을 수 있음" : "지금 신청 받는 중") : p === "early" ? "곧 열립니다" : "신청 기간 끝";
     $("#form").hidden = p !== "open";
     $("#closed").hidden = p === "open";
-    if (p === "early") { $("#earlyForm").hidden = false; $("#closedT").textContent = O.opens_txt + "에 열립니다."; $("#closedP").textContent = "지금 메일을 남겨 두시면 여는 날 아침에 먼저 보내 드립니다."; $("#paid").hidden = true; }
+    if (p === "early") { $("#earlyForm").hidden = false; $("#closedT").textContent = O.undecided ? "여는 날을 정하는 중입니다." : O.opens_txt + "에 열립니다."; $("#closedP").textContent = O.undecided ? "지금 메일을 남겨 두시면 여는 날이 정해질 때 먼저 알려 드립니다." : "지금 메일을 남겨 두시면 여는 날 아침에 먼저 보내 드립니다."; $("#paid").hidden = true; }
     if (p === "closed") { $("#closedT").textContent = "신청 기간이 끝났습니다."; $("#closedP").textContent = O.paid_hint || ""; $("#paid").hidden = !O.paid_hint; }
   }
   show();

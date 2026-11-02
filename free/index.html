@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>무료 자료 — 허봇스</title><meta name="description" content="메일 주소 하나면 받는 트레이너 무료 자료 모음입니다.">
+<link rel="canonical" href="https://heobotss.com/free/"><link rel="icon" href="/favicon.png" type="image/png">
+<style>
+@font-face{font-family:'Pretend';font-weight:400;font-display:swap;src:url('/fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-weight:900;font-display:swap;src:url('/fonts/pretendard-900.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--blue:#4F86F7;--line:#262626}
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;display:flex;flex-direction:column;background:var(--ink);color:var(--bone);font-family:'Pretend',system-ui,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.7;word-break:keep-all}
+header{padding:18px clamp(16px,4vw,28px)}header a{color:var(--bone);text-decoration:none;font-weight:900;font-size:1.25rem}
+main{flex:1;width:100%;max-width:620px;margin:0 auto;padding:clamp(40px,9vw,88px) clamp(16px,4vw,28px) 48px}
+h1{font-size:clamp(2rem,7vw,2.8rem);line-height:1.22;letter-spacing:-.045em;font-weight:900;margin:0 0 14px}p{color:var(--bone-2);margin:0 0 28px}
+ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}li a{display:block;padding:16px 0;border-bottom:1px solid var(--line);color:var(--bone);text-decoration:none}
+li a span{display:block;font-size:.875rem;color:var(--warm)}li a:hover,li a:focus-visible{color:var(--blue)}:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.legal{max-width:620px;width:100%;margin:0 auto;padding:16px clamp(16px,4vw,28px) 32px;font-size:.8125rem;color:var(--warm);border-top:1px solid var(--line)}.legal a{color:var(--warm)}
+</style></head><body><header><a href="/">허봇스</a></header>
+<main><h1>무료 자료</h1><p>메일 주소 하나면 받습니다.</p><ul><li><a href="/free/cycle/">선생님 회원으로 바로 세는 1분 계산표<span>결제 구조 1분 계산표 · 화면에서 바로 적고 인쇄</span></a></li><li><a href="/free/log-post/">수업 기록 글 뼈대 6단계 + 전후 예시<span>블로그 수업 기록 글 뼈대 6단계 · 전후 예시 1쌍 · 쓰기 전 점검 3줄</span></a></li><li><a href="/free/insta-check/">선생님 계정 진단 순서표<span>인스타 계정 진단 5단계 · 계산 칸</span></a></li><li><a href="/free/log-ocr/">일지 사진 판독 지시문<span>AI 지시문(복사 버튼) · 읽은 뒤 숫자 대조 5단계</span></a></li><li><a href="/free/mock-vol1/">헬스트레이너 모의고사 VOL 1 문제지 20문항 무료<span>4T 모의고사 VOL 1 문제지 PDF · 20문항 · 준비 중</span></a></li><li><a href="/free/rereg/">헬스트레이너 재등록 시스템 전자책 무료<span>4T 회원 재등록 시스템 전자책 PDF · 42쪽 · 준비 중</span></a></li></ul></main>
+<footer class="legal" id="legal"></footer>
+<script>fetch("/policy/legal.txt").then(function(r){return r.ok?r.text():""}).then(function(t){if(t)document.getElementById("legal").innerHTML=t.replace(/\.\.\/policy\//g,"/policy/")}).catch(function(){});</script>
+</body></html>
