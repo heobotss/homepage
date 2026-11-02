@@ -56,6 +56,7 @@ h1{word-break:keep-all;font-size:clamp(2.1rem,7.4vw,3.4rem);line-height:1.2;lett
 .lede b{color:var(--bone);font-weight:700}
 .make .cap{display:flex;justify-content:space-between;margin:0;padding:10px 0;border-bottom:1px solid var(--line);font-size:.8125rem;color:var(--warm)}
 .count{font-size:1rem;color:var(--bone-2);margin:10px 0 0}
+.count b{color:var(--bone);font-weight:700}
 .lvl{font-size:clamp(1.25rem,4vw,1.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.5;margin:22px 0 0}
 .lvl em{font-style:normal;font-family:var(--tech);letter-spacing:.02em;border-bottom:2px solid var(--blue)}
 .lvl b{font-weight:700}
@@ -232,7 +233,7 @@ input[type=email].err{border-color:var(--bad)}
   <!-- ── 결과 ── -->
   <section class="view" id="result" hidden>
     <p class="what" id="rWhat"></p>
-    <div class="total"><b id="rTotal">0</b><span>/ 100</span></div>
+    <div class="total"><b id="rTotal">0</b><span id="rOf">/ 30</span></div>
     <p class="count" id="rCount"></p>
     <p class="lvl" id="rLevel" hidden></p>
 
@@ -436,19 +437,23 @@ input[type=email].err{border-color:var(--bad)}
     $("#back").style.visibility = cur > r[0] ? "visible" : "hidden";
     document.querySelectorAll(".ans button").forEach(function (b) { b.classList.toggle("on", ans[cur] === b.dataset.a); });
   }
-  var busy = false;
+  /* 11-02 — 0.1초 안에 두 번 누르면 뒤엣것이 통째로 씹혔다(30번 눌러 16문항).
+     기다리는 동안 들어온 답을 하나 기억했다가 이어서 처리한다 */
+  var busy = false, 다음답 = null;
   function answer(a) {
-    if (busy || $("#quiz").hidden) return;
+    if ($("#quiz").hidden) return;
+    if (busy) { 다음답 = a; return; }
     ans[cur] = a; store();
     document.querySelectorAll(".ans button").forEach(function (b) { b.classList.toggle("on", b.dataset.a === a); });
     busy = true;
     setTimeout(function () {
       busy = false;
       var r = range(phase);
-      if (cur < r[1] - 1) { cur++; ask(); } else finish();
-    }, 160);
+      if (cur < r[1] - 1) { cur++; ask(); } else { 다음답 = null; finish(); return; }
+      if (다음답) { var k = 다음답; 다음답 = null; answer(k); }
+    }, 120);
   }
-  function back() { if (cur > range(phase)[0] && !busy) { cur--; ask(); } }
+  function back() { 다음답 = null; if (cur > range(phase)[0] && !busy) { cur--; ask(); } }
   function begin(p) {
     phase = p;
     var r = range(p);
@@ -482,9 +487,12 @@ input[type=email].err{border-color:var(--bad)}
 
     $("#rWhat").textContent = full ? "트레이너 점수 체크리스트 · 전체 100문항" : "트레이너 점수 체크리스트 · 미리 보기 30문항";
     $("#rTotal").textContent = result.total;
-    $("#rCount").textContent = full
-      ? "100점 만점에 " + result.total + "점 · 100문항 중 " + result.total + "개 「예」"
-      : "100점 만점에 " + result.total + "점 · 미리 보기 30문항 중 " + result.total + "개 「예」";
+    /* 11-02 — 미리 보기는 아무리 잘해도 30점이라 「100점 만점에 4점」이 첫인상이 됐다.
+       푼 만큼을 분모로 보여 주고, 100점 기준은 아래 줄로 내린다 */
+    $("#rOf").textContent = full ? "/ 100" : "/ " + NP;
+    $("#rCount").innerHTML = full
+      ? "100문항 중 <b>" + result.total + "개</b> 「예」 — 100점 만점에 " + result.total + "점"
+      : "미리 보기 " + NP + "문항 중 <b>" + result.total + "개</b> 「예」 · 나머지 " + (QS.length - NP) + "문항에 " + (QS.length - NP) + "점이 남아 있습니다";
 
     /* 10-30 레벨(LV) 표시 없앰(대표님 결정) — 대신 「다음 목표」: 가장 약한 영역의 빈 문항만 채우면 몇 점 오르는지 */
     var weak = result.areas.filter(function (a) { return a.key === result.weakest; })[0];
@@ -555,7 +563,7 @@ input[type=email].err{border-color:var(--bad)}
     if (weak) {
       var m = AREA2[weak.key];
       ab.innerHTML = m
-        ? "가장 낮은 영역 <em>" + weak.name + "</em> (" + weak.yes + "/" + weak.n + ") — 잃은 점수가 <a href=\"../pay/?p=" + m[0] + "\"><em>" + m[1] + "</em></a>(" + won(m[2]) + "원)의 내용입니다. 결제하면 지금 바로 열립니다. 멤버십이 열리면 강의 구매자는 연 59,400원으로 이어집니다."
+        ? "가장 낮은 영역 <em>" + weak.name + "</em> (" + weak.yes + "/" + weak.n + ") — 잃은 점수가 <a href=\"../pay/?p=" + m[0] + "\"><em>" + m[1] + "</em></a>(" + won(m[2]) + "원)의 내용입니다. 결제하면 지금 바로 열립니다."
         : "가장 낮은 영역 <em>" + weak.name + "</em> — 센터 쪽은 <a href=\"../center/\"><em>센터 진단표(무료)</em></a>부터 받아 보세요. 그걸 하루에 같이 고치는 날이 4T 트레이너 마케팅 세미나입니다.";
       ab.hidden = 일부만;
     } else ab.hidden = true;
