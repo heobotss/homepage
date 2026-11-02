@@ -1,5 +1,5 @@
 {
-  "v": "2026-09-17c",
+  "v": "2026-11-03a",
   "areas": [
     {
       "key": "lesson",
@@ -197,13 +197,13 @@
       "text": "수업을 시작할 때 회원의 몸 컨디션부터 확인한다"
     },
     {
-      "id": "q8",
-      "src": 8,
+      "id": "q5",
+      "src": 5,
       "area": "lesson",
-      "lv": 3,
+      "lv": 1,
       "preview": true,
-      "part": "coach-smalltalk",
-      "text": "세트 사이 쉬는 시간에 회원과 나누는 대화가 부담스럽지 않다"
+      "part": null,
+      "text": "수업을 시작할 때 그날 할 운동을 간단히 설명한다"
     },
     {
       "id": "q10",
@@ -211,26 +211,26 @@
       "area": "lesson",
       "lv": 1,
       "preview": true,
-      "part": "coach-teaching",
+      "part": null,
       "text": "수업 중 회원의 운동 동작을 옆에서 보조해 준다"
     },
     {
-      "id": "q17",
-      "src": 17,
+      "id": "q14",
+      "src": 14,
       "area": "lesson",
-      "lv": 3,
+      "lv": 1,
       "preview": true,
-      "part": "coach-static",
-      "text": "정적 체형평가를 할 줄 안다"
+      "part": null,
+      "text": "다음에 할 운동을 미리 안내한다"
     },
     {
-      "id": "q18",
-      "src": 18,
+      "id": "q19",
+      "src": 19,
       "area": "lesson",
-      "lv": 3,
+      "lv": 1,
       "preview": true,
-      "part": "coach-dynamic",
-      "text": "동적 체형평가를 할 줄 안다"
+      "part": "coach-smalltalk",
+      "text": "수업 중에 운동 강도를 확인한다"
     },
     {
       "id": "q21",
@@ -248,7 +248,7 @@
       "lv": 2,
       "preview": true,
       "part": "sales-rereg",
-      "text": "회원의 근력 변화를 기록해서 확인한다"
+      "text": "회원의 근력·근지구력 변화를 확인한다"
     },
     {
       "id": "q32",
@@ -267,8 +267,18 @@
       "lv": 4,
       "preview": true,
       "part": "sales-rereg",
-      "text": "1년 넘게 함께한 회원이 있다",
+      "text": "1년 이상 함께한 회원이 있다",
       "hint": "한 번이라도 있었으면 「예」."
+    },
+    {
+      "id": "q43",
+      "src": 43,
+      "area": "experience",
+      "lv": 1,
+      "preview": true,
+      "part": "member-online",
+      "text": "회원 리뷰를 꾸준히 쌓고 있다",
+      "hint": "지금 하고 있으면 「예」."
     },
     {
       "id": "q36",
@@ -291,16 +301,6 @@
       "hint": "한 번이라도 있었으면 「예」."
     },
     {
-      "id": "q43",
-      "src": 43,
-      "area": "experience",
-      "lv": 1,
-      "preview": true,
-      "part": "member-online",
-      "text": "회원 리뷰를 꾸준히 쌓고 있다",
-      "hint": "지금 하고 있으면 「예」."
-    },
-    {
       "id": "q50",
       "src": 50,
       "area": "care",
@@ -316,7 +316,8 @@
       "lv": 2,
       "preview": true,
       "part": "member-diet",
-      "text": "회원에게 식단 구성 가이드를 줄 수 있다"
+      "text": "회원에게 식단 구성 가이드를 줄 수 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q46",
@@ -325,7 +326,7 @@
       "lv": 1,
       "preview": true,
       "part": "sales-rereg",
-      "text": "회원의 운동 사진이나 영상을 찍어 준다"
+      "text": "회원의 운동 사진을 찍어 준다"
     },
     {
       "id": "q63",
@@ -335,7 +336,7 @@
       "preview": true,
       "part": null,
       "text": "트레이너로서 몸 관리가 되어 있다",
-      "hint": "지금 기준으로 답해 주세요."
+      "hint": "남자 체지방률 15%, 여자 20% 미만이면 「예」. 모르면 느낌대로 답해 주세요."
     },
     {
       "id": "q65",
@@ -353,7 +354,7 @@
       "lv": 2,
       "preview": true,
       "part": "member-online",
-      "text": "경력·자격·사진을 정리한 트레이너 프로필이 있다"
+      "text": "트레이너 프로필을 가지고 있다"
     },
     {
       "id": "q70",
@@ -389,7 +390,8 @@
       "lv": 2,
       "preview": true,
       "part": "sales-consult",
-      "text": "회원 상담을 할 줄 안다"
+      "text": "회원 상담을 할 줄 안다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q79",
@@ -398,7 +400,8 @@
       "lv": 2,
       "preview": true,
       "part": "sales-inbody",
-      "text": "인바디 결과를 회원에게 설명할 줄 안다"
+      "text": "인바디 결과를 회원에게 설명할 줄 안다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q77",
@@ -407,7 +410,8 @@
       "lv": 3,
       "preview": true,
       "part": null,
-      "text": "전화 상담에 응대할 줄 안다"
+      "text": "전화 상담에 응대할 줄 안다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q86",
@@ -464,15 +468,6 @@
       "text": "수업 당일, 수업 전에 회원에게 스케줄 알림을 보낸다"
     },
     {
-      "id": "q5",
-      "src": 5,
-      "area": "lesson",
-      "lv": 1,
-      "preview": false,
-      "part": null,
-      "text": "수업을 시작할 때 그날 할 운동을 간단히 설명한다"
-    },
-    {
       "id": "q7",
       "src": 7,
       "area": "lesson",
@@ -482,13 +477,23 @@
       "text": "운동을 지도하기 전에 직접 몸으로 시범을 보인다"
     },
     {
+      "id": "q8",
+      "src": 8,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": "coach-smalltalk",
+      "text": "세트 사이 쉬는 시간에 회원과 나누는 대화가 부담스럽지 않다"
+    },
+    {
       "id": "q9",
       "src": 9,
       "area": "lesson",
       "lv": 3,
       "preview": false,
       "part": "coach-smalltalk",
-      "text": "세트 사이 쉬는 시간을 조절할 수 있다"
+      "text": "세트 사이 쉬는 시간을 조절할 수 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q11",
@@ -515,16 +520,7 @@
       "lv": 1,
       "preview": false,
       "part": null,
-      "text": "수업할 때 회원보다 목소리가 크다"
-    },
-    {
-      "id": "q14",
-      "src": 14,
-      "area": "lesson",
-      "lv": 1,
-      "preview": false,
-      "part": null,
-      "text": "다음에 할 운동을 미리 안내한다"
+      "text": "회원에게 잘 들리는 목소리로 지도한다"
     },
     {
       "id": "q15",
@@ -533,7 +529,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "자가근막이완 방법을 알고 지도한다"
+      "text": "자가근막이완 방법을 알고 지도한다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q16",
@@ -545,13 +542,24 @@
       "text": "운동 횟수를 틀리지 않고 정확하게 센다"
     },
     {
-      "id": "q19",
-      "src": 19,
+      "id": "q17",
+      "src": 17,
       "area": "lesson",
-      "lv": 1,
+      "lv": 3,
       "preview": false,
-      "part": "coach-smalltalk",
-      "text": "수업 중에 운동 강도를 확인한다"
+      "part": "coach-static",
+      "text": "정적 체형평가를 할 줄 안다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
+    },
+    {
+      "id": "q18",
+      "src": 18,
+      "area": "lesson",
+      "lv": 3,
+      "preview": false,
+      "part": "coach-dynamic",
+      "text": "동적 체형평가를 할 줄 안다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q20",
@@ -578,7 +586,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "100가지 이상의 운동 동작을 알고 지도한다"
+      "text": "100가지 이상의 운동 동작을 알고 지도한다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q24",
@@ -587,7 +596,8 @@
       "lv": 3,
       "preview": false,
       "part": "coach-static",
-      "text": "체형 신드롬을 알고 그에 맞는 운동 프로그램을 구성할 수 있다"
+      "text": "체형 신드롬을 알고 그에 맞는 운동 프로그램을 구성할 수 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q26",
@@ -623,7 +633,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "주말 수업이 가능하다"
+      "text": "주말 수업이 가능하다",
+      "hint": "할 수 있으면 「예」."
     },
     {
       "id": "q30",
@@ -632,7 +643,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "오전 수업이 가능하다"
+      "text": "오전 수업이 가능하다",
+      "hint": "할 수 있으면 「예」."
     },
     {
       "id": "q31",
@@ -782,7 +794,8 @@
       "lv": 2,
       "preview": false,
       "part": null,
-      "text": "유산소 운동 강도를 회원에게 맞춰 준다"
+      "text": "유산소 운동 강도를 회원에게 맞춰 준다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q55",
@@ -809,7 +822,7 @@
       "lv": 2,
       "preview": false,
       "part": null,
-      "text": "트레이너 관련 자격증이 있다"
+      "text": "회원 관리·상담·마케팅처럼 트레이너 일에 관한 자격증이 있다"
     },
     {
       "id": "q58",
@@ -818,7 +831,7 @@
       "lv": 2,
       "preview": false,
       "part": null,
-      "text": "트레이닝 관련 자격증이 있다"
+      "text": "해부학·운동법·기구 사용처럼 운동에 관한 자격증이 있다"
     },
     {
       "id": "q59",
@@ -836,7 +849,8 @@
       "lv": 1,
       "preview": false,
       "part": null,
-      "text": "웨이트 트레이닝에 쓰이는 근육 이름을 알고 있다"
+      "text": "웨이트 트레이닝에 쓰이는 근육 이름을 알고 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q61",
@@ -845,7 +859,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "근육마다 시작하고 끝나는 곳(기시·정지)을 알고 있다"
+      "text": "근육마다 시작하고 끝나는 곳(기시·정지)을 알고 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q62",
@@ -854,7 +869,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "근육마다 하는 일을 알고 있다"
+      "text": "근육마다 하는 일을 알고 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q64",
@@ -930,7 +946,8 @@
       "lv": 2,
       "preview": false,
       "part": "sales-consult",
-      "text": "센터에 직접 찾아온 방문 고객을 응대할 수 있다"
+      "text": "센터에 직접 찾아온 방문 고객을 응대할 수 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q80",
@@ -939,7 +956,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "센터 결제 시스템을 알고 있다"
+      "text": "센터 결제 시스템을 알고 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q81",
@@ -948,7 +966,8 @@
       "lv": 3,
       "preview": false,
       "part": null,
-      "text": "환불 규정을 알고 회원에게 설명할 수 있다"
+      "text": "환불 규정을 알고 회원에게 설명할 수 있다",
+      "hint": "할 수 있으면 「예」. 자신 없으면 「아니요」."
     },
     {
       "id": "q82",
