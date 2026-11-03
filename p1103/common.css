@@ -418,8 +418,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
   .fx .hs .card-it p{opacity:0;transition:opacity .4s;font-size:var(--t6)}
   .fx .hs.spread .card-it p{opacity:1}
   .fx .hs.spread .card-it img{transition:transform .35s cubic-bezier(.2,.8,.2,1);transform-origin:center bottom}
-  .fx .hs.spread .card-it:hover{z-index:40 !important}
-  .fx .hs.spread .card-it:hover img{transform:scale(1.9)}
+  @media (hover:hover){.fx .hs.spread .card-it:hover{z-index:40 !important}.fx .hs.spread .card-it:hover img{transform:scale(1.9)}}
 }
 
 /* ── 준비 중 세 칸 — 김 서린 유리 ── */
