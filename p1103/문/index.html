@@ -64,20 +64,21 @@
 </div></header>
 
 <main id="main">
-<!-- ① 28,200개의 점 → 상자 → 문 둘 → 겸직 한 줄 : 스크롤하거나 누르면 열린다. 자바스크립트가 없거나 움직임 줄이기면 세로로 전부 보인다 -->
+<!-- ① 28,200개의 점 → 상자 → 문 둘 : 패널 1103 결정 ①(16명 걸림) — 「눌러서 열어 보기」 단추·스크롤 관문을 없애고, 숫자를 다 세면 제목과 문 둘이 첫 화면에 바로 보인다.
+     점은 스크롤 없이 스스로 문틀로 모인다(_공통.js door 자동 진행). 안내 「1인샵…」은 카드 위로. 자바스크립트가 없거나 움직임 줄이기면 세로로 전부 보인다 -->
 <section class="door" aria-label="누구신가요">
   <div class="door-stick">
     <i class="burst" aria-hidden="true"></i>
     <div class="count-in" aria-hidden="true"><b>0</b><small>전국 28,200곳을 세는 중</small></div>
-    <div class="who" aria-hidden="true"><em>선생님은 어디쯤일까요</em></div>
+    <div class="who" aria-hidden="true"><em>선생님도, 센터도 이 안에</em></div>
     <div class="door-title">
       <p class="small door-pre">전국 28,200곳 안에서</p>
       <!-- 6-5(11-03 저녁): 「우리 동네에서 나는 몇 번째일까」 → 「회원이 늘지 않는 이유, ⏎ 30초면 나옵니다」. 점이 모이는 글자(.blue)는 「30초」. 문은 「이유」, 센터는 「방법」 -->
       <h1 class="proxi">회원이 늘지 않는 이유,<br class="pc"> <span class="nw"><span class="blue glint">30초</span>면</span> 나옵니다</h1>
-      <button class="btn btn-sub go" type="button">눌러서 열어 보기</button>
+      <p class="door-note small">가입도 카드도 없이 · 선생님도, 원장님도 30초</p>
     </div>
-    <p class="door-note small">가입도 카드도 없이, 30초면 나옵니다</p>
     <div class="door-open">
+      <p class="both"><b>1인샵·원장 겸 강사</b>는 트레이너, <b>팀장·직원</b>이 있으면 원장 — <span class="nw">둘 다면 트레이너부터</span></p>
       <ul class="doors">
         <li><a class="glass" href="../trainer/">
           <b>트레이너·<br>필라테스 강사</b>
@@ -90,7 +91,6 @@
           <span class="go">들어가기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         </a></li>
       </ul>
-      <p class="both"><b>1인샵·원장 겸 강사</b>는 <span class="pc-only">왼쪽</span><span class="m-only">위</span>, <b>팀장·직원</b>이 있으면 <span class="pc-only">오른쪽</span><span class="m-only">아래</span></p>
     </div>
   </div>
 </section>
@@ -115,8 +115,9 @@
         <p class="ridge-foot small"><span class="foot-l"></span><span>헬스장·PT샵·필라테스 28,200곳</span></p>
       </div>
       <div class="next" hidden>
-        <p class="small">동네 안 순위는 각 길에서 무료로 받습니다</p>
-        <div class="act" style="margin-top:var(--s1)"><a class="btn btn-sub" href="../trainer/">트레이너 길로</a><a class="btn btn-sub" href="../center/">센터 길로</a></div>
+        <p class="small next-say"></p>
+        <p class="small">소속 트레이너면 내 이름 리뷰 카드를, 원장이면 센터 카드 12장을 무료로 받습니다</p>
+        <div class="act" style="margin-top:var(--s1)"><a class="btn btn-sub" href="/trainer/#t-report">내 이름 카드 (트레이너)</a><a class="btn btn-sub" href="/center/#c5">센터 카드 12장 (원장)</a></div>
       </div>
       <noscript><p class="small">이 칸은 자바스크립트가 필요합니다. <a href="/check/">30초 진단으로 가기</a></p></noscript>
     </form>
@@ -132,8 +133,9 @@
       <div class="band">
         <div><small>직접 잰 전국 헬스장·PT샵·필라테스</small><strong><span class="n28">28,200</span><em>곳</em></strong></div>
         <div><small>직접 올려 주신 후기</small><strong><span data-count="144" data-wait>144</span><em>건</em></strong></div>
-        <div><small>트레이너·센터 대표<span data-edu></span> 교육 세미나</small><strong><span data-count="50" data-wait>50</span><em>회 가까이</em></strong></div>
+        <div><small>트레이너·센터 대표<span data-edu></span> 교육 세미나 (9기까지)</small><strong><span data-count="50" data-wait>50</span><em>회</em></strong></div>
       </div>
+      <p class="small band-src">네이버 플레이스 공개 정보를 직접 수집해 같은 잣대로 쟀습니다 · 후기는 교육생이 보내 준 것 그대로</p>
     </div>
   </div>
 </section>
@@ -142,14 +144,14 @@
 <div class="giant" aria-hidden="true" data-tone="black" data-shape="text" data-shape-el="b"><b>허봇스</b></div>
 </main>
 
-<!-- 하단 사다리 — v3(11-03 대표님 1번): 눌리는 유리 판 카드 4장. 「VOD 강의 · 준비 중」은 이 페이지에 메일 칸이 없어 트레이너 길의 메일 칸(#t-vod-mail)으로 -->
+<!-- 하단 사다리 — v3(11-03 대표님 1번): 눌리는 유리 판 카드 4장. 패널 1103(9명): 「강의 / 필요한 것만」과 「VOD 강의 / 준비 중」이 충돌 → 「트레이너 시스템 강의 · 15편」 / 「마케팅 강의 · 준비 중」으로 가름. 30초 진단은 이 페이지 안 칸(#check)으로 -->
 <footer class="foot"><div class="wrap">
-  <p class="lab">더 있는 것</p>
+  <p class="lab">허봇스에 있는 것</p>
   <nav class="ladder" aria-label="다음 단계">
-    <a class="glass" href="/check/"><b>30초 진단</b><span>무료</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-    <a class="glass" href="/#/price"><b>멤버십</b><span>월 9,900</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-    <a class="glass" href="/#/vod"><b>강의</b><span>필요한 것만</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-    <a class="glass" href="/trainer/#t-vod-mail"><b>VOD 강의</b><span>준비 중</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="#check"><b>30초 진단</b><span>무료 · 가입 없음</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/#/price"><b>멤버십</b><span>월 9,900 · 연 99,000</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/#/vod"><b>트레이너 시스템 강의</b><span>15편 · 지금 볼 수 있음</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/trainer/#t-vod-mail"><b>마케팅 강의</b><span>준비 중 · 열리면 메일</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </nav>
   <nav class="sublinks" aria-label="그 밖"><a href="/proof/">결과·검증</a><a href="/tools/">프로그램</a><a href="/free/">무료 자료</a><a href="/about/">소개</a></nav>
   <p class="notice">개별 사례이며, 같은 결과를 보장하지 않습니다.</p>

@@ -74,7 +74,8 @@ const 교육인원 = '';
     const pc = pctOf(m, v);
     if (pc < 0) return { out: true, text: '표본 밖', top: 0 };
     const top = Math.max(1, Math.min(99, Math.round(m.역방향 ? pc : 100 - pc)));
-    return { out: false, top, text: top <= 50 ? '상위 ' + top + '%' : '하위 ' + (100 - top) + '%' };
+    /* 패널 1103: 「하위 37%」가 「아래에서 37%」인지 「상위 63%」인지 두 가지로 읽혀 늘 「상위 N%」로 */
+    return { out: false, top, text: '상위 ' + top + '%' };
   }
   function ridge(m) {
     if (m.능선) return m.능선;
@@ -105,7 +106,16 @@ const 교육인원 = '';
     const rankEl = box.querySelector('.rank'), sayEl = box.querySelector('.say'), other = box.querySelector('.other');
     const svg = box.querySelector('.ridge'), pathEl = svg.querySelector('path');
     const mark = box.querySelector('.mark'), mid = box.querySelector('.mid'), footL = box.querySelector('.foot-l');
-    const nextEl = tool.querySelector('.next');
+    const nextEl = tool.querySelector('.next'), nextSay = tool.querySelector('.next-say');
+    /* 패널 1103(9명): 「상위 N%」만 주고 「이유」가 없었다 → 숫자 아래 다음 한 줄 */
+    function sayNext(m, r) {
+      if (!nextSay) return;
+      if (r.out) { nextSay.textContent = ''; return; }
+      const nm = m.이름 + ' 기준, ';
+      nextSay.textContent = r.top <= 20 ? nm + '전국 상위 20% 안입니다. 다음은 어떤 검색어로 회원이 오는지 — 키워드 순위 추적(멤버십)'
+        : r.top <= 50 ? nm + '전국 중앙값은 넘었습니다. 다음은 리뷰에 선생님 이름이 나오는지'
+        : nm + '전국 절반보다 적습니다. 리뷰가 쌓이게 하는 것부터 — 플레이스 「찾아오는 길」 채우기와 수업 뒤 리뷰 부탁';
+    }
     let last = inputs[0].dataset.k, lastRank = '', drawnFor = '';
     if (FX && fxKind === 'gauge') inputs.forEach(i => { const g = document.createElement('span'); g.className = 'gauge'; g.setAttribute('aria-hidden', 'true'); g.append(document.createElement('i')); i.closest('.fld').append(g); });
     function setRank(text, on) {
@@ -147,6 +157,7 @@ const 교육인원 = '';
         setRank(r.out ? '표본 밖' : r.text, true);
         mark.style.left = (rg.X(v) * 100).toFixed(2) + '%'; mark.classList.add('on');
         sayEl.textContent = m.이름 + ' ' + fmtNum(v) + m.단위 + (m.역방향 ? ' 전' : '') + ' · 전국 중앙값 ' + fmtNum(m.중앙값) + m.단위 + (m.역방향 ? ' 전' : '');
+        sayNext(m, r);
         if (nextEl) nextEl.hidden = false;
       }
       inputs.forEach(i => {
@@ -664,7 +675,7 @@ const 교육인원 = '';
     const noop = { update() {} };
     if (!el) return noop;
     const stick = el.querySelector('.door-stick'), me = el.querySelector('.who');
-    const title = el.querySelector('.door-title'), h1 = title.querySelector('h1'), go = title.querySelector('.go'), open = el.querySelector('.door-open');
+    const title = el.querySelector('.door-title'), h1 = title.querySelector('h1'), open = el.querySelector('.door-open');
     const countEl = el.querySelector('.count-in'), countNum = countEl && countEl.querySelector('b'), burst = el.querySelector('.burst');
     if (!FX || !spine) return noop;
     const gl = spine.gl;
@@ -702,7 +713,8 @@ const 교육인원 = '';
     const DOOR_IN = 6;
     function doorRects() {
       const sr = stick.getBoundingClientRect(), orc = open.getBoundingClientRect();
-      const openTop = (parseFloat(getComputedStyle(open).top) || sr.height * .56) - open.offsetHeight / 2; /* 열린 뒤 .door-open 위쪽 자리(무대 기준 px) */
+      const ty = parseFloat((open.style.transform.match(/translateY\(([-\d.]+)px\)/) || [0, 0])[1]) || 0;
+      const openTop = orc.top - sr.top - ty; /* 열린 뒤 .door-open 위쪽 자리(무대 기준 px) — bottom 기준 배치라 지금 자리에서 떠오름 이동분만 뺀다 */
       return [...open.querySelectorAll('.doors a')].map(a => {
         const r = a.getBoundingClientRect(), rad = Math.max(0, (parseFloat(getComputedStyle(a).borderTopLeftRadius) || 16) - DOOR_IN);
         const left = r.left - sr.left + DOOR_IN, top = r.top - orc.top + openTop + DOOR_IN, w = r.width - DOOR_IN * 2, h = r.height - DOOR_IN * 2;
@@ -776,19 +788,15 @@ const 교육인원 = '';
       stick.addEventListener('pointermove', e => { const r = stick.getBoundingClientRect(); lp.x = (e.clientX - r.left) / r.width; lp.y = (e.clientY - r.top) / r.height; lp.in = true; });
       stick.addEventListener('pointerleave', () => { lp.x = .5; lp.y = .5; lp.in = false; });
     }
+    /* 패널 1103 결정 ①(16명 걸림): 스크롤·「눌러서 열어 보기」 관문 없이 — 숫자를 다 세면 점이 스스로 문틀로 모이고(auto.p 0→1) 제목·문 둘이 첫 화면에 바로 보인다.
+       제목은 사라지지 않는다. 문 카드는 p .45~.85 에서 떠오르고, 그 전에도 누를 수 있다(pointer-events 는 .3 부터) */
     let p = 0, p1 = 0, p2 = 0, intro = true;
-    const st = { rev: 0, g: 0 };
+    const st = { rev: 0, g: 0 }, auto = { p: 0 };
     function apply() {
       p1 = easeIO(seg(p, 0, .55)); p2 = easeIO(seg(p, .42, .9));
-      const t = 1 - seg(p, 0, .3);
-      if (!intro) {
-        title.style.opacity = t.toFixed(3); title.style.visibility = t <= 0 ? 'hidden' : 'visible';
-        title.style.transform = 'translateY(calc(-50% - ' + (40 * (1 - t)).toFixed(1) + 'px))';
-        go.style.pointerEvents = t > .5 ? 'auto' : 'none';
-      }
-      const o = easeIO(seg(p, .8, 1));
-      open.style.opacity = o.toFixed(3); open.style.visibility = o > .01 ? 'visible' : 'hidden'; open.style.pointerEvents = o > .6 ? 'auto' : 'none';
-      open.style.transform = 'translateY(calc(-50% + ' + (24 * (1 - o)).toFixed(1) + 'px))';
+      const o = easeIO(seg(p, .45, .85));
+      open.style.opacity = o.toFixed(3); open.style.visibility = o > .01 ? 'visible' : 'hidden'; open.style.pointerEvents = o > .3 ? 'auto' : 'none';
+      open.style.transform = 'translateY(' + (16 * (1 - o)).toFixed(1) + 'px)';
       el.classList.toggle('opened', p > .9);
       me.style.opacity = clamp(1 - p1 * 6, 0, 1).toFixed(3);
       if (burst) { const bu = Math.sin(seg(p, .7, .92) * Math.PI); burst.style.opacity = (bu * .7).toFixed(2); burst.style.transform = 'scale(' + (.6 + bu * 1.4).toFixed(2) + ')'; }
@@ -811,9 +819,9 @@ const 교육인원 = '';
       gl.disable(gl.SCISSOR_TEST); gl.viewport(0, 0, Math.round(W * dpr), Math.round(H * dpr));
       const x = .98, y = asp < .95 ? -.88 : -.42, z = .42, a = t * .05 + ry, cA = Math.cos(a), sA = Math.sin(a), x1 = cA * x + sA * z, z1 = -sA * x + cA * z, cX = Math.cos(rx), sX = Math.sin(rx), y2 = cX * y - sX * z1, z2 = sX * y + cX * z1, pz = 1.9 / (2.7 - z2), fit = Math.min(1, asp / 1.2) * sc * ps;
       let mx = (x1 * pz * fit / asp * .5 + .5) * stick.clientWidth, my = (-(y2 * pz * fit + oy) * .5 + .5) * stick.clientHeight;
-      if (ph) { /* 파란 점·「선생님은 어디쯤일까요」는 단추와 겹치지 않게 오른쪽 아래, 단추에서 24px 넘게 떨어뜨린다 */
-        const gr = go.getBoundingClientRect(), sr = stick.getBoundingClientRect(), minY = gr.bottom - sr.top + 24 + 14;
-        my = Math.min(Math.max(my, minY, stick.clientHeight * .87), stick.clientHeight - 62); mx = Math.min(Math.max(mx, stick.clientWidth * .62), stick.clientWidth - 28); /* 나선(55~85%) 아래·하단 안내 위 */
+      if (ph) { /* 파란 점·「선생님도, 센터도 이 안에」는 제목과 겹치지 않게 제목 아래 오른쪽 */
+        const gr = title.getBoundingClientRect(), sr = stick.getBoundingClientRect(), minY = gr.bottom - sr.top + 24 + 14;
+        my = Math.min(Math.max(my, minY, stick.clientHeight * .5), stick.clientHeight * .6); mx = Math.min(Math.max(mx, stick.clientWidth * .62), stick.clientWidth - 28);
       }
       if (lp.in) { const px = lp.x * stick.clientWidth, py = lp.y * stick.clientHeight, dd = Math.hypot(px - mx, py - my); if (dd < 280) { const f = (1 - dd / 280) * .6; mx += (px - mx) * f; my += (py - my) * f; } }
       me.style.transform = 'translate(' + mx.toFixed(1) + 'px,' + my.toFixed(1) + 'px)';
@@ -822,18 +830,17 @@ const 교육인원 = '';
     new IntersectionObserver(es => { root.classList.toggle('instage', es[0].isIntersecting && es[0].intersectionRatio > .5); }, { threshold: [0, .5, 1] }).observe(stick);
     /* 문 무대의 문서 안 자리. el.offsetTop 은 offsetParent(main, position:relative) 기준이라 0 이 나와 — 맨 위(scrollY 0)에서 진행도가 이미 64/span 만큼 가 있었다.
        PC 는 span 이 커서 제목이 60% 투명도로만 보였지만, 폰(iPhone 13: span 432px)은 진행도 .16 → 제목 48%·「눌러서 열어 보기」 pointer-events none 으로 죽어 있었다(11-03 모바일 점검에서 발견, 「PC 는 되는데 폰은 안 되던 것」). */
-    const docTop = () => el.getBoundingClientRect().top + scrollY;
     function update() {
-      const span = el.offsetHeight - stick.offsetHeight;
-      const raw = span > 0 ? (scrollY - docTop() + BAR) / span : 0;
-      p = clamp(raw / .95, 0, 1);
+      p = clamp(auto.p, 0, 1);
       if (intro && scrollY > 24) endIntro();
       apply();
     }
-    const endY = () => docTop() - BAR + (el.offsetHeight - stick.offsetHeight) * .95;
-    go.addEventListener('click', () => goY(endY(), 2200));
-    /* 「다시 보기」 단추는 6-2 로 없앴다 — 맨 위로 스크롤하면 p 가 0 으로 돌아가 스스로 닫힌다 */
-    open.addEventListener('focusin', () => { if (p < 1) goY(endY(), 10); });
+    let autoTw = null;
+    function runAuto(fast) {
+      if (autoTw) autoTw.kill();
+      autoTw = gsap.to(auto, { p: 1, duration: fast ? 1.2 : 2.6, ease: 'power2.inOut', onUpdate: update, onComplete: update });
+    }
+    open.addEventListener('focusin', () => { if (p < 1) { if (autoTw) autoTw.kill(); auto.p = 1; update(); } });
     open.querySelectorAll('.doors a').forEach(a => a.addEventListener('click', e => {
       if (e.metaKey || e.ctrlKey) return; e.preventDefault();
       const r = a.getBoundingClientRect(), f = document.createElement('div'); f.className = 'fillcard';
@@ -848,9 +855,9 @@ const 교육인원 = '';
       if (tl) { tl.kill(); tl = null; }
       st.rev = 1.06; st.g = 0;
       if (countEl) countEl.style.opacity = 0;
-      title.style.opacity = ''; el.classList.add('ready');
-      try { sessionStorage.setItem('hb-intro', '1'); } catch (err) {}
-      apply();
+      title.style.opacity = 1; el.classList.add('ready');
+      let seen = false; try { seen = !!sessionStorage.getItem('hb-intro'); sessionStorage.setItem('hb-intro', '1'); } catch (err) {}
+      apply(); runAuto(seen || scrollY > 24);
     }
     function runIntro() {
       let seen = false; try { seen = !!sessionStorage.getItem('hb-intro'); } catch (err) {}
@@ -1317,7 +1324,7 @@ const 교육인원 = '';
     });
   });
   document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
-    if (!isLive) { toast('미리보기: 완성본에서는 ' + b.dataset.copy + ' 가 복사됩니다. 받는 페이지 /journal/ 이 아직 없습니다.'); return; }
-    if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(() => toast('링크를 복사했습니다.'));
+    if (!isLive) { toast('미리보기: 완성본에서는 ' + b.dataset.copy + ' 가 복사되고 「복사됐어요 — 단톡방에 붙여 넣으세요」가 뜹니다.'); return; }
+    if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(() => toast('복사됐어요 — 단톡방이나 카톡에 붙여 넣으세요'));
   }));
 })();

@@ -150,7 +150,7 @@ h3{font-size:var(--t4);font-weight:700;letter-spacing:-.02em;line-height:1.35}
 .fx .fourh .fh-line path.lit{stroke:var(--blue);stroke-width:2}
 .fx .fourh .fh-dot{display:block;position:absolute;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--ink);box-shadow:0 0 14px 4px var(--blue),0 0 40px 10px rgba(var(--blue-rgb),.45);pointer-events:none;z-index:2} /* v2: 파란 점은 무대(.fh-stage) 기준 — PC 는 은하 나선 팔을 따라, 휴대폰은 칸 옆 세로선을 따라 */
 @media (min-width:901px){
-  .fx .fourh{height:220vh}
+  .fx .fourh{height:180vh}
   .fx .fourh .fh-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));overflow:hidden;display:flex;flex-direction:column;justify-content:center}
   .fx .fourh .fh-track{display:flex;width:max-content;margin-top:var(--s4);border-top:0;padding-inline:0;will-change:transform;gap:0}
   .fx .fourh .fh-track>div{flex:0 0 auto;width:min(620px,52vw);border-left:0;border-top:1px solid var(--line);padding:var(--s4) var(--s4) var(--s4) 0;margin-right:var(--s4)}
@@ -178,7 +178,7 @@ h3{font-size:var(--t4);font-weight:700;letter-spacing:-.02em;line-height:1.35}
   .proof{flex:0 0 72vw;scroll-snap-align:center}
 }
 @media (min-width:901px){
-  .fx .desk{height:150vh}
+  .fx .desk{height:130vh}
   .fx .desk .desk-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;padding-top:var(--s3)}
   .fx .desk .proofs{margin-top:var(--s3);perspective:1400px;max-width:820px;margin-inline:auto}
   .fx .desk .proof{will-change:transform;transform-origin:center}
@@ -282,7 +282,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .pin-phone,.jn-say{display:none}
 .pin-anchor{position:absolute;left:0;width:1px;height:1px}
 @media (min-width:901px){
-  .fx .pin{height:190vh}
+  .fx .pin{height:160vh}
   .fx .pin .stick{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));display:flex;align-items:center}
   .fx .pin .jn{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:var(--s2);padding-block:var(--s2)}
   .fx .pin .jn .gain{margin-bottom:0}
@@ -329,7 +329,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .huge{display:none}
 @media (max-width:720px){.band{grid-template-columns:1fr}.band>div{border-left:0;padding:var(--s3) 0;border-top:1px solid var(--line)}.band>div:first-child{border-top:0}.band small{min-height:0;margin-bottom:var(--s2)}}
 @media (min-width:901px){
-  .fx .bandpin{height:150vh}
+  .fx .bandpin{height:130vh}
   .fx .bandpin .band-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));display:flex;flex-direction:column;justify-content:center;overflow:hidden}
   .fx .huge{display:block;position:absolute;left:0;top:0;font:500 1px/1 var(--num);letter-spacing:-.04em;white-space:nowrap;transform-origin:left top;will-change:transform;pointer-events:none;font-variant-numeric:tabular-nums}
   .fx .bandpin .band>div:first-child strong .n28{opacity:0}
@@ -350,28 +350,29 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .door-title .door-pre{margin-bottom:var(--s2);letter-spacing:.06em}
 .door-note{text-align:center;text-wrap:balance;z-index:2;position:relative}
 .doors{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);width:100%;max-width:1040px;margin-inline:auto;grid-auto-rows:1fr}
-.doors a{display:flex;flex-direction:column;height:100%;padding:var(--s3);min-height:300px;transition:border-color .25s,background-color .25s;transform:perspective(1200px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+.doors a{display:flex;flex-direction:column;height:100%;padding:var(--s3);min-height:240px;transition:border-color .25s,background-color .25s;transform:perspective(1200px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
 .doors b{display:block;font-size:var(--t2);font-weight:800;letter-spacing:-.035em;line-height:1.14}
 .doors .say{display:block;color:var(--ink2);margin-top:var(--s2)}
 .doors .go{display:flex;align-items:center;gap:var(--s1);margin-top:auto;padding-top:var(--s3);font-weight:500}
 .doors .go svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5}
-.door-open .both{max-width:1040px;margin:var(--s2) auto 0;text-align:center}
+.door-open .both{max-width:1040px;margin:0 auto var(--s2);text-align:center;color:var(--ink2)}
+.door-open .both b{color:var(--ink);font-weight:600}
 .door-open{width:100%;z-index:3}
 @media (max-width:720px){
   .doors{grid-template-columns:1fr;gap:var(--s1)}
   .door-title h1{font-size:var(--t1)}
   .doors a{padding:var(--s3) var(--s2);min-height:0;gap:var(--s1)} /* 6-1(11-03 저녁): 폰은 카드 높이를 내용에 맞추고(최소 높이 없음) 제목은 카드 폭에 맞게 32px — 글·설명·「들어가기」가 카드 안을 고르게. iPhone 13 무대 600px 에 둘 다 들어간다 */
   .doors{grid-auto-rows:auto} /* 카드마다 내용 높이 — 한쪽만 길어 빈 자리가 생기지 않게 */
-  .doors b{font-size:var(--t2);font-weight:800;line-height:1.15;letter-spacing:-.03em} /* 제목 안 <br> 은 폰에서도 살림: 「PT샵·헬스장· ⏎ 필라테스 원장」 두 줄(32px 는 한 줄에 안 들어가 「PT샵·」만 남던 것) */
+  .doors b{font-size:26px;font-weight:800;line-height:1.15;letter-spacing:-.03em} /* 제목 안 <br> 은 폰에서도 살림: 「PT샵·헬스장· ⏎ 필라테스 원장」 두 줄(32px 는 한 줄에 안 들어가 「PT샵·」만 남던 것) */
   .doors .say{margin-top:0;font-size:var(--t5)}
   .doors .go{padding-top:var(--s1);min-height:44px;font-size:var(--t5)}
-  .door-open .both{margin-top:var(--s1);text-align:left}
+  .door-open .both{margin:0 0 var(--s1);text-align:left;font-size:var(--t6)}
 }
 @media (min-width:721px) and (max-width:1100px){.doors a{padding:var(--s2) var(--s3)}.doors b{font-size:var(--t3)}}
-.fx:not(.nostars) .door{height:calc(165vh - var(--bar))}
-.fx:not(.nostars) .door-stick{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));height:calc(100svh - var(--bar));display:block;padding:0;background:transparent}
+.fx:not(.nostars) .door{height:auto}
+.fx:not(.nostars) .door-stick{position:relative;height:calc(100vh - var(--bar));height:calc(100svh - var(--bar));min-height:560px;display:block;padding:0;background:transparent}
 /* 폰(11-03 모바일 점검): 고정 구간은 150vh 아래로, iOS 주소창을 뺀 svh 기준 */
-@media (max-width:720px){.fx:not(.nostars) .door{height:calc(150vh - var(--bar));height:calc(150svh - var(--bar))}}
+@media (max-width:720px){.fx:not(.nostars) .door-stick{min-height:600px}}
 .fx:not(.nostars) .count-in{display:block;position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:200 var(--t0)/1 var(--num);letter-spacing:-.04em;font-variant-numeric:tabular-nums;pointer-events:none;z-index:2;color:var(--ink)}
 .fx:not(.nostars) .count-in b{font-weight:200}
 .fx:not(.nostars) .count-in small{display:block;font:500 var(--t6)/1.6 var(--sans);letter-spacing:.06em;color:var(--ink2);margin-top:var(--s2)}
@@ -386,14 +387,17 @@ html:not(.fx) .fill .w{color:var(--ink)}
   .door-title h1 .blue{color:#6B9CFF}}
 @keyframes ring{from{transform:scale(.4);opacity:1}to{transform:scale(2.4);opacity:0}}
 @keyframes beat{0%,100%{box-shadow:0 0 14px 4px var(--blue),0 0 44px 12px rgba(var(--blue-rgb),.5)}50%{box-shadow:0 0 20px 7px var(--blue),0 0 70px 18px rgba(var(--blue-rgb),.6)}}
-.fx:not(.nostars) .door-title{position:absolute;left:var(--gut);right:var(--gut);top:50%;transform:translateY(-50%);pointer-events:none;will-change:opacity,transform;opacity:0}
+/* 패널 1103 결정 ①: 제목은 위(9%), 문 둘은 아래(bottom 6%) — 스크롤·단추 없이 숫자를 다 세면 둘 다 보인다 */
+.fx:not(.nostars) .door-title{position:absolute;left:var(--gut);right:var(--gut);top:9%;pointer-events:none;will-change:opacity;opacity:0}
+.fx:not(.nostars) .door-title h1{font-size:var(--t1)}
+@media (max-width:720px){.fx:not(.nostars) .door-title{top:6%}.fx:not(.nostars) .door-title h1{font-size:40px}}
 .fx:not(.nostars) .door-title h1{text-shadow:0 2px 14px rgba(10,10,11,.75),0 4px 60px rgba(10,10,11,.85)}
-.fx:not(.nostars) .door-title .go{pointer-events:auto;background:rgba(var(--face-rgb),.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.fx:not(.nostars) .door-open{position:absolute;left:0;right:0;top:56%;transform:translateY(-50%);padding-inline:var(--gut);opacity:0;visibility:hidden;will-change:transform,opacity}
-.fx:not(.nostars) .door-note{position:absolute;left:var(--gut);right:var(--gut);bottom:var(--s3);opacity:0;transition:opacity 1s}
+.fx:not(.nostars) .door-open{position:absolute;left:0;right:0;bottom:6%;padding-inline:var(--gut);opacity:0;visibility:hidden;will-change:transform,opacity}
+@media (max-width:720px){.fx:not(.nostars) .door-open{bottom:4%}}
+.fx:not(.nostars) .door-note{opacity:0;transition:opacity 1s;margin-top:var(--s2)}
 .fx:not(.nostars) .door.ready .door-note{opacity:1}
 /* 「다시 보기」 단추는 6-2(11-03 저녁)로 삭제 — 맨 위로 스크롤하면 진행도가 0 으로 돌아가 문이 스스로 닫힌다 */
-.fx:not(.nostars) .door.opened .door-note{opacity:0;visibility:hidden}
+
 .fillcard{position:fixed;z-index:50;background:var(--face);border:1px solid var(--ink-a18);border-radius:var(--r);pointer-events:none}
 
 /* ── 12장 가로 이동 (휴대폰·효과 없음) / 카드 덱 돌리기 (센터 PC) ── */
@@ -405,7 +409,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .hs .rail::-webkit-scrollbar{display:none}
 .hs .card-it{scroll-snap-align:center}
 @media (min-width:901px){
-  .fx .hs{height:240vh}
+  .fx .hs{height:200vh}
   .fx .hs .stick{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;padding-top:var(--s3)}
   .fx .hs .stick>.wrap:last-child{flex:1;display:flex;flex-direction:column;min-height:0}
   .fx .hs .rail{overflow:visible;margin:0;padding:0;flex:1;position:relative;min-height:0}
@@ -414,6 +418,9 @@ html:not(.fx) .fill .w{color:var(--ink)}
   .fx .hs .card-it img{box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 0 1px var(--ink-a10)}
   .fx .hs .card-it p{opacity:0;transition:opacity .4s;font-size:var(--t6)}
   .fx .hs.spread .card-it p{opacity:1}
+  .fx .hs.spread .card-it img{transition:transform .35s cubic-bezier(.2,.8,.2,1);transform-origin:center bottom}
+  .fx .hs.spread .card-it:hover{z-index:40 !important}
+  .fx .hs.spread .card-it:hover img{transform:scale(1.9)}
 }
 
 /* ── 준비 중 세 칸 — 김 서린 유리 ── */
@@ -541,9 +548,11 @@ main{overflow-x:clip}
 .ring .pane .small{margin-top:var(--s1)}
 .ring-cap{display:none}
 @media (min-width:901px){
-  .fx .ringpin{height:230vh}
+  .fx .ringpin{height:190vh}
   .fx .ring-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));overflow:hidden;display:flex;flex-direction:column;justify-content:center}
-  .fx .ring-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);align-items:center}
+  .fx .ring-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s4);align-items:center}
+  .fx .ring-grid>div:first-child{min-width:0}
+  .fx .ring-grid h2{max-width:9em}
   .fx .ring-wrap{height:min(64vh,620px);perspective:1600px;margin-top:0;position:relative}
   .fx .ring{position:absolute;left:50%;top:50%;width:0;height:0;overflow:visible;margin:0;padding:0;display:block;transform-style:preserve-3d;will-change:transform}
   .fx .ring .pane{position:absolute;left:0;top:0;width:min(280px,21vw);margin-left:calc(min(280px,21vw) * -.5);transform:translateY(-50%) rotateY(var(--a)) translateZ(var(--rz));backface-visibility:hidden;transition:opacity .6s}
@@ -590,7 +599,7 @@ html:not(.fx) .wall .row{width:auto;overflow-x:auto;scrollbar-width:none}
 .dial .core small{display:block;font:500 var(--t6)/1.6 var(--sans);letter-spacing:.04em;color:var(--ink2);margin-top:var(--s1)}
 @media (max-width:900px){.dial-stage{grid-template-columns:1fr}.dial{width:min(100%,280px)}}
 @media (min-width:901px){
-  .fx .dialpin{height:150vh}
+  .fx .dialpin{height:130vh}
   .fx .dial-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));overflow:hidden}
   .fx .dial{width:min(82vh,660px)}
   .fx .dial .core b{font-size:var(--t0)}
@@ -626,7 +635,7 @@ html:not(.fx) .wall .row{width:auto;overflow-x:auto;scrollbar-width:none}
 .tunnel .tn-stage{position:relative}
 .tunnel .gates{display:none}
 @media (min-width:901px){
-  .fx .tunnel{height:260vh}
+  .fx .tunnel{height:210vh}
   .fx .tunnel .tn-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding-block:var(--s3)}
   .fx .tunnel .four{display:none}
   .fx .tunnel .gates{display:block;position:absolute;inset:0;perspective:800px;perspective-origin:50% 50%}
@@ -663,7 +672,7 @@ html:not(.fx) .cols .edge{display:none}
 .x23{display:none}
 @media (max-width:720px){.bars .bar{grid-template-columns:1fr;gap:var(--s1)}}
 @media (min-width:901px){
-  .fx .barpin{height:140vh}
+  .fx .barpin{height:120vh}
   .fx .barpin .bar-stage{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));display:flex;align-items:center;overflow:hidden}
   .fx .barpin .two{width:100%}
   .fx .x23{display:block;position:absolute;left:0;top:0;font:500 1px/1 var(--num);letter-spacing:-.04em;white-space:nowrap;transform-origin:left top;will-change:transform;pointer-events:none;color:var(--blue)}
@@ -691,3 +700,22 @@ html:not(.fx) .giant b::after{clip-path:none}
   .giant .blue-fill{clip-path:none}
 }
 html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
+
+/* ── 패널 1103 반영(11-03 저녁) ── */
+.band-src{margin-top:var(--s3);max-width:40em}
+.src{margin-top:var(--s2);max-width:46em;color:var(--ink2)}
+.inlist{margin-top:var(--s2);display:grid;gap:6px;color:var(--ink2);padding-left:0;list-style:none}
+.inlist li{position:relative;padding-left:16px}
+.inlist li::before{content:"";position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.inlist b{color:var(--ink);font-weight:600}
+.one-price .inlist{margin-bottom:var(--s2)}
+.next-say{color:var(--ink);font-weight:500;margin-bottom:var(--s1)}
+.next-say:empty{display:none}
+.jn-note{margin-top:var(--s2);text-align:center}
+.phone-shot p{padding:var(--s1) var(--s2);text-align:center}
+.route-hint{margin-top:var(--s1)}
+@media (max-width:720px){
+  .wall .row:nth-child(n+3){display:none}                       /* 폰: 86장 벽은 두 줄만 */
+  .pin .steps>li:nth-child(n+2) img{display:none}               /* 폰: 수업일지 화면은 첫 장만(회원 관리 화면의 빨간 단추가 오해를 삼) */
+  .ladder a b{font-size:var(--t6)}
+}
