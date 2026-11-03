@@ -171,6 +171,7 @@ h3{font-size:var(--t4);font-weight:700;letter-spacing:-.02em;line-height:1.35}
 .proof .small{margin-top:var(--s1)}
 .proof .small a{color:var(--ink)}
 .desk-cap{display:none}
+@media (min-width:1101px){#c3 .proofs{grid-template-columns:repeat(3,minmax(0,300px))}}
 @media (max-width:1100px){.proofs{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:720px){
   .proofs{display:flex;gap:var(--s2);overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--gut) * -1);padding-inline:var(--gut);scrollbar-width:none;margin-top:var(--s3)}
@@ -723,12 +724,11 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
   .fx:not(.nostars) .door-title{position:relative;top:auto;left:auto;right:auto;padding:calc(3svh + var(--s2)) var(--gut) 0}
   .fx:not(.nostars) .door-open{position:relative;bottom:auto;margin-top:var(--s3)}}
 .member-shot{margin-top:var(--s4);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--face);max-width:340px}
-@media (min-width:901px){#t-member .wrap{display:grid;grid-template-columns:1fr 340px;gap:var(--s4);align-items:start}#t-member .member-shot{grid-column:2;grid-row:1 / span 3;margin-top:0}#t-member .one-price{grid-column:1}}
 .member-shot img{display:block;width:100%;height:auto}
 .member-shot p{padding:var(--s1) var(--s2)}
 /* 상단 메뉴 6칸(11-03 밤) — 폰은 넓은 것 둘 숨김, 글자 작게 */
 .top nav{gap:var(--s2)}
-@media (max-width:720px){.top nav a.wide{display:none}.top nav{gap:10px;font-size:13px}.top nav a{min-width:0}.top nav a.me{padding-inline:12px}}
+@media (max-width:720px){.top nav a.wide{display:none}.top nav{gap:2px;font-size:13px}.top nav a.me{padding-inline:12px}}
 @media (min-width:721px) and (max-width:1000px){.top nav{gap:var(--s2);font-size:var(--t6)}}
 /* 센터 길 끝 두 칸 */
 .duo.nextduo{margin-top:var(--s4);align-items:stretch}

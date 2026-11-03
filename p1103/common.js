@@ -114,7 +114,8 @@ const 교육인원 = '';
       const nm = m.이름 + ' 기준, ';
       nextSay.textContent = r.top <= 20 ? nm + '전국 상위 20% 안입니다. 다음은 어떤 검색어로 회원이 오는지 — 키워드 순위 추적(멤버십)'
         : r.top <= 50 ? nm + '전국 중앙값은 넘었습니다. 다음은 리뷰에 선생님 이름이 나오는지'
-        : nm + '전국 ' + r.top + '%가 우리보다 많습니다. 리뷰가 쌓이게 하는 것부터 — 플레이스 「찾아오는 길」 채우기와 수업 뒤 리뷰 부탁';
+        : nm + '전국 ' + r.top + (m.역방향 ? '%가 우리보다 최근에 리뷰를 받았습니다. 리뷰가' : '%가 우리보다 많습니다. 리뷰가');
+      if (r.top > 50) nextSay.textContent += ' 쌓이게 하는 것부터 — 플레이스 「찾아오는 길」 채우기와 수업 뒤 리뷰 부탁';
     }
     let last = inputs[0].dataset.k, lastRank = '', drawnFor = '';
     if (FX && fxKind === 'gauge') inputs.forEach(i => { const g = document.createElement('span'); g.className = 'gauge'; g.setAttribute('aria-hidden', 'true'); g.append(document.createElement('i')); i.closest('.fld').append(g); });
