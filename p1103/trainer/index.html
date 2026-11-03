@@ -3,7 +3,7 @@
   허봇스 트레이너 길 미리보기 — 실제 자리: /trainer/
   구조 정본: 구조_1027\23_최종구조_확정본.md 2절 ② (+ 20_v1 · 22_v2 의 T블록). 효과 정본: 개편_1102\효과지도_1103.md 「트레이너 길」 표.
   순서: T1 머리(통과) → T2 네 칸(가로 길·파란 점) → T3 먼저 해 본 분들(입체 회전목마) → T3-b 후기 벽(커서 불 켜짐) → T4 30초(게이지) → T5 100점(눈금 다이얼)
-        → T6 내 이름 카드(포일) → T7 수업일지(단어 교체) → T8 만든 사람(글자 차오름) → T9 멤버십(9,900 쿵) → T9-b 마케팅 강의(숨 쉬는 준비 중) → T10 마무리 → 끝(파랑 차오름 + 거대한 이름).
+        → T6 내 이름 카드(포일) → T7 수업일지(단어 교체) → T8 만든 사람(글자 차오름) → T9 멤버십(9,900 쿵) → T9-b VOD(숨 쉬는 준비 중) → T10 마무리 → 끝(파랑 차오름 + 거대한 이름).
 
   ■ 11-03 2차: 뒤에 고정된 등뼈 점(.spine)이 흩어짐 → 네 칸 길의 선 → 다이얼 고리 → 포일 카드 윤곽 → 폰 테두리 → 거대한 이름 글자로 모인다(data-shape). 흐림 등장 삭제, 고정 구간 30% 단축, 첫 제목은 커서 근처 글자가 밝아짐(.proxi), 「몇 점」은 커졌다 안착(data-land), 「뭘 쓸지」는 광택(loop).
   ■ 11-03 시각 90 작업 — 화면별 주연 효과는 효과지도 그대로. 큰 글자로 뽑은 후기 문구는 캡처(img\result-*.jpg)에 실제로 적힌 문장만 옮겼다:
@@ -29,7 +29,7 @@
       → sb.from("report_requests").insert({ email, name, place_url, pen_name, visitor, utm_* }) → HBT.event("lead","report")
       → sb.from("contacts").upsert({ email, name }, { onConflict:"email" })
       필요 파일: supabase-js, /vod/auth.js, /t.js. 서버가 접수를 확인한 뒤에만 완료 화면, 실패하면 입력 보존.
-    T9-b 트레이너 마케팅 강의 = /#/vod 연결 + 「열리면 메일로 알려 드리는 칸」(data-early, 지금은 전송 안 함).
+    T9-b 트레이너 마케팅 VOD 강의 = /#/vod 연결 + 「열리면 메일로 알려 드리는 칸」(data-early, 지금은 전송 안 함).
       붙일 호출 = site\free\_틀.html earlyForm 과 같게: window.HB.sb.rpc("news_signup", { _email, _ad:true, _night:false, _ver:"2026-10-12", _content:"vod-trainer-marketing", _visitor·_source·_medium·_campaign은 HBT.pack() })
       → HBT.event("lead","vod-early"). free-claim 의 "early" 는 열리기 전 열람권 신청을 409 로 거절하는 코드라 이 칸과 무관하다.
   ■ 라이브러리: ../lib/gsap.min.js · ScrollTrigger.min.js (GSAP 3.13.0) · lenis.min.js (1.3.11). 외부 주소 없음.
@@ -161,11 +161,12 @@
   </div>
 </section>
 
-<!-- T5 100점 진단 — 화면 가득 눈금 다이얼이 스크롤에 돌며 0 → 100, 가운데 숫자가 뒤섞였다가 「몇 점」으로 맞춰진다. /score/ 살아 있음. 문장 site/score/index.html -->
+<!-- T5 100점 진단 — 화면 가득 눈금 다이얼이 스크롤에 돌며 0 → 100, 가운데 숫자가 뒤섞였다가 「몇 점」으로 맞춰진다. /score/ 살아 있음. 문장 site/score/index.html.
+     v3(11-03 대표님 4번): 자가진단 자리는 트레이너 길 안, 지금 구조 그대로. 얻는 것 줄 「무료 · 30문항 · 결과 메일」(결과 메일은 site/score 가 실제로 보낸다), 단추 「30문항 먼저 풀어 보기」 유지 -->
 <section class="blk dialpin" id="t-score" data-glow="c" data-tone="deep" data-shape="ring" data-shape-el=".dial">
   <div class="wrap dial-stage">
     <div>
-      <p class="gain rv">30문항 · 빈 영역 · 배울 순서</p>
+      <p class="gain rv">무료 · 30문항 · 결과 메일</p>
       <h2 class="rv">나는 <span class="blue" data-land>몇 점</span>짜리<br class="pc"> 트레이너일까요</h2>
       <p class="big rv" style="margin-top:var(--s3);color:var(--ink2)">30문항이면 어느 영역이 비었는지 나옵니다<br class="pc"> 무엇부터 배울지 정해집니다</p>
       <div class="act rv"><a class="btn btn-main" href="/score/">30문항 먼저 풀어 보기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
@@ -218,9 +219,10 @@
   </div>
 </section>
 
-<!-- T8 만든 사람 — ① 글자 차오름. 사진 없음(구매자 먼저, 얼굴 사진 안 씀). v2(11-03): 트레이너 · 센터 대표 · 협회장. 협회 이름은 site\index.html 하단 「민간자격 관리: 대한트레이닝교육협회」 글자 그대로 -->
+<!-- T8 만든 사람 — ① 글자 차오름. 사진 없음(구매자 먼저, 얼굴 사진 안 씀). v3(11-03 대표님 2번 문장 그대로): 현직 센터 대표가 먼저, 「비브레」 이름은 뺌(사람들 기준에서 모르는 이름). 협회 이름은 site\index.html 하단 「민간자격 관리: 대한트레이닝교육협회」 글자 그대로 -->
 <section class="blk" id="t-who" data-glow="c" data-tone="deep"><div class="wrap">
-  <p class="fill">트레이너 허재윤입니다.<br class="pc"> <span class="nw">PT 센터 「비브레」 대표</span> ·<br class="pc"> <span class="nw">대한트레이닝교육협회 협회장</span><br class="pc"> <span class="nw">전국 28,200곳을</span> <b>직접 재서</b> <span class="nw">이 기준을</span> 만들었습니다.</p>
+  <!-- 6-3(11-03 저녁, 2번 대체 · 대표님 정정 문장 그대로): 「허봇스」는 대표님 본인을 가리키는 이름 — 「센터 대표이자 현직 트레이너, 허봇스입니다. ⏎ 허재윤 · 대한트레이닝교육협회 협회장 ⏎ 전국 28,200곳을 직접 재서 이 기준을 만들었습니다.」 -->
+  <p class="fill"><span class="nw">센터 대표이자</span> <span class="nw">현직 트레이너,</span> <span class="nw">허봇스입니다.</span><br> <span class="nw">허재윤 ·</span> <span class="nw">대한트레이닝교육협회 협회장</span><br class="pc"> <span class="nw">전국 28,200곳을</span> <b>직접 재서</b> <span class="nw">이 기준을</span> 만들었습니다.</p>
 </div></section>
 
 <!-- T9 멤버십 한 칸 — 「9,900」이 크게 들어왔다가 제자리로 쿵 안착, 유리 판. 길엔 「월 9,900」 한 숫자만 -->
@@ -236,16 +238,16 @@
   </div>
 </div></section>
 
-<!-- T9-b 자리 — 11-02 결정: 세미나 대신 트레이너 마케팅 강의. 「준비 중」이 숨 쉬듯, 제목에 빛이 천천히 지나간다. 메일 칸을 누르면 테두리에 빛. 전송은 미리보기 표시만 -->
+<!-- T9-b 자리 — 11-02 결정: 세미나 대신 트레이너 마케팅 VOD 강의. 「준비 중」이 숨 쉬듯, 제목에 빛이 천천히 지나간다. 메일 칸을 누르면 테두리에 빛. 전송은 미리보기 표시만 -->
 <section class="blk" id="t-vod" data-glow="l" data-tone="black">
   <div class="wrap two top-align">
     <div>
       <p class="gain rv"><span class="breath">준비 중</span></p>
-      <h2 class="rv"><span class="glint" data-glint="loop">트레이너 마케팅</span><br class="pc"> 강의</h2>
+      <h2 class="rv"><span class="glint" data-glint="loop">트레이너 마케팅</span><br class="pc"> VOD 강의</h2>
       <p class="big rv" style="margin-top:var(--s3);color:var(--ink2)">세미나에서 하던 것을 강의로 옮기는 중입니다.<br class="pc"> 열리면 메일로 먼저 알려 드립니다.</p>
       <div class="act rv"><a class="btn btn-sub" href="/#/vod">지금 있는 강의 보기</a></div>
     </div>
-    <form class="form glass rv" data-early novalidate style="margin-top:0;padding:var(--s3)">
+    <form class="form glass rv" id="t-vod-mail" data-early novalidate style="margin-top:0;padding:var(--s3)">
       <label>열리는 날 먼저 알려 드릴 메일<input class="inp" type="email" autocomplete="email" placeholder="you@example.com" required></label>
       <label class="agree"><input type="checkbox" required><span>[필수] 열리는 날 알림과 새 무료 자료 소식을 메일로 받는 데 동의합니다<small>받는 정보: 메일 주소 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
       <button class="btn btn-main" type="submit">열리는 날 먼저 알려 주세요 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
@@ -267,12 +269,14 @@
 <div class="giant blue-end" aria-hidden="true" data-shape="text" data-shape-el="b"><i class="blue-fill"></i><b>허봇스</b></div>
 </main>
 
+<!-- 하단 사다리 — v3(11-03 대표님 1번): 눌리는 유리 판 카드 4장. 「VOD 강의 · 준비 중」은 위 메일 알림 칸(#t-vod-mail, 칸 자체)으로 스크롤 — 폰에서는 섹션 머리가 아니라 칸이 화면 위에 오게 -->
 <footer class="foot"><div class="wrap">
+  <p class="lab">더 있는 것</p>
   <nav class="ladder" aria-label="다음 단계">
-    <a href="/check/">30초 진단<span>무료</span></a>
-    <a href="/#/price">멤버십<span>월 9,900</span></a>
-    <a href="/#/vod">강의</a>
-    <a href="/#/vod">트레이너 마케팅 강의<span>준비 중</span></a>
+    <a class="glass" href="/check/"><b>30초 진단</b><span>무료</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/#/price"><b>멤버십</b><span>월 9,900</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/#/vod"><b>강의</b><span>필요한 것만</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="#t-vod-mail"><b>VOD 강의</b><span>준비 중</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </nav>
   <nav class="sublinks" aria-label="그 밖"><a href="/proof/">결과·검증</a><a href="/tools/">프로그램</a><a href="/free/">무료 자료</a><a href="/about/">소개</a></nav>
   <p class="notice">개별 사례이며, 같은 결과를 보장하지 않습니다.</p>

@@ -6,7 +6,7 @@
 
   ■ 11-03 시각 90 작업 — 이 페이지의 주연 효과 (효과지도 「문」 표 그대로)
     첫 진입: 검정에서 0 → 28,200 이 올라가며 점이 하나씩 켜진다(1.8초, 다시 올 때는 건너뜀 sessionStorage hb-intro)
-    제목: 점들이 모여 「몇 번째」 글자가 됐다가 또렷한 글자로 교체되며 빛이 한 번 스친다(.glint)
+    제목: 점들이 모여 「30초」 글자가 됐다가 또렷한 글자로 교체되며 빛이 한 번 스친다(.glint). 6-5(11-03 저녁) 제목 「회원이 늘지 않는 이유, ⏎ 30초면 나옵니다」 · 폰은 모임·흐림 등장 없이 바로 또렷(6-6) · 「다시 보기」 단추 없음(6-2)
     파란 점 「나」: 맥박처럼 뛰고 고리가 퍼지며, 마우스가 다가오면 끌려온다
     상자 → 문 둘: 상자가 열릴 때 빛이 터진다(.burst). 문 카드는 유리 판(.glass) + 마우스 쪽 기울기, 누르면 카드가 화면을 채우며 넘어간다
     v2(11-03): 점 테두리는 유리 카드의 실제 자리(top 56% 기준)·같은 모서리 반지름(16px)·안쪽 6px 로 잰 둥근 사각형 위에 놓인다(_공통.js doorRects). 창 크기가 바뀌면 다시 잰다. 검수용 window.__doorBounds()
@@ -30,7 +30,7 @@
     /free/         → /free/rereg/ 등 낱개 주소만 있음
     /center/       → 주소는 있으나 옛 진단표 화면. 새 길은 이 폴더 center\index.html (옛 화면은 /center/check/ 로 이사)
 
-  ■ 11-02 대표님 결정: 트레이너 마케팅 세미나는 10기부터 열지 않고 트레이너 마케팅 강의로 대체. 하단 사다리 넷째 칸은 「트레이너 마케팅 강의」(/#/vod). 가격·열리는 날·편수 없음.
+  ■ 11-02 대표님 결정: 트레이너 마케팅 세미나는 10기부터 열지 않고 VOD 강의로 대체. 하단 사다리 넷째 칸은 「트레이너 마케팅 VOD 강의」(/#/vod). 가격·열리는 날·편수 없음.
     숫자 띠의 「세미나에서 약 1,000명」은 뺌. 셋째 칸은 「세미나 50회 가까이」(메모리 heobotss-account-facts). 사람 수는 _공통.js 맨 위 교육인원 한 변수.
 
   ■ 서버 호출: 이 페이지에는 없다. 30초 칸은 화면 안에서만 계산한다(저장·전송 없음).
@@ -42,11 +42,11 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>허봇스 — 우리 동네에서 나는 몇 번째일까</title>
-<meta name="description" content="트레이너·필라테스 강사와 센터 원장이 우리 동네에서 몇 번째인지 재 보는 곳. 전국 28,200곳 실측 기준. 가입·카드 없이 30초면 나옵니다.">
+<title>허봇스 — 회원이 늘지 않는 이유, 30초면 나옵니다</title>
+<meta name="description" content="트레이너·필라테스 강사와 센터 원장의 회원이 늘지 않는 이유를 재 보는 곳. 전국 28,200곳 실측 기준. 가입·카드 없이 30초면 나옵니다.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="허봇스">
-<meta property="og:title" content="우리 동네에서 나는 몇 번째일까 — 허봇스">
+<meta property="og:title" content="회원이 늘지 않는 이유, 30초면 나옵니다 — 허봇스">
 <meta property="og:description" content="전국 헬스장·PT샵·필라테스 28,200곳을 직접 재서 만든 기준으로, 30초면 내 자리가 나옵니다.">
 <meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
 <meta property="og:url" content="https://heobotss.com/">
@@ -72,7 +72,8 @@
     <div class="who" aria-hidden="true"><em>선생님은 어디쯤일까요</em></div>
     <div class="door-title">
       <p class="small door-pre">전국 28,200곳 안에서</p>
-      <h1 class="proxi">우리 동네에서<br class="pc"> 나는 <span class="blue glint">몇 번째</span>일까</h1>
+      <!-- 6-5(11-03 저녁): 「우리 동네에서 나는 몇 번째일까」 → 「회원이 늘지 않는 이유, ⏎ 30초면 나옵니다」. 점이 모이는 글자(.blue)는 「30초」. 문은 「이유」, 센터는 「방법」 -->
+      <h1 class="proxi">회원이 늘지 않는 이유,<br class="pc"> <span class="nw"><span class="blue glint">30초</span>면</span> 나옵니다</h1>
       <button class="btn btn-sub go" type="button">눌러서 열어 보기</button>
     </div>
     <p class="door-note small">가입도 카드도 없이, 30초면 나옵니다</p>
@@ -91,7 +92,6 @@
       </ul>
       <p class="both"><b>1인샵·원장 겸 강사</b>는 <span class="pc-only">왼쪽</span><span class="m-only">위</span>, <b>팀장·직원</b>이 있으면 <span class="pc-only">오른쪽</span><span class="m-only">아래</span></p>
     </div>
-    <button class="again" type="button">다시 보기</button>
   </div>
 </section>
 
@@ -142,12 +142,14 @@
 <div class="giant" aria-hidden="true" data-tone="black" data-shape="text" data-shape-el="b"><b>허봇스</b></div>
 </main>
 
+<!-- 하단 사다리 — v3(11-03 대표님 1번): 눌리는 유리 판 카드 4장. 「VOD 강의 · 준비 중」은 이 페이지에 메일 칸이 없어 트레이너 길의 메일 칸(#t-vod-mail)으로 -->
 <footer class="foot"><div class="wrap">
+  <p class="lab">더 있는 것</p>
   <nav class="ladder" aria-label="다음 단계">
-    <a href="/check/">30초 진단<span>무료</span></a>
-    <a href="/#/price">멤버십<span>월 9,900</span></a>
-    <a href="/#/vod">강의</a>
-    <a href="/#/vod">트레이너 마케팅 강의<span>준비 중</span></a>
+    <a class="glass" href="/check/"><b>30초 진단</b><span>무료</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/#/price"><b>멤버십</b><span>월 9,900</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/#/vod"><b>강의</b><span>필요한 것만</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <a class="glass" href="/trainer/#t-vod-mail"><b>VOD 강의</b><span>준비 중</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </nav>
   <nav class="sublinks" aria-label="그 밖"><a href="/proof/">결과·검증</a><a href="/tools/">프로그램</a><a href="/free/">무료 자료</a><a href="/about/">소개</a></nav>
   <p class="notice">개별 사례이며, 같은 결과를 보장하지 않습니다.</p>

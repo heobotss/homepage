@@ -185,9 +185,10 @@ const 교육인원 = '';
   }
   const top = document.querySelector('.top');
   if (FX && top) addEventListener('scroll', () => top.classList.toggle('thin', scrollY > 40), { passive: true });
-  if (FX) document.querySelectorAll('.btn').forEach(b => {
+  /* 단추 + 하단 사다리 카드(v3): 테두리를 도는 빛(.sp). 자석(커서 따라오기)은 단추에만, 마우스 기기에서만 */
+  if (FX) document.querySelectorAll('.btn, .ladder a').forEach(b => {
     const sp = document.createElement('i'); sp.className = 'sp'; sp.setAttribute('aria-hidden', 'true'); b.append(sp);
-    if (!hoverable) return;
+    if (!hoverable || !b.classList.contains('btn')) return;
     b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * .22, y: (e.clientY - r.top - r.height / 2) * .32, duration: .45, ease: 'power2.out' }); });
     b.addEventListener('pointerleave', () => gsap.to(b, { x: 0, y: 0, duration: .7, ease: 'elastic.out(1,.45)' }));
   });
@@ -241,11 +242,12 @@ const 교육인원 = '';
       }, { passive: true });
       document.addEventListener('pointerleave', () => { dot.style.opacity = 0; ptr.on = false; });
     }
+    const lightOn = () => hoverable || innerWidth > 720; /* 폰은 .light 를 CSS 로 끄므로 매 프레임 자리 계산도 건너뛴다(11-03 모바일 점검) */
     gsap.ticker.add(() => {
       const now = performance.now();
       if (!moved) { const t = (now - t0) / 1000; tx = innerWidth * (.5 + .32 * Math.sin(t * .23)); ty = innerHeight * (.35 + .22 * Math.cos(t * .17)); }
       lx += (tx - lx) * .06; ly += (ty - ly) * .06;
-      light.style.transform = 'translate(' + lx.toFixed(1) + 'px,' + ly.toFixed(1) + 'px)';
+      if (lightOn()) light.style.transform = 'translate(' + lx.toFixed(1) + 'px,' + ly.toFixed(1) + 'px)';
       if (dot && hoverable) { dx += (tx - dx) * .25; dy += (ty - dy) * .25; dot.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)'; }
     });
     const POS = { l: [.12, .55], c: [.5, .5], r: [.88, .55], b: [.5, 1.05] };
@@ -300,7 +302,7 @@ const 교육인원 = '';
     let W = innerWidth, H = innerHeight, dpr = 1;
     function size() { dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = Math.max(1, Math.round(W * dpr)); c.height = Math.max(1, Math.round(H * dpr)); }
     size();
-    const N = wide() ? clamp(Math.round(innerWidth * innerHeight / 125), 8000, 12000) : 3500;
+    const N = wide() ? clamp(Math.round(innerWidth * innerHeight / 125), 8000, 12000) : 2600; /* 폰 3,500 → 2,600 (11-03 모바일 점검: 프레임 확보) */
     const pos = new Float32Array(N * 2), vel = new Float32Array(N * 2), sr = new Float32Array(N), wt = new Float32Array(N), scat = new Float32Array(N * 2);
     for (let i = 0; i < N; i++) { sr[i] = Math.random(); scat[i * 2] = Math.random(); scat[i * 2 + 1] = Math.random(); pos[i * 2] = scat[i * 2] * 2 - 1; pos[i * 2 + 1] = 1 - scat[i * 2 + 1] * 2; wt[i] = .5; }
     const bufP = gl.createBuffer(), bufS = gl.createBuffer(), bufW = gl.createBuffer();
@@ -662,7 +664,7 @@ const 교육인원 = '';
     const noop = { update() {} };
     if (!el) return noop;
     const stick = el.querySelector('.door-stick'), me = el.querySelector('.who');
-    const title = el.querySelector('.door-title'), h1 = title.querySelector('h1'), go = title.querySelector('.go'), open = el.querySelector('.door-open'), again = el.querySelector('.again');
+    const title = el.querySelector('.door-title'), h1 = title.querySelector('h1'), go = title.querySelector('.go'), open = el.querySelector('.door-open');
     const countEl = el.querySelector('.count-in'), countNum = countEl && countEl.querySelector('b'), burst = el.querySelector('.burst');
     if (!FX || !spine) return noop;
     const gl = spine.gl;
@@ -799,7 +801,7 @@ const 교육인원 = '';
       lp.sx += (lp.x - lp.sx) * .05; lp.sy += (lp.y - lp.sy) * .05;
       const rx = .46 + (lp.sy - .5) * .34 + p * .18, ry = (lp.sx - .5) * .9 + p * .5, sc = 1 + .22 * seg(p, 0, .5) * (1 - seg(p, .5, 1));
       /* 휴대폰(720px 이하): 나선이 제목 뒤를 지나지 않게 제목 아래(화면 55~85%)로 내리고 0.6배·밝기 60%. 상자·문으로 모이는 단계(p2)에서는 원래 자리로 돌아온다. PC 는 그대로 */
-      const ph = innerWidth <= 720, ps = ph ? .6 + .4 * p2 : 1, oy = ph ? -.4 * (1 - p2) : 0, br = ph ? .6 + .4 * p2 : 1;
+      const ph = innerWidth <= 720, ps = ph ? .55 + .45 * p2 : 1, oy = ph ? -.56 * (1 - p2) : 0, br = ph ? .6 + .4 * p2 : 1; /* 6-6: 폰은 나선을 제목 아래(화면 65~90%)로 더 내리고 0.55배 — 제목 뒤 어둠 없이도 대비가 선다 */
       gl.viewport(Math.round(r.left * dpr), Math.round((H - r.bottom) * dpr), Math.round(r.width * dpr), Math.round(r.height * dpr));
       gl.enable(gl.SCISSOR_TEST); gl.scissor(Math.round(r.left * dpr), Math.round((H - bot) * dpr), Math.round(r.width * dpr), Math.round((bot - top) * dpr));
       bind();
@@ -818,16 +820,19 @@ const 교육인원 = '';
       return cover;
     }
     new IntersectionObserver(es => { root.classList.toggle('instage', es[0].isIntersecting && es[0].intersectionRatio > .5); }, { threshold: [0, .5, 1] }).observe(stick);
+    /* 문 무대의 문서 안 자리. el.offsetTop 은 offsetParent(main, position:relative) 기준이라 0 이 나와 — 맨 위(scrollY 0)에서 진행도가 이미 64/span 만큼 가 있었다.
+       PC 는 span 이 커서 제목이 60% 투명도로만 보였지만, 폰(iPhone 13: span 432px)은 진행도 .16 → 제목 48%·「눌러서 열어 보기」 pointer-events none 으로 죽어 있었다(11-03 모바일 점검에서 발견, 「PC 는 되는데 폰은 안 되던 것」). */
+    const docTop = () => el.getBoundingClientRect().top + scrollY;
     function update() {
       const span = el.offsetHeight - stick.offsetHeight;
-      const raw = span > 0 ? (scrollY - el.offsetTop + BAR) / span : 0;
+      const raw = span > 0 ? (scrollY - docTop() + BAR) / span : 0;
       p = clamp(raw / .95, 0, 1);
       if (intro && scrollY > 24) endIntro();
       apply();
     }
-    const endY = () => el.offsetTop - BAR + (el.offsetHeight - stick.offsetHeight) * .95;
+    const endY = () => docTop() - BAR + (el.offsetHeight - stick.offsetHeight) * .95;
     go.addEventListener('click', () => goY(endY(), 2200));
-    again.addEventListener('click', () => goY(el.offsetTop - BAR, 1400));
+    /* 「다시 보기」 단추는 6-2 로 없앴다 — 맨 위로 스크롤하면 p 가 0 으로 돌아가 스스로 닫힌다 */
     open.addEventListener('focusin', () => { if (p < 1) goY(endY(), 10); });
     open.querySelectorAll('.doors a').forEach(a => a.addEventListener('click', e => {
       if (e.metaKey || e.ctrlKey) return; e.preventDefault();
@@ -855,10 +860,15 @@ const 교육인원 = '';
       tl.to(st, { rev: 1.06, duration: 1.1, ease: 'power1.inOut' }, 0);
       if (countNum) tl.to(num, { v: 28200, duration: 1.1, ease: 'power2.out', onUpdate: () => { countNum.textContent = fmtNum(Math.round(num.v)); } }, 0);
       if (countEl) tl.to(countEl, { opacity: 0, duration: .35 }, 1.0);
-      tl.to(st, { g: 1, duration: .75, ease: 'power3.inOut' }, 1.05);
-      tl.to(title, { opacity: 1, duration: .5, ease: 'power2.out' }, 1.9);
-      tl.to(st, { g: 0, duration: .7, ease: 'power2.inOut' }, 2.0);
-      if (gw) tl.add(() => glintRun(gw, 1.1), 2.05);
+      if (innerWidth <= 720) { /* 6-6 ③ 폰: 점이 글자로 모이는 단계·투명도 등장 없이, 숫자가 다 세이면 제목이 바로 또렷하게 */
+        tl.set(title, { opacity: 1 }, 1.15);
+        if (gw) tl.add(() => glintRun(gw, 1.1), 1.25);
+      } else {
+        tl.to(st, { g: 1, duration: .75, ease: 'power3.inOut' }, 1.05);
+        tl.to(title, { opacity: 1, duration: .5, ease: 'power2.out' }, 1.9);
+        tl.to(st, { g: 0, duration: .7, ease: 'power2.inOut' }, 2.0);
+        if (gw) tl.add(() => glintRun(gw, 1.1), 2.05);
+      }
     }
     size(); addEventListener('resize', () => { size(); update(); });
     const ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
@@ -1246,6 +1256,8 @@ const 교육인원 = '';
   addEventListener('resize', requestTick);
   addEventListener('load', () => { requestTick(); if (FX) ScrollTrigger.refresh(); });
   addEventListener('scroll', requestTick, { passive: true });
+  /* 상단 줄이 64 ↔ 52px 로 줄었다 돌아오는 .4s 동안 문 무대의 문서 자리도 같이 움직인다 — 맨 위로 돌아온 뒤 마지막 scroll 이벤트가 중간값(52)으로 진행도를 계산해 제목이 90% 에 머물렀다(11-03 폰 점검). 전환이 끝나면 한 번 더 계산 */
+  if (FX && top) top.addEventListener('transitionend', e => { if (e.propertyName === 'height') requestTick(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (FX) { ScrollTrigger.refresh(); masked.forEach(lines); if (spine) spine.refresh(); } requestTick(); });
   onScroll();
 
@@ -1271,7 +1283,8 @@ const 교육인원 = '';
     t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 5000);
   }
   if (!isLive) {
-    document.querySelectorAll('a[href^="/"]').forEach(a => { const h = a.getAttribute('href'); a.setAttribute('href', h in MAP ? MAP[h] : LIVE + h); });
+    /* v3: 「/trainer/#t-vod」처럼 # 가 붙은 주소는 앞부분만 표에서 찾고 # 은 그대로 잇는다(문 하단 사다리 「VOD 강의」 → 트레이너 길의 메일 칸) */
+    document.querySelectorAll('a[href^="/"]').forEach(a => { const h = a.getAttribute('href'), i = h.indexOf('#'), path = i < 0 ? h : h.slice(0, i), hash = i < 0 ? '' : h.slice(i); a.setAttribute('href', path in MAP ? MAP[path] + hash : LIVE + h); });
   }
   if (FX) document.addEventListener('click', e => {
     const a = e.target.closest('a[href]'); if (!a || a.closest('.doors') || a.target === '_blank' || e.metaKey || e.ctrlKey) return;
