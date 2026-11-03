@@ -604,7 +604,7 @@ input[type=email].err{border-color:var(--bad)}
     fetch(FN, {
       method: "POST",
       headers: { "Content-Type": "application/json", apikey: SB_KEY },
-      body: JSON.stringify({ email: email, years: picked("years"), center: picked("center"), marketing: $("#mkt").checked, night: $("#mkt").checked && $("#night").checked, v: D.v, answers: bits(), website: $("#website").value, visitor: window.HBT ? HBT.visitor() : null, utm: window.HBT ? HBT.utm() : null })
+      body: JSON.stringify({ email: email, years: picked("years"), center: picked("center"), agree: true, marketing: $("#mkt").checked, night: $("#mkt").checked && $("#night").checked, v: D.v, answers: bits(), website: $("#website").value, visitor: window.HBT ? HBT.visitor() : null, utm: window.HBT ? HBT.utm() : null })
     }).then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
       .then(function (d) {
         if (d && d.ok) { $("#mailForm").hidden = true; $("#done").hidden = false; return; }
@@ -672,7 +672,7 @@ input[type=email].err{border-color:var(--bad)}
     var pk = window.HBT ? HBT.pack() : { visitor: null, utm: null };
     fetch(FN, {
       method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY },
-      body: JSON.stringify({ email: email, marketing: $("#gateMkt").checked, night: false, v: D.v, answers: bits(),
+      body: JSON.stringify({ email: email, agree: true, marketing: $("#gateMkt").checked, night: false, v: D.v, answers: bits(),
         website: $("#cWeb").value, link: true, visitor: pk.visitor, utm: pk.utm })
     }).then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
       .then(function (d) {
