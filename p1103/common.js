@@ -112,7 +112,7 @@ const 교육인원 = '';
       if (!nextSay) return;
       if (r.out) { nextSay.textContent = ''; return; }
       const nm = m.이름 + ' 기준, ';
-      nextSay.textContent = r.top <= 20 ? nm + '전국 상위 20% 안입니다. 다음은 어떤 검색어로 회원이 오는지 — 키워드 순위 추적(멤버십)'
+      nextSay.textContent = r.top <= 20 ? nm + '전국 상위 20% 안입니다. 다음은 내 글이 몇 위인지 — 내 블로그 순위판(멤버십, 열리면 바로)'
         : r.top <= 50 ? nm + '전국 중앙값은 넘었습니다. 다음은 리뷰에 선생님 이름이 나오는지'
         : nm + '전국 ' + r.top + (m.역방향 ? '%가 우리보다 최근에 리뷰를 받았습니다. 리뷰가' : '%가 우리보다 많습니다. 리뷰가');
       if (r.top > 50) nextSay.textContent += ' 쌓이게 하는 것부터 — 플레이스 「찾아오는 길」 채우기와 수업 뒤 리뷰 부탁';
@@ -677,6 +677,7 @@ const 교육인원 = '';
     if (!el) return noop;
     const stick = el.querySelector('.door-stick'), me = el.querySelector('.who');
     const title = el.querySelector('.door-title'), h1 = title.querySelector('h1'), open = el.querySelector('.door-open');
+    const cue = el.querySelector('.door-cue');
     const countEl = el.querySelector('.count-in'), countNum = countEl && countEl.querySelector('b'), burst = el.querySelector('.burst');
     if (!FX || !spine) return noop;
     const gl = spine.gl;
@@ -789,14 +790,15 @@ const 교육인원 = '';
       stick.addEventListener('pointermove', e => { const r = stick.getBoundingClientRect(); lp.x = (e.clientX - r.left) / r.width; lp.y = (e.clientY - r.top) / r.height; lp.in = true; });
       stick.addEventListener('pointerleave', () => { lp.x = .5; lp.y = .5; lp.in = false; });
     }
-    /* 패널 1103 결정 ①(16명 걸림): 스크롤·「눌러서 열어 보기」 관문 없이 — 숫자를 다 세면 점이 스스로 문틀로 모이고(auto.p 0→1) 제목·문 둘이 첫 화면에 바로 보인다.
-       제목은 사라지지 않는다. 문 카드는 p .45~.85 에서 떠오르고, 그 전에도 누를 수 있다(pointer-events 는 .3 부터) */
+    /* 11-04 대표님: 은하수 → 상자까지는 스스로(auto.p 0→.42), 그다음 아래로 내리는 만큼 문 둘이 나온다. 단추는 없고, 끝까지 내리면 다음 화면으로 이어진다. 폰은 문이 나오면서 제목이 빠진다(짧은 화면 겹침 방지) */
     let p = 0, p1 = 0, p2 = 0, intro = true;
     const st = { rev: 0, g: 0 }, auto = { p: 0 };
     function apply() {
       p1 = easeIO(seg(p, 0, .55)); p2 = easeIO(seg(p, .42, .9));
-      const o = easeIO(seg(p, .3, .7));
-      open.style.opacity = o.toFixed(3); open.style.visibility = o > .01 ? 'visible' : 'hidden'; open.style.pointerEvents = o > .3 ? 'auto' : 'none';
+      const o = easeIO(seg(p, .62, .94));
+      open.style.opacity = o.toFixed(3); open.style.visibility = o > .01 ? 'visible' : 'hidden'; open.style.pointerEvents = o > .4 ? 'auto' : 'none';
+      if (!intro) title.style.opacity = innerWidth <= 720 ? (1 - seg(p, .56, .72)).toFixed(3) : 1;
+      if (cue) cue.style.opacity = !intro && p < .6 ? 1 : 0;
       open.style.transform = 'translateY(' + (16 * (1 - o)).toFixed(1) + 'px)';
       el.classList.toggle('opened', p > .9);
       me.style.opacity = clamp(1 - p1 * 6, 0, 1).toFixed(3);
@@ -831,17 +833,21 @@ const 교육인원 = '';
     new IntersectionObserver(es => { root.classList.toggle('instage', es[0].isIntersecting && es[0].intersectionRatio > .5); }, { threshold: [0, .5, 1] }).observe(stick);
     /* 문 무대의 문서 안 자리. el.offsetTop 은 offsetParent(main, position:relative) 기준이라 0 이 나와 — 맨 위(scrollY 0)에서 진행도가 이미 64/span 만큼 가 있었다.
        PC 는 span 이 커서 제목이 60% 투명도로만 보였지만, 폰(iPhone 13: span 432px)은 진행도 .16 → 제목 48%·「눌러서 열어 보기」 pointer-events none 으로 죽어 있었다(11-03 모바일 점검에서 발견, 「PC 는 되는데 폰은 안 되던 것」). */
+    const docTop = () => el.getBoundingClientRect().top + scrollY;
+    const endY = () => docTop() - BAR + (el.offsetHeight - stick.offsetHeight) * .95;
     function update() {
-      p = clamp(auto.p, 0, 1);
+      const span = el.offsetHeight - stick.offsetHeight;
+      const raw = span > 0 ? clamp((scrollY - docTop() + BAR) / span / .95, 0, 1) : 1;
+      p = clamp(auto.p + (1 - auto.p) * raw, 0, 1);
       if (intro && scrollY > 24) endIntro();
       apply();
     }
     let autoTw = null;
     function runAuto(fast) {
       if (autoTw) autoTw.kill();
-      autoTw = gsap.to(auto, { p: 1, duration: fast ? 1 : 1.6, ease: 'power2.inOut', onUpdate: update, onComplete: update });
+      autoTw = gsap.to(auto, { p: .42, delay: fast ? 0 : .9, duration: fast ? 1 : 2.2, ease: 'power2.inOut', onUpdate: update, onComplete: update });
     }
-    open.addEventListener('focusin', () => { if (p < 1) { if (autoTw) autoTw.kill(); auto.p = 1; update(); } });
+    open.addEventListener('focusin', () => { if (p < .9) scrollTo(0, endY()); });
     open.querySelectorAll('.doors a').forEach(a => a.addEventListener('click', e => {
       if (e.metaKey || e.ctrlKey) return; e.preventDefault();
       const r = a.getBoundingClientRect(), f = document.createElement('div'); f.className = 'fillcard';

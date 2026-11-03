@@ -281,6 +281,8 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .pin .steps span{display:block;color:var(--ink2);max-width:26em}
 .pin .steps img{margin-top:var(--s3)}
 .pin-phone,.jn-say{display:none}
+.pin .steps b i{font-style:normal}
+.jn-pair{display:none}
 .pin-anchor{position:absolute;left:0;width:1px;height:1px}
 @media (min-width:901px){
   .fx .pin{height:160vh}
@@ -309,7 +311,12 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .prog i{width:32px;height:1px;background:var(--line);transition:background-color .3s}
 .prog i.on{background:var(--ink)}
 @media (max-width:900px),(prefers-reduced-motion:reduce){.prog{display:none}}
-@media (max-width:900px){.pin .steps img{max-height:560px;width:min(100%,320px);object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:var(--r)}}
+@media (max-width:900px){.pin .steps img{display:none}
+  .pin .steps>li{padding-block:var(--s2)}
+  .pin .steps b{font-size:var(--t2);margin-bottom:var(--s1)}
+  .jn-pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin:var(--s3) 0 0;max-width:520px}
+  .jn-pair img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r)}
+  .jn-pair figcaption{margin-top:var(--s1);text-align:center;color:var(--ink2);font-size:var(--t6)}}
 
 /* ── 멤버십 한 칸 — 「9,900」이 크게 들어왔다가 제자리로 쿵 ── */
 .one-price{display:grid;grid-template-columns:1fr auto;gap:var(--s4);align-items:end;margin-top:var(--s4);padding:var(--s3)}
@@ -370,8 +377,8 @@ html:not(.fx) .fill .w{color:var(--ink)}
   .door-open .both{margin:0 0 var(--s1);text-align:left;font-size:var(--t6)}
 }
 @media (min-width:721px) and (max-width:1100px){.doors a{padding:var(--s2) var(--s3)}.doors b{font-size:var(--t3)}}
-.fx:not(.nostars) .door{height:auto}
-.fx:not(.nostars) .door-stick{position:relative;height:calc(100vh - var(--bar));height:calc(100svh - var(--bar));min-height:560px;display:block;padding:0;background:transparent}
+.fx:not(.nostars) .door{height:calc(185vh - var(--bar));height:calc(185svh - var(--bar))}
+.fx:not(.nostars) .door-stick{position:sticky;top:var(--bar);height:calc(100vh - var(--bar));height:calc(100svh - var(--bar));min-height:560px;display:block;padding:0;background:transparent}
 /* 폰(11-03 모바일 점검): 고정 구간은 150vh 아래로, iOS 주소창을 뺀 svh 기준 */
 .fx:not(.nostars) .count-in{display:block;position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:200 var(--t0)/1 var(--num);letter-spacing:-.04em;font-variant-numeric:tabular-nums;pointer-events:none;z-index:2;color:var(--ink)}
 .fx:not(.nostars) .count-in b{font-weight:200}
@@ -387,7 +394,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
   .door-title h1 .blue{color:#6B9CFF}}
 @keyframes ring{from{transform:scale(.4);opacity:1}to{transform:scale(2.4);opacity:0}}
 @keyframes beat{0%,100%{box-shadow:0 0 14px 4px var(--blue),0 0 44px 12px rgba(var(--blue-rgb),.5)}50%{box-shadow:0 0 20px 7px var(--blue),0 0 70px 18px rgba(var(--blue-rgb),.6)}}
-/* 패널 1103 결정 ①: 제목은 위(9%), 문 둘은 아래(bottom 6%) — 스크롤·단추 없이 숫자를 다 세면 둘 다 보인다 */
+/* 제목은 위(9%), 문 둘은 아래(bottom 6%) — 아래로 내리는 만큼 문이 떠오른다 */
 .fx:not(.nostars) .door-title{position:absolute;left:var(--gut);right:var(--gut);top:9%;pointer-events:none;will-change:opacity;opacity:0}
 .fx:not(.nostars) .door-title h1{font-size:var(--t1)}
 @media (max-width:720px){.fx:not(.nostars) .door-title h1{font-size:38px}}
@@ -714,14 +721,16 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 .route-hint{margin-top:var(--s1)}
 @media (max-width:720px){
   .wall .row:nth-child(n+3){display:none}                       /* 폰: 86장 벽은 두 줄만 */
-  .pin .steps>li:nth-child(n+2) img{display:none}               /* 폰: 수업일지 화면은 첫 장만(회원 관리 화면의 빨간 단추가 오해를 삼) */
   .ladder a b{font-size:var(--t6)}
 }
 
-/* 폰 문 첫 화면은 흐름 배치(제목 → 안내 → 문 둘) — 짧은 화면(390×664)에서 절대 배치가 포개지던 것(패널 C 2차). 절대 배치 규칙보다 뒤에 있어야 이긴다 */
-@media (max-width:720px){.fx:not(.nostars) .door-stick{height:auto;min-height:calc(100svh - var(--bar));display:flex;flex-direction:column;justify-content:space-between;padding:0 0 var(--s3)}
-  .fx:not(.nostars) .door-title{position:relative;top:auto;left:auto;right:auto;padding:calc(3svh + var(--s2)) var(--gut) 0}
-  .fx:not(.nostars) .door-open{position:relative;bottom:auto;margin-top:var(--s3)}}
+/* 폰 문 첫 화면: 제목은 위, 문 둘은 아래. 문이 나올 때 제목이 빠지므로 짧은 화면에서도 겹치지 않는다 */
+@media (max-width:720px){.fx:not(.nostars) .door-title{top:4%}
+  .fx:not(.nostars) .door-open{bottom:var(--s2)}}
+.door-cue{display:none}
+.fx:not(.nostars) .door-cue{display:block;position:absolute;left:50%;bottom:var(--s3);width:28px;height:28px;margin-left:-14px;color:var(--ink);pointer-events:none;z-index:3;opacity:0;transition:opacity .4s}
+.door-cue svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:translateY(-4px);opacity:.45}50%{transform:translateY(5px);opacity:1}}
 .member-shot{margin-top:var(--s4);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--face);max-width:340px}
 .member-shot img{display:block;width:100%;height:auto}
 .member-shot p{padding:var(--s1) var(--s2)}
@@ -761,3 +770,4 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 .faqs dd{margin:var(--s1) 0 0;color:var(--ink2)}
 @media (max-width:1000px){.tiers{grid-template-columns:1fr}}
 @media (max-width:720px){.faqs{grid-template-columns:1fr}.terms div{grid-template-columns:60px 1fr}}
+.fx:not(.nostars) .door:not(.ready) .who em{opacity:0}
