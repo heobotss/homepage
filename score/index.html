@@ -289,7 +289,7 @@ input[type=email].err{border-color:var(--bad)}
         <div class="field">
           <label class="agree"><input type="checkbox" id="agree"><span>[필수] 결과를 보내기 위해 메일·연차·일하는 곳과 응답을 받고 1년 동안 보관하는 데 동의합니다. <a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></span></label>
           <label class="agree"><input type="checkbox" id="mkt"><span>[선택] 광고성 정보 수신 동의 — 새 강의·무료 자료·할인 소식을 메일로 받겠습니다<small>받는 정보: 메일 주소 · 보관: 동의를 끊을 때까지 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
-          <label class="agree sub"><input type="checkbox" id="night" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다<small>야간 수신 동의 · 문자·카카오톡 알림에 적용됩니다</small></span></label>
+          <label class="agree sub"><input type="checkbox" id="night" disabled><span>[선택] 밤 9시~아침 8시에도 받겠습니다<small>야간 수신 동의 · 지금은 메일만 보내 드리고, 앞으로 문자·알림톡을 쓰게 될 때 적용됩니다</small></span></label>
           <p class="agree-note">선택 항목은 동의하지 않아도 결과 메일을 그대로 받으실 수 있습니다.</p>
         </div>
 
@@ -727,9 +727,16 @@ input[type=email].err{border-color:var(--bad)}
     intro();
     var 받은답 = new URLSearchParams(location.search).get("a") || "";
     if (받은답.length === QS.length && !/[^01-]/.test(받은답)) {
-      ans = 받은답.split("").map(function (c) { return c === "-" ? null : c; }); store();
+      /* 11-03 — 주소창에 답 100글자를 직접 넣으면 메일을 내지 않고도 전체 결과가 열렸다.
+         메일 링크로 오신 분은 로그인 상태이므로, 로그인한 분만 뒤 70문항까지 되살린다.
+         로그인 없이 들어온 답은 미리 보기 범위만 살려 관문이 그대로 뜨게 한다 */
       계정확인().then(function () {
         history.replaceState(null, "", location.pathname);
+        ans = 받은답.split("").map(function (c, i) {
+          if (c === "-") return null;
+          return (로그인됨 || QS[i].preview) ? c : null;
+        });
+        store();
         if (filled("preview") === NP) finish();
       });
     }
