@@ -726,3 +726,14 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 @media (min-width:901px){#t-member .wrap{display:grid;grid-template-columns:1fr 340px;gap:var(--s4);align-items:start}#t-member .member-shot{grid-column:2;grid-row:1 / span 3;margin-top:0}#t-member .one-price{grid-column:1}}
 .member-shot img{display:block;width:100%;height:auto}
 .member-shot p{padding:var(--s1) var(--s2)}
+/* 상단 메뉴 6칸(11-03 밤) — 폰은 넓은 것 둘 숨김, 글자 작게 */
+.top nav{gap:var(--s2)}
+@media (max-width:720px){.top nav a.wide{display:none}.top nav{gap:10px;font-size:13px}.top nav a{min-width:0}.top nav a.me{padding-inline:12px}}
+@media (min-width:721px) and (max-width:1000px){.top nav{gap:var(--s2);font-size:var(--t6)}}
+/* 센터 길 끝 두 칸 */
+.duo.nextduo{margin-top:var(--s4);align-items:stretch}
+.duo.nextduo .card{display:flex;flex-direction:column;gap:var(--s2);padding:var(--s4)}
+.duo.nextduo .card .lab{margin-bottom:0}
+.duo.nextduo .card h3{font-size:var(--t3);margin-bottom:0}
+.duo.nextduo .card .btn{margin-top:auto;align-self:flex-start}
+@media (max-width:720px){.duo{grid-template-columns:1fr}.duo.nextduo .card{padding:var(--s3)}.duo.nextduo .card .btn{align-self:stretch}}
