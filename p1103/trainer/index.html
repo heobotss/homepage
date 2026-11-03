@@ -1,0 +1,290 @@
+<!doctype html>
+<!--
+  허봇스 트레이너 길 미리보기 — 실제 자리: /trainer/
+  구조 정본: 구조_1027\23_최종구조_확정본.md 2절 ② (+ 20_v1 · 22_v2 의 T블록). 효과 정본: 개편_1102\효과지도_1103.md 「트레이너 길」 표.
+  순서: T1 머리(통과) → T2 네 칸(가로 길·파란 점) → T3 먼저 해 본 분들(입체 회전목마) → T3-b 후기 벽(커서 불 켜짐) → T4 30초(게이지) → T5 100점(눈금 다이얼)
+        → T6 내 이름 카드(포일) → T7 수업일지(단어 교체) → T8 만든 사람(글자 차오름) → T9 멤버십(9,900 쿵) → T9-b VOD(숨 쉬는 준비 중) → T10 마무리 → 끝(파랑 차오름 + 거대한 이름).
+
+  ■ 11-03 2차: 뒤에 고정된 등뼈 점(.spine)이 흩어짐 → 네 칸 길의 선 → 다이얼 고리 → 포일 카드 윤곽 → 폰 테두리 → 거대한 이름 글자로 모인다(data-shape). 흐림 등장 삭제, 고정 구간 30% 단축, 첫 제목은 커서 근처 글자가 밝아짐(.proxi), 「몇 점」은 커졌다 안착(data-land), 「뭘 쓸지」는 광택(loop).
+  ■ 11-03 시각 90 작업 — 화면별 주연 효과는 효과지도 그대로. 큰 글자로 뽑은 후기 문구는 캡처(img\result-*.jpg)에 실제로 적힌 문장만 옮겼다:
+    @yeeun.12 「지난주 1위에 이어 이번주도 1위!」 · @broad_minded94 「딱 7일만에 플레이스 1위로!」 · @sohyeon_h.i.t 「체험 회원님 30회 등록까지 연결하기 성공!」 · @k_imtaeyeong 「블로그 상위 노출 확률 94.5%」
+    「세미나에서 약 1,000명」 → 「직접 교육한 트레이너·센터 대표」(숫자 없음, _공통.js 교육인원 변수에 실제 수가 오면 자동으로 붙는다).
+
+  ■ 동결(토스 심사): 상단 「플랜」→/#/price, 하단 사업자 정보·약관·환불 그대로. 결제는 /#/price 만 거친다. /pay/ 직접 링크 없음.
+
+  ■ 이 길에 일부러 안 쓴 것 (근거는 개편_1102\확인필요.md)
+    다음 묶음 30일 자동 열림·후기 관련 약속(서버 구현 전) / 강의 가격(길엔 월 9,900 한 숫자) / 세미나 판매·예약(11-02 결정) / 「센터는 바뀌어도」 문장 / 센터 길 직접 링크
+
+  ■ 아직 없는 주소 (→ 지금 살아 있는 대체 경로)
+    /journal/  → https://app.heobotss.com/
+    /check/    → /#/check
+    /proof/    → /#/facts
+    /tools/    → /#/tools
+    /about/    → / 소개 구간
+    /free/     → /free/rereg/ 등 낱개 주소만 있음
+
+  ■ 붙여야 할 서버 호출
+    #t-report 신청 칸(지금은 data-preview 로 전송 안 함) = site\report\index.html 과 같게:
+      window.HB.session() 로 로그인 확인 → 없으면 칸 값을 localStorage 「hb-draft-report」에 맡기고 window.HB.mountAuth() 로 받을 곳 정함
+      → sb.from("report_requests").insert({ email, name, place_url, pen_name, visitor, utm_* }) → HBT.event("lead","report")
+      → sb.from("contacts").upsert({ email, name }, { onConflict:"email" })
+      필요 파일: supabase-js, /vod/auth.js, /t.js. 서버가 접수를 확인한 뒤에만 완료 화면, 실패하면 입력 보존.
+    T9-b 트레이너 마케팅 VOD 강의 = /#/vod 연결 + 「열리면 메일로 알려 드리는 칸」(data-early, 지금은 전송 안 함).
+      붙일 호출 = site\free\_틀.html earlyForm 과 같게: window.HB.sb.rpc("news_signup", { _email, _ad:true, _night:false, _ver:"2026-10-12", _content:"vod-trainer-marketing", _visitor·_source·_medium·_campaign은 HBT.pack() })
+      → HBT.event("lead","vod-early"). free-claim 의 "early" 는 열리기 전 열람권 신청을 409 로 거절하는 코드라 이 칸과 무관하다.
+  ■ 라이브러리: ../lib/gsap.min.js · ScrollTrigger.min.js (GSAP 3.13.0) · lenis.min.js (1.3.11). 외부 주소 없음.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>트레이너·필라테스 강사 — 허봇스</title>
+<meta name="description" content="수업은 자신 있는데 회원이 안 늘어 답답하다면, 회원이 오는 네 칸 중 어디서 끊기는지 무료로 재 보세요. 전국 28,200곳 실측 기준.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="허봇스">
+<meta property="og:title" content="수업은 자신 있는데, 회원이 안 늘어 답답하신가요">
+<meta property="og:description" content="회원이 오는 네 칸 중 어디서 끊기는지 재 드립니다. 가입·카드 없이 30초.">
+<meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
+<meta property="og:url" content="https://heobotss.com/trainer/">
+<link rel="canonical" href="https://heobotss.com/trainer/">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="stylesheet" href="../common.css">
+<script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('still')</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="bgfx" aria-hidden="true"><i class="glow"></i><i class="light"></i></div>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/">허봇스</a>
+  <nav aria-label="주 메뉴"><a href="/#/vod">강의</a><a href="/#/price">플랜</a><a class="me" href="/vod/">로그인</a></nav>
+</div></header>
+
+<main id="main">
+<!-- T1 머리 — 줄마다 마스크로 솟는 큰 제목, 「답답」에만 빛이 흐른다. 스크롤하면 제목이 커지며 화면 밖으로 지나가 다음 화면으로 통과(PC) -->
+<section class="hero" data-glow="c" data-shape="scatter">
+  <div class="hero-stage"><div class="wrap">
+    <h1 class="mask lead proxi"><span class="ln"><i>수업은 자신 있는데,</i></span><span class="ln"><i>회원이 안 늘어</i></span><span class="ln"><i><span class="nw"><b class="blue glint" data-glint="loop">답답</b>하신가요</span></i></span></h1>
+    <p class="sub rv">지금 막힌 곳 하나만 고르세요</p>
+    <nav class="route rv" aria-label="막힌 곳 고르기">
+      <a href="#t-check">블로그를 써도 문의가 없다 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+      <a href="#t-report">리뷰에 내 이름이 안 나온다 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+      <a href="#jn-1">회원 기록이 엑셀·카톡에 흩어져 있다 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+      <a href="#jn-3">재등록이 자꾸 끊긴다 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+    </nav>
+  </div></div>
+</section>
+
+<!-- T2 네 칸 — v2(11-03): 등뼈 점이 은하 나선(data-shape="galaxy")으로 모이고, 나선 팔 위의 밝은 매듭 4개가 네 단계. 파란 점(.fh-dot)이 팔을 따라 매듭 1→4 로 이동(PC). 칸 아래 선은 밟은 만큼 파랗게 찬다.
+     모양은 섹션 진입 때 바뀌지 않고 스크롤 진행도로 연속 보간된다(_공통.js ③). 숫자 출처 site/index.html s-facts · s-results -->
+<section class="blk fourh" id="t-four" data-glow="l" data-tone="deep" data-shape="galaxy" data-shape-el=".fh-stage">
+  <div class="fh-stage">
+    <div class="wrap fh-head"><h2 class="rv" style="max-width:17em">회원은 이 네 단계를 거쳐 옵니다<br class="pc"> 어디서 끊기는지 알려 드립니다</h2></div>
+    <div class="wrap"><div class="fh-track">
+      <div class="rv"><h3>동네에서 검색된다</h3><span class="n numf"><span data-count="50">50</span><em>%</em></span><p>전국 절반은 「찾아오는 길」이 빈칸</p></div>
+      <div class="rv"><h3>리뷰와 글이 이어진다</h3><span class="n numf"><span data-count="60">60</span><em>%</em></span><p>10곳 중 6곳은 한 달간 새 리뷰 0건</p></div>
+      <div class="rv"><h3>리뷰에 선생님 이름이 나온다</h3><span class="n numf"><span data-count="2.3" data-dec="1">2.3</span><em>배</em></span><p>선생님이 직접 글 쓰는 센터의 리뷰</p></div>
+      <div class="rv"><h3>문의가 등록으로 이어진다</h3><span class="n numf"><span data-count="77">77</span><em>건</em></span><p>@tz_h.i.t 한 달 신규 문의</p></div>
+      <svg class="fh-line" aria-hidden="true" focusable="false"></svg>
+    </div></div>
+    <i class="fh-dot" aria-hidden="true"></i>
+    <div class="wrap"><p class="note rv"><b>좋아요·팔로워 수는 안 봅니다.</b> 우리 동네 회원이 되지 않아서요.</p></div>
+  </div>
+</section>
+
+<!-- T3 먼저 해 본 분들 — 입체 회전목마. 캡처 유리 판이 돌고, 앞에 온 판의 실제 문구(캡처에 적힌 그대로)가 아주 큰 글자로 교체된다.
+     교육생·캡처 모두 site/index.html s-results 와 대조. 휴대폰·효과 없음: 옆으로 넘기는 띠 + 장마다 문구 -->
+<section class="blk ringpin" id="t-proof" data-glow="c">
+  <div class="ring-stage">
+    <div class="wrap ring-grid">
+      <div><h2 class="rv">먼저 해 본 선생님들의 결과</h2>
+      <div class="ring-cap" aria-hidden="true">
+      <p>지난주 1위에 이어 이번주도 1위!<small>@yeeun.12</small></p>
+      <p>딱 7일만에 플레이스 1위로!<small>@broad_minded94</small></p>
+      <p>체험 회원님 30회 등록까지 연결하기 성공!<small>@sohyeon_h.i.t</small></p>
+      <p>블로그 상위 노출 확률 94.5%<small>@k_imtaeyeong</small></p>
+    </div>
+      </div>
+      <div class="ring-wrap">
+        <div class="ring" aria-label="교육을 들은 분들이 직접 보내 주신 결과물 4장">
+        <figure class="pane glass"><img src="../img/result-18.jpg" alt="@yeeun.12 님이 보내 주신 필라테스 블로그 순위 화면" loading="lazy" width="360" height="639"><q>지난주 1위에 이어 이번주도 1위!</q><p class="small"><a href="https://www.instagram.com/yeeun.12/" target="_blank" rel="noopener">@yeeun.12</a></p></figure>
+        <figure class="pane glass"><img src="../img/result-10.jpg" alt="@broad_minded94 님이 보내 주신 플레이스 순위 화면" loading="lazy" width="360" height="640"><q>딱 7일만에 플레이스 1위로!</q><p class="small"><a href="https://www.instagram.com/broad_minded94/" target="_blank" rel="noopener">@broad_minded94</a></p></figure>
+        <figure class="pane glass"><img src="../img/result-09.jpg" alt="@sohyeon_h.i.t 님이 보내 주신 블로그 순위와 등록 화면" loading="lazy" width="360" height="639"><q>체험 회원님 30회 등록까지 연결하기 성공!</q><p class="small"><a href="https://www.instagram.com/sohyeon_h.i.t/" target="_blank" rel="noopener">@sohyeon_h.i.t</a></p></figure>
+        <figure class="pane glass"><img src="../img/result-07.jpg" alt="@k_imtaeyeong 님이 보내 주신 블로그 순위 화면" loading="lazy" width="360" height="640"><q>블로그 상위 노출 확률 94.5%</q><p class="small"><a href="https://www.instagram.com/k_imtaeyeong/" target="_blank" rel="noopener">@k_imtaeyeong</a></p></figure>
+      </div>
+      </div>
+    </div>
+    <div class="wrap"><p class="small" style="margin-top:var(--s2)">원문 그대로 · 개별 사례</p></div>
+  </div>
+</section>
+
+<!-- T3-b 순위표 후기 벽 — 어둡게 눌린 캡처 벽이 곡면으로 휘어 흐르고, 커서 주변만 불이 켜져 또렷해진다. site/img 의 실제 캡처만. 휴대폰은 줄 하나씩 켜짐 -->
+<section class="blk" id="t-flow" data-glow="r" data-tone="ink" data-shape="scatter">
+  <div class="wrap">
+    <p class="lab rv">직접 보내 주신 것 · 개별 사례</p>
+    <h2 class="rv" style="max-width:15em">선생님들이 보내 주신 결과물 86장</h2>
+  </div>
+  <div class="wall" aria-label="교육생이 보내 주신 결과물들">
+    <div class="rows wall-dim">
+      <div class="row"><img src="../img/result-01.jpg" alt="한 달 신규 문의 77건 화면" loading="lazy" width="360" height="639"><img src="../img/result-03.jpg" alt="포항pt 플레이스 1·2위 화면" loading="lazy" width="360" height="640"><img src="../img/result-04.jpg" alt="김포 12개 검색어 상위 노출 화면" loading="lazy" width="360" height="640"><img src="../img/result-05.jpg" alt="블로그 리뷰 209개 화면" loading="lazy" width="360" height="640"><img src="../img/result-06.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-08.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-13.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"></div>
+      <div class="row"><img src="../img/result-15.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="639"><img src="../img/result-17.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-19.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="639"><img src="../img/result-22.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-23.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="639"><img src="../img/result-24.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-25.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="639"></div>
+      <div class="row"><img src="../img/result-26.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/review-12.jpg" alt="@pila_jay 님이 올린 후기 글" loading="lazy" width="360" height="640"><img src="../img/review-11-text.jpg" alt="@mediel_pilates 님이 올린 센터 대표자 교육 후기 글" loading="lazy" width="332" height="380"><img src="../img/result-09.jpg" alt="블로그 순위와 등록 화면" loading="lazy" width="360" height="639"><img src="../img/result-10.jpg" alt="플레이스 순위 1위 화면" loading="lazy" width="360" height="640"><img src="../img/result-18.jpg" alt="필라테스 블로그 순위 화면" loading="lazy" width="360" height="639"><img src="../img/result-07.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"></div>
+      <div class="row"><img src="../img/result-13.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-22.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-05.jpg" alt="블로그 리뷰 209개 화면" loading="lazy" width="360" height="640"><img src="../img/result-25.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="639"><img src="../img/result-03.jpg" alt="포항pt 플레이스 1·2위 화면" loading="lazy" width="360" height="640"><img src="../img/result-19.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="639"><img src="../img/result-01.jpg" alt="한 달 신규 문의 77건 화면" loading="lazy" width="360" height="639"></div>
+    </div>
+  </div>
+  <div class="wrap"><div class="act rv"><a class="btn btn-sub" href="/proof/">결과 더 보기</a></div></div>
+</section>
+
+<!-- T4 30초 — 칸마다 값을 넣을 때 게이지가 차고 곡선이 그려진다(data-fx="gauge"). 내 이름 적힌 리뷰 칸은 뺌 -->
+<section class="blk" id="t-check" data-glow="l" data-tone="black">
+  <div class="wrap two">
+    <div>
+      <p class="gain rv">가입 없음 · 저장 없음 · 30초</p>
+      <h2 class="rv h-big">아는 숫자 하나만 넣으세요</h2>
+    </div>
+    <form class="tool glass rv" data-tool data-fx="gauge" autocomplete="off">
+      <label class="fld"><span>방문자 리뷰</span><span class="in"><input class="inp" type="number" inputmode="numeric" min="0" max="99999" step="1" data-k="리뷰수" placeholder="120" aria-label="방문자 리뷰 건수"><i>건</i></span></label>
+      <label class="fld"><span>블로그 글</span><span class="in"><input class="inp" type="number" inputmode="numeric" min="0" max="99999" step="1" data-k="블로그카페리뷰" placeholder="80" aria-label="블로그 글 건수"><i>건</i></span></label>
+      <label class="fld"><span>마지막 리뷰가 며칠 전</span><span class="in"><input class="inp" type="number" inputmode="numeric" min="0" max="9999" step="1" data-k="최근리뷰경과일" placeholder="14" aria-label="마지막 리뷰가 며칠 전"><i>일</i></span></label>
+      <div class="res" aria-live="polite">
+        <p class="rank">상위 ○%</p>
+        <p class="say">전국 28,200곳 기준</p>
+        <div class="ridge-box">
+          <svg class="ridge" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d=""/></svg>
+          <i class="mid"></i><i class="mark"></i>
+        </div>
+        <p class="ridge-foot small"><span class="foot-l"></span><span>헬스장·PT샵·필라테스 28,200곳</span></p>
+        <div class="other" hidden></div>
+      </div>
+      <noscript><p class="small">이 칸은 자바스크립트가 필요합니다. <a href="/check/">30초 진단으로 가기</a></p></noscript>
+    </form>
+  </div>
+</section>
+
+<!-- T5 100점 진단 — 화면 가득 눈금 다이얼이 스크롤에 돌며 0 → 100, 가운데 숫자가 뒤섞였다가 「몇 점」으로 맞춰진다. /score/ 살아 있음. 문장 site/score/index.html -->
+<section class="blk dialpin" id="t-score" data-glow="c" data-tone="deep" data-shape="ring" data-shape-el=".dial">
+  <div class="wrap dial-stage">
+    <div>
+      <p class="gain rv">30문항 · 빈 영역 · 배울 순서</p>
+      <h2 class="rv">나는 <span class="blue" data-land>몇 점</span>짜리<br class="pc"> 트레이너일까요</h2>
+      <p class="big rv" style="margin-top:var(--s3);color:var(--ink2)">30문항이면 어느 영역이 비었는지 나옵니다<br class="pc"> 무엇부터 배울지 정해집니다</p>
+      <div class="act rv"><a class="btn btn-main" href="/score/">30문항 먼저 풀어 보기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+    </div>
+    <div class="dial rv" aria-hidden="true"><div class="core"><b class="numf">몇 점</b><small>100문항 중 30문항 · 한 문항 1점</small></div></div>
+  </div>
+</section>
+
+<!-- T6 내 이름 리포트 — 포일 카드: 마우스 각도에 따라 파란 광택이 흐르고, 「내 이름」 칸의 안내가 타자처럼 적힌다. 칸은 서버 표(report_requests)에 있는 것만. 전송 안 함. 등뼈 점은 카드를 도는 타원 궤도 둘(orbit, v2) -->
+<section class="blk" id="t-report" data-glow="r" data-tone="ink" data-shape="orbit" data-shape-el=".foil">
+  <div class="wrap two">
+    <div class="narrow-shot rv first-on-m">
+      <div class="tilt screenshot foil"><img src="../img/report.jpg" alt="내 이름 리포트 카드 — 내 이름이 적힌 리뷰 건수와 마지막으로 적힌 날(숫자는 가림)" loading="lazy" width="720" height="960"><i class="sheen" aria-hidden="true"></i><i class="edge" aria-hidden="true"></i></div>
+      <p class="small" style="margin-top:var(--s1)">보기 카드 · 신청하면 내 이름으로 옵니다</p>
+    </div>
+    <div>
+      <p class="gain rv">무료 · 내 이름으로 · 하루 안에</p>
+      <h2 class="rv">우리 센터에서 나는<br class="pc"> <span class="nw">몇 번째일까</span></h2>
+      <p class="sub rv">리뷰를 세지 않아도 됩니다. 하루 안에 메일로 옵니다.</p>
+      <form class="form rv" data-preview novalidate>
+        <label>리뷰에 적히는 이름<input class="inp" type="text" maxlength="20" autocomplete="name" placeholder="회원들이 리뷰에 쓰는 그 이름" data-type="회원들이 리뷰에 쓰는 그 이름" required data-say="리뷰에 적히는 이름을 적어 주세요."></label>
+        <label>지금 일하는 센터의 네이버 플레이스 주소<input class="inp" type="url" placeholder="https://naver.me/xxxxxxx" required data-check="naver" data-say="네이버 지도에서 센터를 찾아 「공유 → 주소 복사」 한 주소를 넣어 주세요."></label>
+        <p class="safe">결과는 본인 메일에만 갑니다. 센터에 알리지 않습니다.</p>
+        <button class="btn btn-main" type="submit">무료로 내 카드 받기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+        <p class="msg" role="status"></p>
+        <p class="small">적어 주신 정보는 리포트를 만들어 보내는 데만 씁니다 · <a href="/policy/privacy.html" style="text-decoration:underline">개인정보 처리방침</a></p>
+        <p class="pv-tag">미리보기 — 전송되지 않습니다</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- T7 수업일지 — 화면 고정, 폰 화면이 스스로 채워지고 큰 단어만 교체(남긴다 → 쌓인다 → 쓴다, 문장 site/index.html).
+     v2(11-03): 가운데 정렬 — 큰 단어가 폰 위 가운데, 폰이 가운데, 설명 한 줄이 폰 아래 가운데(.jn, 설명 줄은 JS 가 각 단계 span 을 폰 아래로 옮겨 교대). 등뼈 점은 폰을 감싸는 둥근 빛무리(halo).
+     휴대폰·움직임 줄이기·JS 없음은 세로로 -->
+<section class="blk" id="t-journal" data-glow="c" data-tone="black" data-shape="halo" data-shape-el=".pin-phone">
+  <div class="pin" style="position:relative">
+    <i class="pin-anchor" id="jn-1"></i><i class="pin-anchor" id="jn-2"></i><i class="pin-anchor" id="jn-3"></i>
+    <div class="stick"><div class="wrap jn">
+      <p class="gain">수업일지 · 무료 · 기간 제한 없음</p>
+      <ol class="steps">
+        <li class="on"><b>남긴다</b><span>수업 끝나고 30초, 폰으로 세트·무게만</span><img src="../img/app3.jpg" alt="수업 기록 화면 — 지난 바퀴 기록과 오늘 세트 입력" loading="lazy" width="600" height="1298"></li>
+        <li><b>쌓인다</b><span>회원별로 저절로 정리</span><img src="../img/app2.jpg" alt="회원 화면 — 진행 회차와 재등록 타이밍" loading="lazy" width="600" height="1298"></li>
+        <li><b>쓴다</b><span>월요일 아침, 재등록 명단이 옵니다</span><img src="../img/app1.jpg" alt="이번 주 브리핑 화면 — 재등록 타이밍과 2주 넘게 안 온 회원" loading="lazy" width="600" height="1298"></li>
+      </ol>
+      <div class="pin-phone" aria-hidden="true"><img src="../img/app3.jpg" alt="" class="on" loading="lazy"><img src="../img/app2.jpg" alt="" loading="lazy"><img src="../img/app1.jpg" alt="" loading="lazy"></div>
+      <div class="prog" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <div class="act"><a class="btn btn-main" href="/journal/">무료로 시작 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn-sub" href="/lesson/6/">쓰는 법 보기</a></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- T8 만든 사람 — ① 글자 차오름. 사진 없음(구매자 먼저, 얼굴 사진 안 씀). v2(11-03): 트레이너 · 센터 대표 · 협회장. 협회 이름은 site\index.html 하단 「민간자격 관리: 대한트레이닝교육협회」 글자 그대로 -->
+<section class="blk" id="t-who" data-glow="c" data-tone="deep"><div class="wrap">
+  <p class="fill">트레이너 허재윤입니다.<br class="pc"> <span class="nw">PT 센터 「비브레」 대표</span> ·<br class="pc"> <span class="nw">대한트레이닝교육협회 협회장</span><br class="pc"> <span class="nw">전국 28,200곳을</span> <b>직접 재서</b> <span class="nw">이 기준을</span> 만들었습니다.</p>
+</div></section>
+
+<!-- T9 멤버십 한 칸 — 「9,900」이 크게 들어왔다가 제자리로 쿵 안착, 유리 판. 길엔 「월 9,900」 한 숫자만 -->
+<section class="blk" id="t-member" data-glow="r" data-tone="ink"><div class="wrap">
+  <p class="gain rv">키워드 순위 추적 · 월말 매출·VIP 계산</p>
+  <h2 class="rv h-big" style="max-width:15em">어떤 검색어로 회원이 오는지<br class="pc"> <span class="blue glint" data-glint="loop">매주</span> 알려 드립니다</h2>
+  <div class="one-price glass rv">
+    <div>
+      <p class="p numf"><em>월</em>9,900</p>
+      <p class="small" style="margin-top:var(--s1)">결제하면 프로그램과 첫 강의가 바로 열립니다</p>
+    </div>
+    <a class="btn btn-main" href="/#/price">플랜 보기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+  </div>
+</div></section>
+
+<!-- T9-b 자리 — 11-02 결정: 세미나 대신 트레이너 마케팅 VOD 강의. 「준비 중」이 숨 쉬듯, 제목에 빛이 천천히 지나간다. 메일 칸을 누르면 테두리에 빛. 전송은 미리보기 표시만 -->
+<section class="blk" id="t-vod" data-glow="l" data-tone="black">
+  <div class="wrap two top-align">
+    <div>
+      <p class="gain rv"><span class="breath">준비 중</span></p>
+      <h2 class="rv"><span class="glint" data-glint="loop">트레이너 마케팅</span><br class="pc"> VOD 강의</h2>
+      <p class="big rv" style="margin-top:var(--s3);color:var(--ink2)">세미나에서 하던 것을 강의로 옮기는 중입니다.<br class="pc"> 열리면 메일로 먼저 알려 드립니다.</p>
+      <div class="act rv"><a class="btn btn-sub" href="/#/vod">지금 있는 강의 보기</a></div>
+    </div>
+    <form class="form glass rv" data-early novalidate style="margin-top:0;padding:var(--s3)">
+      <label>열리는 날 먼저 알려 드릴 메일<input class="inp" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label class="agree"><input type="checkbox" required><span>[필수] 열리는 날 알림과 새 무료 자료 소식을 메일로 받는 데 동의합니다<small>받는 정보: 메일 주소 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+      <button class="btn btn-main" type="submit">열리는 날 먼저 알려 주세요 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      <p class="msg" role="status"></p>
+      <p class="pv-tag">미리보기 — 전송되지 않습니다</p>
+    </form>
+  </div>
+</section>
+
+<!-- T10 마무리 — v2(11-03): 누르면 수업일지라는 것과 왜 눌러야 하는지가 바로 읽히게 -->
+<section class="blk" id="t-end" data-glow="c"><div class="wrap">
+  <p class="gain rv">무료 · 기간 제한 없음 · 30초</p>
+  <h2 class="rv">수업일지, <span class="blue">무료로</span> 시작하기</h2>
+  <p class="sub rv">오늘 수업을 30초로 남기면, 재등록 상담 때 보여 줄 기록이 쌓입니다</p>
+  <div class="act rv"><a class="btn btn-main" href="/journal/">수업일지 무료로 시작 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+</div></section>
+
+<!-- ⑤ 끝 — 바탕이 파랑으로 차오르고 거대한 「허봇스」가 마스크처럼 뚫린다 (파랑 바탕은 마지막 화면의 예외). 글자 6단계 밖의 유일한 예외 -->
+<div class="giant blue-end" aria-hidden="true" data-shape="text" data-shape-el="b"><i class="blue-fill"></i><b>허봇스</b></div>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <nav class="ladder" aria-label="다음 단계">
+    <a href="/check/">30초 진단<span>무료</span></a>
+    <a href="/#/price">멤버십<span>월 9,900</span></a>
+    <a href="/#/vod">강의</a>
+    <a href="/#/vod">VOD 강의<span>준비 중</span></a>
+  </nav>
+  <nav class="sublinks" aria-label="그 밖"><a href="/proof/">결과·검증</a><a href="/tools/">프로그램</a><a href="/free/">무료 자료</a><a href="/about/">소개</a></nav>
+  <p class="notice">개별 사례이며, 같은 결과를 보장하지 않습니다.</p>
+  <p class="legal"><b>허봇스</b> · 대표 허재윤 · 사업자등록번호 636-04-03949 · 통신판매업 신고: 간이과세자로 신고 면제(공정거래위원회 고시 제2022-4호)<br>
+주소 강원특별자치도 원주시 혁신로 224, 612동 302호(반곡동, 엘에이치센트럴파크) · 전화 010-8245-5022 · 이메일 gjwodbs77@gmail.com<br>
+호스팅 제공: GitHub, Inc.<br>
+<a href="/policy/terms.html">이용약관</a> · <a href="/policy/privacy.html">개인정보 처리방침</a> · <a href="/policy/refund.html">환불 규정</a></p>
+</div></footer>
+<div class="dot" aria-hidden="true"></div>
+<script src="../lib/gsap.min.js"></script>
+<script src="../lib/ScrollTrigger.min.js"></script>
+<script src="../lib/lenis.min.js"></script>
+<script src="../common.js"></script>
+</body>
+</html>

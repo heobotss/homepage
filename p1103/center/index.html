@@ -1,0 +1,307 @@
+<!doctype html>
+<!--
+  허봇스 센터 대표 길 미리보기 — 실제 자리: /center/
+  구조 정본: 구조_1027\23_최종구조_확정본.md 3절 9블록(C1~C9). 효과 정본: 개편_1102\효과지도_1103.md 「센터 대표 길」 표.
+  ⚠ 지금 /center/ 에는 옛 진단표가 살아 있다. 교체하려면 옛 화면을 /center/check/ 로 먼저 옮겨야 한다(확정본 결정 8).
+
+  ■ 11-03 2차: 뒤에 고정된 등뼈 점(.spine)이 동네 격자 → 터널 문틀 → 부채꼴 → 막대 두 개 → 거대한 이름 글자로 모인다(data-shape). 격자 canvas 는 뺌(등뼈가 그림). 터널은 빛나는 문틀·뒤 문이 작게 비침, 세 기둥은 다섯 기둥 작은 판·파란 먹빛, 「카드 12장」 안착(data-land), 「세 가지」 광택.
+  ■ 11-03 시각 90 작업 — 화면별 주연 효과
+    C1 동네 격자 판(canvas 2D)이 기울어 떠 있고 빛이 훑으며 점이 켜진다 · 제목 「몇」 자리에 숫자가 룰렛처럼 돌다 「?」 → 「몇」
+    C2 터널 — 네 개의 문을 차례로 통과(PC). 휴대폰·효과 없음은 세로 네 칸
+    C3 캡처가 흩어진 책상처럼 놓였다가 정돈되고, 핵심 문구(캡처에 적힌 그대로)가 크게 떠오른다
+    C3-b 세로로 올라가는 세 기둥, 서로 다른 속도 · C5 카드 덱 돌리기(12장이 날아와 벽으로) · C6 막대 둘이 자라고 「2.3배」가 크게 나왔다가 제목 속 자리로
+    C9 김 서린 유리 세 장, 커서가 닿는 곳만 닦인다(손이 없으면 스스로 닦임) · 끝: 동네 격자가 다시 켜지며 거대한 이름(수미상관)
+    큰 글자 문구는 캡처(img\result-03.jpg)에 실제로 적힌 문장: @park_coach_h.i.t 「네이버 플레이스 1위, 2위를 한 센터가 동시에」
+
+  ■ 11-02 대표님 결정: 트레이너 마케팅 세미나는 10기부터 열지 않고 VOD 강의로 대체. C8 은 「준비 중」 + 열리면 메일 칸. 플랜 화면의 세미나 판매는 토스 동결이라 그대로.
+    센터 대표가 돈 내는 곳 = 당분간 결제 없음, 무료 카드 12장까지. C9 는 「센터 플랜이 열리면 메일로 알립니다」로 닫고 없는 상품을 약속하지 않는다.
+    「세미나에서 약 1,000명」 → 「직접 교육한 트레이너·센터 대표」(숫자 없음, _공통.js 교육인원 변수).
+
+  ■ 동결(토스 심사): 상단 「플랜」→/#/price, 하단 사업자 정보·약관·환불 그대로. /pay/ 직접 링크 없음.
+
+  ■ 확정본과 다르게 적은 것 (근거는 개편_1102\확인필요.md — 캡처를 눈으로 대조함)
+    포항pt 1·2위 = @park_coach_h.i.t / 김포 12개 검색어 = @sheep.coach / 리뷰 209개 = @shoulder_hak
+    19.7% 모수 = 28,200곳이 아니라 밖에서 쓴 글이 있는 27,139곳
+
+  ■ 아직 없는 주소 (→ 지금 살아 있는 대체 경로)
+    /center/check/ → 이 페이지 #c5 (옛 신청 화면은 지금 /center/)
+    /journal/      → https://app.heobotss.com/
+    /check/        → /#/check
+    /proof/        → /#/facts
+    /tools/        → /#/tools
+    /about/        → / 소개 구간
+    /free/         → /free/rereg/ 등 낱개 주소만 있음
+
+  ■ 붙여야 할 서버 호출
+    #c5 신청 칸(지금은 data-preview 로 전송 안 함) = site\center\index.html 과 같게:
+      window.HB.session() 로 로그인 확인 → 없으면 칸 값을 localStorage 「hb-draft-center」에 맡기고 window.HB.mountAuth() 로 받을 곳(카카오·이메일) 정함
+      → sb.from("report_requests").insert({ email, kind:"center", place_url, visitor, utm_* }) → HBT.event("lead","center")
+      → 상태 보기는 report_requests 를 email·kind:"center" 로 읽어 sent/failed/그 밖을 사람 말로.
+      필요 파일: supabase-js, /vod/auth.js, /t.js. 서버가 접수를 확인한 뒤에만 완료 화면, 실패하면 입력 보존.
+    C6 「선생님께 보내기」 = navigator.clipboard 로 https://heobotss.com/journal/?ax=center 복사. /journal/ 이 생긴 뒤에 켠다.
+    C8 트레이너 마케팅 VOD 강의 = /#/vod 연결 + 「열리면 메일로 알려 드리는 칸」(data-early, 지금은 전송 안 함).
+      붙일 호출 = site\free\_틀.html earlyForm 과 같게: window.HB.sb.rpc("news_signup", { _email, _ad:true, _night:false, _ver:"2026-10-12", _content:"vod-trainer-marketing-center", _visitor·_source·_medium·_campaign은 HBT.pack() })
+      → HBT.event("lead","vod-early").
+    C9 「먼저 알림 받기」 = 이미 있음: /news/?tier=센터 (rpc news_signup).
+  ■ 라이브러리: ../lib/gsap.min.js · ScrollTrigger.min.js (GSAP 3.13.0) · lenis.min.js (1.3.11). 외부 주소 없음. 이 페이지에 WebGL 은 없다(격자는 canvas 2D).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PT샵·헬스장·필라테스 원장 — 허봇스</title>
+<meta name="description" content="우리 센터에 회원이 오게 하는 방법. 전국 28,200곳과 대조해 어디서 끊기는지부터 보고, 어디를 고치면 올라가는지 카드 12장으로 보내 드립니다. 무료, 전화하지 않습니다.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="허봇스">
+<meta property="og:title" content="우리 센터에 회원이 오게 하는 방법, 알고 싶으신가요">
+<meta property="og:description" content="어디를 고치면 올라가는지 카드 12장으로. 무료이고, 전화하지 않습니다.">
+<meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
+<meta property="og:url" content="https://heobotss.com/center/">
+<link rel="canonical" href="https://heobotss.com/center/">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="stylesheet" href="../common.css">
+<script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('still')</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="bgfx" aria-hidden="true"><i class="glow"></i><i class="light"></i></div>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/">허봇스</a>
+  <nav aria-label="주 메뉴"><a href="/#/vod">강의</a><a href="/#/price">플랜</a><a class="me" href="/vod/">로그인</a></nav>
+</div></header>
+
+<main id="main">
+<!-- C1 머리 — v2(11-03 대표님 8번): 「몇 번째인지 아시나요」 → 「회원이 오게 하는 방법」. 뒤에는 등뼈 점이 기울어진 동네 레이더(동심 타원, data-shape="radar")로 모인다. 「몇」 룰렛은 제목이 바뀌어 뺌.
+     PC 줄: 「우리 센터에 ⏎ 회원이 오게 하는 방법, ⏎ 알고 싶으신가요」 — 지시서의 ⏎(방법, 뒤)은 그대로 두고, 첫 줄 18자가 128px 한 줄(14자 규칙)에 안 들어가 「우리 센터에」 뒤에서 한 번 더 끊었다. 파랑은 「회원이」 한 단어 -->
+<section class="gridhero" data-glow="c" data-shape="radar">
+  <div class="wrap" style="padding-top:var(--s4);padding-bottom:var(--s3)">
+    <h1 class="mask lead proxi"><span class="ln"><i>우리 센터에</i></span><span class="ln"><i><b><span class="blue">회원이</span> 오게</b> 하는 방법,</i></span><span class="ln"><i>알고 싶으신가요</i></span></h1>
+    <p class="sub rv">전국 28,200곳과 대조해, 우리 센터는 어디서 끊기는지부터 봅니다 · 전화하지 않습니다</p>
+    <nav class="route rv" aria-label="궁금한 것 고르기">
+      <a href="#c4">우리 센터가 동네 몇 번째인지 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+      <a href="#c6">선생님들이 직접 글을 쓰게 하려면 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+      <a href="#c2">광고비 쓰기 전에 할 것 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></a>
+    </nav>
+    <p class="both rv" style="margin-top:var(--s3)"><b>1인샵·원장 겸 강사</b>는 <a href="../trainer/" style="text-decoration:underline;text-underline-offset:3px">트레이너 길</a>이 맞습니다</p>
+  </div>
+</section>
+
+<!-- C2 네 칸 — v2(11-03 대표님 9번): 네모 터널 → 원형 고리 터널. 등뼈 점이 동심원 4개(data-shape="rings")로 모이고 중심은 무대(.tn-stage) 정중앙. 글 판 4장은 틀 없이 고리 가운데를 차례로 통과한다(PC).
+     휴대폰·효과 없음은 세로 네 칸. 숫자 site/index.html s-facts -->
+<section class="blk tunnel" id="c2" data-glow="l" data-tone="deep" data-shape="rings" data-shape-el=".tn-stage">
+  <div class="tn-stage">
+    <div class="wrap"><h2 class="rv" style="max-width:15em">손님은 이 네 단계를 거쳐 옵니다<br class="pc"> <span class="nw">우리 센터는</span> 어디서 끊기는지</h2></div>
+    <div class="wrap"><div class="four">
+      <div class="rv"><h3>동네에서 검색된다</h3><span class="n numf"><span data-count="50">50</span><em>%</em></span><p>전국 절반은 「찾아오는 길」이 빈칸</p></div>
+      <div class="rv"><h3>리뷰와 글이 이어진다</h3><span class="n numf"><span data-count="60">60</span><em>%</em></span><p>10곳 중 6곳은 한 달간 새 리뷰 0건</p></div>
+      <div class="rv"><h3>선생님 이름이 리뷰에 나온다</h3><span class="n numf"><span data-count="2.3" data-dec="1">2.3</span><em>배</em></span><p>선생님이 직접 글 쓰는 센터의 리뷰</p></div>
+      <div class="rv"><h3>문의가 등록으로 이어진다</h3><span class="n numf"><span data-count="77">77</span><em>건</em></span><p>@tz_h.i.t 한 달 신규 문의</p></div>
+    </div></div>
+    <div class="gates" aria-hidden="true"></div>
+    <div class="wrap"><p class="note rv"><b>광고비 쓰기 전에, 비어 있는 「찾아오는 길」부터.</b> 0원입니다.</p></div>
+  </div>
+</section>
+
+<!-- C3 센터 사례 — 캡처가 흩어진 책상처럼 놓였다가 스크롤로 정돈되고, 핵심 문구(캡처에 적힌 그대로)가 크게 떠오른다. 계정·문장은 캡처 원본과 site/index.html 로 대조 -->
+<section class="blk desk" id="c3" data-glow="r" data-tone="ink" data-shape="fan" data-shape-el=".desk-stage">
+  <div class="desk-stage"><div class="wrap">
+    <h2 class="rv">먼저 고친 센터들의 결과</h2>
+    <p class="small rv" style="margin-top:var(--s2)">직접 보내 주신 것 · 개별 사례</p>
+    <p class="desk-cap" aria-hidden="true">네이버 플레이스 1위, 2위를 한 센터가 동시에</p>
+    <div class="proofs">
+      <figure class="proof rv">
+        <a class="shot" href="https://www.instagram.com/park_coach_h.i.t/" target="_blank" rel="noopener"><img src="../img/result-03.jpg" alt="@park_coach_h.i.t 님이 보내 주신 플레이스 순위 화면" loading="lazy" width="360" height="640"></a>
+        <figcaption><h3>플레이스 <span class="nw">1위·2위를</span> 한 센터가</h3><p class="small"><a href="https://www.instagram.com/park_coach_h.i.t/" target="_blank" rel="noopener">@park_coach_h.i.t</a> · 2달</p></figcaption>
+      </figure>
+      <figure class="proof rv">
+        <a class="shot" href="https://www.instagram.com/sheep.coach/" target="_blank" rel="noopener"><img src="../img/result-04.jpg" alt="@sheep.coach 님이 보내 주신 검색어 순위 화면" loading="lazy" width="360" height="640"></a>
+        <figcaption><h3>김포 12개 검색어 전부 상위</h3><p class="small"><a href="https://www.instagram.com/sheep.coach/" target="_blank" rel="noopener">@sheep.coach</a> · 교육 다음 날부터</p></figcaption>
+      </figure>
+      <figure class="proof rv">
+        <a class="shot tall" href="https://www.instagram.com/mediel_pilates/" target="_blank" rel="noopener"><img src="../img/review-11-text.jpg" alt="@mediel_pilates 님이 인스타그램에 올린 센터 대표자 교육 후기 글" loading="lazy" width="332" height="380"></a>
+        <figcaption><h3>센터 전체의 방향을 잡는 자리</h3><p class="small"><a href="https://www.instagram.com/mediel_pilates/" target="_blank" rel="noopener">@mediel_pilates</a> · 필라테스 센터 대표</p></figcaption>
+      </figure>
+      <figure class="proof rv">
+        <a class="shot" href="https://www.instagram.com/shoulder_hak/" target="_blank" rel="noopener"><img src="../img/result-05.jpg" alt="@shoulder_hak 님이 보내 주신 블로그 리뷰 수 화면" loading="lazy" width="360" height="640"></a>
+        <figcaption><h3>블로그 리뷰 209개</h3><p class="small"><a href="https://www.instagram.com/shoulder_hak/" target="_blank" rel="noopener">@shoulder_hak</a> · 7개월</p></figcaption>
+      </figure>
+    </div>
+    <div class="act rv"><a class="btn btn-sub" href="#c4">우리 센터는?</a><a class="btn btn-sub" href="/proof/">결과 더 보기</a></div>
+  </div></div>
+</section>
+
+<!-- C3-b 후기 벽 — 세로로 올라가는 세 기둥이 서로 다른 속도(시차). site/img 의 실제 캡처만. 휴대폰은 한 기둥 -->
+<section class="blk" id="c3b" data-glow="c">
+  <div class="wrap">
+    <p class="lab rv">직접 보내 주신 것 · 개별 사례</p>
+    <h2 class="rv" style="max-width:15em">센터들이 보내 주신 결과물</h2>
+  </div>
+  <div class="wrap"><div class="cols" aria-label="센터들이 보내 주신 결과물들">
+    <i class="edge t" aria-hidden="true"></i><i class="edge b" aria-hidden="true"></i>
+    <div class="col"><img src="../img/result-03.jpg" alt="포항pt 플레이스 1·2위 화면" loading="lazy" width="360" height="640"><img src="../img/result-13.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-22.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-06.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"></div>
+    <div class="col"><img src="../img/result-04.jpg" alt="김포 12개 검색어 상위 노출 화면" loading="lazy" width="360" height="640"><img src="../img/result-01.jpg" alt="한 달 신규 문의 77건 화면" loading="lazy" width="360" height="640"><img src="../img/result-17.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-07.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"></div>
+    <div class="col"><img src="../img/result-05.jpg" alt="블로그 리뷰 209개 화면" loading="lazy" width="360" height="640"><img src="../img/result-10.jpg" alt="플레이스 순위 1위 화면" loading="lazy" width="360" height="640"><img src="../img/result-08.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/review-12.jpg" alt="@pila_jay 님이 올린 후기 글" loading="lazy" width="360" height="640"></div>
+    <div class="col"><img src="../img/result-19.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-23.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-24.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-15.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"></div>
+    <div class="col"><img src="../img/result-25.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-26.jpg" alt="블로그 순위 화면" loading="lazy" width="360" height="640"><img src="../img/result-09.jpg" alt="블로그 순위와 등록 화면" loading="lazy" width="360" height="640"><img src="../img/result-18.jpg" alt="필라테스 블로그 순위 화면" loading="lazy" width="360" height="640"></div>
+  </div></div>
+</section>
+
+<!-- C4 30초 — 리뷰 수 한 칸. 저장·전송 없음. 곡선 획 그리기 + 빛 기둥 -->
+<section class="blk" id="c4" data-glow="l" data-tone="black">
+  <div class="wrap two">
+    <form class="tool glass rv first-on-m" data-tool autocomplete="off">
+      <label class="fld"><span>우리 센터 방문자 리뷰</span><span class="in"><input class="inp" type="number" inputmode="numeric" min="0" max="99999" step="1" data-k="리뷰수" placeholder="120" aria-label="우리 센터 방문자 리뷰 건수"><i>건</i></span></label>
+      <div class="res" aria-live="polite">
+        <p class="rank">상위 ○%</p>
+        <p class="say">전국 28,200곳 기준</p>
+        <div class="ridge-box">
+          <svg class="ridge" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d=""/></svg>
+          <i class="mid"></i><i class="mark"></i>
+        </div>
+        <p class="ridge-foot small"><span class="foot-l"></span><span>헬스장·PT샵·필라테스 28,200곳</span></p>
+      </div>
+      <div class="next" hidden>
+        <p class="small">어디를 고칠지는 아래 카드 12장에 있습니다</p>
+        <div class="act" style="margin-top:var(--s1)"><a class="btn btn-sub" href="#c5">카드 받으러 가기</a></div>
+      </div>
+      <noscript><p class="small">이 칸은 자바스크립트가 필요합니다. <a href="/check/">30초 진단으로 가기</a></p></noscript>
+    </form>
+    <div>
+      <p class="gain rv">가입 없음 · 저장 없음 · 30초</p>
+      <h2 class="rv h-big">리뷰 수 하나면<br class="pc"> 전국 <span class="nw">몇 %인지</span> 바로 나옵니다</h2>
+    </div>
+  </div>
+</section>
+
+<!-- C5 센터 진단 카드 12장 — 카드 덱 돌리기: 덱에서 한 장씩 날아와 펼쳐지고, 끝에 12장이 벽 전체로 깔린다(PC). 휴대폰·효과 없음: 옆으로 넘기기.
+     그림 site/img/card-01~12, 제목 site/index.html s-diag. 카드 안 숫자는 보기(비브레) -->
+<section class="blk" id="c5" data-glow="r" data-tone="deep">
+  <div class="hs">
+    <div class="stick">
+      <div class="wrap">
+        <p class="gain rv">무료 · 하루 안에 메일로 · 전화 없음</p>
+        <h2 class="rv">어디를 고치면 올라가는지<br class="pc"> <span class="blue" data-land>카드 12장</span>으로 알려 드립니다</h2>
+        <p class="small rv" style="margin-top:var(--s2)">보기 카드 · 신청하면 우리 센터 숫자로 옵니다</p>
+      </div>
+      <div class="wrap"><div class="rail" tabindex="0" aria-label="진단 카드 12장 보기" data-cur="끌기"><ol class="track">
+        <li class="card-it"><img src="../img/card-01.jpg" alt="진단 카드 1 — 표지" loading="lazy" width="720" height="960"><p class="small">01 우리 센터 한 줄 요약</p></li>
+        <li class="card-it"><img src="../img/card-02.jpg" alt="진단 카드 2 — 지금 어디쯤인가" loading="lazy" width="720" height="960"><p class="small">02 13개 지표, 지금 어디쯤</p></li>
+        <li class="card-it"><img src="../img/card-03.jpg" alt="진단 카드 3 — 지금 어디쯤인가 이어서" loading="lazy" width="720" height="960"><p class="small">03 어디가 위고 어디가 아래인가</p></li>
+        <li class="card-it"><img src="../img/card-04.jpg" alt="진단 카드 4" loading="lazy" width="720" height="960"><p class="small">04 같은 동네와 견주면</p></li>
+        <li class="card-it"><img src="../img/card-05.jpg" alt="진단 카드 5 — 목표" loading="lazy" width="720" height="960"><p class="small">05 석 달 뒤 목표치</p></li>
+        <li class="card-it"><img src="../img/card-06.jpg" alt="진단 카드 6 — 누가 쓰고 있나" loading="lazy" width="720" height="960"><p class="small">06 이 글은 누가 쓰고 있나</p></li>
+        <li class="card-it"><img src="../img/card-07.jpg" alt="진단 카드 7" loading="lazy" width="720" height="960"><p class="small">07 한 사람에게 몰려 있나</p></li>
+        <li class="card-it"><img src="../img/card-08.jpg" alt="진단 카드 8 — 잘하고 계신 것" loading="lazy" width="720" height="960"><p class="small">08 이미 잘되고 있는 것</p></li>
+        <li class="card-it"><img src="../img/card-09.jpg" alt="진단 카드 9 — 지금 안 보이는 위험" loading="lazy" width="720" height="960"><p class="small">09 지금 안 보이는 위험</p></li>
+        <li class="card-it"><img src="../img/card-10.jpg" alt="진단 카드 10 — 오늘 할 것" loading="lazy" width="720" height="960"><p class="small">10 오늘 30분이면 되는 것</p></li>
+        <li class="card-it"><img src="../img/card-11.jpg" alt="진단 카드 11 — 다음 행동" loading="lazy" width="720" height="960"><p class="small">11 이번 달에 할 것</p></li>
+        <li class="card-it"><img src="../img/card-12.jpg" alt="진단 카드 12 — 이 판정의 근거" loading="lazy" width="720" height="960"><p class="small">12 이 판정의 근거</p></li>
+      </ol></div></div>
+    </div>
+  </div>
+  <div class="wrap two" style="margin-top:var(--s4)">
+    <div>
+      <p class="big rv">공개된 플레이스 정보만 봅니다.<br class="pc"> <span class="nw">매출·회원</span> 정보는 보지 않습니다.</p>
+    </div>
+    <form class="form glass rv" data-preview novalidate style="margin-top:0;padding:var(--s3)">
+      <label>우리 센터의 네이버 플레이스 주소<input class="inp" type="url" placeholder="https://naver.me/xxxxxxx" required data-check="naver" data-say="네이버 지도에서 센터를 찾아 「공유 → 주소 복사」 한 주소를 넣어 주세요."></label>
+      <p class="small">네이버 지도 → 공유 → 주소 복사</p>
+      <p class="safe">전화하지 않습니다. 카드는 메일로만 갑니다.</p>
+      <button class="btn btn-main" type="submit">우리 센터 카드 받기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      <p class="msg" role="status"></p>
+      <p class="small">카카오 또는 메일로 계정만 정하면 끝 · <a href="/policy/privacy.html" style="text-decoration:underline">개인정보 처리방침</a></p>
+      <p class="pv-tag">미리보기 — 전송되지 않습니다</p>
+    </form>
+  </div>
+</section>
+
+<!-- C6 선생님과 같이 — 막대 두 개가 스크롤에 자라고, 「2.3배」가 아주 크게 나왔다가 제목 속 자리로 줄어든다. 19.7% 모수 27,139곳(site/index.html) -->
+<section class="blk barpin" id="c6" data-glow="l" data-tone="ink" data-shape="arcs" data-shape-el=".bar-stage">
+  <div class="bar-stage">
+    <span class="x23 numf" aria-hidden="true">2.3<em>배</em></span>
+    <div class="wrap two">
+      <div>
+        <p class="lab rv">광고비 쓰기 전에</p>
+        <h2 class="rv">선생님이 직접 글 쓰는 센터는 리뷰가 <span class="blue x23-slot numf">2.3배</span></h2>
+        <div class="bars rv" aria-label="방문자 리뷰 비교">
+          <div class="bar hi"><span>선생님이 직접 쓰는 센터 5,349곳</span><i><b>2.3</b></i></div>
+          <div class="bar"><span>나머지 21,790곳</span><i><b>1</b></i></div>
+        </div>
+        <p class="sub rv">27,139곳 중 19.7%가 직접 씁니다</p>
+        <p class="sub rv" style="margin-top:0">그 센터들의 리뷰가 나머지의 2.3배였습니다</p>
+        <p class="small rv" style="margin-top:var(--s1)">원인이라고 단정하지는 않습니다</p>
+        <p class="note rv"><b>선생님용 수업일지는 무료입니다.</b> 기록 공유는 선생님 본인이 켜고 끕니다.</p>
+        <div class="act rv"><button class="btn btn-sub" type="button" data-copy="https://heobotss.com/journal/?ax=center">선생님께 링크 보내기</button></div>
+      </div>
+      <div class="phone-shot rv"><img src="../img/app1.jpg" alt="수업일지 이번 주 브리핑 화면 — 재등록 타이밍과 2주 넘게 안 온 회원, 회원 이름은 가림" loading="lazy" width="600" height="1298"></div>
+    </div>
+  </div>
+</section>
+
+<!-- C7 만든 사람 — ① 글자 차오름. 사진 없음. v2(11-03): 트레이너 길과 같게. 협회 이름은 site\index.html 하단 「민간자격 관리: 대한트레이닝교육협회」 글자 그대로 -->
+<section class="blk" id="c7" data-glow="c" data-tone="black"><div class="wrap">
+  <p class="fill">트레이너 허재윤입니다.<br class="pc"> <span class="nw">PT 센터 「비브레」 대표</span> ·<br class="pc"> <span class="nw">대한트레이닝교육협회 협회장</span><br class="pc"> <span class="nw">전국 28,200곳을</span> <b>직접 재서</b> <span class="nw">이 기준을</span> 만들었습니다.</p>
+</div></section>
+
+<!-- C8 자리 — 11-02 결정: 「세미나 정문」을 트레이너 마케팅 VOD 강의로 대체. 「준비 중」 + 열리면 메일 칸. 전송은 미리보기 표시만 -->
+<section class="blk" id="c8" data-glow="r" data-tone="deep">
+  <div class="wrap two top-align">
+    <div>
+      <p class="gain rv"><span class="breath">준비 중</span></p>
+      <h2 class="rv"><span class="glint" data-glint="loop">트레이너 마케팅</span><br class="pc"> VOD 강의</h2>
+      <p class="big rv" style="margin-top:var(--s3);color:var(--ink2)">세미나에서 하던 것을 강의로 옮기는 중입니다.<br class="pc"> 열리면 메일로 먼저 알려 드립니다.</p>
+      <div class="act rv"><a class="btn btn-sub" href="/#/vod">지금 있는 강의 보기</a></div>
+    </div>
+    <form class="form glass rv" data-early novalidate style="margin-top:0;padding:var(--s3)">
+      <label>열리는 날 먼저 알려 드릴 메일<input class="inp" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label class="agree"><input type="checkbox" required><span>[필수] 열리는 날 알림과 새 무료 자료 소식을 메일로 받는 데 동의합니다<small>받는 정보: 메일 주소 · 메일마다 있는 「수신 거부」로 바로 끊을 수 있습니다</small></span></label>
+      <button class="btn btn-main" type="submit">열리는 날 먼저 알려 주세요 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      <p class="msg" role="status"></p>
+      <p class="pv-tag">미리보기 — 전송되지 않습니다</p>
+    </form>
+  </div>
+</section>
+
+<!-- C9 센터 플랜 준비 중 — 김 서린 유리 세 장, 커서가 닿는 곳만 닦인다. 들어갈 것 3가지(확정본 결정 6). 날짜·가격 안 적음. 센터 길의 끝 -->
+<section class="blk" id="c9" data-glow="c" data-tone="ink"><div class="wrap">
+  <h2 class="rv" style="max-width:15em">센터 전체를 보는 도구 <span class="blue glint" data-glint="loop">3개</span><br class="pc"> 준비 중입니다</h2>
+  <div class="tri">
+    <div class="card glass rv"><h3>유입경로 추적</h3><p>어느 단계가 상담을 만들었는지</p></div>
+    <div class="card glass rv"><h3>재등록·VIP 추적</h3><p>이번 주 연락할 회원 명단</p></div>
+    <div class="card glass rv"><h3>매달 센터 진단</h3><p>매달 무엇이 변했는지</p></div>
+  </div>
+  <p class="sub rv">열리면 메일로 알립니다. 그 전엔 결제할 것이 없습니다.</p>
+  <div class="act rv"><a class="btn btn-main" href="/news/?tier=센터">열리면 먼저 알림 받기 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+  <p class="lab rv" style="margin-top:var(--s4);margin-bottom:0">그동안 쓸 수 있는 것</p>
+  <div class="duo">
+    <a class="card card-link glass rv" href="#c5"><h3>센터 진단 카드 12장</h3><p>무료</p></a>
+    <a class="card card-link glass rv" href="/#/price"><h3>1인샵·개업 1년 안</h3><p>멤버십 월 9,900, 창업 강의 바로 열림</p></a>
+  </div>
+</div></section>
+
+<!-- ⑤ 끝 — 파랑이 아니라 동네 격자가 다시 켜지며 거대한 이름(처음과 수미상관). 글자 6단계 밖의 유일한 예외 -->
+<div class="giant grid-end" aria-hidden="true" data-tone="black" data-shape="text" data-shape-el="b"><b>허봇스</b></div>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <nav class="ladder" aria-label="다음 단계">
+    <a href="/center/check/">센터 진단<span>무료 · 카드 12장</span></a>
+    <a href="/#/price">멤버십<span>월 9,900</span></a>
+    <a href="/#/vod">강의</a>
+    <a href="/#/vod">VOD 강의<span>준비 중</span></a>
+  </nav>
+  <nav class="sublinks" aria-label="그 밖"><a href="/proof/">결과·검증</a><a href="/tools/">프로그램</a><a href="/free/">무료 자료</a><a href="/about/">소개</a></nav>
+  <p class="notice">개별 사례이며, 같은 결과를 보장하지 않습니다.</p>
+  <p class="legal"><b>허봇스</b> · 대표 허재윤 · 사업자등록번호 636-04-03949 · 통신판매업 신고: 간이과세자로 신고 면제(공정거래위원회 고시 제2022-4호)<br>
+주소 강원특별자치도 원주시 혁신로 224, 612동 302호(반곡동, 엘에이치센트럴파크) · 전화 010-8245-5022 · 이메일 gjwodbs77@gmail.com<br>
+호스팅 제공: GitHub, Inc.<br>
+<a href="/policy/terms.html">이용약관</a> · <a href="/policy/privacy.html">개인정보 처리방침</a> · <a href="/policy/refund.html">환불 규정</a></p>
+</div></footer>
+<div class="dot" aria-hidden="true"></div>
+<script src="../lib/gsap.min.js"></script>
+<script src="../lib/ScrollTrigger.min.js"></script>
+<script src="../lib/lenis.min.js"></script>
+<script src="../common.js"></script>
+</body>
+</html>
