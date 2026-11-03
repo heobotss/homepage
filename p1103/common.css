@@ -737,3 +737,28 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 .duo.nextduo .card h3{font-size:var(--t3);margin-bottom:0}
 .duo.nextduo .card .btn{margin-top:auto;align-self:flex-start}
 @media (max-width:720px){.duo{grid-template-columns:1fr}.duo.nextduo .card{padding:var(--s3)}.duo.nextduo .card .btn{align-self:stretch}}
+
+/* 가격 화면(/plan/) — 카드 안 값이 주연, 약관 같은 줄은 표처럼 또렷하게 */
+#p-head h1{max-width:12em}
+.pick{display:grid;gap:var(--s1)}
+.pick h3,.pick p{margin:0}
+.pick strong{font:500 var(--t2)/1.1 var(--num);letter-spacing:-.02em;color:var(--ink)}
+.pick strong em{font:500 var(--t5) var(--sans);font-style:normal;color:var(--ink2);margin-left:4px}
+.shop,.tiers{margin-top:var(--s4);align-items:stretch}
+.shop .card,.tiers .card{display:flex;flex-direction:column;gap:var(--s1);padding:var(--s3)}
+.shop .card>.lab,.tiers .card>.lab{margin-bottom:0}
+.shop .card .p,.tiers .card .p{font:500 var(--t2)/1.1 var(--num);letter-spacing:-.02em;white-space:nowrap}
+.shop .card .p em,.tiers .card .p em{font:500 var(--t5) var(--sans);font-style:normal;color:var(--ink2);margin:0 4px}
+.shop .card .act,.tiers .card .act{margin-top:auto;padding-top:var(--s2);display:flex;flex-wrap:wrap;gap:var(--s1)}
+.terms{display:grid;gap:var(--s1);margin:var(--s2) 0 0}
+.terms div{display:grid;grid-template-columns:72px 1fr;gap:var(--s1);padding-top:var(--s1);border-top:1px solid var(--line)}
+.terms dt{color:var(--ink2)}
+.terms dd{margin:0}
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s2)}
+.tier-hi{border-color:rgba(var(--blue-rgb),.55)}
+.tier-note{padding-top:var(--s1);border-top:1px solid var(--line)}
+.faqs{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4);margin-top:var(--s4)}
+.faqs dt{font-weight:500;color:var(--ink)}
+.faqs dd{margin:var(--s1) 0 0;color:var(--ink2)}
+@media (max-width:1000px){.tiers{grid-template-columns:1fr}}
+@media (max-width:720px){.faqs{grid-template-columns:1fr}.terms div{grid-template-columns:60px 1fr}}

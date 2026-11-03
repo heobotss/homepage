@@ -1276,7 +1276,9 @@ const 교육인원 = '';
     '/': '../문/index.html',
     '/trainer/': '../trainer/index.html',
     '/center/': '../center/index.html',
-    '/center/check/': '../center/index.html#c5',
+    '/center/check/': '../center/check/index.html',
+    '/report/': '../report/index.html',
+    '/plan/': '../plan/index.html',
     '/check/': LIVE + '/#/check',
     '/journal/': 'https://app.heobotss.com/',
     '/proof/': LIVE + '/#/facts',
@@ -1299,7 +1301,13 @@ const 교육인원 = '';
     const h = a.getAttribute('href'); if (!/index\.html/.test(h) || /^#/.test(h)) return;
     e.preventDefault(); veil.cover(() => { location.href = a.href; }, e.clientX, e.clientY);
   });
-  document.querySelectorAll('form[data-preview]').forEach(f => {
+  /* 신청 칸: 값을 맡기고 신청 화면(/report/ · /center/check/)으로 간다. 로그인·접수·상태 보기는 그 화면의 코드가 맡는다 */
+  function loadHB() {
+    if (window.HB) return Promise.resolve();
+    const add = src => new Promise((ok, no) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.append(s); });
+    return add('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js').then(() => add('/vod/auth.js'));
+  }
+  document.querySelectorAll('form[data-apply]').forEach(f => {
     f.addEventListener('submit', e => {
       e.preventDefault();
       const msg = f.querySelector('.msg'); let bad = null;
@@ -1309,7 +1317,9 @@ const 교육인원 = '';
         i.classList.toggle('err', !ok); if (!ok && !bad) bad = i;
       });
       if (bad) { msg.className = 'msg'; msg.textContent = bad.dataset.say || '칸을 채워 주세요.'; bad.focus(); return; }
-      msg.className = 'msg pv'; msg.textContent = '미리보기라 전송하지 않았습니다. 완성본에서는 여기서 카카오 또는 이메일로 계정을 정하고 바로 신청됩니다.';
+      const v = {}; f.querySelectorAll('[data-f]').forEach(i => { v[i.dataset.f] = i.value.trim(); });
+      try { localStorage.setItem(f.dataset.draft, JSON.stringify({ v, t: Date.now() })); } catch (err) {}
+      location.href = (!isLive && f.dataset.go in MAP) ? MAP[f.dataset.go] : f.dataset.go;
     });
   });
   /* 열리면 메일로 알려 드리는 칸(VOD 준비 중): 붙일 서버 호출 = site\free\_틀.html earlyForm 과 같은 길(news_signup). free-claim 의 "early" 는 이 칸과 무관 */
@@ -1321,7 +1331,18 @@ const 교육인원 = '';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { email.classList.add('err'); msg.className = 'msg'; msg.textContent = '메일 주소를 다시 확인해 주세요.'; email.focus(); return; }
       email.classList.remove('err');
       if (!agree.checked) { msg.className = 'msg'; msg.textContent = '알림을 보내려면 수신 동의가 필요합니다.'; agree.focus(); return; }
-      msg.className = 'msg pv'; msg.textContent = '미리보기라 적어 두지 않았습니다. 완성본에서는 메일을 적어 두고, 열리는 날 아침에 먼저 보내 드립니다.';
+      if (!isLive) { msg.className = 'msg pv'; msg.textContent = '내 PC 미리보기라 적어 두지 않았습니다.'; return; }
+      const btn = f.querySelector('button[type="submit"]'); btn.disabled = true; msg.className = 'msg'; msg.textContent = '적는 중…';
+      loadHB().then(() => {
+        const 짐 = { _email: v, _ad: true, _night: false, _ver: '2026-10-12', _content: f.dataset.content };
+        if (window.HBT) { const p = HBT.pack(); 짐._visitor = p.visitor; if (p.utm) { 짐._source = p.utm.source; 짐._medium = p.utm.medium; 짐._campaign = p.utm.campaign; } }
+        return window.HB.sb.rpc('news_signup', 짐);
+      }).then(r => {
+        if (r.error) throw r.error;
+        if (window.HBT) HBT.event('lead', 'vod-early');
+        email.disabled = true; agree.disabled = true; btn.hidden = true;
+        msg.className = 'msg pv'; msg.textContent = '적어 두었습니다. 열리는 날 ' + v + ' 로 먼저 보내 드립니다.';
+      }).catch(() => { btn.disabled = false; msg.className = 'msg'; msg.textContent = '적지 못했습니다. 잠시 뒤 다시 해 주세요.'; });
     });
   });
   document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
