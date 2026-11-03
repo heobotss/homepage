@@ -372,7 +372,6 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .fx:not(.nostars) .door{height:auto}
 .fx:not(.nostars) .door-stick{position:relative;height:calc(100vh - var(--bar));height:calc(100svh - var(--bar));min-height:560px;display:block;padding:0;background:transparent}
 /* 폰(11-03 모바일 점검): 고정 구간은 150vh 아래로, iOS 주소창을 뺀 svh 기준 */
-@media (max-width:720px){.fx:not(.nostars) .door-stick{min-height:600px}}
 .fx:not(.nostars) .count-in{display:block;position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:200 var(--t0)/1 var(--num);letter-spacing:-.04em;font-variant-numeric:tabular-nums;pointer-events:none;z-index:2;color:var(--ink)}
 .fx:not(.nostars) .count-in b{font-weight:200}
 .fx:not(.nostars) .count-in small{display:block;font:500 var(--t6)/1.6 var(--sans);letter-spacing:.06em;color:var(--ink2);margin-top:var(--s2)}
@@ -390,10 +389,9 @@ html:not(.fx) .fill .w{color:var(--ink)}
 /* 패널 1103 결정 ①: 제목은 위(9%), 문 둘은 아래(bottom 6%) — 스크롤·단추 없이 숫자를 다 세면 둘 다 보인다 */
 .fx:not(.nostars) .door-title{position:absolute;left:var(--gut);right:var(--gut);top:9%;pointer-events:none;will-change:opacity;opacity:0}
 .fx:not(.nostars) .door-title h1{font-size:var(--t1)}
-@media (max-width:720px){.fx:not(.nostars) .door-title{top:6%}.fx:not(.nostars) .door-title h1{font-size:40px}}
+@media (max-width:720px){.fx:not(.nostars) .door-title h1{font-size:40px}}
 .fx:not(.nostars) .door-title h1{text-shadow:0 2px 14px rgba(10,10,11,.75),0 4px 60px rgba(10,10,11,.85)}
 .fx:not(.nostars) .door-open{position:absolute;left:0;right:0;bottom:6%;padding-inline:var(--gut);opacity:0;visibility:hidden;will-change:transform,opacity}
-@media (max-width:720px){.fx:not(.nostars) .door-open{bottom:4%}}
 .fx:not(.nostars) .door-note{opacity:0;transition:opacity 1s;margin-top:var(--s2)}
 .fx:not(.nostars) .door.ready .door-note{opacity:1}
 /* 「다시 보기」 단추는 6-2(11-03 저녁)로 삭제 — 맨 위로 스크롤하면 진행도가 0 으로 돌아가 문이 스스로 닫힌다 */
@@ -704,7 +702,7 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 /* ── 패널 1103 반영(11-03 저녁) ── */
 .band-src{margin-top:var(--s3);max-width:40em}
 .src{margin-top:var(--s2);max-width:46em;color:var(--ink2)}
-.inlist{margin-top:var(--s2);display:grid;gap:6px;color:var(--ink2);padding-left:0;list-style:none}
+.inlist{margin-top:var(--s2);display:grid;gap:var(--s1);color:var(--ink2);padding-left:0;list-style:none}
 .inlist li{position:relative;padding-left:16px}
 .inlist li::before{content:"";position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--blue)}
 .inlist b{color:var(--ink);font-weight:600}
@@ -719,3 +717,12 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
   .pin .steps>li:nth-child(n+2) img{display:none}               /* 폰: 수업일지 화면은 첫 장만(회원 관리 화면의 빨간 단추가 오해를 삼) */
   .ladder a b{font-size:var(--t6)}
 }
+
+/* 폰 문 첫 화면은 흐름 배치(제목 → 안내 → 문 둘) — 짧은 화면(390×664)에서 절대 배치가 포개지던 것(패널 C 2차). 절대 배치 규칙보다 뒤에 있어야 이긴다 */
+@media (max-width:720px){.fx:not(.nostars) .door-stick{height:auto;min-height:calc(100svh - var(--bar));display:flex;flex-direction:column;justify-content:space-between;padding:0 0 var(--s3)}
+  .fx:not(.nostars) .door-title{position:relative;top:auto;left:auto;right:auto;padding:calc(3svh + var(--s2)) var(--gut) 0}
+  .fx:not(.nostars) .door-open{position:relative;bottom:auto;margin-top:var(--s3)}}
+.member-shot{margin-top:var(--s4);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--face);max-width:340px}
+@media (min-width:901px){#t-member .wrap{display:grid;grid-template-columns:1fr 340px;gap:var(--s4);align-items:start}#t-member .member-shot{grid-column:2;grid-row:1 / span 3;margin-top:0}#t-member .one-price{grid-column:1}}
+.member-shot img{display:block;width:100%;height:auto}
+.member-shot p{padding:var(--s1) var(--s2)}

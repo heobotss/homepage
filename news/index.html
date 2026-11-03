@@ -71,7 +71,7 @@ h1{font-size:clamp(1.8rem,5.5vw,2.3rem);line-height:1.28;letter-spacing:-.04em;m
   <div class="what">
     알려 드리는 것<br>
     · <b>새 강의·프로그램이 열릴 때</b> — 멤버십에 무엇이 더해졌는지<br>
-    · <b>세미나 날짜가 잡힐 때</b> — 먼저 알려 드립니다<br>
+    · <b>트레이너 마케팅 강의가 열릴 때</b> — 세미나는 9기까지, 10기부터는 강의로<br>
     · <b>새 무료 자료</b> — 전자책·문제지가 열릴 때
   </div>
 
@@ -126,7 +126,8 @@ h1{font-size:clamp(1.8rem,5.5vw,2.3rem);line-height:1.28;letter-spacing:-.04em;m
     document.querySelector(".lede").innerHTML = '월 9,900원 · 연 99,000원. 결제하면 프로그램과 첫 강의가 바로 열립니다. <a href="../pay/?p=membership-month" style="color:var(--blue)"><b>멤버십 시작하기 →</b></a><br>새 강의·세미나 소식만 받으시려면 아래에 메일을 적어 주세요.';
     document.title = "멤버십 — 허봇스";
   } else if (TIER === "센터") {
-    $("#h1").innerHTML = "센터 플랜이 열리면<br>먼저 알려 드립니다";
+    $("#h1").innerHTML = "센터 플랜은 12월 6일에 열립니다<br>열리는 날 먼저 알려 드립니다";
+    document.querySelector(".lede").innerHTML = "월 49,900원 · 설치 없이 웹에서 · 연 결제 없음. 메일 주소 <b>하나만</b> 적으시면 됩니다.";
     document.title = TIER + " 알림 받기 — 허봇스";
   }
 

@@ -58,7 +58,7 @@ const 교육인원 = '';
   /* ───────── ① 30초 재 보기 ───────── */
   const DIST = {
     리뷰수: { 이름: '방문자 리뷰', 단위: '건', 역방향: false, 중앙값: 69, q: [1,1,1,1,2,2,3,3,4,4,5,6,7,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,24,25,27,28,30,31,33,35,37,39,41,43,45,47,49,51,53,56,58,61,64,66,69,72,75,78,82,85,88,92,96,100,105,109,114,118,123,128,133,138,144,151,158,164,172,180,190,199,208,220,232,244,258,273,290,311,331,356,382,414,445,485,529,580,647,722,814,938,1084,1279,1560,2155,19294] },
-    블로그카페리뷰: { 이름: '블로그 글', 단위: '건', 역방향: false, 중앙값: 65, q: [0,0,0,0,1,1,1,1,2,2,2,3,3,3,4,4,5,5,6,6,7,8,8,9,10,11,12,13,14,15,16,18,19,21,22,24,26,28,30,33,35,37,40,42,45,48,51,54,57,61,65,68,73,76,81,85,90,95,100,105,111,116,123,130,136,143,150,158,166,174,184,193,203,213,225,237,249,260,274,288,304,319,337,355,377,400,427,454,483,519,559,608,665,727,802,896,1029,1199,1464,1879,17956] },
+    블로그카페리뷰: { 이름: '블로그 리뷰', 단위: '건', 역방향: false, 중앙값: 65, q: [0,0,0,0,1,1,1,1,2,2,2,3,3,3,4,4,5,5,6,6,7,8,8,9,10,11,12,13,14,15,16,18,19,21,22,24,26,28,30,33,35,37,40,42,45,48,51,54,57,61,65,68,73,76,81,85,90,95,100,105,111,116,123,130,136,143,150,158,166,174,184,193,203,213,225,237,249,260,274,288,304,319,337,355,377,400,427,454,483,519,559,608,665,727,802,896,1029,1199,1464,1879,17956] },
     최근리뷰경과일: { 이름: '마지막 리뷰', 단위: '일', 역방향: true, 중앙값: 38, q: [0,0,0,1,1,1,1,1,1,2,2,2,2,3,3,3,4,4,4,5,5,6,6,6,7,7,8,8,9,9,10,11,12,13,13,14,15,16,17,19,20,22,23,25,27,28,30,31,34,36,38,41,43,46,49,53,56,60,64,67,72,77,82,88,95,102,111,119,128,141,151,162,175,191,212,229,248,273,301,328,364,400,435,479,531,582,644,711,771,834,912,980,1068,1136,1222,1322,1414,1540,1703,1999,3482] }
   };
   function pctOf(m, v) {
@@ -114,7 +114,7 @@ const 교육인원 = '';
       const nm = m.이름 + ' 기준, ';
       nextSay.textContent = r.top <= 20 ? nm + '전국 상위 20% 안입니다. 다음은 어떤 검색어로 회원이 오는지 — 키워드 순위 추적(멤버십)'
         : r.top <= 50 ? nm + '전국 중앙값은 넘었습니다. 다음은 리뷰에 선생님 이름이 나오는지'
-        : nm + '전국 절반보다 적습니다. 리뷰가 쌓이게 하는 것부터 — 플레이스 「찾아오는 길」 채우기와 수업 뒤 리뷰 부탁';
+        : nm + '전국 ' + r.top + '%가 우리보다 많습니다. 리뷰가 쌓이게 하는 것부터 — 플레이스 「찾아오는 길」 채우기와 수업 뒤 리뷰 부탁';
     }
     let last = inputs[0].dataset.k, lastRank = '', drawnFor = '';
     if (FX && fxKind === 'gauge') inputs.forEach(i => { const g = document.createElement('span'); g.className = 'gauge'; g.setAttribute('aria-hidden', 'true'); g.append(document.createElement('i')); i.closest('.fld').append(g); });
@@ -149,7 +149,7 @@ const 교육인원 = '';
       const raw = cur.value.trim();
       if (raw === '' || !(Number(raw) >= 0)) {
         setRank('상위 ○%', false); mark.classList.remove('on');
-        sayEl.textContent = '전국 28,200곳 기준';
+        sayEl.textContent = '전국 28,200곳 기준'; if (nextSay) nextSay.textContent = '';
         if (nextEl) nextEl.hidden = true;
       } else {
         const v = Number(raw), r = rank(m, v);
@@ -794,7 +794,7 @@ const 교육인원 = '';
     const st = { rev: 0, g: 0 }, auto = { p: 0 };
     function apply() {
       p1 = easeIO(seg(p, 0, .55)); p2 = easeIO(seg(p, .42, .9));
-      const o = easeIO(seg(p, .45, .85));
+      const o = easeIO(seg(p, .3, .7));
       open.style.opacity = o.toFixed(3); open.style.visibility = o > .01 ? 'visible' : 'hidden'; open.style.pointerEvents = o > .3 ? 'auto' : 'none';
       open.style.transform = 'translateY(' + (16 * (1 - o)).toFixed(1) + 'px)';
       el.classList.toggle('opened', p > .9);
@@ -838,7 +838,7 @@ const 교육인원 = '';
     let autoTw = null;
     function runAuto(fast) {
       if (autoTw) autoTw.kill();
-      autoTw = gsap.to(auto, { p: 1, duration: fast ? 1.2 : 2.6, ease: 'power2.inOut', onUpdate: update, onComplete: update });
+      autoTw = gsap.to(auto, { p: 1, duration: fast ? 1 : 1.6, ease: 'power2.inOut', onUpdate: update, onComplete: update });
     }
     open.addEventListener('focusin', () => { if (p < 1) { if (autoTw) autoTw.kill(); auto.p = 1; update(); } });
     open.querySelectorAll('.doors a').forEach(a => a.addEventListener('click', e => {
@@ -1320,7 +1320,7 @@ const 교육인원 = '';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { email.classList.add('err'); msg.className = 'msg'; msg.textContent = '메일 주소를 다시 확인해 주세요.'; email.focus(); return; }
       email.classList.remove('err');
       if (!agree.checked) { msg.className = 'msg'; msg.textContent = '알림을 보내려면 수신 동의가 필요합니다.'; agree.focus(); return; }
-      msg.className = 'msg pv'; msg.textContent = '미리보기라 적어 두지 않았습니다. 완성본에서는 news_signup 으로 메일을 적어 두고, 열리는 날 아침에 먼저 보내 드립니다.';
+      msg.className = 'msg pv'; msg.textContent = '미리보기라 적어 두지 않았습니다. 완성본에서는 메일을 적어 두고, 열리는 날 아침에 먼저 보내 드립니다.';
     });
   });
   document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
