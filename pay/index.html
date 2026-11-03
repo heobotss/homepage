@@ -108,7 +108,7 @@ const 판매개시 = true;
 const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
 const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";   // 공개용 키 — 상품 읽기만 된다
 const FN = SB_URL + "/functions/v1/";
-const DEFAULT_PRODUCT = "seminar-10-early";
+const DEFAULT_PRODUCT = "membership-month";
 
 const $ = (s) => document.querySelector(s);
 const won = (n) => n.toLocaleString("ko-KR") + "원";
@@ -130,7 +130,12 @@ async function loadProduct() {
   const r = await fetch(SB_URL + "/rest/v1/pay_products?id=eq." + encodeURIComponent(productId) + "&select=*", { headers: { apikey: SB_KEY } });
   const rows = r.ok ? await r.json() : [];
   product = rows[0];
-  if (!product) { $("#pName").textContent = "지금은 판매하지 않는 상품입니다"; $("#pDesc").textContent = ""; return; }
+  if (!product) {   // 판매를 내린 상품 — 결제 칸을 보이지 않게 하고 판매 중인 곳으로 안내한다 (11-03)
+    $("#pName").textContent = "지금은 판매하지 않는 상품입니다";
+    $("#pDesc").innerHTML = '<a href="../#/price" style="color:inherit;text-decoration:underline">지금 판매 중인 상품 보기</a>';
+    $("#form").hidden = true; $("#payBtn").hidden = true;
+    return;
+  }
   $("#pName").textContent = product.name;
   $("#pDesc").textContent = product.description || "";
   $("#pPrice").innerHTML = won(product.price) + "<small>부가세 포함</small>";
@@ -262,7 +267,7 @@ async function 받는것표(product) {
     $("#note-email").textContent = "— 확인 메일이 갑니다"; $("#note-phone").textContent = "비워도 됩니다";
   } else if (k === "sub") {
     rows.push(["받는 것", esc(product.description || product.name)]);
-    rows.push(["결제", "매달 자동 결제 · 해지는 내 구독 화면에서 언제든, 다음 결제부터 멈추고 남은 기간은 끝까지"]);
+    rows.push(["결제", (product.period === "year" ? "1년마다" : "매달") + " 자동 결제 · 해지는 내 구독 화면에서 언제든, 다음 결제부터 멈추고 남은 기간은 끝까지"]);
     rows.push(["환불", "회차 결제 뒤 7일 안이고 그 회차에 한 편도 재생하지 않았으면 전액 · <a href=\"../policy/refund.html\" target=\"_blank\" rel=\"noopener\">전문</a>"]);
     $("#note-email").textContent = "— 영수 메일과 결제 안내가 갑니다"; $("#note-phone").textContent = "비워도 됩니다";
   } else if (k === "course") {
