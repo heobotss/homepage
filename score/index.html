@@ -438,22 +438,23 @@ input[type=email].err{border-color:var(--bad)}
     document.querySelectorAll(".ans button").forEach(function (b) { b.classList.toggle("on", ans[cur] === b.dataset.a); });
   }
   /* 11-02 — 0.1초 안에 두 번 누르면 뒤엣것이 통째로 씹혔다(30번 눌러 16문항).
-     기다리는 동안 들어온 답을 하나 기억했다가 이어서 처리한다 */
-  var busy = false, 다음답 = null;
+     11-03 — 하나만 기억하게 했더니 30번에 16문항으로 그대로였다(실제 사이트에서 확인).
+     밀린 답을 줄로 쌓아 누른 만큼 다 처리한다. 밀려 있는 동안은 넘기는 간격도 줄인다 */
+  var busy = false, 대기줄 = [];
   function answer(a) {
     if ($("#quiz").hidden) return;
-    if (busy) { 다음답 = a; return; }
+    if (busy) { if (대기줄.length < 120) 대기줄.push(a); return; }
     ans[cur] = a; store();
     document.querySelectorAll(".ans button").forEach(function (b) { b.classList.toggle("on", b.dataset.a === a); });
     busy = true;
     setTimeout(function () {
       busy = false;
       var r = range(phase);
-      if (cur < r[1] - 1) { cur++; ask(); } else { 다음답 = null; finish(); return; }
-      if (다음답) { var k = 다음답; 다음답 = null; answer(k); }
-    }, 120);
+      if (cur < r[1] - 1) { cur++; ask(); } else { 대기줄.length = 0; finish(); return; }
+      if (대기줄.length) answer(대기줄.shift());
+    }, 대기줄.length ? 30 : 120);
   }
-  function back() { 다음답 = null; if (cur > range(phase)[0] && !busy) { cur--; ask(); } }
+  function back() { 대기줄.length = 0; if (cur > range(phase)[0] && !busy) { cur--; ask(); } }
   function begin(p) {
     phase = p;
     var r = range(p);
