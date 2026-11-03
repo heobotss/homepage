@@ -551,12 +551,12 @@ input[type=email].err{border-color:var(--bad)}
       $("#recPart").textContent = P.title;
       $("#recAbout").textContent = P.about;
       $("#recWhy").textContent = "「아니요」라고 답하신 문항 중 " + result.recCount + "개가 이 강의에서 다루는 부분입니다.";
-      $("#recMaster").innerHTML = '회원관리·세일즈·운동지도 15편을 한 번에 보시려면 <a href="../pay/?p=vod-4t-master">4T 마스터 ' + won(D.products["vod-4t-master"].price) + "원</a>";
+      $("#recMaster").innerHTML = '회원관리·세일즈·운동지도 15편을 한 번에 보시려면 <a href="../pay/?p=vod-4t-master">4T 트레이너 시스템 ' + won(D.products["vod-4t-master"].price) + "원</a>";
     } else {
       $("#recCourse").textContent = "";
-      $("#recPart").textContent = "4T 마스터";
+      $("#recPart").textContent = "4T 트레이너 시스템";
       $("#recAbout").textContent = weak
-        ? "「아니요」로 답하신 문항은 강의로 다루는 범위 밖에 있습니다. 문항을 하나씩 「예」로 바꿔 가시면 되고, 수업 전체를 시스템으로 정리하고 싶으시면 4T 마스터가 있습니다."
+        ? "「아니요」로 답하신 문항은 강의로 다루는 범위 밖에 있습니다. 문항을 하나씩 「예」로 바꿔 가시면 되고, 수업 전체를 시스템으로 정리하고 싶으시면 4T 트레이너 시스템이 있습니다."
         : "수업 전체를 시스템으로 정리하고 싶으시면 회원관리·세일즈·운동지도 15편을 한 번에 보실 수 있습니다.";
       $("#recWhy").textContent = "";
       $("#recMaster").textContent = "";
