@@ -389,7 +389,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
 /* 패널 1103 결정 ①: 제목은 위(9%), 문 둘은 아래(bottom 6%) — 스크롤·단추 없이 숫자를 다 세면 둘 다 보인다 */
 .fx:not(.nostars) .door-title{position:absolute;left:var(--gut);right:var(--gut);top:9%;pointer-events:none;will-change:opacity;opacity:0}
 .fx:not(.nostars) .door-title h1{font-size:var(--t1)}
-@media (max-width:720px){.fx:not(.nostars) .door-title h1{font-size:40px}}
+@media (max-width:720px){.fx:not(.nostars) .door-title h1{font-size:38px}}
 .fx:not(.nostars) .door-title h1{text-shadow:0 2px 14px rgba(10,10,11,.75),0 4px 60px rgba(10,10,11,.85)}
 .fx:not(.nostars) .door-open{position:absolute;left:0;right:0;bottom:6%;padding-inline:var(--gut);opacity:0;visibility:hidden;will-change:transform,opacity}
 .fx:not(.nostars) .door-note{opacity:0;transition:opacity 1s;margin-top:var(--s2)}
