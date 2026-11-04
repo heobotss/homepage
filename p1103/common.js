@@ -249,7 +249,7 @@ const 교육인원 = '';
         const pick = cl('[data-cur="보기"], .ring .pane, .wall img, .proof .shot, .cols img, .card-it img');
         const drag = cl('[data-cur="끌기"]');
         const link = !pick && !drag && cl('a, button, label, .card-link');
-        dot.classList.toggle('pick', !!pick); dot.classList.toggle('drag', !!drag && !pick); dot.classList.toggle('link', !!link); dot.classList.toggle('big', !!link && !cl('input'));
+        dot.classList.toggle('pick', !!pick); dot.classList.toggle('drag', !!drag && !pick); dot.classList.toggle('link', !!link); dot.classList.toggle('big', !!link && !cl('form'));
         lab.textContent = pick ? '보기' : drag ? '끌기' : '';
       }, { passive: true });
       document.addEventListener('pointerleave', () => { dot.style.opacity = 0; ptr.on = false; });

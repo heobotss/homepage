@@ -532,10 +532,10 @@ main{overflow-x:clip}
 @media (max-width:720px){.fx .grain{display:none}.glass{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}}
 .dot{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--ink);mix-blend-mode:difference;pointer-events:none;z-index:40;opacity:0;transition:width .25s,height .25s,margin .25s,opacity .25s,background-color .25s;will-change:transform;display:flex;align-items:center;justify-content:center}
 .dot em{font:500 var(--t6)/1 var(--sans);font-style:normal;letter-spacing:.04em;color:var(--bg0);opacity:0;transition:opacity .2s;white-space:nowrap}
-.dot.big{width:48px;height:48px;margin:-24px 0 0 -24px}
+.dot.big{width:22px;height:22px;margin:-11px 0 0 -11px}
 .dot.pick,.dot.drag{width:76px;height:76px;margin:-38px 0 0 -38px;mix-blend-mode:normal;background:var(--ink)}
 .dot.pick em,.dot.drag em{opacity:1}
-.dot.link{background:var(--blue);mix-blend-mode:normal}
+.dot.link{background:rgba(var(--blue-rgb),.25);box-shadow:inset 0 0 0 1.5px var(--blue);mix-blend-mode:normal}
 @media (pointer:fine){.fx.cur,.fx.cur *{cursor:none}}
 .veil{position:fixed;inset:0;z-index:60;pointer-events:none;display:none}
 .fx .veil{display:block}
