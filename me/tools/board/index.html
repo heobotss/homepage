@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>우리 팀 숫자 — 허봇스</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="../../../favicon.png" type="image/png">
+<style>
+/* 선생님 회의용 공유 화면 — 읽기 전용. 트레이너별 숫자만, 회원 정보 없음. 댓글·채팅 없음(토스 조건). */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../../fonts/pretendard-700.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--line:#333333;--line-2:#3C3C3C;--blue:#4F86F7;--bad:#E07A6B;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+main{max-width:1000px;margin:0 auto;padding:clamp(24px,5vw,44px) 16px 60px}
+@media (min-width:600px){main{padding-left:24px;padding-right:24px}}
+h1{font-size:clamp(1.375rem,4.5vw,1.875rem);line-height:1.3;letter-spacing:-.03em;margin:0 0 6px}
+.small{font-size:.8125rem;color:var(--warm);line-height:1.6;margin:0}
+.note{border-left:2px solid var(--blue);padding:8px 12px;margin:14px 0 0;font-size:.875rem;color:var(--bone-2);background:var(--ink-2);border-radius:0 8px 8px 0}
+.note.warn{border-left-color:var(--bad)}
+.tbl{width:100%;border-collapse:collapse;font-size:.9375rem;margin-top:16px}
+.tbl th{font-size:.8125rem;color:var(--warm);font-weight:400;text-align:right;padding:8px;border-bottom:1px solid var(--line);vertical-align:bottom}
+.tbl th:first-child{text-align:left}
+.tbl td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}
+.tbl td.name{text-align:left;font-weight:700}
+.tbl tr.avg td{color:var(--bone-2);font-weight:700;border-top:1px solid var(--line-2)}
+@media (max-width:900px){
+  .tbl thead{display:none}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl tr{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px;background:var(--ink-2)}
+  .tbl td{display:flex;justify-content:space-between;gap:14px;border:0;padding:4px 0}
+  .tbl td::before{content:attr(data-k);color:var(--warm);font-size:.8125rem;text-align:left;flex:none}
+  .tbl td.name{display:block}
+  .tbl td.name::before{content:none}
+  .tbl tr.avg td{border:0}
+}
+footer{border-top:1px solid var(--line);padding:20px 16px;color:var(--warm);font-size:.8125rem;text-align:center}
+</style>
+</head>
+<body>
+<main>
+  <h1>우리 팀 숫자</h1>
+  <p class="small" id="basis">불러오는 중입니다.</p>
+  <div id="box"></div>
+  <p class="note" id="yuchi" hidden>유치율은 파일로 안 나옵니다. 회의 때 직접 적어 두세요.</p>
+  <p class="small" id="how" style="margin-top:14px" hidden>재등록률은 판정이 끝난 회원 기준입니다. VIP는 누적 600만 원 이상입니다. 소진율은 지금 진행중 회원 한 명이 한 달에 몇 번 수업했는지입니다. 읽기 전용 화면입니다.</p>
+</main>
+<footer>허봇스</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../../vod/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = window.HB.esc;
+  function 퍼(v) { return v == null ? "—" : (v * 100).toFixed(1) + "%"; }
+  function 원(v) { return v == null ? "—" : Math.round(v).toLocaleString("ko-KR") + "원"; }
+  function 수(v) { return v == null ? "—" : Number(v).toLocaleString("ko-KR"); }
+  function 회(v) { return v == null ? "—" : Number(v).toFixed(1) + "회"; }
+  var 칸 = [
+    ["재등록률", function (r) { return 퍼(r.재등록률); }],
+    ["성사/판정", function (r) { return 수(r.성사) + "/" + 수(r.분모); }],
+    ["VIP 비율", function (r) { return 퍼(r.VIP비율); }],
+    ["평균 객단가", function (r) { return 원(r.객단가); }],
+    ["소진율", function (r) { return 회(r.소진율); }],
+    ["맡은 회원", function (r) { return 수(r.맡은회원); }],
+    ["진행중", function (r) { return 수(r.진행중); }],
+    ["골든타임 지남", function (r) { return 수(r.골든지남); }],
+    ["지금 챙길 회원", function (r) { return 수(r.챙길대화); }],
+    ["수업 급감", function (r) { return 수(r.수업급감); }],
+    ["미재등록", function (r) { return 수(r.미재등록); }],
+    ["환불 종결", function (r) { return 수(r.환불종결); }]
+  ];
+  function 없음(말) {
+    $("#basis").textContent = "";
+    $("#box").innerHTML = '<p class="note warn">' + esc(말) + "</p>";
+  }
+  async function boot() {
+    var 토큰 = new URLSearchParams(location.search).get("t") || "";
+    if (토큰.length < 24) { 없음("주소가 맞지 않습니다. 받으신 주소를 그대로 열어 주세요."); return; }
+    var r;
+    try { r = await window.HB.sb.rpc("team_board", { p_token: 토큰 }); }
+    catch (e) { 없음("지금은 불러오지 못했습니다. 잠시 뒤 다시 열어 주세요."); return; }
+    if (r.error) { 없음("지금은 불러오지 못했습니다. 잠시 뒤 다시 열어 주세요."); return; }
+    if (!r.data || !r.data.summary) { 없음("이 주소는 더 이상 열리지 않습니다. 대표님께 새 주소를 받아 주세요."); return; }
+    var s = r.data.summary;
+    $("#basis").textContent = (s.기준일 || r.data.period) + " 기준" + (s.소진달 ? " · 소진율은 " + s.소진달 + " 수업" : "");
+    var h = '<table class="tbl"><thead><tr><th>트레이너</th>' +
+      칸.map(function (k) { return "<th>" + esc(k[0]) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    function 줄(x, 평균) {
+      return "<tr" + (평균 ? ' class="avg"' : "") + '><td class="name">' + esc(x.이름) + "</td>" +
+        칸.map(function (k) { return '<td data-k="' + esc(k[0]) + '">' + esc(k[1](x)) + "</td>"; }).join("") + "</tr>";
+    }
+    (s.트레이너 || []).forEach(function (x) { h += 줄(x); });
+    if (s.평균) h += 줄(s.평균, true);
+    $("#box").innerHTML = h + "</tbody></table>";
+    $("#yuchi").hidden = false; $("#how").hidden = false;
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

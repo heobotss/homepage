@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>재등록·VIP 추적 — 허봇스</title>
+<meta name="robots" content="noindex">
+<!-- 파일 내용이 밖으로 나갈 길을 브라우저 차원에서 막는다. 서버 연결은 로그인·구독 확인용 수파베이스 한 곳뿐이다. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://kpubgeejyiupdvbbdxwt.supabase.co wss://kpubgeejyiupdvbbdxwt.supabase.co; form-action 'self'; base-uri 'none'">
+<link rel="icon" href="../../../favicon.png" type="image/png">
+<style>
+/* 재등록·VIP 추적 — 무채색 + 블루 소량 (site/me 토큰 그대로) */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../../../fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../../../fonts/pretendard-700.woff2') format('woff2')}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;
+  --line:#333333;--line-2:#3C3C3C;--blue:#4F86F7;--good:#5FBF8A;--bad:#E07A6B;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:1rem;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+a{color:var(--bone)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;font-size:1.25rem;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.logo small{font-family:"Bahnschrift",var(--sans);font-size:.6875rem;color:var(--blue);letter-spacing:.12em;margin-left:6px;vertical-align:2px}
+.top nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 14px;font-size:.875rem;color:var(--warm);min-width:0}
+.top nav a{color:var(--warm);text-decoration:none}
+main{max-width:1000px;margin:0 auto;padding:clamp(24px,5vw,44px) 16px 80px}
+@media (min-width:600px){main{padding-left:24px;padding-right:24px}}
+#authBox label{display:block;margin-top:14px;font-size:.9375rem}
+#authBox input{display:block;width:100%;margin-top:6px;background:var(--ink-3);border:1px solid var(--line-2);border-radius:10px;color:var(--bone);padding:12px 14px;min-height:48px}
+#noPlan{margin-bottom:14px}
+.first{margin:0 0 10px;color:var(--blue);font-weight:700;font-size:.9375rem}
+h1{font-size:clamp(1.5rem,5vw,2.125rem);line-height:1.3;letter-spacing:-.03em;margin:0 0 10px}
+h2{font-size:1.125rem;letter-spacing:-.02em;margin:0 0 4px}
+.lead{color:var(--bone-2);margin:0 0 26px;max-width:640px}
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,3vw,22px);margin-top:14px}
+.small{font-size:.8125rem;color:var(--warm);line-height:1.6}
+.sec{margin-top:36px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 18px;background:#F2F2F2;color:#0B0B0B;border:0;border-radius:10px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn.sub{background:transparent;color:var(--bone);border:1px solid var(--line-2);font-weight:400}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+
+/* 파일 칸 */
+.drops{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:760px){.drops{grid-template-columns:repeat(3,1fr)}}
+.drop{display:flex;flex-direction:column;gap:6px;background:var(--ink-2);border:1px dashed var(--line-2);border-radius:14px;padding:16px;min-width:0}
+.drop.done{border-style:solid}
+.drop.over{border-color:var(--blue)}
+.drop b{font-size:1rem}
+.drop .tag{color:var(--warm);font-weight:400;font-size:.8125rem;margin-left:6px}
+.drop input[type=file]{width:100%;max-width:100%;font-size:.875rem;color:var(--bone-2);margin-top:4px}
+.state{font-size:.875rem;color:var(--bone-2)}
+.state.ok{color:var(--good)}
+.state.no{color:var(--bad)}
+details{margin-top:6px}
+summary{cursor:pointer;font-size:.875rem;color:var(--bone-2)}
+.pick{display:grid;gap:8px;margin-top:10px}
+.pick label{display:grid;gap:3px;font-size:.8125rem;color:var(--bone-2)}
+.pick label em{font-style:normal;color:var(--blue);margin-left:4px}
+select,input[type=text],textarea{width:100%;max-width:100%;background:var(--ink-3);border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;min-height:40px}
+textarea{min-height:88px;resize:vertical;font-size:.875rem}
+.note{border-left:2px solid var(--blue);padding:8px 12px;margin:10px 0 0;font-size:.875rem;color:var(--bone-2);background:var(--ink-3);border-radius:0 8px 8px 0}
+.note.warn{border-left-color:var(--bad)}
+
+/* 화면 고르기 */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-top:30px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;margin-bottom:-1px;cursor:pointer;color:var(--warm);font-weight:700;min-height:44px}
+.tab[aria-selected=true]{color:var(--bone);border-bottom-color:var(--blue)}
+
+/* 숫자 칸 */
+.nums{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px}
+@media (min-width:760px){.nums{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.num{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.num .k{font-size:.8125rem;color:var(--warm);display:block}
+.num .v{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;line-height:1.35;display:block}
+.num .v.txt{font-size:1rem;font-weight:400;color:var(--bone-2);line-height:1.5;padding:4px 0}
+.num .s{font-size:.75rem;color:var(--warm);display:block;line-height:1.5}
+
+/* 표 — 폰에서는 줄마다 카드로 바뀌어 가로로 밀리지 않는다 */
+.tbl{width:100%;border-collapse:collapse;font-size:.9375rem;margin-top:12px}
+.tbl th{font-size:.8125rem;color:var(--warm);font-weight:400;text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:bottom}
+.tbl td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl .r{text-align:right}
+.tbl tr.avg td{color:var(--bone-2);font-weight:700;border-top:1px solid var(--line-2)}
+.tbl .why{display:block;font-size:.75rem;color:var(--warm);line-height:1.5}
+.tbl a{color:var(--bone);text-decoration:none;border-bottom:1px solid var(--line-2)}
+@media (max-width:900px){
+  .tbl thead{display:none}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl tr{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px;background:var(--ink-2)}
+  .tbl td{display:flex;justify-content:space-between;gap:14px;border:0;padding:4px 0;text-align:right}
+  .tbl td::before{content:attr(data-k);color:var(--warm);font-size:.8125rem;text-align:left;flex:none}
+  .tbl td.name{font-weight:700}
+  .tbl td.name::before{content:none}
+  .tbl td.name{display:block;text-align:left}
+  .tbl tr.avg td{border:0}
+}
+.chips{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:.875rem}
+.chips label{display:inline-flex;align-items:center;gap:6px;min-height:32px;cursor:pointer}
+.chips input{width:18px;height:18px;accent-color:var(--blue);flex:none}
+.lists{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.lists button{background:var(--ink-3);border:1px solid var(--line-2);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:.875rem;min-height:38px;color:var(--bone-2)}
+.lists button[aria-pressed=true]{border-color:var(--blue);color:var(--bone)}
+pre.send{background:var(--ink-3);border:1px solid var(--line-2);border-radius:10px;padding:12px;max-height:320px;overflow:auto;font-size:.75rem;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0}
+.msg{font-size:.9375rem;margin:10px 0 0;min-height:1.4em}
+.msg.ok{color:var(--good)}
+.msg.no{color:var(--bad)}
+.share{display:block;margin-top:8px;padding:10px 12px;background:var(--ink-3);border:1px solid var(--line-2);border-radius:8px;font-size:.8125rem;word-break:break-all}
+footer{border-top:1px solid var(--line);padding:24px 16px;color:var(--warm);font-size:.875rem;text-align:center}
+footer a{color:var(--bone-2)}
+@media print{.top,.tabs,footer,#fileSec,.noprint{display:none!important}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="../../../">허봇스<small>HEOBOTSS</small></a>
+  <nav><span id="who" hidden></span><a href="#" id="logout" hidden>로그아웃</a></nav>
+</header>
+
+<main>
+  <p class="first">파일은 이 브라우저 밖으로 나가지 않습니다</p>
+  <h1>이번 달 연락할 회원과 선생님별 재등록률이 바로 나옵니다</h1>
+  <p class="lead">회원 관리 프로그램에서 파일 두 개만 내려받아 올리세요. 누구에게 먼저 연락할지 순서가 나오고, 선생님 회의에 쓸 숫자 화면이 따로 나옵니다.</p>
+
+  <p id="loading" class="small">확인하는 중입니다.</p>
+  <div id="authBox"></div>
+
+  <div class="card" id="noPlan" hidden>
+    <h2>센터 플랜에서 씁니다</h2>
+    <p class="small" style="margin:6px 0 14px">센터 플랜을 쓰시면 이 화면에서 바로 파일을 올릴 수 있습니다.</p>
+    <a class="btn" href="/plan/">센터 플랜 보기</a>
+  </div>
+
+  <div id="tool" hidden>
+    <section id="fileSec">
+      <div class="drops">
+        <div class="drop" data-kind="결제">
+          <b>결제내역<span class="tag">필수</span></b>
+          <span class="small">한 줄이 결제 한 건인 파일. 재등록·객단가·VIP가 여기서 나옵니다.</span>
+          <input type="file" accept=".xls,.xlsx,.csv" aria-label="결제내역 파일">
+          <span class="state"></span><div class="more"></div>
+        </div>
+        <div class="drop" data-kind="회원">
+          <b>회원목록<span class="tag">필수</span></b>
+          <span class="small">담당 트레이너 칸이 있어야 선생님별로 나뉩니다.</span>
+          <input type="file" accept=".xls,.xlsx,.csv" aria-label="회원목록 파일">
+          <span class="state"></span><div class="more"></div>
+        </div>
+        <div class="drop" data-kind="레슨">
+          <b>레슨 현황<span class="tag">선택</span></b>
+          <span class="small">있으면 소진율과 수업이 줄어든 회원까지 나옵니다.</span>
+          <input type="file" accept=".xls,.xlsx,.csv" aria-label="레슨 현황 파일">
+          <span class="state"></span><div class="more"></div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:10px">체크짐 파일은 열을 자동으로 읽습니다. 다른 프로그램 파일은 열 이름으로 찾고, 못 찾은 칸만 여쭙니다. 새로고침하면 올린 파일은 사라집니다.</p>
+      <div id="readErr"></div>
+    </section>
+
+    <div id="result" hidden>
+      <div class="tabs noprint" role="tablist">
+        <button class="tab" role="tab" id="tabOwner" aria-selected="true">대표용</button>
+        <button class="tab" role="tab" id="tabTeam" aria-selected="false">선생님 회의용</button>
+      </div>
+
+      <!-- 대표용: 실명·연락처가 나온다 -->
+      <section id="owner">
+        <p class="small" style="margin-top:14px" id="basis"></p>
+        <div class="nums" id="nums"></div>
+        <div class="nums" id="todo"></div>
+        <div id="notes"></div>
+
+        <div class="sec">
+          <h2>지금 연락할 회원</h2>
+          <p class="small">이 명단은 대표님만 보세요. 실명과 연락처가 있습니다.</p>
+          <div class="lists" id="listBtns"></div>
+          <div class="row" style="margin-top:12px">
+            <select id="listT" aria-label="담당 트레이너로 좁히기" style="width:auto;min-width:160px"></select>
+            <button class="btn sub" id="csv">CSV 내려받기</button>
+          </div>
+          <p class="small" id="listNote" style="margin-top:10px"></p>
+          <div id="listBox"></div>
+          <button class="btn sub" id="moreList" hidden style="margin-top:6px">더 보기</button>
+        </div>
+
+        <div class="sec" id="ownerTSec">
+          <h2>트레이너별 비교</h2>
+          <div id="ownerT"></div>
+        </div>
+
+        <p class="small" style="margin-bottom:14px"><b>파일만 넣은 재등록률은 실제보다 높게 나올 수 있습니다.</b> 담당이 바뀐 회원의 옛 재등록이 지금 담당의 실적으로 잡히기 때문입니다. 아래 「파일에 없는 사정 넣기」를 채우면 정확해집니다.</p>
+
+        <div class="sec noprint" id="pickSec">
+          <h2>비교할 트레이너</h2>
+          <p class="small">진행중 회원이 있는 분을 먼저 골라 두었습니다. 대표님·퇴사자는 체크를 빼세요. 평균도 함께 바뀝니다.</p>
+          <div class="chips" id="pickT"></div>
+        </div>
+
+        <details class="sec noprint card">
+          <summary>파일에 없는 사정 넣기 (숫자가 더 정확해집니다)</summary>
+          <p class="small" style="margin-top:8px">파일은 담당이 바뀐 회원의 옛 재등록까지 지금 담당의 실적으로 셉니다. 아래에 적으면 바로 반영합니다. 적은 내용도 이 브라우저 안에서만 쓰이고, 새로고침하면 사라집니다.</p>
+          <div class="pick">
+            <label>담당이 바뀐 회원 (한 줄에 한 명, 이름만 또는 「이름, 인계일 2026-03-01」)<textarea id="in인계"></textarea></label>
+            <label>「안 나온다」고 확인한 회원 (한 줄에 한 명)<textarea id="in종료"></textarea></label>
+            <label>기록 밖 결제로 재등록이 확인된 회원 (한 줄에 한 명)<textarea id="in확정"></textarea></label>
+            <label>2:1·세션 공유 짝 (한 줄에 「0원 회원, 결제자」)<textarea id="in짝"></textarea></label>
+            <label>집계에서 뺄 회원 이름에 든 말 (쉼표로 나눔, 예: 체험단, 직원)<input type="text" id="in제외"></label>
+          </div>
+          <button class="btn sub" id="reCalc" style="margin-top:12px">다시 계산</button>
+        </details>
+
+        <details class="sec noprint card">
+          <summary>이렇게 셉니다</summary>
+          <ul class="small" style="padding-left:18px;margin:10px 0 0">
+            <li>재등록률: 한 번이라도 재등록한 회원 ÷ 판정이 끝난 회원. 다섯 번 재등록해도 한 명입니다. 아직 첫 회차를 도는 회원은 빠집니다.</li>
+            <li>같은 사이클: 직전 결제 30일 안의 재결제는 재등록이 아닙니다. 체험 전환·상위 전환·분할 결제가 여기 걸립니다.</li>
+            <li>미재등록 확정: 마지막 결제 후 200일이 지나면 확정합니다. 회차권 만료일이 남았으면 진행중으로 둡니다.</li>
+            <li>VIP: 누적 순결제 600만 원 이상. 환불은 뺍니다.</li>
+            <li>평균 객단가: 순매출 ÷ 사이클 수.</li>
+            <li>골든타임: 마지막 결제 후 60일이 지난 진행중 회원. VIP는 만료일을 알면 만료 60일 전부터입니다.</li>
+            <li>환불 종결: 마지막 PT 기록이 환불인 회원. 다시 결제하면 되살아납니다.</li>
+            <li>소진율: 수업이 100건 이상 있는 가장 최근 달의 수업 수 ÷ 지금 진행중 회원 수. 노쇼도 수업으로 셉니다.</li>
+            <li>유치율: 어느 프로그램 파일에도 나오지 않습니다.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- 선생님 회의용: 트레이너별 숫자만. 회원 이름·연락처·회원별 금액 없음 -->
+      <section id="team" hidden>
+        <p class="small" style="margin-top:14px" id="teamBasis"></p>
+        <div id="teamT"></div>
+        <p class="note">유치율은 파일로 안 나옵니다. 회의 때 선생님께 직접 물어 적어 두세요.</p>
+
+        <div class="card noprint" id="saveBox">
+          <h2>이 숫자를 주소로 나누기</h2>
+          <p class="small">누르기 전에는 아무것도 나가지 않습니다. 파일과 회원 명단은 보내지 않고, 위 표의 트레이너별 숫자만 보냅니다.</p>
+          <div class="row" style="margin-top:12px">
+            <button class="btn" id="saveAsk">집계 저장</button>
+            <button class="btn sub" id="shareBtn">공유 주소 만들기</button>
+            <button class="btn sub" id="print">인쇄</button>
+          </div>
+          <div id="sendBox" hidden>
+            <p class="small" style="margin-top:14px">서버로 가는 내용은 아래가 전부입니다.</p>
+            <pre class="send" id="sendText"></pre>
+            <div class="row">
+              <button class="btn" id="saveGo">이 내용 저장</button>
+              <button class="btn sub" id="saveNo">그만두기</button>
+            </div>
+          </div>
+          <p class="msg" id="saveMsg"></p>
+          <div id="shareBox" hidden>
+            <code class="share" id="shareUrl"></code>
+            <div class="row" style="margin-top:8px">
+              <button class="btn sub" id="copy">주소 복사</button>
+              <button class="btn sub" id="reToken">새 주소로 바꾸기 (옛 주소는 막힘)</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  허봇스 · 대표 허재윤 · 사업자등록번호 636-04-03949 · gjwodbs77@gmail.com ·
+  <a href="../../../policy/privacy.html">개인정보 처리방침</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../../vod/auth.js"></script>
+<script src="계산.js"></script>
+<script src="열맞춤.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = window.HB.esc, sb = window.HB.sb;
+  var 계산 = window.재등록계산, 맞춤 = window.재등록열맞춤;
+  var 올림 = { 결제: null, 회원: null, 레슨: null };   // { 표, 판, 파일이름, 수정시각, 줄 } — 메모리에만 있다
+  var 결과 = null, 고른현역 = null, 지금목록 = "후보", 보이는수 = 50;
+
+  /* ── 문 ─────────────────────────────────────────────── */
+  function 플랜안내() { $("#noPlan").hidden = false; }
+
+  async function boot() {
+    var s = null;
+    try { s = await window.HB.session(); } catch (e) { s = null; }
+    $("#loading").hidden = true;
+    if (!s) {
+      플랜안내();
+      window.HB.mountAuth($("#authBox"), function () { location.reload(); },
+        { lead: "센터 플랜을 쓰시는 계정으로 들어와 주세요." });
+      return;
+    }
+    $("#who").hidden = false; $("#who").textContent = (s.user.email || "");
+    $("#logout").hidden = false;
+    $("#logout").onclick = async function (e) { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
+    var 층 = null;
+    try {
+      var r = await sb.rpc("tool_tier");
+      if (!r.error) 층 = r.data;
+    } catch (e) { 층 = null; }
+    if (층 !== "center") { 플랜안내(); return; }
+    await 표도구싣기();
+    $("#tool").hidden = false;
+  }
+
+  /* 파일 칸이 열리는 분만 큰 라이브러리를 받는다. 받는 곳과 내용을 고정해 둔다. */
+  function 표도구싣기() {
+    return new Promise(function (ok) {
+      var t = document.createElement("script");
+      t.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+      t.integrity = "sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw";
+      t.crossOrigin = "anonymous";
+      t.onload = function () { ok(); };
+      t.onerror = function () {
+        $("#readErr").innerHTML = '<p class="note warn">파일을 읽는 도구를 받지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요.</p>';
+        ok();
+      };
+      document.head.appendChild(t);
+    });
+  }
+
+  /* ── 파일 올리기 ─────────────────────────────────────── */
+  document.querySelectorAll(".drop").forEach(function (칸) {
+    var 종류 = 칸.dataset.kind;
+    var 입력 = 칸.querySelector("input[type=file]");
+    입력.addEventListener("change", function () { if (입력.files[0]) 읽기(종류, 입력.files[0], 칸); });
+    ["dragover", "dragenter"].forEach(function (ev) {
+      칸.addEventListener(ev, function (e) { e.preventDefault(); 칸.classList.add("over"); });
+    });
+    ["dragleave", "drop"].forEach(function (ev) {
+      칸.addEventListener(ev, function (e) { e.preventDefault(); 칸.classList.remove("over"); });
+    });
+    칸.addEventListener("drop", function (e) {
+      var f = e.dataTransfer && e.dataTransfer.files[0];
+      if (f) 읽기(종류, f, 칸);
+    });
+  });
+
+  async function 읽기(종류, 파일, 칸) {
+    var 상태 = 칸.querySelector(".state");
+    상태.className = "state"; 상태.textContent = "읽는 중입니다.";
+    try {
+      if (!window.XLSX) throw new Error("도구 없음");
+      var 버퍼 = await 파일.arrayBuffer();
+      var 표 = 맞춤.표읽기(window.XLSX, 버퍼, 파일.name);
+      if (!표.length) throw new Error("빈 파일");
+      var 판 = 맞춤.살펴보기(표, 종류);
+      올림[종류] = { 표: 표, 판: 판, 파일이름: 파일.name, 수정시각: 파일.lastModified };
+      칸.classList.add("done");
+      칸그리기(종류, 칸);
+      계산하기();
+    } catch (e) {
+      올림[종류] = null;
+      칸.classList.remove("done");
+      칸.querySelector(".more").innerHTML = "";
+      상태.className = "state no";
+      상태.textContent = "이 파일을 읽지 못했습니다. xls, xlsx, csv 파일인지 확인해 주세요.";
+      계산하기();
+    }
+  }
+
+  function 칸그리기(종류, 칸) {
+    var 올린 = 올림[종류], 판 = 올린.판;
+    var 줄수 = 올린.표.length - 판.머리줄 - 1;
+    var 상태 = 칸.querySelector(".state"), 더 = 칸.querySelector(".more");
+    var 사전 = 맞춤.사전[종류];
+    var 부족 = 판.못찾은필수.length > 0;
+    상태.className = "state " + (부족 ? "no" : "ok");
+    상태.textContent = 올린.파일이름 + " · " + 줄수.toLocaleString("ko-KR") + "줄" +
+      (판.체크짐 ? " · 체크짐 파일로 읽었습니다" : "") +
+      (부족 ? " · 아래에서 " + 판.못찾은필수.join("·") + " 칸을 골라 주세요" : "");
+
+    var 담당없음 = 종류 === "회원" && 판.열["담당"] === undefined;
+    var html = "";
+    if (담당없음) {
+      html += '<p class="note warn">담당 트레이너 칸을 못 찾았습니다. 아래에서 고르지 않으면 트레이너별 재등록률·VIP·객단가·소진율과 선생님 회의용 화면이 나오지 않습니다. 센터 전체 숫자와 연락 명단은 나옵니다.</p>';
+    }
+    html += "<details" + ((부족 || 담당없음) ? " open" : "") + "><summary>이 열이 무엇인지 확인하기</summary><div class=\"pick\">";
+    사전.뜻들.forEach(function (뜻) {
+      html += "<label>" + esc(뜻.뜻) + (뜻.필수 ? "<em>필수</em>" : "") +
+        '<select data-key="' + esc(뜻.키) + '"><option value="">이 파일에 없음</option>';
+      판.머리.forEach(function (h, i) {
+        if (!h) return;
+        html += '<option value="' + i + '"' + (판.열[뜻.키] === i ? " selected" : "") + ">" + esc(h) + "</option>";
+      });
+      html += "</select></label>";
+    });
+    html += "</div></details>";
+    더.innerHTML = html;
+    더.querySelectorAll("select").forEach(function (s) {
+      s.addEventListener("change", function () {
+        if (s.value === "") delete 판.열[s.dataset.key];
+        else 판.열[s.dataset.key] = Number(s.value);
+        맞춤.다시살펴보기(판);
+        var 펼침 = 더.querySelector("details").open;
+        칸그리기(종류, 칸);
+        더.querySelector("details").open = 펼침;
+        계산하기();
+      });
+    });
+  }
+
+  /* ── 계산 ───────────────────────────────────────────── */
+  function 이름줄(글) {
+    return String(글 || "").split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function 표에넣기(표, 줄글, 값) {
+    var 이름 = 줄글.split(",")[0].trim();
+    if (이름) 표["n:" + 이름] = 값;
+  }
+  function 손입력() {
+    var 인계표 = {}, 종료표 = {}, 확정표 = {}, 짝표 = {};
+    이름줄($("#in인계").value).forEach(function (줄) {
+      var 뒤 = 줄.split(",")[1] || "";
+      표에넣기(인계표, 줄, { 인계일: 계산.R날짜(뒤) });
+    });
+    이름줄($("#in종료").value).forEach(function (줄) { 표에넣기(종료표, 줄, true); });
+    이름줄($("#in확정").value).forEach(function (줄) { 표에넣기(확정표, 줄, true); });
+    이름줄($("#in짝").value).forEach(function (줄) {
+      var 조각 = 줄.split(",");
+      if (조각.length >= 2 && 조각[0].trim() && 조각[1].trim()) 짝표["n:" + 조각[0].trim()] = 조각[1].trim();
+    });
+    var 제외 = $("#in제외").value.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+    return { 인계표: 인계표, 종료표: 종료표, 확정표: 확정표, 짝표: 짝표, 제외: 제외 };
+  }
+
+  function 계산하기(현역그대로) {
+    $("#sendBox").hidden = true; $("#saveMsg").textContent = ""; $("#shareBox").hidden = true;
+    var 결 = 올림.결제, 회 = 올림.회원, 레 = 올림.레슨;
+    var 준비 = 결 && 회 && !결.판.못찾은필수.length && !회.판.못찾은필수.length;
+    if (!준비) { $("#result").hidden = true; 결과 = null; return; }
+    var 레슨쓰기 = 레 && !레.판.못찾은필수.length;
+
+    var 결줄 = 맞춤.줄만들기(결.표, 결.판), 회줄 = 맞춤.줄만들기(회.표, 회.판);
+    var 레줄 = 레슨쓰기 ? 맞춤.줄만들기(레.표, 레.판) : null;
+    var 입력 = {
+      결제: 결줄.줄들, 회원: 회줄.줄들, 레슨: 레줄 ? 레줄.줄들 : null,
+      레슨앵커: 레슨쓰기 ? 달글(new Date(레.수정시각)) : null
+    };
+    var 설정 = 손입력();
+    설정.상품명으로PT판정 = 결.판.열["구분"] === undefined;
+    var 지금 = new Date();
+
+    // 처음엔 담당 전부로 돌려 명단을 얻고, 비교할 사람을 고른 뒤 다시 돈다
+    if (!현역그대로 || !고른현역) {
+      var 먼저 = 계산.재집계(입력, 설정, 지금);
+      고른현역 = 계산.기본현역(먼저.요약, 먼저.소진);
+      전체담당 = 계산.담당목록(먼저.요약);
+    }
+    설정.현역 = 고른현역;
+    결과 = 계산.재집계(입력, 설정, 지금);
+    결과.알림 = 결줄.알림.concat(회줄.알림);
+    if (레 && !레슨쓰기) 결과.알림.push("레슨 현황은 필수 칸을 고르면 소진율에 반영합니다.");
+    if (설정.상품명으로PT판정) {
+      결과.알림.push("PT와 헬스를 나누는 칸이 없어 상품 이름으로 골랐습니다. 헬스·멤버십으로 본 결제 " + ((결과.유형수["헬스·제휴"] || 0)).toLocaleString("ko-KR") + "건은 재등록에서 뺐습니다.");
+    }
+    결과.레슨있음 = !!레슨쓰기;
+    결과.담당있음 = 회.판.열["담당"] !== undefined;
+    그리기();
+    $("#result").hidden = false;
+  }
+  var 전체담당 = [];
+  function 달글(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2); }
+  $("#reCalc").addEventListener("click", function () { 계산하기(true); });
+
+  /* ── 그리기 ─────────────────────────────────────────── */
+  function 퍼(v) { return v === "" || v == null ? "—" : (v * 100).toFixed(1) + "%"; }
+  function 원(v) { return v === "" || v == null ? "—" : Math.round(v).toLocaleString("ko-KR") + "원"; }
+  function 수(v) { return v === "" || v == null ? "—" : Number(v).toLocaleString("ko-KR"); }
+  function 회(v) { return v === "" || v == null ? "—" : Number(v).toFixed(1) + "회"; }
+
+  function 숫자칸(k, v, s, 글자) {
+    return '<div class="num"><span class="k">' + esc(k) + '</span><span class="v' + (글자 ? " txt" : "") + '">' + esc(v) + "</span>" +
+      (s ? '<span class="s">' + esc(s) + "</span>" : "") + "</div>";
+  }
+
+  function 그리기() {
+    var c = 결과.센터, 통 = 결과.통계;
+    $("#basis").textContent = 결과.기준일 + " 기준 · 결제 " + 수(통.결제) + "건 · 회원 " + 수(통.회원) + "명";
+    var 소진글 = 결과.소진 ? 회(결과.평균.소진율) : (결과.레슨있음 ? "—" : "레슨 파일 없음");
+    var 소진말 = 결과.소진 ? 결과.소진.달 + " 수업 · 참고 목표 월 7회"
+      : (결과.레슨있음 ? "수업이 100건 이상인 달이 없습니다" : "올리면 나옵니다");
+    $("#nums").innerHTML =
+      숫자칸("재등록률", 퍼(c.재등록률), 수(c.성사) + "명 ÷ " + 수(c.분모) + "명 · 참고 목표 70%") +
+      숫자칸("VIP 비율", 퍼(c.vip비율), "누적 600만 이상 " + 수(c.vip수) + "명 · 참고 목표 30%") +
+      숫자칸("평균 객단가", 원(c.객단가), "순매출 ÷ 사이클") +
+      숫자칸("소진율", 소진글, 소진말, !결과.소진 && !결과.레슨있음);
+    $("#todo").innerHTML =
+      숫자칸("골든타임 지남", 수(통.골든지남) + "명", "마지막 결제 + 60일") +
+      숫자칸("미재등록 확정", 수(통.미재등록) + "명", "마지막 결제 + 200일") +
+      숫자칸("환불 종결", 수(통.환불종결) + "명", "") +
+      숫자칸("유치율", "파일로 안 나옴", "회의 때 직접 물어 적어 두세요", true);
+
+    var 말 = (결과.알림 || []).slice();
+    if (통.담당못찾음 && 결과.담당있음) {
+      말.push("담당을 못 찾은 결제가 " + 수(통.담당못찾음) + "건 있습니다. 회원목록과 번호·연락처가 안 맞는 줄입니다.");
+    }
+    var 끝날 = 결과.원장.length ? 결과.원장[결과.원장.length - 1].결제일 : "";
+    if (끝날) {
+      var 지난 = Math.floor((new Date(결과.기준일) - new Date(끝날)) / 86400000);
+      if (지난 > 30) 말.push("가장 최근 결제가 " + 지난 + "일 전입니다. 최신 파일인지 확인해 주세요. 오늘 날짜로 판정합니다.");
+    }
+    $("#notes").innerHTML = 말.map(function (t) { return '<p class="note">' + esc(t) + "</p>"; }).join("");
+
+    명단단추();
+    명단그리기();
+
+    var 담당있음 = 결과.담당있음 && 전체담당.length > 0;
+    $("#ownerTSec").hidden = !담당있음;
+    $("#pickSec").hidden = !담당있음;
+    if (담당있음) {
+      $("#ownerT").innerHTML = 트레이너표();
+      체크그리기();
+    }
+    회의용그리기(담당있음);
+  }
+
+  function 트레이너표() {
+    var 집계 = 계산.집계만들기(결과);
+    return 표글(집계);
+  }
+
+  /* 대표용·회의용이 같은 표를 쓴다. 트레이너별 숫자만 들어 있다. */
+  function 표글(집계) {
+    var 칸 = [
+      ["재등록률", function (r) { return 퍼(r.재등록률) ; }],
+      ["성사/판정", function (r) { return r.성사 + "/" + r.분모; }],
+      ["VIP 비율", function (r) { return 퍼(r.VIP비율); }],
+      ["평균 객단가", function (r) { return 원(r.객단가); }],
+      ["소진율", function (r) { return 회(r.소진율); }],
+      ["맡은 회원", function (r) { return 수(r.맡은회원); }],
+      ["진행중", function (r) { return 수(r.진행중); }],
+      ["골든타임 지남", function (r) { return 수(r.골든지남); }],
+      ["지금 챙길 회원", function (r) { return 수(r.챙길대화); }],
+      ["수업 급감", function (r) { return 수(r.수업급감); }],
+      ["미재등록", function (r) { return 수(r.미재등록); }],
+      ["환불 종결", function (r) { return 수(r.환불종결); }]
+    ];
+    var h = '<table class="tbl"><thead><tr><th>트레이너</th>' +
+      칸.map(function (k) { return '<th class="r">' + esc(k[0]) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    function 줄(r, 평균) {
+      return "<tr" + (평균 ? ' class="avg"' : "") + '><td class="name">' + esc(r.이름) + "</td>" +
+        칸.map(function (k) { return '<td class="r" data-k="' + esc(k[0]) + '">' + esc(k[1](r)) + "</td>"; }).join("") + "</tr>";
+    }
+    집계.트레이너.forEach(function (r) { h += 줄(r); });
+    h += 줄(집계.평균, true) + "</tbody></table>";
+    return h;
+  }
+
+  function 체크그리기() {
+    $("#pickT").innerHTML = 전체담당.map(function (t) {
+      return '<label><input type="checkbox" value="' + esc(t) + '"' + (고른현역.indexOf(t) >= 0 ? " checked" : "") + ">" + esc(t) + "</label>";
+    }).join("");
+    $("#pickT").querySelectorAll("input").forEach(function (i) {
+      i.addEventListener("change", function () {
+        고른현역 = Array.prototype.filter.call($("#pickT").querySelectorAll("input"), function (x) { return x.checked; })
+          .map(function (x) { return x.value; });
+        계산하기(true);
+      });
+    });
+  }
+
+  function 회의용그리기(담당있음) {
+    $("#teamBasis").textContent = 결과.기준일 + " 기준" + (결과.소진 ? " · 소진율은 " + 결과.소진.달 + " 수업" : "") + " · 회원 이름과 연락처는 이 화면에 없습니다.";
+    $("#teamT").innerHTML = 담당있음 ? 트레이너표()
+      : '<p class="note warn">담당 트레이너 칸이 있어야 이 화면이 나옵니다. 회원목록 칸에서 담당 트레이너 열을 골라 주세요.</p>';
+    $("#saveBox").hidden = !담당있음;
+  }
+
+  /* ── 명단 ───────────────────────────────────────────── */
+  var 짧은말 = {
+    1: "VIP · 골든타임 지남", 2: "3차 이상 · 골든타임", 3: "2차 · 3차로 넘길 때",
+    4: "2차에서 멈춤 · 복귀 연락", 5: "1차 · 첫 재등록", 6: "3차 이상 이탈 · 복귀 연락"
+  };
+  function 이유글(x) {
+    if (x.순위 === 0) return x.이유;
+    if (x.순위 === 1 && /계약/.test(x.이유)) return x.이유.replace(" — 다음 계약 대화 시점입니다", "");
+    return 짧은말[x.순위] || x.이유;
+  }
+  var 목록들 = {
+    후보: {
+      이름: "우선순위", 말: "0순위 수업 급감, 1~3순위 지금 대화할 회원, 4~6순위 복귀 연락입니다.",
+      칸: [["순위", function (x) { return x.순위; }], ["담당", function (x) { return x.담당; }],
+           ["사이클", function (x) { return x.사이클; }], ["누적 순매출", function (x) { return 원(x.순매출); }],
+           ["마지막 결제", function (x) { return 계산.날짜글(x.마지막결제); }], ["경과", function (x) { return x.경과 === "" ? "—" : x.경과 + "일"; }],
+           ["남은 유예", function (x) {
+             // 회차권 만료일이 남아 200일을 넘겨도 진행중인 회원 — 음수 대신 말로 적는다
+             return /^-/.test(x.남은유예) ? "만료일 남음" : x.남은유예;
+           }]],
+      이유: 이유글, 줄: function () { return 결과.VIP후보; }
+    },
+    골든: {
+      이름: "골든타임", 말: "마지막 결제 후 60일이 지난 진행중 회원입니다. VIP는 만료일 기준입니다.",
+      칸: 회원칸(["골든"]), 줄: function () { return 결과.골든명단; }
+    },
+    미재: {
+      이름: "미재등록 확정", 말: "마지막 결제 후 200일이 지난 회원입니다. 최근 결제 순입니다.",
+      칸: 회원칸([]), 줄: function () {
+        return 결과.미재등록.slice().sort(function (a, b) { return b.마지막결제 - a.마지막결제; });
+      }
+    },
+    환불: {
+      이름: "환불 종결", 말: "마지막 PT 기록이 환불인 회원입니다. 연락 명단에서는 뺐습니다.",
+      칸: 회원칸([]), 줄: function () { return 결과.환불종결; }
+    }
+  };
+  function 회원칸(더) {
+    var 칸 = [["담당", function (x) { return x.담당; }], ["사이클", function (x) { return x.사이클; }],
+      ["누적 순매출", function (x) { return 원(x.순매출); }], ["등급", function (x) { return x.등급; }],
+      ["마지막 결제", function (x) { return 계산.날짜글(x.마지막결제); }], ["경과", function (x) { return x.경과 === "" ? "—" : x.경과 + "일"; }]];
+    if (더.indexOf("골든") >= 0) 칸.push(["골든타임", function (x) { return x.골든; }]);
+    return 칸;
+  }
+
+  function 명단단추() {
+    $("#listBtns").innerHTML = Object.keys(목록들).map(function (k) {
+      return '<button data-k="' + k + '" aria-pressed="' + (k === 지금목록) + '">' + esc(목록들[k].이름) + " " + 수(목록들[k].줄().length) + "</button>";
+    }).join("");
+    $("#listBtns").querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        지금목록 = b.dataset.k; 보이는수 = 50; 명단단추(); 명단그리기();
+      });
+    });
+    var 전 = $("#listT").value;
+    var 담당들 = {};
+    Object.keys(목록들).forEach(function (k) { 목록들[k].줄().forEach(function (x) { if (x.담당) 담당들[x.담당] = 1; }); });
+    $("#listT").innerHTML = '<option value="">담당 전체</option>' + Object.keys(담당들).sort().map(function (t) {
+      return '<option value="' + esc(t) + '">' + esc(t) + "</option>";
+    }).join("");
+    if (담당들[전]) $("#listT").value = 전;
+  }
+
+  function 좁힌줄() {
+    var t = $("#listT").value, 줄 = 목록들[지금목록].줄();
+    return t ? 줄.filter(function (x) { return x.담당 === t; }) : 줄;
+  }
+
+  function 명단그리기() {
+    var 목 = 목록들[지금목록], 줄 = 좁힌줄();
+    $("#listNote").textContent = 목.말 + " " + 수(줄.length) + "명.";
+    if (!줄.length) {
+      $("#listBox").innerHTML = '<p class="small">해당하는 회원이 없습니다.</p>';
+      $("#moreList").hidden = true; return;
+    }
+    var h = '<table class="tbl"><thead><tr><th>회원</th><th>연락처</th>' +
+      목.칸.map(function (k) { return "<th>" + esc(k[0]) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    줄.slice(0, 보이는수).forEach(function (x) {
+      var 숫자 = 계산.R연락처숫자(x.연락처);
+      h += '<tr><td class="name">' + esc(x.이름) + (목.이유 ? '<span class="why">' + esc(목.이유(x)) + "</span>" : "") + "</td>" +
+        '<td data-k="연락처">' + (숫자 ? '<a href="tel:' + esc(숫자) + '">' + esc(x.연락처) + "</a>" : "—") + "</td>" +
+        목.칸.map(function (k) { return '<td data-k="' + esc(k[0]) + '">' + esc(k[1](x)) + "</td>"; }).join("") + "</tr>";
+    });
+    h += "</tbody></table>";
+    $("#listBox").innerHTML = h;
+    $("#moreList").hidden = 줄.length <= 보이는수;
+  }
+  $("#moreList").addEventListener("click", function () { 보이는수 += 100; 명단그리기(); });
+  $("#listT").addEventListener("change", function () { 보이는수 = 50; 명단그리기(); });
+
+  /* CSV 는 이 브라우저 안에서 만들어 바로 내려받는다. 엑셀 수식으로 읽히는 글자는 막는다. */
+  function csv칸(v) {
+    var s = String(v == null ? "" : v);
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  $("#csv").addEventListener("click", function () {
+    var 목 = 목록들[지금목록], 줄 = 좁힌줄();
+    var 머리 = ["회원", "연락처"].concat(목.이유 ? ["이유"] : [], 목.칸.map(function (k) { return k[0]; }));
+    var 글 = [머리.map(csv칸).join(",")].concat(줄.map(function (x) {
+      return [x.이름, x.연락처].concat(목.이유 ? [목.이유(x)] : [], 목.칸.map(function (k) { return k[1](x); })).map(csv칸).join(",");
+    })).join("\r\n");
+    var 주소 = URL.createObjectURL(new Blob(["﻿" + 글], { type: "text/csv;charset=utf-8" }));
+    var a = document.createElement("a");
+    a.href = 주소;
+    a.download = "재등록_" + 목.이름.replace(/\s/g, "") + "_" + 결과.기준일 + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(주소); }, 2000);
+  });
+
+  /* ── 탭 ─────────────────────────────────────────────── */
+  function 탭(대표) {
+    $("#tabOwner").setAttribute("aria-selected", String(대표));
+    $("#tabTeam").setAttribute("aria-selected", String(!대표));
+    $("#owner").hidden = !대표; $("#team").hidden = 대표;
+  }
+  $("#tabOwner").addEventListener("click", function () { 탭(true); });
+  $("#tabTeam").addEventListener("click", function () { 탭(false); });
+  $("#print").addEventListener("click", function () { window.print(); });
+
+  /* ── 집계 저장 · 공유 주소 (누를 때만 서버에 간다) ─────── */
+  function 저장말(t, 좋음) { var m = $("#saveMsg"); m.textContent = t; m.className = "msg" + (t ? (좋음 ? " ok" : " no") : ""); }
+  function 표없음(e) {
+    var t = String((e && (e.message || e.code)) || "");
+    return /center_rereg_summary|PGRST205|42P01|does not exist|schema cache/i.test(t);
+  }
+  function 실패말(e) {
+    if (표없음(e)) return "아직 서버 쪽 준비가 끝나지 않아 저장하지 못했습니다. 화면과 CSV는 그대로 쓰실 수 있습니다.";
+    return "저장하지 못했습니다. 잠시 뒤 다시 해 주세요. 화면과 CSV는 그대로 쓰실 수 있습니다.";
+  }
+  function 보낼내용() {
+    return { period: 결과.기준일.slice(0, 7), summary: 계산.집계만들기(결과) };
+  }
+  $("#saveAsk").addEventListener("click", function () {
+    $("#sendText").textContent = JSON.stringify(보낼내용(), null, 2);
+    $("#sendBox").hidden = false;
+    저장말("");
+  });
+  $("#saveNo").addEventListener("click", function () { $("#sendBox").hidden = true; 저장말(""); });
+  $("#saveGo").addEventListener("click", async function () {
+    var b = $("#saveGo"); b.disabled = true; 저장말("저장하는 중입니다.", true);
+    try {
+      var r = await sb.from("center_rereg_summary").upsert(보낼내용(), { onConflict: "user_id,period" });
+      if (r.error) throw r.error;
+      $("#sendBox").hidden = true;
+      저장말("저장했습니다. 이제 공유 주소를 만들 수 있습니다.", true);
+    } catch (e) { 저장말(실패말(e), false); }
+    b.disabled = false;
+  });
+
+  function 새토큰() {
+    var 바이트 = new Uint8Array(16);
+    crypto.getRandomValues(바이트);
+    return Array.prototype.map.call(바이트, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");  // 32자
+  }
+  function 주소보이기(토큰) {
+    $("#shareUrl").textContent = location.origin + "/me/tools/board/?t=" + 토큰;
+    $("#shareBox").hidden = false;
+  }
+  async function 공유(바꾸기) {
+    저장말("주소를 만드는 중입니다.", true);
+    var 달 = 결과.기준일.slice(0, 7);
+    try {
+      var r = await sb.from("center_rereg_summary").select("board_token").eq("period", 달).maybeSingle();
+      if (r.error) throw r.error;
+      if (!r.data) { 저장말("이번 달 집계를 먼저 저장해 주세요.", false); return; }
+      if (r.data.board_token && !바꾸기) { 저장말(""); 주소보이기(r.data.board_token); return; }
+      var 토큰 = 새토큰();
+      var u = await sb.from("center_rereg_summary").update({ board_token: 토큰 }).eq("period", 달);
+      if (u.error) throw u.error;
+      저장말(바꾸기 ? "새 주소로 바꿨습니다. 옛 주소는 이제 열리지 않습니다." : "", true);
+      주소보이기(토큰);
+    } catch (e) { 저장말(실패말(e), false); }
+  }
+  $("#shareBtn").addEventListener("click", function () { 공유(false); });
+  $("#reToken").addEventListener("click", function () { 공유(true); });
+  $("#copy").addEventListener("click", async function () {
+    try { await navigator.clipboard.writeText($("#shareUrl").textContent); 저장말("주소를 복사했습니다.", true); }
+    catch (e) { 저장말("복사하지 못했습니다. 주소를 직접 선택해 복사해 주세요.", false); }
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>
