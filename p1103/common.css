@@ -906,3 +906,40 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 .fr .tl-fig{aspect-ratio:16/10}
 .tl-fig{aspect-ratio:4/3}
 .fr .tl-fig{aspect-ratio:16/11}
+/* 결과·검증 /proof/ · 소개 /about/ (11-06) */
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s4);align-items:stretch}
+.pf-fact{display:flex;flex-direction:column;gap:var(--s1);padding:var(--s3)}
+.pf-fact .pf-n{font:500 var(--t1)/1 var(--num);letter-spacing:-.03em;color:var(--ink);white-space:nowrap}
+.pf-fact .pf-n em{font:400 var(--t4) var(--sans);font-style:normal;color:var(--ink2);margin-left:var(--s1)}
+.pf-fact h3{margin:var(--s1) 0 0}
+.pf-fact p{margin:0}
+.pf-myth{margin-top:var(--s2);padding:var(--s3);border-color:rgba(var(--blue-rgb),.42)}
+.pf-myth b{color:var(--blue);font-weight:500}
+.pf-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3) var(--s2);margin-top:var(--s3)}
+.pf-shot{margin:0}
+.pf-shot img{display:block;width:100%;height:auto;border-radius:var(--r);border:1px solid var(--line)}
+.pf-shot figcaption{margin-top:var(--s2)}
+.pf-shot h3{margin:0 0 var(--s1)}
+@media (max-width:1100px){.pf-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.pf-grid{grid-template-columns:1fr}.pf-shots{grid-template-columns:1fr 1fr;gap:var(--s3) var(--s1)}}
+.ab-steps{list-style:none;padding:0;margin-top:var(--s4);display:grid;gap:var(--s1)}
+.ab-step{display:grid;grid-template-columns:56px 1fr auto auto;gap:var(--s3);align-items:center;padding:var(--s2) var(--s3)}
+.ab-step .no{font-size:var(--t3);color:var(--ink2);line-height:1}
+.ab-step.free{border-color:rgba(var(--blue-rgb),.42)}
+.ab-step.free .no{color:var(--blue)}
+.ab-step h3,.ab-step p{margin:0}
+.ab-step .btn{min-width:120px}
+@media (max-width:900px){.ab-step{grid-template-columns:44px 1fr;gap:var(--s1) var(--s2)}.ab-step .ab-chip,.ab-step .btn{grid-column:2;justify-self:start}}
+/* 강의 화면 11-06: ATC 묶음 대신 4T 한 편짜리 강의 4개 */
+.crs-one{display:block}
+.crs-lab{margin-top:var(--s4);margin-bottom:0}
+.crs-four{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2);margin-top:var(--s2);align-items:stretch}
+.crs-four .card{display:flex;flex-direction:column;gap:var(--s1);padding:var(--s3)}
+.crs-four .card>.lab{margin-bottom:0}
+.crs-four .p{font:500 var(--t3)/1.1 var(--num);letter-spacing:-.02em;white-space:nowrap}
+.crs-four .p em{font:500 var(--t6) var(--sans);font-style:normal;color:var(--ink2);margin-left:4px}
+.crs-four .act{margin-top:auto;padding-top:var(--s2)}
+.card .crs-gain a{display:inline;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+@media (min-width:901px){.crs-one .card{display:grid;grid-template-columns:1fr 1fr;gap:var(--s1) var(--s4)}.crs-one .card>*{grid-column:1}.crs-one .card>.inlist,.crs-one .card>.crs-sub,.crs-one .card>.crs-list{grid-column:2}.crs-one .card>.inlist{grid-row:1 / span 3;margin-top:0}.crs-one .card>.crs-sub{grid-row:4}.crs-one .card>.crs-list{grid-row:5}.crs-one .card>.act{grid-row:5;align-self:end}}
+@media (max-width:1100px){.crs-four{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.crs-four{grid-template-columns:1fr}}
