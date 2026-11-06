@@ -146,6 +146,9 @@
     });
     var 꽉 = Object.keys(월수).filter(function (k) { return 월수[k] >= 설정.꽉찬달기준; }).sort();
     if (!꽉.length) return null;
+    // 받은 달은 아직 안 끝났다. 월초에 받으면 며칠치로 소진율이 낮게 나온다 (11-05 실측)
+    var 이번달 = 앵커y + '-' + ('0' + 앵커m).slice(-2);
+    if (꽉.length > 1 && 꽉[꽉.length - 1] === 이번달) 꽉.pop();
     var 대상 = 꽉[꽉.length - 1];
     var 수업 = 표새로();
     레슨행.forEach(function (r, i) {
