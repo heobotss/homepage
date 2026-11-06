@@ -839,3 +839,17 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 .crs-modal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media (max-width:900px){.crs-vids,.crs-lsn{grid-template-columns:1fr}.crs-lsn a{min-height:0}}
 @media (max-width:720px){.crs-sub{grid-template-columns:1fr}.crs-sub a{flex-direction:row;justify-content:space-between;align-items:center}}
+/* 프로그램 화면 /tools/ (11-06) — 정본 16개, 층마다 한 칸 */
+.tl-jump{margin-top:var(--s4);align-items:stretch}
+.tl-jump .pick .lab{margin-bottom:0}
+.tl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2);margin-top:var(--s4);align-items:stretch}
+.tl{display:flex;flex-direction:column;gap:var(--s1);padding:var(--s3)}
+.tl .no{font-size:var(--t3);color:var(--blue);line-height:1}
+.tl h3{margin:0}
+.tl p{margin:0}
+.tl .tl-go{margin-top:auto;padding-top:var(--s2);display:inline-flex;align-items:center;gap:var(--s1);min-height:44px;font-weight:500;color:var(--ink);border-top:1px solid var(--line)}
+.tl .tl-go svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .3s}
+.tl .tl-go:hover svg{transform:translateX(4px)}
+.tl-note{margin-top:var(--s2)}
+@media (max-width:1100px){.tl-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.tl-grid{grid-template-columns:1fr}}
