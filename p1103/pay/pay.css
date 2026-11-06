@@ -1,0 +1,84 @@
+/* 허봇스 결제·강의실 화면 — 새 디자인(11-06). 생김새만 바꾼다: 선택자·id·[hidden] 규칙은 옛 pay.css 와 같다.
+   지킬 것: 개편_1102\결제화면_지킬것_1106.md — #payment-method·#agreement 의 너비·높이를 막지 않는다, [hidden]{display:none!important} 유지.
+   이 파일은 교체 때 site\pay\pay.css 로 복사된다(_합치기_교체.py). 그 전까지 실제 결제 화면은 옛 pay.css 를 쓴다 */
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/pretendard-500.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('/fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Bahn';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/bahn-700.woff2') format('woff2')}
+:root{
+  color-scheme:dark;
+  /* 이름은 옛 것 그대로(화면 안 style 속성이 var(--warm) 등을 쓴다), 값만 새 길의 색 */
+  --ink:#0A0A0B; --ink-2:#141416; --ink-3:#0E0E10; --bone:#F2F0EB; --bone-2:#C9C7C2; --warm:#ABABA6;
+  --line:#242426; --line-2:rgba(242,240,235,.18); --brass:#4F86F7; --brass-lt:#F2F0EB; --sage:#4F86F7; --bad:#E07A6B;
+  --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
+  --tech:"Bahn","Bahnschrift",var(--sans);
+  --r:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:16px;line-height:1.7;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:var(--bone);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+/* 옛 머리(교체 때 새 메뉴바 .hb-bar 로 바뀐다. 바뀌기 전에도 같은 결로 보이게) */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0 clamp(16px,4vw,32px);background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .logo{font-weight:900;font-size:20px;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
+.top .logo small{display:none}
+.top .back,.top .home{font-size:14px;color:var(--warm);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.top .back:hover,.top .home:hover{color:var(--bone)}
+main{max-width:600px;margin:0 auto;padding:clamp(32px,6vw,64px) clamp(16px,4vw,32px) 96px}
+h1{font-size:clamp(28px,5vw,40px);font-weight:900;line-height:1.2;letter-spacing:-.035em;margin:0 0 8px}
+.sub{color:var(--warm);font-size:15px;margin:0 0 32px}
+.card{position:relative;background:rgba(20,20,22,.72);border:1px solid rgba(242,240,235,.12);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:inset 0 1px 0 rgba(242,240,235,.14),0 24px 64px rgba(0,0,0,.45)}
+.card h2{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.06em;color:var(--bone);font-weight:500;margin:0 0 16px;text-transform:none}
+.card h2::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--brass);box-shadow:0 0 10px 2px rgba(79,134,247,.55)}
+#prodCard{border-color:rgba(79,134,247,.42)}
+.prod{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.prod .n{font-weight:700;font-size:20px;line-height:1.35;letter-spacing:-.02em}
+.prod .d{color:var(--warm);font-size:14px;margin-top:6px}
+.prod .p{font-family:var(--tech);font-size:32px;color:var(--bone);white-space:nowrap;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.prod .p small{font-family:var(--sans);font-size:13px;color:var(--warm);display:block;text-align:right;font-weight:500;margin-top:4px}
+.seat{margin-top:12px;font-size:13px;color:var(--sage)}
+.seat.full{color:var(--bad)}
+label{display:block;font-size:14px;color:var(--bone-2);margin:16px 0 6px}
+input[type=text],input[type=tel],input[type=email],input[type=password]{width:100%;min-height:52px;background:var(--ink-3);border:1px solid var(--line-2);border-radius:12px;color:var(--bone);font:inherit;font-size:16px;padding:12px 16px;outline:none;transition:border-color .2s}
+input::placeholder{color:#6F6F6B}
+input:focus{border-color:var(--brass)}
+input.err{border-color:var(--bad)}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--bone-2);margin-top:16px;line-height:1.6}
+.agree input{margin-top:5px;width:16px;height:16px;flex:none;accent-color:var(--brass)}
+/* 10-14 — hidden 을 작성자 스타일이 이기면 로그인 전에 회색 결제 버튼이 떠 「고장났나」로 읽힌다 */
+.btn[hidden],[hidden]{display:none!important}
+.steps{margin:0 0 12px;color:var(--warm);font-size:14px}
+.steps b{color:var(--bone)}
+.got{width:100%;border-collapse:collapse;margin:16px 0 0;font-size:15px}
+.got td{padding:10px 0;border-top:1px solid var(--line);vertical-align:top;line-height:1.6}
+.got td:first-child{color:var(--warm);white-space:nowrap;width:5.5em;padding-right:12px}
+.got ul{margin:0;padding-left:18px}
+.got li{margin:1px 0}
+.got .grp{color:var(--bone-2);font-weight:700;margin-top:4px}
+.btn{display:block;width:100%;min-height:56px;border:0;border-radius:999px;padding:16px 24px;font:inherit;font-size:17px;font-weight:700;cursor:pointer;background:var(--brass);color:#0A0A0B;text-align:center;text-decoration:none;transition:background-color .2s,opacity .2s}
+.btn:hover{background:#6B9CFF}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.line{background:none;color:var(--bone);border:1px solid var(--line-2)}
+.btn.line:hover{background:rgba(242,240,235,.06)}
+.msg{margin:12px 0 0;font-size:14px;color:var(--bad);min-height:1.4em}
+.note{font-size:13px;color:var(--warm);margin-top:16px;line-height:1.6}
+.refund{font-size:14px;color:var(--bone-2)}
+.refund summary{cursor:pointer;color:var(--bone);font-weight:500;font-size:14px;min-height:44px;display:flex;align-items:center}
+.refund ul{margin:8px 0 0;padding-left:18px}
+.refund li{margin:4px 0}
+.legal{margin-top:48px;font-size:13px;color:var(--warm);line-height:1.8;border-top:1px solid var(--line);padding-top:16px}
+.legal a{color:var(--warm)}
+/* 완료 화면 */
+.done-icon{width:56px;height:56px;border-radius:50%;background:rgba(79,134,247,.14);color:var(--sage);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
+.done-icon.bad{background:rgba(224,122,107,.14);color:var(--bad)}
+table.kv{width:100%;border-collapse:collapse;font-size:15px}
+table.kv td{padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.kv td:first-child{color:var(--warm);width:92px;white-space:nowrap}
+table.kv tr:last-child td{border-bottom:0}
+.amt{font-family:var(--tech);color:var(--bone);font-size:20px;font-variant-numeric:tabular-nums}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--brass);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+#payment-method,#agreement{margin:0 -6px}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}

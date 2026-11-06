@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>결제 실패 — 허봇스</title>
+<link rel="icon" href="/favicon.png">
+<link rel="stylesheet" href="pay.css">
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
+<style>#payBtn{pointer-events:none}.pv-note{background:#141416;border:1px solid rgba(79,134,247,.42);border-radius:12px;padding:10px 14px;font-size:13.5px;margin-bottom:18px}</style>
+</head>
+<body>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/p1103/문/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/p1103/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/p1103/tools/">프로그램</a><a href="/p1103/courses/">강의</a><a href="/p1103/plan/">가격</a><a class="hb-wide" href="/p1103/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
+<main>
+  <div class="done-icon bad">!</div>
+  <h1>결제가 완료되지 않았습니다</h1>
+  <p class="sub" id="msg">결제창에서 취소됐거나 승인이 거절됐습니다.</p>
+  <p class="note">돈은 빠져나가지 않았습니다. 다른 카드나 결제 수단으로 다시 시도해 주세요.</p>
+  <p style="margin-top:22px"><a class="btn line" id="retry" href="index.html">다시 시도</a></p>
+  <footer class="legal" id="legal"></footer>
+</main>
+<script>
+const q = new URLSearchParams(location.search);
+const code = q.get("code") || "", message = q.get("message") || "";
+if (message) document.getElementById("msg").textContent = message + (code ? " (" + code + ")" : "");
+try { const o = JSON.parse(sessionStorage.getItem("hb_order") || "null"); } catch {}
+fetch("/policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) document.getElementById("legal").innerHTML = t; }).catch(() => {});
+</script>
+<script src="/t.js"></script>
+<script>try { window.HBT && HBT.event("pay_fail", "pay"); } catch (e) {}</script>
+</body>
+</html>
