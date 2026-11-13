@@ -80,6 +80,13 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
         ["다음 결제일", new Date(d0.nextChargeAt).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", dateStyle: "long" })],
         ["해지", '<a href="my.html">내 구독 화면</a>에서 언제든 · 다음 결제부터 멈춥니다'],
       ].filter(Boolean).map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
+      /* 11-13 구독 완료 뒤 갈 곳이 「홈으로」뿐이었다 — 바로 쓰는 단추 둘. 유입 기록에도 구독 결제를 남긴다(단품은 아래에서 남김) */
+      if (!d0.replaced) {
+        const g1 = document.createElement("a"); g1.className = "btn"; g1.href = "../vod/"; g1.textContent = "강의실 열기"; g1.style.marginBottom = "12px";
+        const g2 = document.createElement("a"); g2.className = "btn line"; g2.href = "../me/tools/"; g2.textContent = "프로그램 쓰기";
+        const rc = $("#receipt"); rc.parentNode.insertBefore(g1, rc); rc.parentNode.insertBefore(g2, rc);
+        if (!d0.resumed) { try { window.HBT && HBT.event("paid", "pay:" + subId); } catch (e) {} }
+      }
       history.replaceState(null, "", location.pathname);
       return show("ok");
     } catch (e) {
