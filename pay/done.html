@@ -91,6 +91,12 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
       return show("ok");
     } catch (e) {
       $("#badMsg").textContent = /Failed to fetch|NetworkError|Load failed/i.test(e && e.message || "") ? "인터넷 연결이 잠깐 끊겨 확인하지 못했습니다. 이 화면을 새로고침해 주세요." : (e.message || String(e));
+      /* 11-13 카드 등록 길에서 로그인이 풀린 경우 — 결제는 일어나지 않았다. 「결제를 확정하지 못했습니다」 대신 할 일을 알려 준다 */
+      if (/로그인/.test(e && e.message || "")) {
+        $("#badMsg").textContent = "로그인이 풀려서 카드를 등록하지 못했습니다. 결제된 것은 없습니다. 다시 로그인한 뒤 한 번 더 해 주세요.";
+        const bx = document.querySelector("#bad .btn.line"); if (bx) { bx.href = "my.html"; bx.textContent = "내 구독으로 가서 다시 하기"; }
+        const nt = document.querySelector("#bad .note"); if (nt) nt.hidden = true; document.querySelector("#bad h1").textContent = "카드를 등록하지 못했습니다";
+      }
       return show("bad");
     }
   }
