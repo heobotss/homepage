@@ -66,7 +66,9 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
       const r0 = await fetch(SB_URL + "/functions/v1/billing-register?forceFunctionRegion=ap-northeast-2", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + ses.access_token },
-        body: JSON.stringify({ authKey, customerKey, productId: subId }),
+        body: JSON.stringify(Object.assign({ authKey, customerKey, productId: subId }, (function () {   /* 11-13 구독 화면에서 고른 광고 동의 */
+          try { var c = JSON.parse(sessionStorage.getItem("hb-sub-ad") || "null"); sessionStorage.removeItem("hb-sub-ad"); return c && c.ad === true ? { ad: true, night: c.night === true, visitor: c.visitor, utm: c.utm } : {}; } catch (e) { return {}; }
+        })())),
       });
       const d0 = await r0.json();
       if (!d0.ok) throw new Error(d0.message || "구독을 시작하지 못했습니다");

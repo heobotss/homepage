@@ -143,8 +143,7 @@ async function loadProduct() {
     $("#rfCourse").hidden = false; $("#rfSem").hidden = true;
   }
   if (product.kind === "sub") {
-    // 구독은 pay-create 를 거치지 않아 광고 동의 값이 저장되지 않는다 — 저장 안 되는 칸은 보이지 않게 둔다 (11-03)
-    document.querySelectorAll(".ad-agree").forEach(e => { e.style.display = "none"; });
+    // 11-13 구독도 광고 동의를 저장한다(billing-register) — 동의 칸을 연다. 값은 카드 등록창을 다녀오는 동안 sessionStorage 에 둔다
     $("#rfApp").hidden = false; $("#rfSem").hidden = true;
     $("#sub").textContent = "카드를 한 번 등록하면 그 뒤로는 자동으로 결제됩니다. 해지는 언제든 하실 수 있습니다.";
     var ses0 = await HB.session();
@@ -309,6 +308,10 @@ $("#payBtn").addEventListener("click", async () => {
   try {
     if (product.kind === "sub") {
       const base0 = location.origin + location.pathname.replace(/[^/]*$/, "");
+      try {
+        const pk0 = window.HBT ? HBT.pack() : { visitor: null, utm: null };
+        sessionStorage.setItem("hb-sub-ad", JSON.stringify({ ad: $("#adOk").checked, night: $("#adOk").checked && $("#nightOk").checked, visitor: pk0.visitor, utm: pk0.utm }));
+      } catch (e) {}
       await billing.requestBillingAuth({
         method: "CARD",
         successUrl: base0 + "done.html?sub=" + encodeURIComponent(product.id),
