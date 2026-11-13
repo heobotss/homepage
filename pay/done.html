@@ -76,7 +76,7 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
         : "바로 쓰실 수 있습니다. 확인 메일도 보냈습니다.";
       $("#kv").innerHTML = [
         d0.orderId ? ["주문번호", d0.orderId] : null,
-        ["결제 금액", '<span class="amt">' + won(d0.amount) + "</span>"],
+        [d0.replaced ? "다음 결제 금액" : "결제 금액", '<span class="amt">' + won(d0.amount) + "</span>"],   /* 11-13 카드만 바꿨을 때 방금 결제된 것처럼 보이지 않게 */
         ["다음 결제일", new Date(d0.nextChargeAt).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", dateStyle: "long" })],
         ["해지", '<a href="my.html">내 구독 화면</a>에서 언제든 · 다음 결제부터 멈춥니다'],
       ].filter(Boolean).map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
