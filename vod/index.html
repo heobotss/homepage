@@ -8,58 +8,83 @@
 <link rel="icon" href="../favicon.png">
 <link rel="stylesheet" href="../pay/pay.css">
 <style>
-main{max-width:980px}
-.who{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 22px}
-.who .me{color:var(--warm);font-size:14px}
-.who a{font-size:13.5px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.course{display:flex;flex-direction:column;gap:6px;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:var(--ink-2);cursor:pointer;text-align:left;color:inherit;font:inherit;transition:border-color .15s}
-.course:hover{border-color:var(--brass)}
-.course .k{font-size:12px;color:var(--sage);letter-spacing:.02em}
-.course .t{font-weight:700;font-size:16.5px;line-height:1.4}
-.course .d{font-size:13px;color:var(--warm)}
-.course .s{font-size:12.5px;color:var(--sage);margin-top:4px}
-.course.locked{cursor:default;opacity:.8}
-.course.locked .s{color:var(--warm)}
-.course .buy{margin-top:8px;align-self:flex-start;font-size:13.5px;font-weight:700;color:var(--brass-lt)}
-h2.sec{font-size:13px;color:var(--warm);letter-spacing:.02em;margin:30px 0 12px;font-weight:700}
-.player{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:16/9;max-height:74vh;margin:0 auto}
+/* 강의실 화면(/vod/) 새 디자인 — 11-10. 생김새만 바꾼다. 스크립트·id·클래스·글자는 그대로.
+   바탕 규칙과 색 이름은 ../pay/pay.css(교체 때 새 2판으로 바뀜 — brass·sage 가 파랑, brass-lt 가 밝은 글자)에서 온다.
+   교체 때 site\vod\index.html 의 첫 스타일 블록을 이 내용으로 갈아 끼운다(_합치기_교체.py 「옷」 단계) */
+main{max-width:1040px}
+[hidden]{display:none!important}
+.who{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 24px;padding:14px 20px;
+  border:1px solid var(--line-2);border-radius:999px;background:rgba(242,240,235,.03)}
+.who .me{color:var(--warm);font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
+.who a{font-size:14px;color:var(--bone-2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.course{position:relative;display:flex;flex-direction:column;gap:8px;padding:24px;border:1px solid var(--line-2);border-radius:20px;
+  background:linear-gradient(180deg,rgba(26,26,30,.86),rgba(15,15,17,.86));box-shadow:inset 0 1px 0 rgba(242,240,235,.06),0 16px 40px rgba(0,0,0,.35);
+  cursor:pointer;text-align:left;color:inherit;font:inherit;transition:border-color .2s,transform .2s,box-shadow .2s}
+.course:hover{border-color:rgba(79,134,247,.55);transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(242,240,235,.08),0 20px 48px rgba(79,134,247,.18)}
+.course .k{font-size:12.5px;color:var(--sage);letter-spacing:.04em;font-weight:500}
+.course .t{font-weight:800;font-size:19px;line-height:1.35;letter-spacing:-.02em}
+.course .d{font-size:14px;color:var(--warm);line-height:1.6}
+.course .s{font-size:13px;color:var(--sage);margin-top:auto;padding-top:8px;font-variant-numeric:tabular-nums}
+.course.locked{cursor:default;background:rgba(242,240,235,.02);box-shadow:none}
+.course.locked:hover{transform:none;border-color:rgba(242,240,235,.28);box-shadow:none}
+.course.locked .s{color:var(--bone-2)}
+.course .buy{margin-top:10px;align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;
+  background:var(--brass);color:#0A0A0B;font-size:14.5px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(79,134,247,.3)}
+.course .buy:hover{background:#6B9CFF}
+h2.sec{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--warm);letter-spacing:.12em;margin:40px 0 16px;font-weight:500}
+h2.sec::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brass);box-shadow:0 0 12px 3px rgba(79,134,247,.6)}
+.player{position:relative;background:#000;border-radius:20px;overflow:hidden;aspect-ratio:16/9;max-height:74vh;margin:0 auto;
+  border:1px solid var(--line-2);box-shadow:0 24px 64px rgba(0,0,0,.55)}
 .player video{width:100%;height:100%;display:block;background:#000;object-fit:contain}
 .player .mark{position:absolute;left:8%;top:12%;pointer-events:none;user-select:none;font-size:clamp(11px,1.4vw,15px);color:rgba(255,255,255,.28);text-shadow:0 0 2px rgba(0,0,0,.6);white-space:nowrap;transition:left 1.2s ease,top 1.2s ease}
-.player .fs{position:absolute;right:10px;top:10px;border:0;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;font:inherit;font-size:12.5px;padding:6px 10px;cursor:pointer;opacity:.75}
+.player .fs{position:absolute;right:12px;top:12px;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:inherit;font-size:13px;padding:8px 14px;cursor:pointer;opacity:.8;backdrop-filter:blur(6px)}
 .player .fs:hover{opacity:1}
-.player:fullscreen{max-height:none;border-radius:0}
-.ptitle{font-size:18px;font-weight:700;margin:14px 0 2px}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:22px 0 10px}
-.tabs button{border:1px solid var(--line-2);background:transparent;color:var(--bone-2);border-radius:99px;padding:7px 14px;font:inherit;font-size:13.5px;cursor:pointer}
-.tabs button.on{background:rgba(147,147,147,.14);border-color:var(--brass);color:var(--brass-lt)}
-.list{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.list button{display:flex;width:100%;gap:12px;align-items:center;justify-content:space-between;padding:13px 16px;border:0;border-top:1px solid var(--line);background:var(--ink-2);color:var(--bone);font:inherit;font-size:15px;text-align:left;cursor:pointer}
+.player:fullscreen{max-height:none;border-radius:0;border:0}
+.ptitle{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:20px 0 4px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 12px}
+.tabs button{min-height:44px;border:1px solid var(--line-2);background:rgba(242,240,235,.03);color:var(--bone-2);border-radius:999px;padding:0 18px;font:inherit;font-size:14.5px;cursor:pointer;transition:border-color .2s,background .2s}
+.tabs button:hover{border-color:rgba(242,240,235,.32)}
+.tabs button.on{background:rgba(79,134,247,.14);border-color:var(--brass);color:var(--bone)}
+.list{border:1px solid var(--line-2);border-radius:20px;overflow:hidden;background:rgba(242,240,235,.02)}
+.list button{display:flex;width:100%;gap:14px;align-items:center;justify-content:space-between;min-height:56px;padding:14px 20px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--bone);font:inherit;font-size:15.5px;text-align:left;cursor:pointer;transition:background .15s}
 .list button:first-child{border-top:0}
-.list button:hover{background:var(--ink-3)}
-.list button.on{background:rgba(147,147,147,.1);color:var(--brass-lt)}
-.list .n{color:var(--warm);font-size:12.5px;min-width:26px}
-.list .len{color:var(--warm);font-size:12.5px;font-variant-numeric:tabular-nums}
-.files{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.files button{border:1px solid var(--line-2);background:var(--ink-2);color:var(--bone);border-radius:9px;padding:9px 13px;font:inherit;font-size:13.5px;cursor:pointer}
+.list button:hover{background:rgba(242,240,235,.04)}
+.list button.on{background:rgba(79,134,247,.12);color:var(--bone);box-shadow:inset 3px 0 0 var(--brass)}
+.list .n{color:var(--warm);font-size:13px;min-width:28px;font-variant-numeric:tabular-nums}
+.list .len{color:var(--warm);font-size:13px;font-variant-numeric:tabular-nums;flex:none}
+.files{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.files button{min-height:44px;border:1px solid var(--line-2);background:rgba(242,240,235,.03);color:var(--bone);border-radius:999px;padding:0 18px;font:inherit;font-size:14px;cursor:pointer;transition:border-color .2s}
 .files button:hover{border-color:var(--brass)}
-.back{display:inline-block;margin-bottom:14px;font-size:13.5px}
-.auth{max-width:440px;margin:0 auto}
-.auth h2{font-size:18px;color:var(--bone);text-transform:none;letter-spacing:-.01em}
-.muted{color:var(--warm);font-size:13.5px}
+.back{display:inline-block;margin-bottom:16px;font-size:14px;color:var(--bone-2)}
+.auth{max-width:460px;margin:0 auto}
+.auth h2{font-size:24px;font-weight:800;color:var(--bone);text-transform:none;letter-spacing:-.03em;display:block}
+.auth h2::before{display:none}
+.auth label{display:block;margin:18px 0 8px;font-size:15px;color:var(--bone-2)}
+.auth input{width:100%;min-height:54px;background:var(--ink-3);border:1px solid var(--line-2);border-radius:14px;color:var(--bone);font:inherit;font-size:16px;padding:12px 16px;outline:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.auth input:focus{border-color:var(--brass);box-shadow:inset 0 1px 2px rgba(0,0,0,.5),0 0 0 4px rgba(79,134,247,.16)}
+#aKk{min-height:56px;border-radius:999px!important}
+.muted{color:var(--warm);font-size:14px;line-height:1.7}
+@media (max-width:520px){.course{padding:20px}.who{border-radius:16px}.list button{padding:14px 16px}}
+@media (prefers-reduced-motion:reduce){.course,.course:hover{transition:none;transform:none}}
+
+/* 11-10 체크박스 한 벌 — 새 화면과 같은 꼴(얇은 테두리, 고르면 파랑) */
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;margin-top:2px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]:checked{background:#4F86F7;border-color:#4F86F7}
+input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
+input[type=checkbox]:disabled{opacity:.4;cursor:default}
+input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
+/* 11-10 로그인 전에는 제목도 로그인 카드와 같은 가운데 단에 — 로그인 뒤(강의 목록)는 넓은 단 그대로 */
+@media (min-width:721px){main:has(#app .auth)>h1,main:has(#app .auth)>.sub{max-width:460px;margin-left:auto;margin-right:auto}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
 <script src="auth.js"></script>
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
-<header class="top">
-  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
-  <span style="display:flex;gap:14px;align-items:center">
-    <a class="back" style="margin:0" href="../me/">내 프로필</a>
-    <a class="back" style="margin:0" href="../#/vod">← 강의 목록</a>
-  </span>
-</header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 <main>
   <h1>강의실</h1>
   <p class="sub" id="lead">구매한 강의를 12개월 동안 볼 수 있습니다.</p>
@@ -76,10 +101,13 @@ fetch("../policy/legal.txt").then(function(r){return r.ok?r.text():"";}).then(fu
 
 /* 상품 — 가격은 결제 페이지가 서버에서 다시 읽는다. 여기 값은 안내용 */
 var COURSES = [
-  { id:"vod-atc-guide", name:"ATC 온라인 트레이너 가이드", desc:"상담·인바디·시퀀스·점수 체크리스트·연차별 체크리스트·인스타그램·식단", price:390000 },
   { id:"vod-4t-member", tag:"트레이너 시스템 강의", name:"4T 회원관리", desc:"개인운동·식단·스케줄·온라인 마케팅", price:89000 },
   { id:"vod-4t-sales",  tag:"트레이너 시스템 강의", name:"4T 세일즈", desc:"재등록·OT&체험수업·회원 소개·상담·인바디", price:109000 },
   { id:"vod-4t-coach",  tag:"트레이너 시스템 강의", name:"4T 운동지도", desc:"정적·동적평가·맞춤 운동·스몰토크·티칭 오류·2:1 PT", price:129000 },
+  { id:"vod-4t-consult",  name:"4T 트레이너 상담", desc:"등록으로 잇는 질문 순서·마무리 · 79분 · 바로 쓰는 상담 질문지", price:69000 },
+  { id:"vod-4t-sequence", name:"4T 트레이너 시퀀스", desc:"좋아진 것을 숫자로 남기는 수업 틀 · 50분 · 시퀀스 기록 양식", price:59000 },
+  { id:"vod-4t-score",    name:"4T 트레이너 점수 체크리스트", desc:"100문항으로 내 점수 재기 · 113분 · 인쇄용 체크시트", price:69000 },
+  { id:"vod-4t-years",    name:"4T 연차별 체크리스트", desc:"지금 내 단계와 다음 할 일 · 준비생~5년차 이상 · 약 65분", price:49000 },
   { id:"vod-anatomy",   name:"4T 실전해부학", desc:"1~3부", price:149000 },
   { id:"vod-mock-exam", name:"4T 모의고사", desc:"문제지 9종(LV0 · VOL1~4 · 영역별 4) + 채점용 정답표 + 레벨별·영역별 해설", price:99000 },
   { id:"vod-startup",   name:"트레이너 창업 (창업 전)", desc:"단독 강의", price:49000 }

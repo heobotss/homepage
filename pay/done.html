@@ -7,11 +7,10 @@
 <title>결제 확인 — 허봇스</title>
 <link rel="icon" href="../favicon.png">
 <link rel="stylesheet" href="pay.css">
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
-<header class="top">
-  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
-</header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 <main>
   <div id="testBar" hidden style="background:#161616;border:1px solid #333333;color:#EDEDED;border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:18px"><b>테스트 결제</b>입니다. 실제로 돈이 빠져나가지 않았고, 정식 등록도 아닙니다.</div>
   <div id="wait">
@@ -64,7 +63,7 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
     try {
       const ses = await HB.session();
       if (!ses) throw new Error("로그인이 풀렸습니다. 다시 로그인한 뒤 등록해 주세요.");
-      const r0 = await fetch(SB_URL + "/functions/v1/billing-register", {
+      const r0 = await fetch(SB_URL + "/functions/v1/billing-register?forceFunctionRegion=ap-northeast-2", {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + ses.access_token },
         body: JSON.stringify({ authKey, customerKey, productId: subId }),
@@ -84,13 +83,13 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
       history.replaceState(null, "", location.pathname);
       return show("ok");
     } catch (e) {
-      $("#badMsg").textContent = e.message || String(e);
+      $("#badMsg").textContent = /Failed to fetch|NetworkError|Load failed/i.test(e && e.message || "") ? "인터넷 연결이 잠깐 끊겨 확인하지 못했습니다. 이 화면을 새로고침해 주세요." : (e.message || String(e));
       return show("bad");
     }
   }
   if (!paymentKey || !orderId || !amount) { $("#badMsg").textContent = "결제 정보가 없습니다."; return show("bad"); }
   try {
-    const r = await fetch(SB_URL + "/functions/v1/pay-confirm", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY },
+    const r = await fetch(SB_URL + "/functions/v1/pay-confirm?forceFunctionRegion=ap-northeast-2", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY },
       body: JSON.stringify({ paymentKey, orderId, amount }) });
     const d = await r.json();
     if (!d.ok) throw new Error(d.message || "승인 실패");
@@ -142,7 +141,7 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
     history.replaceState(null, "", location.pathname);   // 새로고침해도 승인 요청이 다시 안 가게
     show("ok");
   } catch (e) {
-    $("#badMsg").textContent = e.message || String(e);
+    $("#badMsg").textContent = /Failed to fetch|NetworkError|Load failed/i.test(e && e.message || "") ? "인터넷 연결이 잠깐 끊겨 확인하지 못했습니다. 이 화면을 새로고침해 주세요." : (e.message || String(e));
     show("bad");
   }
 })();

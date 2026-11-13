@@ -11,12 +11,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
 <script src="../vod/auth.js"></script>
 <script src="../t.js"></script>
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
-<header class="top">
-  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
-  <a class="back" href="javascript:history.length>1?history.back():location.assign('../')">← 돌아가기</a>
-</header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 <main>
   <div id="testBar" hidden style="background:#161616;border:1px solid #333333;color:#EDEDED;border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:18px">지금은 <b>테스트 운영 중</b>입니다. 결제창까지 열리지만 <b>실제로 돈이 빠져나가지 않고</b>, 등록도 되지 않습니다. 정식 오픈 전까지는 이 페이지로 신청하지 마세요.</div>
   <h1 id="title">등록 · 결제</h1>
@@ -48,6 +46,7 @@
         <li>결제 후 7일 안이고 강의를 한 편도 재생하지 않았으면 전액 환불</li>
         <li>그 밖에는 열람 기간(12개월) 안이면 재생하지 않은 강의분 환불</li>
         <li>열람 기간이 끝난 뒤에는 환불되지 않습니다</li>
+        <li>한 편짜리 강의는 재생한 뒤에는 환불되지 않습니다</li>
       </ul>
       <ul id="rfApp" hidden>
         <li>결제 후 7일 안이면 이유 없이 전액 환불</li>
@@ -132,7 +131,7 @@ async function loadProduct() {
   product = rows[0];
   if (!product) {   // 판매를 내린 상품 — 결제 칸을 보이지 않게 하고 판매 중인 곳으로 안내한다 (11-03)
     $("#pName").textContent = "지금은 판매하지 않는 상품입니다";
-    $("#pDesc").innerHTML = '<a href="../#/price" style="color:inherit;text-decoration:underline">지금 판매 중인 상품 보기</a>';
+    $("#pDesc").innerHTML = '<a href="/plan/" style="color:inherit;text-decoration:underline">지금 판매 중인 상품 보기</a>';
     $("#form").hidden = true; $("#payBtn").hidden = true;
     return;
   }
@@ -265,7 +264,6 @@ async function 받는것표(product) {
     if (product.id === "vod-4t-master") {
       rows.push(["먼저 사셨다면", "4T 회원관리·세일즈·운동지도를 결제한 지 30일이 안 됐다면, 4T 트레이너 시스템 결제 확인 뒤 그 금액을 전액 환불해 드립니다."]);
     }
-    rows.push(["미리 보기", "<a href=\"../#/vod\">무료 강의 3편</a>을 먼저 보셔도 됩니다"]);
     $("#note-email").textContent = "— 확인 메일과 강의실 링크가 갑니다";
     $("#note-phone").textContent = "비워도 됩니다 · 환불·문의 때 연락받을 번호";
     $("#agreeLead").innerHTML = "<b>재생한 강의는 환불에서 빠진다</b>는 것과 환불 규정을 확인했고, ";

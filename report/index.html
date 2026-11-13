@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>내 이름 리포트 — 허봇스</title>
 <meta name="description" content="이름과 센터 주소만 주시면 회원이 남긴 말로 잽니다. 우리 센터에서 나는 몇 번째인지, 회원이 나를 어떻게 기억하는지 카드로 만들어 메일로 보내 드립니다. 무료.">
-<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="icon" href="/favicon.png" type="image/png">
 <link rel="canonical" href="https://heobotss.com/report/">
 <style>
 /* 내 이름 리포트 신청 (2026-10-12)
    옛날엔 구글 폼으로 받아 대표님이 손으로 돌리고 손으로 보냈다. 이제 여기서 받아
    PC 프로그램(센터진단\트레이너신청_창고.py)이 2분마다 집어 굽고 신청자에게 바로 보낸다.
    받는 것: 리뷰에 적히는 이름(필수) · 센터 플레이스 주소(필수) · 블로그 필명(선택). 메일은 로그인 계정. */
-@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/pretendard-400.woff2') format('woff2')}
-@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/pretendard-700.woff2') format('woff2')}
-@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('../fonts/pretendard-900.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/pretendard-400.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/pretendard-700.woff2') format('woff2')}
+@font-face{font-family:'Pretend';font-style:normal;font-weight:900;font-display:swap;src:url('/fonts/pretendard-900.woff2') format('woff2')}
 :root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--ink-3:#171717;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;
   --line:#333333;--line-2:#3C3C3C;--blue:#4F86F7;--good:#5FBF8A;--bad:#E07A6B;
   --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif}
@@ -50,9 +50,9 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 .fld input:focus{border-color:var(--blue)}
 .fld input.err{border-color:var(--bad)}
 .fld .why{font-size:.8125rem;color:var(--warm);margin:6px 2px 0;line-height:1.6}
-.btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:24px;border:0;border-radius:12px;
-  padding:16px 20px;background:#F2F2F2;color:#0A0A0A;font-weight:700;font-size:1.0625rem;cursor:pointer}
-.btn:hover{background:#fff}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:24px;border:0;border-radius:999px;
+  padding:16px 20px;min-height:52px;background:var(--blue);color:#0A0A0A;font-weight:700;font-size:1.0625rem;cursor:pointer}
+.btn:hover{background:#6E9BF9}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .msg{margin:12px 0 0;font-size:.9375rem;color:var(--bad);min-height:1.5em}
 .msg.ok{color:var(--good)}
@@ -74,12 +74,10 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:.875rem;color:var(--warm);line-height:1.8}
 .foot a{color:var(--bone-2)}
 </style>
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
-<header class="top">
-  <a class="logo" href="../">허봇스<small>HEOBOTSS</small></a>
-  <nav><span id="who"></span> <a href="../">홈으로</a></nav>
-</header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"><span id="who"></span></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 
 <main>
   <p class="free">무료 · 트레이너에게 드리는 것</p>
@@ -130,12 +128,12 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
 
   <p class="foot">
     공개된 네이버 플레이스 리뷰만 읽습니다. 카드에 들어가는 회원 문장은 <b>닉네임을 지우고</b>, 리뷰에 적힌 다른 분 이름은 <b>허O민</b>처럼 가립니다.<br>
-    적어 주신 정보는 리포트를 만들어 보내는 데만 씁니다 — <a href="../policy/privacy.html">개인정보 처리방침</a>
+    적어 주신 정보는 리포트를 만들어 보내는 데만 씁니다 — <a href="/policy/privacy.html">개인정보 처리방침</a>
   </p>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../vod/auth.js"></script>
+<script src="/vod/auth.js"></script>
 <script>
 (function () {
   "use strict";
@@ -202,6 +200,8 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
     if (!s) {
       $("#authBox").hidden = true; $("#form").hidden = false;
       $("#mailLine").textContent = "「무료로 받기」를 누르면 받으실 곳(카카오 또는 이메일)만 정하고 바로 신청됩니다.";
+      var d0 = 찾기();
+      if (d0) { $("#nm").value = d0.nm || ""; $("#pl").value = d0.pl || ""; $("#pen").value = d0.pen || ""; 맡기기(d0); 말("거의 다 됐습니다 — 아래에서 받으실 곳만 정해 주세요.", true); 계정상자(); }
       return;
     }
     내메일 = (s.user.email || "").toLowerCase();
@@ -253,6 +253,6 @@ h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.25;letter-spacing:-.04em;mar
   boot();
 })();
 </script>
-<script src="../t.js"></script>
+<script src="/t.js"></script>
 </body>
 </html>

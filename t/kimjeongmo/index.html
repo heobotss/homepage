@@ -66,10 +66,32 @@ footer a{color:var(--bone-2)}
 .made b{display:block;font-size:1.0625rem;color:var(--bone);letter-spacing:-.02em}
 .made span{display:block;margin-top:5px;color:var(--warm);font-size:.875rem;line-height:1.6}
 .made i{display:inline-block;margin-top:10px;font-style:normal;font-size:.9375rem;color:#4F86F7}
+/* ── 새 옷 공통 (11-10) ── 옛 화면의 첫 스타일 끝에 덧붙는다. 색 토큰을 새 값으로 다시 선언하고 배경 빛·버튼·판만 바꾼다. 글자·id·스크립트는 그대로 */
+:root{color-scheme:dark;--ink:#0A0A0B;--ink-2:#141416;--ink-3:#1A1A1D;--bone:#F2F0EB;--bone-2:#C9C7C2;--warm:#A3A39E;--line:#242426;--line-2:rgba(242,240,235,.16);--blue:#4F86F7;--brass:#4F86F7;--bad:#E07A6B}
+html{background:#0A0A0B}
+body{background:radial-gradient(900px 520px at 50% -120px,rgba(79,134,247,.20),transparent 70%) no-repeat,radial-gradient(600px 400px at 100% 30%,rgba(79,134,247,.07),transparent 70%) no-repeat,var(--ink)}
+::selection{background:rgba(79,134,247,.35)}
+.btn{border-radius:999px;background:var(--blue);color:#0A0A0B;box-shadow:0 8px 28px rgba(79,134,247,.32),inset 0 1px 0 rgba(255,255,255,.28);transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{background:#6B9CFF;transform:translateY(-1px)}
+.btn[disabled],.btn:disabled{opacity:.38;transform:none;box-shadow:none;cursor:default}
+.btn.line,.btn.sub,.btn.soon{background:transparent;color:var(--bone);border:1px solid var(--line-2);box-shadow:none}
+.btn.line:hover,.btn.sub:hover{background:rgba(242,240,235,.05);border-color:rgba(242,240,235,.36)}
+.card{border:1px solid var(--line-2);border-radius:20px;background:rgba(242,240,235,.03);box-shadow:inset 0 1px 0 rgba(242,240,235,.06),0 24px 64px rgba(0,0,0,.35)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=search],input[type=url],select,textarea{border-radius:14px}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(79,134,247,.16);outline:0}
+@media (prefers-reduced-motion:reduce){.btn,.btn:hover{transform:none}}
+/* 11-10 체크박스 한 벌 — 새 화면과 같은 꼴(얇은 테두리, 고르면 파랑) */
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;margin-top:2px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]:checked{background:var(--blue);border-color:var(--blue)}
+input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
+input[type=checkbox]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input[type=checkbox]:disabled{opacity:.4;cursor:default}
 </style>
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
-<header class="top"><a class="logo" href="/">허봇스<small>HEOBOTSS</small></a><a class="all" href="/">허봇스 홈</a></header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 <main>
 <section id="who"><img class="face" src="../../img/t-kimjeongmo.webp" alt="김정모 트레이너" width="104" height="104"><h1><span class="job">헬스트레이너</span>김정모</h1><p class="meta">비브레 PT 혁신점 · 강원 원주</p><div class="links"><a href="https://www.instagram.com/vivre_jeongmo/" rel="noopener">인스타그램</a></div></section>
 <section id="report"><h2>내 이름 리포트</h2><div class="card"><p class="when">2026년 9월 22일 기준</p><div class="big">38<small>번</small></div><p class="lead">회원이 리뷰에 김정모 선생님의 이름을 적었습니다.</p><div class="links"><a href="../../img/t-story-kimjeongmo.jpg" download>카드 내려받기 (인스타용)</a></div><p class="src">네이버 플레이스에 공개된 리뷰에서 센 수치입니다. 이름을 적지 않은 리뷰, 동명이인, 호칭 없이 적힌 이름은 빠지거나 섞일 수 있습니다. 다른 선생님과 견주는 숫자가 아닙니다.</p></div></section><section id="score"><h2>이달의 성적표</h2><div class="card"><p class="lead">아직 성적표가 없습니다. 첫 성적표는 다음 달 초에 만들어지고, 그다음부터 달마다 한 장씩 쌓입니다.</p><ul class="soon"><li>회원이 세운 새 기록</li><li>회원이 직접 말한 변화</li><li>함께한 수업 횟수</li><li>새로 만난 회원</li></ul><p class="src">회원이 얻은 것만 셉니다. 재등록률·매출·소진율은 넣지 않습니다. 숫자는 본인이 확인한 기록에서만 만들어집니다.</p></div></section><a class="made" href="/report/?r=tpage"><b>이 페이지는 허봇스로 만들었습니다</b><span>선생님 이름이 적힌 리뷰를 세어 카드로 만들어 드립니다 · 무료</span><i>내 것도 받아 보기 →</i></a>

@@ -186,19 +186,37 @@ textarea{resize:vertical;min-height:64px}
 .auth .btn{margin-top:16px;width:100%}
 .auth .msg{color:var(--bad)}
 .card.auth{background:transparent;border:0;padding:0}
+/* ── 새 옷 공통 (11-10) ── 옛 화면의 첫 스타일 끝에 덧붙는다. 색 토큰을 새 값으로 다시 선언하고 배경 빛·버튼·판만 바꾼다. 글자·id·스크립트는 그대로 */
+:root{color-scheme:dark;--ink:#0A0A0B;--ink-2:#141416;--ink-3:#1A1A1D;--bone:#F2F0EB;--bone-2:#C9C7C2;--warm:#A3A39E;--line:#242426;--line-2:rgba(242,240,235,.16);--blue:#4F86F7;--brass:#4F86F7;--bad:#E07A6B}
+html{background:#0A0A0B}
+body{background:radial-gradient(900px 520px at 50% -120px,rgba(79,134,247,.20),transparent 70%) no-repeat,radial-gradient(600px 400px at 100% 30%,rgba(79,134,247,.07),transparent 70%) no-repeat,var(--ink)}
+::selection{background:rgba(79,134,247,.35)}
+.btn{border-radius:999px;background:var(--blue);color:#0A0A0B;box-shadow:0 8px 28px rgba(79,134,247,.32),inset 0 1px 0 rgba(255,255,255,.28);transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{background:#6B9CFF;transform:translateY(-1px)}
+.btn[disabled],.btn:disabled{opacity:.38;transform:none;box-shadow:none;cursor:default}
+.btn.line,.btn.sub,.btn.soon{background:transparent;color:var(--bone);border:1px solid var(--line-2);box-shadow:none}
+.btn.line:hover,.btn.sub:hover{background:rgba(242,240,235,.05);border-color:rgba(242,240,235,.36)}
+.card{border:1px solid var(--line-2);border-radius:20px;background:rgba(242,240,235,.03);box-shadow:inset 0 1px 0 rgba(242,240,235,.06),0 24px 64px rgba(0,0,0,.35)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=search],input[type=url],select,textarea{border-radius:14px}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(79,134,247,.16);outline:0}
+@media (prefers-reduced-motion:reduce){.btn,.btn:hover{transform:none}}
+/* 11-10 체크박스 한 벌 — 새 화면과 같은 꼴(얇은 테두리, 고르면 파랑) */
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;margin-top:2px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]:checked{background:var(--blue);border-color:var(--blue)}
+input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
+input[type=checkbox]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input[type=checkbox]:disabled{opacity:.4;cursor:default}
+/* ATC 묶음 — 시험 화면의 로그인 상자는 칸 규칙이 없어 이메일·비밀번호 칸이 글자 옆에 작게 눌렸다. 내 과정 화면(atc/my)과 같은 꼴로 맞춘다 */
+#authBox label{display:block;margin:12px 0 5px;font-size:.8125rem;color:var(--warm)}
+#authBox input[type=email],#authBox input[type=password],#authBox input[type=text]{width:100%;background:var(--ink);border:1px solid var(--line-2);border-radius:9px;color:var(--bone);padding:11px 13px;font:inherit}
+#authBox .btn{margin-top:16px;width:100%}
 </style>
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
 
-<header class="top">
-  <a class="logo" href="../../">허봇스<small>ATC LV1</small></a>
-  <nav>
-    <span id="who" class="who" hidden></span>
-    <a href="../">과정 안내</a>
-    <a href="../../me/">내 프로필</a>
-    <a href="#" id="logout" hidden>로그아웃</a>
-  </nav>
-</header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"><span id="who" class="who" hidden></span><a href="#" id="logout" hidden>로그아웃</a></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 
 <main>
   <div class="gate" id="gate">
@@ -425,18 +443,42 @@ textarea{resize:vertical;min-height:64px}
           + "외우셨으면 <b>위의 「뼈 16문항 시험 보기」</b>를 눌러 주세요. "
           + "<b>16문항 중 14개</b>를 맞히시면 이 과제가 <b>자동으로 완료</b>됩니다. 몇 번이든 다시 보실 수 있습니다." },
     { n: 3, why: "고칠 곳을 알려면 지금 위치를 알아야 합니다. 4주 뒤 다시 재서 나란히 볼 수 있습니다.",
-      t: "트레이너 점수 체크리스트", go: "강의 보기", lead: "강의(113분)를 보고 100문항 진단까지 하시면 됩니다", link: 1, note: 1,
-      href: "../../vod/", hrefT: "강의실에서 보기",
-      info: "강의실 → <b>ATC 트레이너 가이드 → 트레이너 점수 체크리스트</b><br>" +
-            "다 보셨으면 <a href='../../score/' target='_blank' rel='noopener'>100문항 진단</a>을 하고 <b>받은 점수</b>를 적어 주세요." },
+      t: "트레이너 점수 체크리스트", go: "진단하기", lead: "100문항 진단을 하고 받은 점수를 적어 주세요", note: 1,
+      href: "../../score/", hrefT: "100문항 진단 하러 가기",
+      form: ["받은 점수 — 100점 만점에 몇 점",
+             "가장 낮게 나온 영역과, 이번 4주에 채울 문항 하나"],
+      info: "강의는 보지 않으셔도 됩니다. 위의 <b>「100문항 진단 하러 가기」</b>로 끝까지 풀고 <b>받은 점수</b>를 아래에 적어 주세요.<br>" +
+            "한 문항 1점, 100점 만점입니다. 4주가 끝날 때 한 번 더 재 보시면 무엇이 바뀌었는지 바로 보입니다." },
     { n: 4, why: "연차가 쌓인다고 저절로 되지 않습니다. 연차마다 해야 할 일이 따로 있습니다.",
-      t: "연차별 체크리스트 LV1", go: "강의 보기", lead: "강의(20분)를 보고 정리 + 느낀 점을 남겨 주세요", note: 1,
-      href: "../../vod/", hrefT: "강의실에서 보기",
-      info: "강의실 → <b>ATC 연차별 체크리스트 나눠 보기 → LV1</b>" },
+      t: "연차별 체크리스트 — 준비생", go: "작성하기", lead: "준비생 단계 7칸에 지금 내 상태를 바로 적어 주세요", note: 1,
+      form: ["다이어트 경험 후 바디프로필 — 해 봤나요? 해 봤다면 언제, 아직이면 「아직」",
+             "생체자격증(보디빌딩) — 지금 있나요? 있음 · 준비 중 · 없음",
+             "트레이너 자격증 — 지금 있나요? 있다면 어느 과정",
+             "지인 운동 지도 경험 — 지인을 지도해 본 적이 있나요? 지금까지 누구를, 얼마나",
+             "피트니스 센터 인포데스크 업무경험 — 해 봤나요? 해 봤다면 어디서, 얼마나",
+             "꾸준한 자기관리 및 운동 — 지금 몸 관리와 운동을 어떻게 하고 있나요? 지금 그대로",
+             "+a 필요 자격사항 알아보기 — 더 따고 싶은 자격을 알아봤나요? 무엇을"],
+      info: "영상 없이 바로 답하는 칸입니다. <b>트레이너 준비생 단계</b> 7항목이고, 칸마다 <b>지금 내 상태</b>를 그대로 적어 주세요.<br>" +
+            "아직 안 한 것은 「아직」이라고 적고, 하고 싶으면 <b>이번 달 할 일</b>을 한 줄 덧붙여 주세요. 연차는 햇수가 아니라 <b>앞 단계를 다 넘었는가</b>로 봅니다. 모르는 칸은 비워 두셔도 완료됩니다." },
     { n: 5, why: "회원이 가장 많이 묻는 게 식단입니다. 직접 해 본 사람만 그 질문에 답할 수 있습니다.",
-      t: "식단 가이드 1주 적용", go: "강의 보기", lead: "강의(34분)를 보고 일주일 적용한 기록을 남겨 주세요", note: 1,
-      href: "../../vod/", hrefT: "강의실에서 보기",
-      info: "강의실 → <b>ATC 트레이너 가이드 → 트레이너 식단 가이드</b>" },
+      t: "식단 가이드 1주 적용", go: "작성하기", lead: "계산표대로 내 식단을 짜고 일주일 적용한 기록을 남겨 주세요", note: 1,
+      form: ["내 숫자 — 기초대사량 · 활동계수 · 총 대사량 · 목표 칼로리",
+             "하루 단백질 · 지방 · 탄수화물 그램과 물 몇 L",
+             "1~3일차 — 지킨 것과 못 지킨 것",
+             "4~7일차 — 지킨 것과 못 지킨 것",
+             "회원이 「식단 어떻게 해요?」 하면 이제 뭐라고 답할지 한 줄"],
+      info: "<b>식단 계산표 — 이 순서대로 적습니다</b><br>" +
+            "① 기초대사량 — 인바디 숫자 그대로<br>" +
+            "② 활동대사량 = 기초대사량 × 활동계수 · 거의 누워 지냄 0.2~0.4 · 출퇴근 정도 0.5~0.6 · 출퇴근 + 주 2~3회 운동 0.7~0.75 · 매일 운동(선수급) 0.8~1<br>" +
+            "③ 소화대사량 = (기초 + 활동) × 0.1 — 계산할 줄은 알되, <b>감량 식단에서는 변수 칼로리로 두고 뺍니다</b><br>" +
+            "④ 총 대사량 = 기초 + 활동 (감량 기준)<br>" +
+            "⑤ 목표 칼로리 = 총 대사량 − 300 × 한 달에 뺄 kg (한 달 1.5kg까지)<br>" +
+            "⑥ <b>⑤가 기초대사량보다 낮으면 기초대사량에 맞춥니다</b><br>" +
+            "⑦ 단백질 = 목표 체중 × 0.8(유지) · 1.5(근육 증가) · 2.2(선수형) g → × 4 = kcal<br>" +
+            "⑧ 지방 = 목표 칼로리 × 0.2 kcal → ÷ 9 = g<br>" +
+            "⑨ 탄수화물 = 목표 칼로리 − 단백질 − 지방 kcal → ÷ 4 = g<br>" +
+            "⑩ 물 = 체중 × 0.03 L<br><br>" +
+            "내 몸으로 계산해 <b>7일 동안 그대로 먹어 보고</b> 아래 칸에 적어 주세요. 신장·간 질환, 당뇨, 임신·수유 중이거나 복용 중인 약이 있으면 계산보다 병원 확인이 먼저입니다." },
     { n: 6, why: "내 환경을 모르면 남의 방법을 그대로 가져오게 됩니다. 나에게 맞는 방법을 찾아가세요.",
       t: "본인 알아가기(환경)", go: "작성하기", lead: "지금 내 환경을 적어 보는 과제입니다. 11가지",
       form: ["근무 형태 — 정직원 / 프리랜서·임대 / 1인샵·원장 중 하나",
@@ -758,10 +800,9 @@ textarea{resize:vertical;min-height:64px}
       left.length <= 2  ? left.join(" · ") + "만 더 하시면 됩니다." :
                           "다섯 관문 중 " + left.length + "개가 남았습니다. 오늘 세 개부터 채우시면 됩니다.";
     // 상호성 — 시작할 때 이미 받은 것을 한 번 세어 보여 준다
-    if (X && X.gift && X.gift.videos > 0) {
+    if (X && X.gift) {   // 11-06: 등록 때 주던 영상 열람권이 없어져 영상 수로 가리지 않는다
       $("#giftBox").hidden = false;
-      $("#giftBox").innerHTML = '이 과정에 들어오시면서 <b>강의 3편(약 ' + X.gift.minutes +
-        '분)</b>과 <b>실전해부학 자료</b>, <b>100문항 진단</b>이 함께 열렸습니다. 다 쓰고 가세요.';
+      $("#giftBox").innerHTML = '이 과정에 들어오시면서 <b>실전해부학 자료</b>, <b>100문항 진단</b>, <b>식단 계산표</b>가 함께 열렸습니다. 다 쓰고 가세요.';
     }
     // 남의 말 — 3일 이상 하신 분에게만 (처음부터 들이대지 않는다)
     if ((S.submitted_days || 0) >= 3) {
@@ -1113,5 +1154,8 @@ textarea{resize:vertical;min-height:64px}
   boot();
 })();
 </script>
+<footer class="hb-legal" style="max-width:1312px;margin:0 auto;padding:32px 16px 48px;border-top:1px solid #242426;font-family:&quot;Pretend&quot;,system-ui,sans-serif;font-size:13px;line-height:1.8;color:#A3A39E;word-break:keep-all">허봇스 · 대표 허재윤 · 사업자등록번호 636-04-03949 · 통신판매업 신고 면제(간이과세자)<br>
+강원특별자치도 원주시 혁신로 224, 612동 302호 · 010-8245-5022 · gjwodbs77@gmail.com · 호스팅 GitHub, Inc.<br>
+<a style="color:#C9C7C2" href="/policy/terms.html">이용약관</a> · <a style="color:#C9C7C2" href="/policy/privacy.html">개인정보 처리방침</a> · <a style="color:#C9C7C2" href="/policy/refund.html">환불 규정</a></footer>
 </body>
 </html>

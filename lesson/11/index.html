@@ -144,13 +144,78 @@ em{font-style:normal;color:var(--bone-2);font-weight:400}
   .tbl{font-size:.875rem}
   .tbl th,.tbl td{padding:10px 10px 10px 0}
 }
+/* ── 새 옷 공통 (11-10) ── 옛 화면의 첫 스타일 끝에 덧붙는다. 색 토큰을 새 값으로 다시 선언하고 배경 빛·버튼·판만 바꾼다. 글자·id·스크립트는 그대로 */
+:root{color-scheme:dark;--ink:#0A0A0B;--ink-2:#141416;--ink-3:#1A1A1D;--bone:#F2F0EB;--bone-2:#C9C7C2;--warm:#A3A39E;--line:#242426;--line-2:rgba(242,240,235,.16);--blue:#4F86F7;--brass:#4F86F7;--bad:#E07A6B}
+html{background:#0A0A0B}
+body{background:radial-gradient(900px 520px at 50% -120px,rgba(79,134,247,.20),transparent 70%) no-repeat,radial-gradient(600px 400px at 100% 30%,rgba(79,134,247,.07),transparent 70%) no-repeat,var(--ink)}
+::selection{background:rgba(79,134,247,.35)}
+.btn{border-radius:999px;background:var(--blue);color:#0A0A0B;box-shadow:0 8px 28px rgba(79,134,247,.32),inset 0 1px 0 rgba(255,255,255,.28);transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{background:#6B9CFF;transform:translateY(-1px)}
+.btn[disabled],.btn:disabled{opacity:.38;transform:none;box-shadow:none;cursor:default}
+.btn.line,.btn.sub,.btn.soon{background:transparent;color:var(--bone);border:1px solid var(--line-2);box-shadow:none}
+.btn.line:hover,.btn.sub:hover{background:rgba(242,240,235,.05);border-color:rgba(242,240,235,.36)}
+.card{border:1px solid var(--line-2);border-radius:20px;background:rgba(242,240,235,.03);box-shadow:inset 0 1px 0 rgba(242,240,235,.06),0 24px 64px rgba(0,0,0,.35)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=search],input[type=url],select,textarea{border-radius:14px}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(79,134,247,.16);outline:0}
+@media (prefers-reduced-motion:reduce){.btn,.btn:hover{transform:none}}
+/* 11-10 체크박스 한 벌 — 새 화면과 같은 꼴(얇은 테두리, 고르면 파랑) */
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;margin-top:2px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]:checked{background:var(--blue);border-color:var(--blue)}
+input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
+input[type=checkbox]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input[type=checkbox]:disabled{opacity:.4;cursor:default}
+/* 레슨 (11-10 시각 검토 19·20·21·24) — 글자는 그대로, 생김새만 */
+/* 머리표를 새 화면과 같은 꼴로(파란 점 + 본문 글꼴) */
+.eyebrow{display:flex;align-items:center;gap:8px;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--bone)}
+.eyebrow::before{content:"";flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 10px var(--blue)}
+/* 목록 12줄마다 붙던 「무료」 딱지는 뺀다 — 바로 위 안내에 「레슨 12편은 모두 무료」가 있다 */
+ol .free{display:none}
+/* 옛 꼬리말 한 줄은 숨긴다 — 같은 약관 링크가 아래 사업자 정보 블록에 있다 */
+footer.legal:not(#legal){display:none}
+/* 표: 기준선 칸·번호 칸이 두 줄로 꺾이지 않게 */
+.tbl .base,.tbl td.num{white-space:nowrap}
+.tbl td strong{word-break:keep-all}
+/* 11-10 레슨 잠금 — 문 두 개(가입 · 열쇠), 잠긴 동안 체크·관련 레슨 숨김 */
+.hb-lock{margin:40px 0 8px;padding:28px 24px;border:1px solid var(--line-2);border-radius:16px;background:linear-gradient(180deg,rgba(79,134,247,.08),rgba(255,255,255,.02));position:relative}
+.hb-lock::before{content:"";position:absolute;left:0;right:0;top:-72px;height:72px;background:linear-gradient(180deg,transparent,var(--bg,#0A0A0B));pointer-events:none}
+.hb-lock .hb-lt{margin:0;font-size:clamp(20px,2.4vw,24px);font-weight:800;color:var(--bone);word-break:keep-all}
+.hb-left{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px}
+.hb-left li{display:flex;gap:10px;align-items:flex-start;color:var(--bone-2);font-size:15px;line-height:1.5}
+.hb-left svg{flex:0 0 14px;margin-top:4px;color:var(--blue)}
+.hb-doors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.hb-door{margin:0;padding:20px;border-radius:12px;border:1px solid var(--line-2);background:rgba(10,10,11,.6);display:flex;flex-direction:column;gap:8px}
+.hb-door b{font-size:17px;color:var(--bone)}
+.hb-door p{margin:0;font-size:14px;line-height:1.6;color:var(--bone-2);word-break:keep-all}
+.hb-door2{border-color:rgba(79,134,247,.55)}
+.hb-join{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:12px;background:#FEE500;color:#191919;font-weight:800;font-size:16px;text-decoration:none}
+.hb-keyrow{display:flex;gap:8px;margin-top:auto}
+.hb-keyrow input{flex:1;min-width:0;min-height:52px;padding:0 14px;border-radius:12px;border:1px solid var(--line-2);background:#0A0A0B;color:var(--bone);font-size:20px;letter-spacing:.2em;font-family:inherit}
+.hb-keyrow input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.hb-keyrow button{min-height:52px;padding:0 20px;border-radius:12px;border:0;background:var(--blue);color:#fff;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit}
+.hb-err{color:#FF8A80 !important}
+.hb-wait{display:none;margin:0;color:var(--bone-2)}
+.hb-lock.wait>*{display:none}.hb-lock.wait>.hb-wait{display:block}.hb-lock.wait::before{display:none}
+.hb-lock[hidden]{display:none}
+body.hb-locked #check,body.hb-locked .rel{display:none}
+@media (max-width:720px){.hb-doors{grid-template-columns:1fr}.hb-lock{padding:24px 16px}}
+/* 목록: 줄마다 열림·자물쇠 */
+ol a .hb-st{justify-self:end;align-self:center;color:var(--bone-2);font-size:12px;font-weight:700;display:inline-flex;align-items:center}
+ol a .hb-st.on{color:var(--blue)}
+.hb-all{margin:24px 0 0;text-align:center}
+.hb-all .btn{min-height:52px}
+.hb-all[hidden]{display:none}
+@media (max-width:420px){ol a .hb-st{grid-column:2;justify-self:start;margin-top:-4px}}
+.hb-doors{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hb-door{min-width:0}
+.hb-join{text-align:center;padding:0 16px;line-height:1.35}
+.hb-keyrow input:placeholder-shown{letter-spacing:0;font-size:16px}
+@media (max-width:720px){.hb-doors{grid-template-columns:minmax(0,1fr)}}
 </style>
+<style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(10,10,11,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #242426;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#ABABA6;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#ABABA6}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav .hb-wide{display:none}.hb-bar nav a.hb-me{padding:0 12px}.hb-bar .hb-keep{display:none}}</style>
 </head>
 <body>
-<header class="top">
-  <a class="logo" href="/">허봇스<small>HEOBOTSS</small></a>
-  <a class="home" href="/lesson/">레슨 전체</a>
-</header>
+<header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header>
 
 <main>
   <div class="lesson-band" aria-label="레슨 11 / 12">
@@ -175,42 +240,18 @@ em{font-style:normal;color:var(--bone-2);font-weight:400}
 <tr><td>③ 등록</td><td>체험 <span class="arrow">→</span> 등록 횟수</td><td>왔는데 안 남는다</td></tr>
 </tbody></table></div>
 <p>「상위 노출은 되는데 문의가 없다」는 ①은 있는데 ②가 비어 있는 상태예요. 이때 할 일은 노출을 더 늘리는 게 아니라 ②를 채우는 겁니다.</p>
-<h2><span class="n">02</span>문의가 생기는 글과 안 생기는 글</h2>
-<p>8일에 문의 8건을 받은 선생님이 쓴 글은 운동 방법 글이 아니었어요. 「등 운동 하는 법」 「스쿼트 자세」 같은 글은 읽는 사람이 「아, 그렇구나」 하고 끝납니다. 그 선생님이 쓴 건 회원 수업 기록이었어요. 오늘 이 회원을 어떤 생각으로 운동시켰는지, 어떤 운동을 했는지, 회원이 뭐라고 했는지.</p>
-<div class="tbl-wrap"><table class="tbl">
-<thead><tr><th>운동 방법 글</th><th>회원 수업 기록 글</th></tr></thead>
-<tbody>
-<tr><td>「스쿼트는 이렇게」</td><td>「허리 아프다던 회원과 오늘 한 것」</td></tr>
-<tr><td>읽고 나서: 「그렇구나」</td><td>읽고 나서: 「나도 이렇게 운동하겠구나」</td></tr>
-<tr><td>비교 대상: 유튜브 전체</td><td>비교 대상: 이 동네 트레이너</td></tr>
-<tr><td>문의로 안 이어진다</td><td>「상담 가능한가요」로 이어진다</td></tr>
-</tbody></table></div>
-<p>차이는 읽는 사람이 자기를 대입하느냐예요. 수업 기록 글은 잠재 회원이 「내가 받으면 이런 식이겠구나」를 상상하게 만들고, 그 상상이 문의가 됩니다. 그리고 <a class="xref" href="/lesson/5/">레슨 5</a>에서 말한 수업일지가 있으면 이 글의 재료가 매 수업 쌓여요. 기록이 곧 글감입니다.</p>
-<aside class="point"><small>여기서 하나만</small><p>노출은 「나를 찾게」 하고, 수업 기록은 「나를 상상하게」 합니다. 문의는 두 번째에서 나와요.</p></aside>
-<h2><span class="n">03</span>세 곳이 같은 사람으로 보여야 등록까지 갑니다</h2>
-<p>문의가 왔다고 끝이 아니죠. ③등록까지 가려면 하나 더 있어요. 요즘 회원은 한 곳만 보고 등록하지 않습니다. 블로그를 보고 괜찮았는데 리뷰를 보니 내 이름이 없어서 빠져나가고, 리뷰는 좋은데 인스타에 사생활만 있어서 빠져나가요. PT는 비싼 상품이라 더 그렇습니다.</p>
-<div class="tbl-wrap"><table class="tbl">
-<thead><tr><th>곳</th><th>순서</th><th>거기서 보여야 할 것</th></tr></thead>
-<tbody>
-<tr><td>네이버 블로그</td><td>1순위</td><td>회원 수업 기록. 지역 사람이 검색해서 찾는 곳</td></tr>
-<tr><td>네이버 리뷰</td><td>2순위</td><td>트레이너 이름, 같이 찍은 사진, 좋아진 점. 결정 직전에 보는 곳</td></tr>
-<tr><td>인스타그램</td><td>3순위</td><td>한눈에 트레이너로 보이는 프로필, 하이라이트(자격·리뷰·회원 운동), 사생활 없음</td></tr>
-</tbody></table></div>
-<p>세 곳에서 같은 트레이너가 보여야 「이 사람이면 되겠다」가 됩니다. 인스타부터 시작하는 분이 많은데 순서는 반대예요. 지금 등록할 사람은 네이버에서 검색하고 있거든요. 그리고 글이든 게시물이든 끝에 「상담 예약」 「DM 문의」 같은 행동 문구를 꼭 넣으세요. 운동이 필요한 사람에게 운동하라고 말하는 건 장사가 아니라 할 일입니다.</p>
-<p>이 세 곳의 「노출법」 자체는 이 레슨 범위가 아니에요. 이 글은 셋이 이어지는 구조까지고, 트레이너 점수 체크리스트에 블로그·리뷰·인스타 문항이 따로 있으니 선생님이 몇 개나 「예」인지 먼저 보세요. 캡처 속 두 선생님이 채운 칸이 거기 있습니다.</p>
-<h2><span class="n">04</span>그 선생님이 한 순서</h2>
-<div class="tbl-wrap"><table class="tbl">
-<thead><tr><th>순서</th><th>한 것</th><th>결과(캡처)</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>수업 기록 글을 19일 동안 29편</td><td>27편 상위, 유입 94 <span class="arrow">→</span> 436</td></tr>
-<tr><td>2</td><td>글 끝에 체험 문의 문구, 리뷰에 이름</td><td>평일 8일 동안 체험 문의 8건</td></tr>
-<tr><td>3</td><td>체험 온 회원을 수업으로 (다른 선생님)</td><td>30회 등록</td></tr>
-</tbody></table></div>
-<p>세 줄을 한 사람이 다 한 게 아니에요. ①②는 같은 선생님이고 ③은 다른 선생님입니다. 그래도 순서는 같아요. 노출 <span class="arrow">→</span> 문의 <span class="arrow">→</span> 등록. 그리고 ③은 결국 <a class="xref" href="/lesson/2/">레슨 2</a>부터 <a class="xref" href="/lesson/10/">레슨 10</a>까지가 하는 일이에요. 온라인은 사람을 데려오고, 남기는 건 수업 안팎의 시스템입니다.</p>
-<h2><span class="n">05</span>제일 큰 감사</h2>
-<p>선생님들이 저한테 배운 걸로 잘됐다는 연락을 주실 때. 그때가 제일 큰 감사와 감동입니다. 그리고 알려드린 대로 잘 따라오시는 모습을 볼 때도 그래요. 제가 따라오시길 바라는 이유는 하나입니다. 그렇게 해야 선생님들의 행복과 성과가 빠르게 따라오니까요. 그걸 원해서 그러는 거예요.</p>
-<p>이 캡처 세 장이 그 연락이었습니다. 숫자만 올리고 계정은 가렸어요. 선생님 것도 언젠가 이렇게 올릴 수 있으면 좋겠습니다.</p>
+<div id="hbTail"></div>
   </article>
+<section class="hb-lock wait" id="hbLock" data-n="11">
+<p class="hb-lt">여기부터는 무료 열쇠로 열립니다</p>
+<ul class="hb-left"><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>02 문의가 생기는 글과 안 생기는 글</span></li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>03 세 곳이 같은 사람으로 보여야 등록까지 갑니다</span></li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>04 그 선생님이 한 순서</span></li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>05 제일 큰 감사</span></li><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>읽고 나서 바로 — 「선생님은?」 체크</span></li></ul>
+<div class="hb-doors">
+<div class="hb-door hb-door2"><b>12편 전부 열기</b><p>카카오로 무료 가입하면 레슨 12편이 한 번에 열립니다. 이미 가입했다면 같은 버튼으로 로그인됩니다.</p><a class="hb-join" href="/join/?next=/lesson/11/">카카오로 무료 가입하고 열기</a></div>
+<form class="hb-door hb-door1" id="hbKeyForm"><b>이 편만 열기</b><p class="hb-d1">릴스 댓글로 받은 DM 속 열쇠 6자리가 있으면 넣어 주세요</p><div class="hb-keyrow"><input id="hbKey" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="열쇠 6자리" aria-label="열쇠 6자리"><button type="submit">열기</button></div><p class="hb-err" id="hbErr" role="alert" hidden></p></form>
+</div>
+<p class="hb-wait">여는 중…</p>
+</section>
+
 
   <section class="check" id="check">
     <h2><small>읽고 나서 바로</small>선생님은?</h2>
@@ -234,8 +275,8 @@ em{font-style:normal;color:var(--bone-2);font-weight:400}
   </div>
 
   <section class="member">
-    <small>HEOBOTSS MEMBERSHIP</small>
-    <b>레슨 12편은 모두 무료입니다 · 로그인 없이 읽습니다</b>
+    <small>허봇스 멤버십</small>
+    <b>레슨 12편은 모두 무료입니다 · 가입하면 한 번에 열립니다</b>
     <p>멤버십에는 트레이너 프로그램 · 영상 강의 · 모의고사 문제지 · ATC 4주 챌린지가 들어 있습니다 — 회원관리·창업 강의는 결제하면 바로, 나머지는 후기를 인스타 스토리에 올릴 때마다 한 묶음씩 열립니다</p>
     <div class="price">9,900<i>원 / 월</i></div>
     <p class="bridge">지금 당장 고쳐야 하면 — <a href="/#/vod"><b>온라인 강의</b></a>에서 순서대로 고쳐 보세요. 센터 쪽은 <a href="/center/">센터 진단표(무료)</a>부터 받아 보셔도 됩니다.</p>
@@ -249,6 +290,49 @@ em{font-style:normal;color:var(--bone-2);font-weight:400}
 </main>
 
 <script src="/t.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/vod/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var box = document.getElementById("hbLock"); if (!box) return;
+  var N = +box.getAttribute("data-n"), tail = document.getElementById("hbTail");
+  var q = new URLSearchParams(location.search), k = q.get("k"), r = q.get("r") || q.get("utm_medium") || null, saved = null;
+  if (k) { q.delete("k"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash); }
+  try { saved = localStorage.getItem("hb-lk-" + N); } catch (e) {}
+  function show(lock) { box.classList.remove("wait"); document.body.classList.toggle("hb-locked", lock); box.hidden = !lock; }
+  function err(t) { var e = document.getElementById("hbErr"); e.textContent = t; e.hidden = !t; }
+  async function open(key, typed) {
+    if (!window.HB) { show(true); if (typed) err("잠시 문제가 생겼습니다. 새로고침해 주세요."); return false; }
+    var res = await window.HB.sb.rpc("lesson_open", { p_n: N, p_key: key || null, p_r: r });
+    var d = res.data || {};
+    if (res.error || !d.ok) {
+      show(true);
+      if (typed) err(d.why === "busy" ? "잠시 뒤 다시 넣어 주세요." : d.why === "key" ? "열쇠가 맞지 않습니다. DM에 온 숫자 6자리를 다시 확인해 주세요." : "잠시 문제가 생겼습니다. 새로고침해 주세요.");
+      if (key && key === saved) { try { localStorage.removeItem("hb-lk-" + N); } catch (e) {} }
+      return false;
+    }
+    tail.innerHTML = d.body; show(false);
+    try {
+      if (d.via === "key") localStorage.setItem("hb-lk-" + N, key);
+      var o = JSON.parse(localStorage.getItem("hb-lopen") || "[]"); if (o.indexOf(N) < 0) { o.push(N); localStorage.setItem("hb-lopen", JSON.stringify(o)); }
+    } catch (e) {}
+    if (window.HBT) HBT.event("view", "lesson-open:" + N + ":" + d.via);
+    return true;
+  }
+  document.getElementById("hbKeyForm").addEventListener("submit", function (ev) {
+    ev.preventDefault(); err("");
+    var v = (document.getElementById("hbKey").value || "").replace(/\D/g, "");
+    if (v.length !== 6) { err("열쇠는 숫자 6자리입니다."); return; }
+    open(v, true);
+  });
+  (async function () {
+    var s = window.HB ? await window.HB.session() : null;
+    if (s || k || saved) { if (await open(k || saved, !!k)) return; }
+    show(true);
+  })();
+})();
+</script>
 <script>
 (function(){
   "use strict";
@@ -268,5 +352,8 @@ em{font-style:normal;color:var(--bone-2);font-weight:400}
   });
 })();
 </script>
+<footer class="hb-legal" style="max-width:1312px;margin:0 auto;padding:32px 16px 48px;border-top:1px solid #242426;font-family:&quot;Pretend&quot;,system-ui,sans-serif;font-size:13px;line-height:1.8;color:#A3A39E;word-break:keep-all">허봇스 · 대표 허재윤 · 사업자등록번호 636-04-03949 · 통신판매업 신고 면제(간이과세자)<br>
+강원특별자치도 원주시 혁신로 224, 612동 302호 · 010-8245-5022 · gjwodbs77@gmail.com · 호스팅 GitHub, Inc.<br>
+<a style="color:#C9C7C2" href="/policy/terms.html">이용약관</a> · <a style="color:#C9C7C2" href="/policy/privacy.html">개인정보 처리방침</a> · <a style="color:#C9C7C2" href="/policy/refund.html">환불 규정</a></footer>
 </body>
 </html>

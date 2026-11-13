@@ -962,7 +962,7 @@ const 교육인원 = '';
       total = 0;
       cells.forEach((c, i) => {
         const r = c.getBoundingClientRect(), n = c.querySelector('.n').getBoundingClientRect(), s = segs[i];
-        if (horiz) { const y = n.top - tr.top + n.height / 2; s.a = [r.left - tr.left + 8, y]; s.b = [r.right - tr.left - 8, y]; }
+        if (horiz) { const y = n.top - tr.top + n.height / 2; const ne = (c.querySelector('.n em') || c.querySelector('.n')).getBoundingClientRect(); s.a = [Math.min(ne.right - tr.left + 24, r.right - tr.left - 40), y]; s.b = [r.right - tr.left - 8, y]; }
         else { const x = -16; s.a = [x, r.top - tr.top + 8]; s.b = [x, r.bottom - tr.top - 8]; }
         s.len = Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]); total += s.len;
         const d = 'M' + s.a[0].toFixed(1) + ',' + s.a[1].toFixed(1) + 'L' + s.b[0].toFixed(1) + ',' + s.b[1].toFixed(1);
@@ -1238,7 +1238,7 @@ const 교육인원 = '';
   })();
 
   /* ── 센터 준비 중 도구 3개: 김 서린 유리 ── */
-  if (FX) document.querySelectorAll('.tri .card').forEach((card, idx) => {
+  if (FX) document.querySelectorAll('.tri[data-fog] .card').forEach((card, idx) => {
     const cv = document.createElement('canvas'); cv.className = 'fog'; cv.setAttribute('aria-hidden', 'true'); card.classList.add('fogged'); card.append(cv);
     const x = cv.getContext('2d'); let W = 0, Hh = 0, wiped = 0, auto = null;
     function paintFog() {

@@ -22,3 +22,33 @@ th{color:var(--bone);background:var(--ink-2);font-weight:700;white-space:nowrap}
 .box{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
 .legal{margin-top:34px;font-size:12px;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
 .legal a{color:var(--warm)}
+/* ── 새 옷 공통 (11-10) ── 옛 화면의 첫 스타일 끝에 덧붙는다. 색 토큰을 새 값으로 다시 선언하고 배경 빛·버튼·판만 바꾼다. 글자·id·스크립트는 그대로 */
+:root{color-scheme:dark;--ink:#0A0A0B;--ink-2:#141416;--ink-3:#1A1A1D;--bone:#F2F0EB;--bone-2:#C9C7C2;--warm:#A3A39E;--line:#242426;--line-2:rgba(242,240,235,.16);--blue:#4F86F7;--brass:#4F86F7;--bad:#E07A6B}
+html{background:#0A0A0B}
+body{background:radial-gradient(900px 520px at 50% -120px,rgba(79,134,247,.20),transparent 70%) no-repeat,radial-gradient(600px 400px at 100% 30%,rgba(79,134,247,.07),transparent 70%) no-repeat,var(--ink)}
+::selection{background:rgba(79,134,247,.35)}
+.btn{border-radius:999px;background:var(--blue);color:#0A0A0B;box-shadow:0 8px 28px rgba(79,134,247,.32),inset 0 1px 0 rgba(255,255,255,.28);transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{background:#6B9CFF;transform:translateY(-1px)}
+.btn[disabled],.btn:disabled{opacity:.38;transform:none;box-shadow:none;cursor:default}
+.btn.line,.btn.sub,.btn.soon{background:transparent;color:var(--bone);border:1px solid var(--line-2);box-shadow:none}
+.btn.line:hover,.btn.sub:hover{background:rgba(242,240,235,.05);border-color:rgba(242,240,235,.36)}
+.card{border:1px solid var(--line-2);border-radius:20px;background:rgba(242,240,235,.03);box-shadow:inset 0 1px 0 rgba(242,240,235,.06),0 24px 64px rgba(0,0,0,.35)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=search],input[type=url],select,textarea{border-radius:14px}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(79,134,247,.16);outline:0}
+@media (prefers-reduced-motion:reduce){.btn,.btn:hover{transform:none}}
+/* 11-10 체크박스 한 벌 — 새 화면과 같은 꼴(얇은 테두리, 고르면 파랑) */
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;margin-top:2px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]:checked{background:var(--blue);border-color:var(--blue)}
+input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
+input[type=checkbox]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input[type=checkbox]:disabled{opacity:.4;cursor:default}
+/* 약관 세 쪽 — 폰에서 표가 화면 밖으로 밀리지 않게(글자는 그대로) */
+@media (max-width:640px){html,body{overflow-x:clip}table{table-layout:fixed}th,td{overflow-wrap:anywhere;word-break:break-all;padding-left:8px;padding-right:8px}}
+/* 11-10 약관 세 쪽 생김새(문구·순서는 한 글자도 안 바꿈) — 제목을 사이트 크기로, 표는 둥근 틀에 가로줄만 */
+h1{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.03em;margin:0 0 12px}
+.date{padding-bottom:20px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+table{border-collapse:separate;border-spacing:0;border:1px solid var(--line-2);border-radius:16px;overflow:hidden;margin:16px 0}
+td,th{border:0;border-bottom:1px solid var(--line);padding:12px 14px}
+tr:last-child>td{border-bottom:0}
+th{background:rgba(242,240,235,.04)}
