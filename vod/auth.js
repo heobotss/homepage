@@ -5,6 +5,14 @@
   var SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
   var SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";
   var sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, storageKey: "hb-auth" } });
+  /* 11-13 로그아웃은 이 기기만, 그리고 반드시 된다 — 서버에서 이미 끊긴 로그인(다른 기기에서 로그아웃 등)은 서버가 403 을 돌려줘
+     기본 signOut 이 이 기기의 로그인 정보를 안 지웠다(단추를 눌러도 그대로). 서버 답과 상관없이 이 기기 것을 지운다 */
+  var _signOut = sb.auth.signOut.bind(sb.auth);
+  sb.auth.signOut = async function (o) {
+    try { await _signOut(Object.assign({ scope: "local" }, o || {})); } catch (e) {}
+    try { localStorage.removeItem("hb-auth"); } catch (e) {}
+    return { error: null };
+  };
 
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
