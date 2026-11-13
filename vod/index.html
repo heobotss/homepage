@@ -40,6 +40,9 @@ h2.sec::before{content:"";width:6px;height:6px;border-radius:50%;background:var(
 .player .mark{position:absolute;left:8%;top:12%;pointer-events:none;user-select:none;font-size:clamp(11px,1.4vw,15px);color:rgba(255,255,255,.28);text-shadow:0 0 2px rgba(0,0,0,.6);white-space:nowrap;transition:left 1.2s ease,top 1.2s ease}
 .player .fs{position:absolute;right:12px;top:12px;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:inherit;font-size:13px;padding:8px 14px;cursor:pointer;opacity:.8;backdrop-filter:blur(6px)}
 .player .fs:hover{opacity:1}
+.player .pstart{position:absolute;inset:0;margin:auto;width:fit-content;height:fit-content;display:flex;align-items:center;gap:12px;border:0;border-radius:999px;background:var(--blue,#4F86F7);color:#fff;font:inherit;font-size:18px;font-weight:800;padding:16px 28px 16px 24px;cursor:pointer;box-shadow:0 10px 40px rgba(79,134,247,.45)}
+.player .pstart[hidden]{display:none}
+.player .pstart i{width:0;height:0;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent}
 .player:fullscreen{max-height:none;border-radius:0;border:0}
 .ptitle{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:20px 0 4px}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 12px}
@@ -230,7 +233,7 @@ function openCourse(id, want){
   var wv = want ? vids.filter(function(v){ return v.title === want; })[0] : null;
   state.coll = wv ? wv.collection : colls[0];
   var h = whoBar() + '<a href="#" class="back" id="toHome">← 내 강의</a>';
-  h += '<div class="player" id="player"><video id="vid" controls playsinline controlslist="nodownload nofullscreen" disablepictureinpicture></video><span class="mark" id="mark"></span><button class="fs" id="fs" type="button">전체화면</button></div>';
+  h += '<div class="player" id="player"><video id="vid" controls playsinline controlslist="nodownload nofullscreen" disablepictureinpicture></video><span class="mark" id="mark"></span><button class="fs" id="fs" type="button">전체화면</button><button class="pstart" id="pstart" type="button" hidden><i aria-hidden="true"></i><span>재생</span></button></div>';
   h += '<p class="ptitle" id="ptitle">'+esc(c.name)+'</p><p class="muted" id="pmsg">목록에서 영상을 고르세요 · '+ymd(state.access[id])+'까지</p>';
   if (colls.length>1) h += '<div class="tabs" id="tabs">'+colls.map(function(n,i){ return '<button data-k="'+esc(n)+'" class="'+(n===state.coll?'on':'')+'">'+esc(label(n))+'</button>'; }).join("")+'</div>';
   else h += '<div style="height:18px"></div>';
@@ -248,7 +251,14 @@ function openCourse(id, want){
   drawList();
   if (!wv && state.part[id]) { wv = vids.filter(canPlay)[0] || null; if (wv) { state.coll = wv.collection; if (tabs) tabs.querySelectorAll("button").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-k")===state.coll); }); drawList(); } }
   var first = wv || vids.filter(function(v){ return v.collection===state.coll; })[0];
-  if (first) play(first.id, false);
+  if (first) ready(first);
+}
+/* 11-13 강의를 열기만 해서는 재생 주소를 받지 않는다 — vod-play 가 부를 때마다 재생으로 기록하고, 환불 계산이 그 기록을 본다.
+   재생 단추(또는 목록)를 눌렀을 때만 부른다 */
+function ready(v){
+  stopPlayer(); state.videoId = v.id; drawList();
+  document.getElementById("ptitle").textContent = v.title;
+  var b = document.getElementById("pstart"); b.hidden = false; b.onclick = function(){ play(v.id, true); };
 }
 function label(n){
   if (/나눠 보기/.test(n)) return "연차별로 나눠 보기";
@@ -272,6 +282,7 @@ async function play(videoId, auto){
   stopPlayer(); state.videoId = videoId; drawList();
   var msg = document.getElementById("pmsg"), video = document.getElementById("vid");
   msg.textContent = "영상 준비 중…";
+  var ps = document.getElementById("pstart"); if (ps) ps.hidden = true;
   var r = await authed(FN + "vod-play", { videoId: videoId });
   var d = await r.json().catch(function(){ return {}; });
   if (!d.ok) { msg.textContent = d.message || "재생할 수 없습니다"; return; }
