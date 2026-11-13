@@ -1356,3 +1356,6 @@ const 교육인원 = '';
     if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(() => toast('복사됐어요 — 단톡방이나 카톡에 붙여 넣으세요'));
   }));
 })();
+
+/* 11-13 로그인돼 있으면 메뉴바 「로그인」을 「내 강의실」로 (계정 세션은 hb-auth 에 있다 · 주소는 같은 /vod/) */
+(function(){function f(){try{if(!localStorage.getItem("hb-auth"))return;var a=document.querySelector('a.me[href="/vod/"]');if(a)a.textContent="내 강의실";}catch(e){}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f();})();
