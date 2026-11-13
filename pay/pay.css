@@ -126,3 +126,10 @@ input[type=checkbox]:checked{background:#4F86F7;border-color:#4F86F7}
 input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
 input[type=checkbox]:disabled{opacity:.4;cursor:default}
 input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
+/* 11-13 대표님 「환불 규정 보기 밑에 동의가 있어 환불 내용처럼 보인다」 — 접기는 접기답게(▸ 열고 닫기), 동의 칸은 선으로 따로 떼어 「결제 전 동의」로 보이게. 글자·id·순서는 그대로 */
+.refund summary{list-style:none;gap:8px;color:var(--bone-2);text-decoration:underline;text-underline-offset:3px}
+.refund summary::-webkit-details-marker{display:none}
+.refund summary::before{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .2s;flex:none;margin-right:2px}
+.refund[open] summary::before{transform:rotate(45deg)}
+.refund{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px}
+.refund+.agree{margin-top:20px}
