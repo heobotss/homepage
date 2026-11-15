@@ -263,6 +263,8 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
         if (v.phone) $("#phone").value = v.phone;
       } catch (e) {}
       await 창고에(s.user.email, "kakao");
+      /* 11-15 가입 기록 — 어느 링크로 온 사람이 가입까지 갔는지 (개인정보 없음) */
+      try { if (window.HBT && Date.now() - new Date(s.user.created_at).getTime() < 6e5) HBT.event("join", "join:kakao"); } catch (e) {}   /* 방금 만든 계정만 — 다시 로그인은 세지 않는다 */
       /* 프로필 화면으로 끌고 가지 않는다 — 「또 가입하라는 건가」 싶어진다.
          원래 가려던 곳(?next=)이 있으면 거기로, 없으면 첫 화면으로 보낸다. */
       var 갈곳 = "../";
@@ -288,6 +290,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
         if (r2.error) throw r2.error;
       }
       await 창고에(email, "email");
+      try { if (window.HBT) HBT.event("join", "join:email"); } catch (e) {}
       $("#box").hidden = true; $("#done").hidden = false;
     } catch (err) {
       msg.textContent = window.HB.kr(err);
