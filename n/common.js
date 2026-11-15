@@ -971,6 +971,9 @@ const 교육인원 = '';
       travel = horiz ? Math.max(0, tr.right - innerWidth + parseFloat(getComputedStyle(root).getPropertyValue('--gut'))) : 0;
     }
     function at(p) {
+      if (!segs.length) return;
+      if (!segs[0].a) layout();   /* 11-15 주소 끝 #자리로 바로 들어오면 자리 계산 전에 불려 오류 → 아래 신청 칸까지 죽었다 */
+      if (!segs[0].a) return;
       let L = p * total, px = segs[0].a[0], py = segs[0].a[1];
       segs.forEach((s, i) => {
         const k = clamp(L / Math.max(1, s.len), 0, 1);
