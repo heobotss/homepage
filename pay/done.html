@@ -87,7 +87,7 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
         const g1 = document.createElement("a"); g1.className = "btn"; g1.href = "../vod/"; g1.textContent = "강의실 열기"; g1.style.marginBottom = "12px";
         const g2 = document.createElement("a"); g2.className = "btn line"; g2.href = "../me/tools/"; g2.textContent = "프로그램 쓰기";
         const rc = $("#receipt"); rc.parentNode.insertBefore(g1, rc); rc.parentNode.insertBefore(g2, rc);
-        if (!d0.resumed) { try { window.HBT && HBT.event("paid", "pay:" + subId); } catch (e) {} }
+        if (!d0.resumed) { try { window.HBT && HBT.event("paid", "pay:" + subId + (d0.orderId ? ":" + d0.orderId : ""));   /* 11-16 주문번호를 같이 남긴다 — 어느 링크가 결제를 데려왔는지 잇는 용도 */ } catch (e) {} }
       }
       history.replaceState(null, "", location.pathname);
       return show("ok");
@@ -151,7 +151,7 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
     if (waiting && o.virtualAccount) rows.push(["입금 계좌", (o.virtualAccount.bankCode || "") + " " + (o.virtualAccount.accountNumber || "") + "<br>예금주 " + (o.virtualAccount.customerName || "") + " · 기한 " + kst(o.virtualAccount.dueDate)]);
     $("#kv").innerHTML = rows.map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
     if (o.receiptUrl) { $("#receipt").href = o.receiptUrl; $("#receipt").hidden = false; }
-    try { window.HBT && HBT.event("paid", "pay:" + (o.productId || "")); } catch (e) {}
+    try { window.HBT && HBT.event("paid", "pay:" + (o.productId || "") + ":" + (o.orderId || orderId));   /* 11-16 주문번호 같이 */ } catch (e) {}
     sessionStorage.removeItem("hb_order");
     history.replaceState(null, "", location.pathname);   // 새로고침해도 승인 요청이 다시 안 가게
     show("ok");
