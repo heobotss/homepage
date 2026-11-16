@@ -297,7 +297,7 @@
     var id = location.hash.slice(1);
     var d = 도구.filter(function (x) { return x.id === id; })[0];
     if (d && d.그림) {
-      if (!쓸수있나(d)) { 그리기(머리(d.이름, d.층 === "center" ? "센터 플랜에서 씁니다." : "멤버십에서 씁니다.") + '<p><a href="/#/price">플랜 보기</a></p>'); return; }
+      if (!쓸수있나(d)) { 그리기(머리(d.이름, d.층 === "center" ? "센터 플랜에서 씁니다." : "멤버십에서 씁니다.") + '<p><a href="/plan/">플랜 보기</a></p>'); return; }
       d.그림(); return;
     }
     목록();
@@ -306,7 +306,7 @@
   HB.session().then(function (s) {
     나 = s && s.user;
     if (!나) {
-      그리기('<h1>내 프로그램</h1><p class="lead">수업일지·강의실과 같은 계정으로 들어옵니다.</p><div id="authBox" class="card"></div>');
+      그리기('<h1>내 프로그램</h1><p class="lead">수업일지·강의실과 같은 계정으로 들어옵니다.</p><div id="authBox"></div>');
       HB.mountAuth(document.getElementById("authBox"), function () { location.reload(); }, {});
       return;
     }

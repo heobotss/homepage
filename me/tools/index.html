@@ -40,6 +40,7 @@ small.why{display:block;color:var(--warm);margin:-2px 0 6px}
 input,textarea,select{width:100%;background:var(--ink-3);border:1px solid var(--line);border-radius:8px;padding:11px 12px}
 button.go{margin-top:16px;background:var(--bone);color:#0A0A0A;border:0;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer}
 button.go:disabled{opacity:.5;cursor:default}
+.auth .btn{display:block;width:100%;margin-top:8px;padding:15px 18px;border:0;font-weight:700;font-size:1.0625rem;cursor:pointer}   /* 11-16 로그인 단추가 작은 덩어리로 보이던 것 */
 button.sub{margin-top:16px;background:none;border:1px solid var(--line);border-radius:8px;padding:11px 16px;cursor:pointer}
 .msg{margin-top:12px;color:var(--bad);font-size:.9375rem}
 .msg.ok{color:var(--good)}
@@ -85,7 +86,7 @@ footer:not(.hb-legal){display:none}
 <body>
 <header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header><script>try{if(localStorage.getItem("hb-auth"))document.querySelector(".hb-bar .hb-me").textContent="내 강의실"}catch(e){}</script>
 <main id="app"><p class="lead">불러오는 중입니다.</p></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
 <script src="../../vod/auth.js"></script>
 <script src="도구.js"></script>
 <footer class="hb-legal" style="max-width:1312px;margin:0 auto;padding:32px 16px 48px;border-top:1px solid #242426;font-family:&quot;Pretend&quot;,system-ui,sans-serif;font-size:13px;line-height:1.8;color:#A3A39E;word-break:keep-all">허봇스 · 대표 허재윤 · 사업자등록번호 636-04-03949 · 통신판매업 신고 면제(간이과세자)<br>

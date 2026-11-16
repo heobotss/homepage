@@ -43,6 +43,7 @@
       '<div id="aName" hidden><label for="aNm">이름</label><input type="text" id="aNm" autocomplete="name" placeholder="실명"></div>' +
       '<label for="aEm">이메일</label><input type="email" id="aEm" autocomplete="email" placeholder="you@example.com">' +
       '<div id="aPwWrap"><label for="aPw">비밀번호</label><input type="password" id="aPw" autocomplete="current-password" placeholder="6자 이상"></div>' +
+      '<p class="note" id="aAg" hidden style="margin:8px 0 0;font-size:.8125rem">가입하시면 <a href="/policy/terms.html" target="_blank" rel="noopener">이용약관</a>과 <a href="/policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>에 동의하신 것으로 봅니다 · 만 14세 이상만 가입할 수 있습니다</p>' +   /* 11-16 이메일 가입에 동의 안내가 없던 것 */
       '<p class="msg" id="aMsg"></p>' +
       '<button class="btn" id="aGo" type="button">로그인</button>' +
       '<p class="note" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap">' +
@@ -53,6 +54,7 @@
     function set(m) {
       mode = m;
       $("aName").hidden = m !== "signup";
+      $("aAg").hidden = m !== "signup";
       $("aPwWrap").hidden = m === "forgot";
       $("aT").textContent = m === "signup" ? "가입하기" : m === "forgot" ? "비밀번호 찾기" : "로그인";
       $("aGo").textContent = m === "signup" ? "가입하고 시작하기" : m === "forgot" ? "재설정 메일 받기" : "로그인";

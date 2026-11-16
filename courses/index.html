@@ -55,7 +55,7 @@
       <p class="lab">트레이너 시스템 강의</p>
       <h3>4T 트레이너 시스템</h3>
       <p class="p numf">249,000<em>원</em></p>
-      <ul class="inlist"><li>회원관리 4편 · 세일즈 5편 · 운동지도 6편</li><li>재등록·상담·인바디·OT부터 평가·티칭까지</li><li>15편 · 1시간 53분</li></ul>
+      <ul class="inlist"><li>회원관리 4편 · 세일즈 5편 · 운동지도 6편</li><li>재등록·상담·인바디·OT부터 평가·티칭까지</li><li>15편 · 1시간 52분</li></ul>
       <p class="crs-gain">상담·OT·재등록부터 평가·티칭까지, 쓰는 말과 순서를 통째로 가져갑니다</p>
       <p class="crs-gain">셋을 따로 사면 327,000원 — <b>78,000원 덜 냅니다</b></p>
       <div class="crs-sub"><a href="/pay/?p=vod-4t-member"><span>회원관리만</span><b class="numf">89,000원</b></a><a href="/pay/?p=vod-4t-sales"><span>세일즈만</span><b class="numf">109,000원</b></a><a href="/pay/?p=vod-4t-coach"><span>운동지도만</span><b class="numf">129,000원</b></a></div>
@@ -237,7 +237,8 @@ function 업그레이드띠(u) {
   d.style.cssText = "margin:0 0 16px;padding:16px 18px;border:1px solid #5B8CFF;border-radius:14px;background:rgba(91,140,255,.12);line-height:1.65;text-align:left";
   d.innerHTML = '<b style="color:#8FB0FF">' + 산것 + '를 이미 갖고 계세요</b><br>지금 4T 트레이너 시스템으로 올리면 <b>' + 원(u.back) +
     '을 돌려드려</b>, 실제로는 <b style="font-size:1.3em;color:#fff">' + 원(실제) + '</b>입니다.<br><small style="opacity:.75">' + 날 +
-    '까지 · 249,000원이 결제된 뒤 ' + 원(u.back) + '이 자동으로 환불됩니다</small>';
+    '까지 · 249,000원 결제가 확인되면 ' + 원(u.back) + '을 결제한 수단으로 돌려드립니다</small>';
+  if (실제 <= 0) return null;   /* 낱개 셋을 다 산 사람 — 「실제 -78,000원」이 뜨던 것 */
   return { 띠: d, 실제: 실제 };
 }
 (function () {
@@ -250,10 +251,10 @@ function 업그레이드띠(u) {
       .then(function (u) {
         if (!u || !u.ok) return;
         var c = document.getElementById("c-4t"); if (!c) return;
-        var x = 업그레이드띠(u);
+        var x = 업그레이드띠(u); if (!x) return;
         c.insertBefore(x.띠, c.querySelector(".lab"));
         var b = c.querySelector('.act a[href*="vod-4t-master"]');
-        if (b) b.textContent = "업그레이드 — 실제 " + x.실제.toLocaleString("ko-KR") + "원";
+        if (b) b.textContent = "15편으로 업그레이드";
       }).catch(function () {});
   } catch (e) {}
 })();

@@ -390,7 +390,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
 </div>
 
 <script src="../t.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
 <script src="../vod/auth.js"></script>
 <script>
 (function () {
@@ -630,7 +630,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
       var m = AREA2[weak.key];
       ab.innerHTML = m
         ? "가장 낮은 영역 <em>" + weak.name + "</em> (" + weak.yes + "/" + weak.n + ") — 잃은 점수가 <a href=\"../pay/?p=" + m[0] + "\"><em>" + m[1] + "</em></a>(" + won(m[2]) + "원)의 내용입니다. 결제하면 지금 바로 열립니다."
-        : "가장 낮은 영역 <em>" + weak.name + "</em> — 센터 쪽은 <a href=\"../center/\"><em>센터 진단표(무료)</em></a>부터 받아 보세요. 그걸 하루에 같이 고치는 날이 4T 트레이너 마케팅 세미나입니다.";
+        : "가장 낮은 영역 <em>" + weak.name + "</em> — 센터 쪽은 <a href=\"../center/\"><em>센터 진단표(무료)</em></a>부터 받아 보세요.";
       ab.hidden = 일부만;
     } else ab.hidden = true;
     $("#recBuy").href = "../pay/?p=" + prodId;

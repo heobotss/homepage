@@ -132,7 +132,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
   </p>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
 <script src="../vod/auth.js"></script>
 <script>
 (function () {
@@ -182,7 +182,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
       if (window.HBT) HBT.event("lead", "news" + (TIER ? ":" + TIER : ""));
       $("#form").hidden = true; $("#done").hidden = false;
       $("#doneD").textContent = (TIER === "센터")
-        ? email + " 로 " + TIER + "이 열리는 날 가장 먼저 보내 드리겠습니다."
+        ? email + " 로 센터 플랜이 열리는 날 가장 먼저 보내 드리겠습니다."
         : email + " 로 보내 드리겠습니다.";
     } catch (err) {
       msg.textContent = window.HB.kr(err) || "적지 못했습니다. 잠시 뒤 다시 해 주세요.";

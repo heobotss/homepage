@@ -149,7 +149,7 @@ const 교육인원 = '';
       const cur = inputs.find(i => i.dataset.k === last);
       const raw = cur.value.trim();
       if (raw === '' || !(Number(raw) >= 0)) {
-        setRank('상위 ○%', false); mark.classList.remove('on');
+        setRank('상위 —%', false); mark.classList.remove('on');
         sayEl.textContent = '전국 28,200곳 기준'; if (nextSay) nextSay.textContent = '';
         if (nextEl) nextEl.hidden = true;
       } else {
@@ -1314,7 +1314,7 @@ const 교육인원 = '';
   function loadHB() {
     if (window.HB) return Promise.resolve();
     const add = src => new Promise((ok, no) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.append(s); });
-    return add('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js').then(() => add('/vod/auth.js'));
+    return add('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js').then(() => add('/vod/auth.js'));
   }
   document.querySelectorAll('form[data-apply]').forEach(f => {
     f.addEventListener('submit', e => {

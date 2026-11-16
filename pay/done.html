@@ -36,7 +36,7 @@
     <h1>결제를 확정하지 못했습니다</h1>
     <p class="sub" id="badMsg"></p>
     <p class="note">카드 승인이 났더라도 확정되지 않은 결제는 자동으로 취소됩니다. 다시 시도하거나 문의 주세요.</p>
-    <p style="margin-top:22px"><a class="btn line" href="index.html">다시 시도</a></p>
+    <p style="margin-top:22px"><a class="btn line" id="retry2" href="index.html" onclick="try{var p=sessionStorage.getItem('hb-last-p');if(p)this.href='index.html?p='+encodeURIComponent(p)}catch(e){}">다시 시도</a></p>
   </div>
 
   <footer class="legal" id="legal"></footer>

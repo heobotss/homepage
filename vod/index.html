@@ -164,7 +164,7 @@ async function boot(){
 
 function whoBar(){
   var u = state.session.user;
-  return '<div class="who"><span class="me">'+esc((u.user_metadata&&u.user_metadata.name)||"")+' '+esc(u.email)+'</span><a href="#" id="logout">로그아웃</a></div>';
+  return '<div class="who"><span class="me">'+esc((u.user_metadata&&u.user_metadata.name)||"")+' '+esc(u.email)+'</span><a href="../pay/my.html">내 구독·해지</a><a href="#" id="logout">로그아웃</a></div>';
 }
 function bindWho(){ var a=document.getElementById("logout"); if(a) a.onclick=async function(e){ e.preventDefault(); await sb.auth.signOut(); location.href=location.pathname; }; }
 

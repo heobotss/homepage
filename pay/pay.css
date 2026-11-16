@@ -111,7 +111,7 @@ table.kv tr:last-child td{border-bottom:0}
   main:has(#prodCard){max-width:1160px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);column-gap:56px;align-items:start}
   main:has(#prodCard)>*{grid-column:2;min-width:0}
   main:has(#prodCard)>#testBar,main:has(#prodCard)>.pv-note,main:has(#prodCard)>h1,main:has(#prodCard)>.sub,main:has(#prodCard)>.legal{grid-column:1 / -1}
-  main:has(#prodCard)>#prodCard{grid-column:1;grid-row:auto / span 24;position:sticky;top:96px;padding:40px;margin-bottom:0}
+  main:has(#prodCard)>#prodCard{grid-column:1;grid-row:auto / span 24;position:sticky;top:96px;padding:40px;margin-bottom:160px}   /* 11-16 아래 사업자 정보를 덮지 않게 — sticky 는 아래 여백만큼 멈춘다 */
   main:has(#prodCard)>#prodCard::before{left:40px;right:40px}
   main:has(#prodCard)>.steps{justify-self:start}
 }

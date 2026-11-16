@@ -24,6 +24,7 @@ const q = new URLSearchParams(location.search);
 const code = q.get("code") || "", message = q.get("message") || "";
 if (message) document.getElementById("msg").textContent = message + (code ? " (" + code + ")" : "");
 try { const o = JSON.parse(sessionStorage.getItem("hb_order") || "null"); } catch {}
+try { const lp = sessionStorage.getItem("hb-last-p"); if (lp) document.getElementById("retry").href = "index.html?p=" + encodeURIComponent(lp); } catch (e) {}
 fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) document.getElementById("legal").innerHTML = t; }).catch(() => {});
 </script>
 <script src="../t.js"></script>

@@ -132,7 +132,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
       <div class="fld">
         <label for="phone">전화번호 <span class="opt">선택</span></label>
         <input type="tel" id="phone" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel">
-        <p class="why">세미나 자리가 나면 문자로 먼저 알려 드립니다.</p>
+        <p class="why">강의 안내와 문의 답변에만 씁니다.</p>
       </div>
 
       <label class="agree"><input type="checkbox" id="agree"><span>[필수] <a href="../policy/terms.html" target="_blank" rel="noopener">이용약관</a>과 <a href="../policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>에 동의합니다<small>만 14세 이상만 가입할 수 있습니다</small></span></label>
@@ -166,7 +166,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
   </p>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
 <script src="../vod/auth.js"></script>
 <script>
 /* 10-27 가입 완료 화면의 인스타 아이디 칸 — 연락처 창고 contacts.instagram 에 적는다 (/story/ 와 같은 칸) */
@@ -239,10 +239,11 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
     return sb.from("contacts").upsert(줄, { onConflict: "email" });
   }
 
+  function 안전한곳(u) { u = String(u || ""); return (/^\/(?!\/)/.test(u) || /^\.\.\//.test(u)) ? u : "../"; }   /* 11-16 ?next= 에 바깥 주소·javascript: 가 들어오지 못하게 */
   /* 카카오 — Supabase 의 카카오 공급자로 넘긴다. 돌아오면 이 화면으로 다시 온다 */
   $("#kakao").addEventListener("click", async function () {
     $("#kakao").disabled = true;
-    try { sessionStorage.setItem("hb-next", new URLSearchParams(location.search).get("next") || "../"); } catch (e) {}
+    try { sessionStorage.setItem("hb-next", 안전한곳(new URLSearchParams(location.search).get("next"))); } catch (e) {}
     try { sessionStorage.setItem("hb-join", JSON.stringify({ ad: $("#mkt").checked, night: $("#night").checked, year: $("#year").value, phone: $("#phone").value })); } catch (e) {}
     var r = await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.origin + "/join/?k=1" } });
     if (r.error) {
@@ -269,7 +270,7 @@ input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
          원래 가려던 곳(?next=)이 있으면 거기로, 없으면 첫 화면으로 보낸다. */
       var 갈곳 = "../";
       try { 갈곳 = sessionStorage.getItem("hb-next") || "../"; sessionStorage.removeItem("hb-next"); } catch (e) {}
-      location.href = 갈곳;
+      location.href = 안전한곳(갈곳);
     }, 600);
   }
 
