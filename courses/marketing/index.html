@@ -9,7 +9,7 @@
 <meta property="og:site_name" content="허봇스">
 <meta property="og:title" content="트레이너 마케팅 파트0 무료 — 허봇스">
 <meta property="og:description" content="트레이너 마케팅 강의의 첫 두 편(11분)을 무료로 봅니다.">
-<meta property="og:image" content="https://heobotss.com/img/og-card.jpg">
+<meta property="og:image" content="https://heobotss.com/courses/marketing/p0_01.jpg">
 <meta property="og:url" content="https://heobotss.com/courses/marketing/">
 <link rel="canonical" href="https://heobotss.com/courses/marketing/">
 <link rel="icon" href="/favicon.png" type="image/png">
@@ -25,6 +25,9 @@
 .p0ep{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;border-radius:14px;border:1px solid var(--line,#242426);background:rgba(242,240,235,.03);color:inherit;font:inherit;cursor:pointer;min-height:52px}
 .p0ep[aria-current="true"]{border-color:#4F86F7;background:rgba(79,134,247,.10)}
 .p0ep small{opacity:.7;white-space:nowrap}
+.p0ep img{width:128px;height:72px;object-fit:cover;border-radius:8px;flex:none}
+.p0ep span{flex:1}
+@media (max-width:520px){.p0ep img{width:96px;height:54px}}
 .p0msg{min-height:1.4em;margin-top:8px;color:#C9C7C2}
 .p0auth{max-width:460px}
 .p0auth h2{font-size:1.25rem;margin:0 0 4px}
@@ -120,13 +123,14 @@
   EP = r.data || [];
   if (!EP.length) { msg.textContent = "영상을 준비하고 있습니다. 잠시 뒤 다시 와 주세요."; return; }
   var mm = function (s) { s = s || 0; return Math.floor(s / 60) + "분" + (s % 60 ? " " + (s % 60) + "초" : ""); };
-  box.innerHTML = '<div class="p0player" id="p0pl"><video id="p0v" controls playsinline controlslist="nodownload" disablepictureinpicture></video><span class="mark" id="p0mark"></span></div>'
+  box.innerHTML = '<div class="p0player" id="p0pl"><video id="p0v" controls playsinline controlslist="nodownload" disablepictureinpicture preload="none" poster="p0_01.jpg"></video><span class="mark" id="p0mark"></span></div>'
     + '<p class="p0msg" id="p0msg2"></p><div class="p0list">'
-    + EP.map(function (v, i) { return '<button class="p0ep" type="button" data-i="' + i + '"><span>' + esc(v.title) + '</span><small>' + mm(v.length_sec) + '</small></button>'; }).join("")
+    + EP.map(function (v, i) { return '<button class="p0ep" type="button" data-i="' + i + '"><img src="p0_0' + (v.ord || i + 1) + '_s.jpg" alt="" width="128" height="72" loading="lazy"><span>' + esc(v.title) + '</span><small>' + mm(v.length_sec) + '</small></button>'; }).join("")
     + "</div>";
   var m2 = document.getElementById("p0msg2"), video = document.getElementById("p0v");
   async function play(i, auto) {
     if (hls) { hls.destroy(); hls = null; } clearInterval(markTimer);
+    video.poster = "p0_0" + (EP[i].ord || i + 1) + ".jpg";
     document.querySelectorAll(".p0ep").forEach(function (b) { b.setAttribute("aria-current", String(+b.dataset.i === i)); });
     m2.textContent = "영상 준비 중…";
     var s = await HB.session();
