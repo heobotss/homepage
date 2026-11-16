@@ -102,10 +102,10 @@
 <script>
 // ── 설정 ─────────────────────────────────────────────────────────────────
 // 라이브 클라이언트 키 (09-29 카드사 심사용으로 전환). 시크릿 키는 여기 절대 안 둔다.
-const TOSS_CLIENT_KEY = "live_gck_DnyRpQWGrN9YnaaZQB7BVKwv1M9E";
+const TOSS_CLIENT_KEY = (window.HB_TEST && window.HB_TEST.gck) || "live_gck_DnyRpQWGrN9YnaaZQB7BVKwv1M9E";   // 11-16 이 PC 안 시험 화면(시험서버.py)에서만 문서용 시험 열쇠
 // 자동결제(빌링)는 상점아이디가 따로다 (bill_heobopp7o) — 키도 따로 쓴다.
 // 2026-10-26 빌링 계약 완료(10-23) → 라이브 키로 교체. 승인된 카드사부터 바로 결제된다
-const TOSS_BILLING_KEY = "live_ck_24xLea5zVAmvJNe1X6oYVQAMYNwW";
+const TOSS_BILLING_KEY = (window.HB_TEST && window.HB_TEST.ck) || "live_ck_24xLea5zVAmvJNe1X6oYVQAMYNwW";
 // 2026-10-01 대표님 결정: 토스가 다 끝날 때까지 결제를 받지 않는다 → 2026-10-12 해제.
 //   토스 심사원이 ?open=1 없이 들어와 잠긴 화면을 보고 「결제창 연동을 확인할 수 없다」며 보완을 요구했다.
 //   10-12 대표님 결정: 심사가 끝날 때까지 전부 연다. false 로 되돌리면 다시 잠긴다.
@@ -363,7 +363,7 @@ $("#payBtn").addEventListener("click", async () => {
     await widgets.requestPayment({
       orderId: o.orderId, orderName: o.orderName,
       successUrl: base + "done.html", failUrl: base + "fail.html",
-      customerName: o.customerName, customerEmail: o.customerEmail, customerMobilePhone: o.customerMobilePhone,
+      customerName: o.customerName, customerEmail: o.customerEmail, ...(o.customerMobilePhone ? { customerMobilePhone: o.customerMobilePhone } : {}),   /* 11-16 시험 모드에서 발견 — 휴대폰을 비우면 빈 값이 가서 토스가 INVALID_PHONE 으로 결제창을 막았다 */
     });
   } catch (e) {
     $("#msg").textContent = e.message || String(e);
