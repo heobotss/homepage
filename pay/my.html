@@ -26,6 +26,7 @@
 <script src="../vod/auth.js"></script>
 <script>
 const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
+const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";   // 공개용 키 — 11-16 해지 호출에 같이 보낸다
 const FN = SB_URL + "/functions/v1/";
 const $ = (s) => document.querySelector(s);
 const won = (n) => n.toLocaleString("ko-KR") + "원";
@@ -76,7 +77,7 @@ document.addEventListener("click", async function (e) {
     const ses = await HB.session();
     const r = await fetch(FN + "billing-cancel?forceFunctionRegion=ap-northeast-2", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: "Bearer " + ses.access_token },
+      headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + ses.access_token },
       body: JSON.stringify({ subscriptionId: Number(b.getAttribute("data-cancel")) }),
     });
     const d = await r.json();

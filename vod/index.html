@@ -151,6 +151,8 @@ async function boot(){
   var r1 = await sb.rpc("vod_my_access");
   state.access = {}; state.part = {};
   (r1.data||[]).forEach(function(a){ state.access[a.product_id] = a.expires_at; if (a.videos) state.part[a.product_id] = a.videos; });
+  /* 11-16 인증·멤버십으로 열린 문제지 — 부분 열람권이어도 서버가 허락한 파일은 보이게(vod_file_access 와 같은 기준) */
+  state.pfiles = {}; try { var r5 = await sb.rpc("vod_my_files"); (r5.data||[]).forEach(function(x){ state.pfiles[x.product_id] = x.file_keys || []; }); } catch (e) {}
   var r2 = await sb.from("vod_videos").select("*").eq("free", false).order("sort");
   state.videos = r2.data || [];
   var r3 = await sb.from("vod_files").select("*").order("sort");
@@ -228,7 +230,9 @@ function openCourse(id, want){
   history.replaceState(null, "", location.pathname + "?c=" + id);
   var vids = state.videos.filter(function(v){ return v.product_id===id; });
   var colls = []; vids.forEach(function(v){ if (colls.indexOf(v.collection)<0) colls.push(v.collection); });
-  var files = state.part[id] ? [] : state.files.filter(function(f){ return f.product_id===id; });   // 무료 열람권은 문제지 제외
+  var files = state.part[id]
+    ? state.files.filter(function(f){ return f.product_id===id && (state.pfiles[id]||[]).indexOf(f.key)>=0; })   // 부분 열람권은 허락된 파일만
+    : state.files.filter(function(f){ return f.product_id===id; });
   if (!state.part[id] && EBOOK_OF[id] && state.access["vod-4t-master"]) files = files.concat(state.files.filter(function(f){ return EBOOK_OF[id].indexOf(f.key)>=0; }));
   var wv = want ? vids.filter(function(v){ return v.title === want; })[0] : null;
   state.coll = wv ? wv.collection : colls[0];

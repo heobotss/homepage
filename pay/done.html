@@ -72,13 +72,14 @@ fetch("../policy/legal.txt").then(r => r.ok ? r.text() : "").then(t => { if (t) 
       });
       const d0 = await r0.json();
       if (!d0.ok) throw new Error(d0.message || "구독을 시작하지 못했습니다");
-      $("#okTitle").textContent = d0.replaced ? "카드를 바꿨습니다" : d0.resumed ? "결제가 다시 이어졌습니다" : "구독이 시작됐습니다";
+      $("#okTitle").textContent = d0.replaced ? "카드를 바꿨습니다" : d0.uncanceled ? "해지를 취소했습니다" : d0.resumed ? "결제가 다시 이어졌습니다" : "구독이 시작됐습니다";
       $("#okSub").textContent = d0.replaced
         ? "다음 결제일부터 새 카드로 결제됩니다."
+        : d0.uncanceled ? "지금은 결제되지 않았습니다. 쓰시던 기간 그대로, 다음 결제일부터 이어집니다."
         : "바로 쓰실 수 있습니다. 확인 메일도 보냈습니다.";
       $("#kv").innerHTML = [
         d0.orderId ? ["주문번호", d0.orderId] : null,
-        [d0.replaced ? "다음 결제 금액" : "결제 금액", '<span class="amt">' + won(d0.amount) + "</span>"],   /* 11-13 카드만 바꿨을 때 방금 결제된 것처럼 보이지 않게 */
+        [(d0.replaced || d0.uncanceled) ? "다음 결제 금액" : "결제 금액", '<span class="amt">' + won(d0.amount) + "</span>"],   /* 11-13 카드만 바꿨을 때 방금 결제된 것처럼 보이지 않게 */
         ["다음 결제일", new Date(d0.nextChargeAt).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", dateStyle: "long" })],
         ["해지", '<a href="my.html">내 구독 화면</a>에서 언제든 · 다음 결제부터 멈춥니다'],
       ].filter(Boolean).map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("");
