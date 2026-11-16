@@ -142,14 +142,14 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
 <header class="hb-bar"><div class="hb-in"><a class="hb-logo" href="/">허봇스</a><span class="hb-keep"></span><nav aria-label="주 메뉴"><a href="/trainer/#t-check">30초 진단</a><a class="hb-wide" href="/tools/">프로그램</a><a href="/courses/">강의</a><a href="/plan/">가격</a><a class="hb-wide" href="/free/">무료 자료</a><a class="hb-me" href="/vod/">로그인</a></nav></div></header><script>try{if(localStorage.getItem("hb-auth"))document.querySelector(".hb-bar .hb-me").textContent="내 강의실"}catch(e){}</script>
 
 <main>
-  <p class="state" id="state">곧 열립니다</p>
+  <p class="state" id="state">지금 신청 받는 중</p>
   <h1>헬스트레이너 재등록 시스템 전자책 무료</h1>
   <p class="lede">마지막 회차가 다가오면 재등록 얘기를 꺼내기 어려운 선생님께. 첫 상담부터 마지막 회차까지 이어지는 세 단계(계획·진행·미리 보기)를 42쪽으로 정리했습니다.</p>
 
   <ul class="facts">
     <li><span>열리는 것</span><b>4T 회원 재등록 시스템 전자책 PDF · 42쪽</b></li>
     <li ><span>쓸 수 있는 기간</span><b>받은 때부터 7일</b></li>
-    <li hidden><span>신청 기간</span><b>1월 1일(목) ~ 12월 30일(수)</b></li>
+    <li ><span>신청 기간</span><b>11월 16일(월) ~ 12월 30일(수)</b></li>
     <li hidden><span>쓸 수 있는 기간</span><b>기간 없음 · 언제든 다시 열기</b></li>
     <li><span>필요한 것</span><b>메일 주소 하나 · 카드 등록 없음</b></li>
   </ul>
@@ -191,8 +191,8 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
     <p>메일의 「지금 열기」를 누르면 로그인된 채로 바로 열립니다. 버튼은 1시간 동안 쓸 수 있어요. 안 보이면 스팸함도 확인해 주세요.</p>
   </div>
 
-  <div class="closed" id="closed" >
-    <b id="closedT">여는 날을 정하는 중입니다.</b>
+  <div class="closed" id="closed" hidden>
+    <b id="closedT">11월 16일(월)에 열립니다.</b>
     <form id="earlyForm" novalidate hidden style="margin-top:14px">
       <label for="earlyEmail" style="display:block;font-size:.9375rem;color:var(--bone-2);margin-bottom:6px">열리는 날 먼저 알려 드릴 메일</label>
       <input type="email" id="earlyEmail" placeholder="you@example.com" autocomplete="email" style="width:100%;background:var(--ink-2);border:1px solid var(--line-2);border-radius:10px;color:var(--bone);font:inherit;padding:13px 15px;outline:none">
@@ -281,7 +281,7 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
 <script>
 (function () {
   "use strict";
-  const O = {"id": "rereg", "opens_at": "2098-12-31T15:00:00+00:00", "closes_at": "2099-12-30T15:00:00+00:00", "paid_hint": null, "kind": "video", "always_open": false, "target_url": "https://heobotss.com/dl/?k=free/ebook-rereg.pdf", "opens_txt": "1월 1일(목)", "undecided": true};
+  const O = {"id": "rereg", "opens_at": "2026-11-16T08:52:51.082569+00:00", "closes_at": "2099-12-30T15:00:00+00:00", "paid_hint": null, "kind": "video", "always_open": false, "target_url": "https://heobotss.com/dl/?k=free/ebook-rereg.pdf", "opens_txt": "11월 16일(월)", "undecided": false};
   const FN = "https://kpubgeejyiupdvbbdxwt.supabase.co/functions/v1/free-claim";
   const $ = (s) => document.querySelector(s);
 
