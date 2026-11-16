@@ -64,7 +64,16 @@
     return { source: null, medium: null, campaign: null, content: null };
   }
 
+  /* 11-17 로봇 방문은 남기지 않는다 — 11-16 유튜브가 바뀐 설명란 링크를 검사하며 1분에 115건 land 를 찍어 유입 숫자가 부풀었다
+     (AI 10단계 고리 2 채팅 실측). 자동 브라우저 표시(webdriver)나 이름에 봇·검사기 표시가 있으면 아무것도 보내지 않는다 */
+  var BOT = (function () {
+    try {
+      if (navigator.webdriver) return true;
+      return /bot|crawl|spider|slurp|Google-|HeadlessChrome|Lighthouse|facebookexternalhit|preview/i.test(navigator.userAgent || "");
+    } catch (e) { return false; }
+  })();
   function send(ev, page, utm) {
+    if (BOT) return;
     try {
       fetch(URL_, {
         method: "POST", keepalive: true,
