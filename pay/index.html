@@ -104,6 +104,21 @@ const TOSS_BILLING_KEY = "live_ck_24xLea5zVAmvJNe1X6oYVQAMYNwW";
 //   토스 심사원이 ?open=1 없이 들어와 잠긴 화면을 보고 「결제창 연동을 확인할 수 없다」며 보완을 요구했다.
 //   10-12 대표님 결정: 심사가 끝날 때까지 전부 연다. false 로 되돌리면 다시 잠긴다.
 const 판매개시 = true;
+/* 11-16 대표님 — 4T 낱개를 30일 안에 산 사람에게 「올리면 실제 얼마」를 보여 준다. 읽기 전용 조회(my_4t_upgrade), 결제 금액·순서는 그대로 */
+function 업그레이드띠(u) {
+  var 이름 = { "vod-4t-member": "회원관리", "vod-4t-sales": "세일즈", "vod-4t-coach": "운동지도" };
+  var 산것 = (u.parts || []).map(function (p) { return 이름[p] || p; }).join("·");
+  var 원 = function (n) { return Number(n).toLocaleString("ko-KR") + "원"; };
+  var 실제 = 249000 - u.back, 끝 = new Date(u.until);
+  var 날 = (끝.getMonth() + 1) + "월 " + 끝.getDate() + "일";
+  var d = document.createElement("div");
+  d.className = "up4t";
+  d.style.cssText = "margin:0 0 16px;padding:16px 18px;border:1px solid #5B8CFF;border-radius:14px;background:rgba(91,140,255,.12);line-height:1.65;text-align:left";
+  d.innerHTML = '<b style="color:#8FB0FF">' + 산것 + '를 이미 갖고 계세요</b><br>지금 4T 트레이너 시스템으로 올리면 <b>' + 원(u.back) +
+    '을 돌려드려</b>, 실제로는 <b style="font-size:1.3em;color:#fff">' + 원(실제) + '</b>입니다.<br><small style="opacity:.75">' + 날 +
+    '까지 · 249,000원이 결제된 뒤 ' + 원(u.back) + '이 자동으로 환불됩니다</small>';
+  return { 띠: d, 실제: 실제 };
+}
 const SB_URL = "https://kpubgeejyiupdvbbdxwt.supabase.co";
 const SB_KEY = "sb_publishable_09UkwFHF2-tqRQexECgFUw_eyrPlCvD";   // 공개용 키 — 상품 읽기만 된다
 const FN = SB_URL + "/functions/v1/";
@@ -168,6 +183,13 @@ async function loadProduct() {
                                   : "결제하면 이 계정의 강의실에서 12개월 동안 바로 볼 수 있습니다.";
     var ses = await HB.session();
     await 받는것표(product);
+    if (product.id === "vod-4t-master" && ses) {
+      try {
+        const ur = await fetch(SB_URL + "/rest/v1/rpc/my_4t_upgrade", { method: "POST", headers: { apikey: SB_KEY, Authorization: "Bearer " + ses.access_token, "Content-Type": "application/json" }, body: "{}" });
+        const u = ur.ok ? await ur.json() : null;
+        if (u && u.ok) { const x = 업그레이드띠(u); $("#pPrice").insertAdjacentElement("afterend", x.띠); }
+      } catch (e) {}
+    }
     if (!ses) {
       $("#steps").hidden = false; $("#steps").innerHTML = "<b>① 로그인</b> → ② 결제 → ③ 바로 " + (isApp ? "수업일지" : "강의실") + " · 결제 버튼은 로그인하면 나타납니다";
       $("#form").hidden = true; $("#payBtn").hidden = true; $("#authBox").hidden = false;
