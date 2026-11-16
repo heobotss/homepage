@@ -357,6 +357,11 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .door-title .go{margin-top:var(--s3)}
 .door-title .door-pre{margin-bottom:var(--s2);letter-spacing:.06em}
 .door-note{text-align:center;text-wrap:balance;z-index:2;position:relative}
+/* 11-16 라이브 점검 — 보조 문구가 입자 그림에 묻혀 안 읽히던 것: 문구 뒤에 어두운 바탕 */
+.door-note{width:fit-content;margin-inline:auto;padding:6px 16px;border-radius:999px;background:rgba(10,10,11,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink)}
+/* 11-16 폰 첫 화면에 누를 단추가 없던 것 — 제목 아래 「30초 진단 해 보기」(폰에서만) */
+.door-go{display:none}
+@media (max-width:720px){.door-go{display:inline-flex;margin-top:var(--s2);position:relative;z-index:3}}
 .doors{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);width:100%;max-width:1040px;margin-inline:auto;grid-auto-rows:1fr}
 .doors a{display:flex;flex-direction:column;height:100%;padding:var(--s3);min-height:240px;transition:border-color .25s,background-color .25s;transform:perspective(1200px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
 .doors b{display:block;font-size:var(--t2);font-weight:800;letter-spacing:-.035em;line-height:1.14}
