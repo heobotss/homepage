@@ -165,6 +165,13 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
     </div>
   </section>
 
+  <div class="closed" id="lock" hidden>
+    <b>릴스 댓글로 받는 자료입니다</b>
+    <p>인스타그램 @heobotss 릴스에 댓글을 남기시면 DM으로 여는 링크를 보내 드립니다. 그 링크로 들어오시면 바로 받으실 수 있습니다.</p>
+    <a class="btn line" href="https://www.instagram.com/heobotss/" target="_blank" rel="noopener">인스타그램에서 릴스 보기</a>
+    <p style="margin-top:18px">멤버십 회원은 로그인하면 댓글 없이 바로 열립니다. <a href="/plan/" style="color:var(--bone)">멤버십 보기</a></p>
+    <div id="lockAuth"></div>
+  </div>
   <div class="done" id="quick" hidden>
     <b id="quickT">로그인돼 있습니다</b>
     <p id="quickP"></p>
@@ -281,9 +288,16 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
 <script>
 (function () {
   "use strict";
-  const O = {"id": "handover-first", "opens_at": "2026-11-13T15:00:00+00:00", "closes_at": "2099-12-30T15:00:00+00:00", "paid_hint": null, "kind": "doc", "always_open": true, "target_url": "https://heobotss.com/free/handover-first/view/", "opens_txt": "11월 14일(토)", "undecided": false};
+  const O = {"id": "handover-first", "opens_at": "2026-11-13T15:00:00+00:00", "closes_at": "2099-12-30T15:00:00+00:00", "paid_hint": null, "kind": "doc", "always_open": true, "target_url": "https://heobotss.com/free/handover-first/view/", "locked": false, "opens_txt": "11월 14일(토)", "undecided": false};
   const FN = "https://kpubgeejyiupdvbbdxwt.supabase.co/functions/v1/free-claim";
   const $ = (s) => document.querySelector(s);
+  /* 11-18 잠긴 자료(릴스 자료) — 댓글 DM 링크의 ?k=열쇠 를 이 기기에 적어 둔다(가입·로그인으로 화면이 바뀌어도 남게). 맞는지는 서버가 본다 */
+  const KEY = (function () {
+    var k = ""; try { k = (new URLSearchParams(location.search).get("k") || "").slice(0, 40); } catch (e) {}
+    try { if (k) localStorage.setItem("hbk:" + O.id, k); else k = localStorage.getItem("hbk:" + O.id) || ""; } catch (e) {}
+    return k;
+  })();
+  const LOCKED = !!O.locked && !KEY;   // 열쇠 없이 들어온 사람: 메일 칸 대신 안내 + 로그인(회원은 바로 열림)
 
   // 지금 열려 있나 — 굽는 시점이 아니라 여는 시점 기준으로 다시 판정
   function phase() {
@@ -296,7 +310,9 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
     const p = phase();
     $("#state").className = "state" + (p === "open" ? " open" : "");
     $("#state").textContent = p === "open" ? (O.always_open ? "언제든 받을 수 있음" : "지금 신청 받는 중") : p === "early" ? "곧 열립니다" : "신청 기간 끝";
-    $("#form").hidden = p !== "open";
+    $("#form").hidden = p !== "open" || LOCKED;
+    $("#lock").hidden = !(p === "open" && LOCKED);
+    if (p === "open" && LOCKED) $("#state").textContent = "릴스 댓글로 받는 자료";
     $("#closed").hidden = p === "open";
     if (p === "early") { $("#earlyForm").hidden = false; $("#closedT").textContent = O.undecided ? "여는 날을 정하는 중입니다." : O.opens_txt + "에 열립니다."; $("#closedP").textContent = O.undecided ? "지금 메일을 남겨 두시면 여는 날이 정해질 때 먼저 알려 드립니다." : "지금 메일을 남겨 두시면 여는 날 아침에 먼저 보내 드립니다."; $("#paid").hidden = true; }
     if (p === "closed") { $("#closedT").textContent = "신청 기간이 끝났습니다."; $("#closedP").textContent = O.paid_hint || ""; $("#paid").hidden = !O.paid_hint; }
@@ -306,19 +322,22 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
   (async function () {
     if (O.kind !== "doc" || phase() !== "open" || !window.HB) return;
     var 세션 = await window.HB.session();
-    if (!세션) return;
+    if (!세션) {
+      if (LOCKED) window.HB.mountAuth($("#lockAuth"), function () { location.reload(); }, { lead: "멤버십 회원은 로그인하면 바로 열립니다." });
+      return;
+    }
     var 받음 = await window.HB.sb.from("free_doc_access").select("offer_id").eq("offer_id", O.id).maybeSingle();
-    $("#form").hidden = true; $("#quick").hidden = false;
+    $("#form").hidden = true; $("#lock").hidden = true; $("#quick").hidden = false;
     $("#quickP").textContent = 세션.user.email + " 계정" + (받음.data ? "으로 이미 받으신 자료입니다." : "으로 바로 받습니다. 메일은 오지 않습니다.");
     if (받음.data) { $("#quickT").textContent = "이미 받으셨습니다"; $("#quickGo").textContent = "자료 열기"; }
-    $("#quickOther").onclick = function (e) { e.preventDefault(); $("#quick").hidden = true; $("#form").hidden = false; };
+    $("#quickOther").onclick = function (e) { e.preventDefault(); $("#quick").hidden = true; $("#form").hidden = LOCKED; $("#lock").hidden = !LOCKED; };
     $("#quickGo").onclick = async function () {
       if (받음.data) { location.href = O.target_url; return; }
       $("#quickGo").disabled = true; $("#quickGo").textContent = "여는 중…";
       var pk = window.HBT ? HBT.pack() : { visitor: null, utm: null };
       try {
         var r = await fetch(FN, { method: "POST", headers: { "Content-Type": "application/json", apikey: window.HB.SB_KEY, Authorization: "Bearer " + 세션.access_token },
-          body: JSON.stringify({ offer: O.id, instant: true, visitor: pk.visitor, utm: pk.utm }) });
+          body: JSON.stringify({ offer: O.id, instant: true, key: KEY, visitor: pk.visitor, utm: pk.utm }) });
         var d = await r.json().catch(function () { return {}; });
         if (!r.ok || !d.ok) throw new Error(d.message || "잠시 문제가 생겼습니다. 다시 시도해 주세요.");
         if (window.HBT) HBT.event("claim", "free:" + O.id);
@@ -358,7 +377,7 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
       const r = await fetch(FN, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ offer: O.id, email: email, agree: true, ad: $("#mkt").checked, night: $("#mkt").checked && $("#night").checked,
-          visitor: pk.visitor, utm: pk.utm, website: $("#website").value })
+          visitor: pk.visitor, utm: pk.utm, key: KEY, website: $("#website").value })
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok || !d.ok) throw new Error(d.message || "잠시 문제가 생겼습니다. 다시 시도해 주세요.");

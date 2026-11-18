@@ -177,6 +177,11 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
     }
     var r = await window.HB.sb.from("free_docs").select("body_html, copy_text").eq("offer_id", ID).maybeSingle();
     if (r.error || !r.data) { location.replace("/free/" + ID + "/"); return; }   // 받지 않은 계정 → 신청 페이지(로그인돼 있으면 거기서 「바로 열기」)
+    if (/^\s*<!doctype/i.test(r.data.body_html)) {   // 11-18 완성 페이지 자료(릴스 첫 10편) — 계산기·표·디자인 그대로 화면을 통째로 바꾼다
+      if (window.HBT) HBT.event("view", "free-doc:" + ID);
+      document.open(); document.write(r.data.body_html); document.close();
+      return;
+    }
     $("#doc").innerHTML = r.data.body_html;
     copyText = r.data.copy_text || "";
     $("#copyAll").hidden = !copyText;
