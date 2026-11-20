@@ -742,8 +742,10 @@ html:not(.fx) .giant.blue-end .blue-fill{clip-path:none}
 /* 상단 메뉴 6칸(11-03 밤) — 폰은 넓은 것 둘 숨김, 글자 작게 */
 .top nav{gap:var(--s2)}
 /* 11-16 폰에서 「프로그램·무료 자료」가 아예 사라지던 것 — 숨기지 않고 메뉴를 옆으로 밀어 보게 한다 */
-@media (max-width:720px){.top nav{gap:2px;font-size:13px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;min-width:0;flex:1 1 auto;justify-content:flex-start;mask-image:linear-gradient(90deg,#000 88%,transparent)}.top nav::-webkit-scrollbar{display:none}.top nav a{flex:none;min-width:0;padding-inline:4px}.top nav a.me{padding-inline:10px;margin-left:2px}.top .wrap{gap:8px}.top .logo{flex:none;white-space:nowrap}}
-@media (max-width:370px){.top nav{font-size:12px;mask-image:none}.top nav a{padding-inline:3px}.top nav a.me{padding-inline:8px}}
+@media (max-width:720px){.top nav{gap:2px;font-size:13px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;min-width:0;flex:1 1 auto;justify-content:flex-start}.top nav::-webkit-scrollbar{display:none}.top nav a{flex:none;min-width:0;padding-inline:4px}.top nav a.me{padding-inline:10px;margin-left:2px}.top .wrap{gap:8px}.top .logo{flex:none;white-space:nowrap}}
+@media (max-width:370px){.top nav{font-size:12px}.top nav a{padding-inline:3px}.top nav a.me{padding-inline:8px}}
+/* 11-20 흐림은 메뉴가 실제로 넘치는 359px 이하에서만(넘치지 않는데 로그인 단추가 흐려 보였음) */
+@media (max-width:359px){.top nav{mask-image:linear-gradient(90deg,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent)}}
 @media (min-width:721px) and (max-width:1000px){.top nav{gap:var(--s2);font-size:var(--t6)}}
 /* 센터 길 끝 두 칸 */
 .duo.nextduo{margin-top:var(--s4);align-items:stretch}
