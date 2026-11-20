@@ -264,13 +264,27 @@
   }
   function 글(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/`/g, ""); }
 
+  // 틀 높이는 내용에 맞춘다. 재기 전에 높이를 0 으로 내려야 넓어져 짧아진 내용에도 줄어든다(11-20)
+  function 틀높이() {
+    [].forEach.call(document.querySelectorAll("iframe.kwr"), function (f) {
+      if (!f._잼) { f._잼 = 1; f.addEventListener("load", 틀높이); }
+      try {
+        var 문서 = f.contentDocument; if (!문서 || !문서.body) return;
+        f.style.height = "0px";
+        f.style.height = (Math.max(문서.documentElement.scrollHeight, 문서.body.scrollHeight) + 8) + "px";
+      } catch (e) {}
+    });
+  }
+  var 틀높이대기;
+  function 틀높이늦게() { clearTimeout(틀높이대기); 틀높이대기 = setTimeout(틀높이, 200); }
+  window.addEventListener("resize", 틀높이늦게);
+  window.addEventListener("orientationchange", 틀높이늦게);
+
   function 상권틀(html) {
-    // 틀 높이는 내용에 맞춘다. 글꼴이 늦게 들어오면 높이가 바뀌므로 몇 번 다시 잰다
+    // 글꼴이 늦게 들어오면 높이가 바뀌므로 처음 몇 번은 시간으로도 다시 잰다
     setTimeout(function 맞추기(n) {
       n = n || 0;
-      [].forEach.call(document.querySelectorAll("iframe.kwr"), function (f) {
-        try { f.style.height = (f.contentDocument.documentElement.scrollHeight + 8) + "px"; } catch (e) {}
-      });
+      틀높이();
       if (n < 6) setTimeout(function () { 맞추기(n + 1); }, 700);
     }, 150);
     return '<iframe class="kwr" title="키워드 상권 진단 결과" sandbox="allow-same-origin" loading="lazy" ' +
