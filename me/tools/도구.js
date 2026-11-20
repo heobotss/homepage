@@ -8,7 +8,7 @@
   var 층 = "none", 나 = null;
 
   var 도구 = [
-    // 11-16 공개 화면(/plan/·/tools/)과 같은 칸 수로 — 무료 4 · 멤버십 4 · 센터 8. 무료 셋은 각자 화면으로 간다
+    // 11-16 공개 화면(/plan/·/tools/)과 같은 칸 수로 — 무료 4 · 멤버십 4 · 센터 9 (11-20 키워드 상권 진단 더함). 무료 셋은 각자 화면으로 간다
     { id: "centercheck", 이름: "센터 진단표", 말: "플레이스 리뷰로 우리 센터 위치를 카드로 받습니다", 층: "free", 주소: "/center/check/" },
     { id: "report", 이름: "트레이너 진단표", 말: "회원이 남긴 말로 내 위치를 재는 내 이름 리포트", 층: "free", 주소: "/report/" },
     { id: "journal", 이름: "마케팅용 수업일지", 말: "종이에 쓰고 끝나고 사진 한 장 — 매주 글감이 됩니다", 층: "free", 주소: "https://app.heobotss.com/" },
@@ -23,6 +23,7 @@
     { id: "rereg", 이름: "재등록 · VIP 추적", 말: "파일 두 개로 재등록률과 지금 연락할 회원이 나옵니다", 층: "center", 주소: "rereg/" },
     { id: "board", 이름: "회원 리포트 · 팀 현황판", 말: "선생님별 재등록·회원 현황을 한 장으로 나눠 봅니다", 층: "center", 주소: "rereg/" },
     { id: "inflow", 이름: "유입경로 추적기", 말: "문의가 어느 채널에서 왔는지 쌓고 분기로 봅니다", 층: "center", 그림: 유입화면 },
+    { id: "keyword", 이름: "키워드 상권 진단", 말: "검색 1~10위가 리뷰·블로그를 한 달에 얼마나 받는지, 우리와의 차이를 봅니다", 층: "center", 그림: 상권화면 },
     { id: "market", 이름: "동네 시세표", 말: "PT 회당·헬스 월당 시세와 영업시간, 개업·폐업 수", 층: "center", 그림: 시세화면 },
     { id: "ai", 이름: "AI 등장률", 말: "AI 답에 우리 센터가 나오는 비율을 분기마다 잽니다", 층: "center", 그림: AI화면 },
     { id: "levels", 이름: "센터 블로그 레벨표", 말: "선생님들 블로그 레벨과 글이 멈춘 사람을 한 표로", 층: "center", 그림: 레벨화면 }
@@ -49,7 +50,7 @@
           esc(됨 ? d.말 : (t[0] === "center" ? "센터 플랜에서 씁니다" : "멤버십에서 씁니다")) + "</span></a>";
       });
       h += "</div>";
-      // 센터 등록은 프로그램이 아니라 처음 한 번 하는 설정 — 칸 수(8개)에 넣지 않고 한 줄로
+      // 센터 등록은 프로그램이 아니라 처음 한 번 하는 설정 — 칸 수(9개)에 넣지 않고 한 줄로
       if (t[0] === "center" && 층순서[층] >= 층순서.center) h += '<p class="note">처음이면 <a href="#center">센터 등록</a>부터 한 번 하세요 — 플레이스 번호와 키워드만 넣으면 됩니다.</p>';
     });
     그리기(h);
@@ -262,6 +263,68 @@
     return h + (표 ? "</table></div>" : "");
   }
   function 글(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/`/g, ""); }
+
+  function 상권틀(html) {
+    // 틀 높이는 내용에 맞춘다. 글꼴이 늦게 들어오면 높이가 바뀌므로 몇 번 다시 잰다
+    setTimeout(function 맞추기(n) {
+      n = n || 0;
+      [].forEach.call(document.querySelectorAll("iframe.kwr"), function (f) {
+        try { f.style.height = (f.contentDocument.documentElement.scrollHeight + 8) + "px"; } catch (e) {}
+      });
+      if (n < 6) setTimeout(function () { 맞추기(n + 1); }, 700);
+    }, 150);
+    return '<iframe class="kwr" title="키워드 상권 진단 결과" sandbox="allow-same-origin" loading="lazy" ' +
+      'style="width:100%;min-height:900px;border:0;border-radius:16px;background:#f3f1ea" srcdoc="' + esc(html) + '"></iframe>';
+  }
+
+  function 상권화면() {
+    그리기(머리("키워드 상권 진단", "손님이 검색하는 말 하나로, 휴대폰 검색 1~10위가 리뷰와 블로그 글을 한 달에 얼마나 받고 있는지와 우리 센터의 차이를 봅니다.") +
+      폼("f", [["kw", "키워드", "당산pt", "지역 이름 + pt·헬스장처럼 손님이 검색하는 말 하나"],
+        ["ct", "우리 센터 이름", "네이버 플레이스에 적힌 이름", "플레이스에 적힌 이름 그대로 넣어야 찾습니다"]], "진단 받기") +
+      '<p class="note">한 번에 3~5분쯤 걸리고, 신청이 겹치면 순서대로 잽니다. 하루 2번까지 쓸 수 있고, 못 잰 것은 횟수에서 뺍니다. ' +
+      '순위를 약속하는 자료가 아니라 「1~10위가 지금 이 속도로 가고 있다」는 기준선입니다.</p><div id="r"></div><div id="past"></div>');
+
+    function 그림(d) {
+      if (!d || !d.html) return '<p class="msg">결과를 읽지 못했습니다. 잠시 뒤 다시 열어 주세요.</p>';
+      return 상권틀(d.html);
+    }
+    function 지난목록() {
+      // 숫자 요약만 가져온다(구운 화면은 누를 때 한 건씩) — 목록을 열 때마다 화면 열두 장을 받지 않게
+      sb.from("tool_jobs").select("id,created_at,summary:result->summary").eq("tool", "keyword").eq("status", "done")
+        .order("created_at", { ascending: false }).limit(12).then(function (r) {
+          var 칸 = document.getElementById("past");
+          if (!칸 || !r.data || !r.data.length) return;
+          칸.innerHTML = '<div class="card"><h2>지난 진단</h2>' + r.data.map(function (x) {
+            var s = x.summary || {};
+            return '<p><a href="#" data-job="' + x.id + '">' + esc(x.created_at.slice(0, 10)) + " · " + esc(s["키워드"] || "") + " · " + esc(s["센터"] || "") +
+              (s["자리"] ? " · " + s["자리"] + "위" : "") + "</a></p>";
+          }).join("") + "</div>";
+          [].forEach.call(칸.querySelectorAll("a[data-job]"), function (a) {
+            a.onclick = function (e) {
+              e.preventDefault();
+              var 결과칸 = document.getElementById("r");
+              결과칸.innerHTML = '<p class="msg ok">불러오는 중입니다.</p>';
+              sb.from("tool_jobs").select("result").eq("id", a.getAttribute("data-job")).single().then(function (q) {
+                결과칸.innerHTML = 그림(q.data && q.data.result);
+                결과칸.scrollIntoView({ behavior: "smooth", block: "start" });
+              });
+            };
+          });
+          // 처음 들어오면 가장 최근 것을 바로 보여 준다
+          if (!document.getElementById("r").innerHTML) 칸.querySelector("a[data-job]").click();
+        });
+    }
+    document.getElementById("f").onsubmit = function (e) {
+      e.preventDefault();
+      일넣기("keyword", { keyword: 값("kw"), center: 값("ct") }, "r", function (d) { setTimeout(지난목록, 300); return 그림(d); });
+    };
+    내센터().then(function (r) {
+      if (!r.data) return;
+      if (r.data.place_name) document.getElementById("ct").value = r.data.place_name;
+      if ((r.data.keywords || []).length) document.getElementById("kw").value = r.data.keywords[0];
+    });
+    지난목록();
+  }
 
   function 시세화면() {
     그리기(머리("동네 시세표", "우리 동네 값과 영업시간, 새로 생기고 닫은 곳의 수를 봅니다.") +
