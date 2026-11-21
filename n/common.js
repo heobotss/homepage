@@ -784,7 +784,13 @@ const 교육인원 = '';
       gl.useProgram(PG.p); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       [['a', 3, 0], ['b', 3, 3], ['d', 3, 6], ['s', 1, 9], ['e', 2, 10]].forEach(n => { const l = PG.A[n[0]]; gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, n[1], gl.FLOAT, false, F * 4, n[2] * 4); });
     }
-    function size() { asp = stick.clientWidth / Math.max(1, stick.clientHeight); doors(); letters(); upload(); }
+    /* 11-21: 컴퓨터도 화면 높이가 낮으면(노트북 대부분) 제목 아래 끝이 문 카드 위 끝보다 내려와 겹친다 — 그때는 폰처럼 문이 나오면서 제목이 빠진다 */
+    let tight = false;
+    function fitCheck() {
+      const ty = parseFloat((open.style.transform.match(/translateY\(([-\d.]+)px\)/) || [0, 0])[1]) || 0;
+      tight = title.getBoundingClientRect().bottom + 12 > open.getBoundingClientRect().top - ty;
+    }
+    function size() { asp = stick.clientWidth / Math.max(1, stick.clientHeight); fitCheck(); doors(); letters(); upload(); }
     const lp = { x: .5, y: .5, sx: .5, sy: .5, in: false };
     if (hoverable) {
       stick.addEventListener('pointermove', e => { const r = stick.getBoundingClientRect(); lp.x = (e.clientX - r.left) / r.width; lp.y = (e.clientY - r.top) / r.height; lp.in = true; });
@@ -797,7 +803,7 @@ const 교육인원 = '';
       p1 = easeIO(seg(p, 0, .55)); p2 = easeIO(seg(p, .42, .9));
       const o = easeIO(seg(p, .62, .94));
       open.style.opacity = o.toFixed(3); open.style.visibility = o > .01 ? 'visible' : 'hidden'; open.style.pointerEvents = o > .4 ? 'auto' : 'none';
-      if (!intro) title.style.opacity = innerWidth <= 720 ? (1 - seg(p, .56, .72)).toFixed(3) : 1;
+      if (!intro) title.style.opacity = innerWidth <= 720 || tight ? (1 - seg(p, .56, .72)).toFixed(3) : 1;
       if (cue) cue.style.opacity = !intro && p < .6 ? 1 : 0;
       open.style.transform = 'translateY(' + (16 * (1 - o)).toFixed(1) + 'px)';
       el.classList.toggle('opened', p > .9);

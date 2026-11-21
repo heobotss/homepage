@@ -29,6 +29,7 @@ h3{font-size:1rem;margin:22px 0 8px}
 .lead{color:var(--bone-2);margin:0 0 22px}
 .card{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,4vw,24px);margin-bottom:14px}
 .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+@media (min-width:720px){.grid:has(> :nth-child(4):last-child){grid-template-columns:1fr 1fr}} /* 11-21: 4개 묶음은 3칸이면 끝줄에 한 장만 남아 2×2 로 */
 .tool{display:block;text-decoration:none;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:16px;min-height:112px}
 .tool b{display:block;margin-bottom:4px}
 .tool span{color:var(--warm);font-size:.875rem;line-height:1.55;display:block}
