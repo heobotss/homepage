@@ -133,3 +133,24 @@ input[type=checkbox]:focus-visible{outline:2px solid #5B8FFA;outline-offset:2px}
 .refund[open] summary::before{transform:rotate(45deg)}
 .refund{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px}
 .refund+.agree{margin-top:20px}
+/* ══ 11-22 안쪽 디테일(시안 라) ── 첫 화면 묶음(n/common.css 끝 블록)과 같은 손질을 안쪽 화면에: 빛은 왼쪽 위 한 방향 · 카드에 층 · 단추 번짐 없음. 글자·순서·id는 그대로 ══ */
+:root{--ink:#070D19;--ink-2:#111A2C;--ink-3:#18243C;--bone:#F2F0EB;--bone-2:#C3CBD8;--warm:#9FABBD;--line:#24324A;--line-2:rgba(242,240,235,.16)}
+/* 바탕 빛은 화면 전체(html)에 건다 — 짧은 화면에서 본문 아래가 따로 끊겨 보이지 않게 */
+html{min-height:100%;background:radial-gradient(900px 620px at 16% -4%,rgba(91,143,250,.17),transparent 62%),radial-gradient(760px 540px at 100% 100%,rgba(255,86,48,.045),transparent 65%),linear-gradient(180deg,#0A1424 0%,#060B15 100%)!important;background-color:#060B15!important}
+body{background:none!important}
+/* 카드: 위에서 빛 받는 판, 테두리는 빛 받는 쪽만 밝게 */
+.card,.gate,.buy,.member,.hb-lock,.taste,#box,.what,.make,.cards:not(:has(.card)){border:1px solid transparent!important;background:linear-gradient(180deg,#18243C 0%,#111A2C 42%) padding-box,linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 38%,rgba(255,255,255,.02) 70%) border-box!important;box-shadow:0 28px 56px -28px rgba(0,0,0,.7)!important}
+/* 판 안의 판은 겹치지 않게 */
+.gate .card,.card .card,.buy .card,#box .card,.card .gate{background:none!important;border:0!important;box-shadow:none!important}
+/* 결제 화면의 고른 상품 판만 파란 테두리(빛 받는 쪽이 진하게) */
+#prodCard.card{background:linear-gradient(180deg,#1B2944 0%,#121C30 46%) padding-box,linear-gradient(135deg,rgba(91,143,250,.8),rgba(91,143,250,.22) 45%,rgba(91,143,250,.08) 75%) border-box!important}
+/* 작은 칸은 한 단 조용하게: 면 하나, 윗선만 살짝 */
+.learn li,.scene p,.bundle ol{background:#111A2C!important;border-color:#24324A!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+/* 단추: 아래 색 번짐을 빼고 윗면 빛만 */
+.btn{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 2px rgba(0,0,0,.4)!important}
+.btn:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 2px rgba(0,0,0,.4)!important}
+.btn.line,.btn.sub,.btn.soon,.btn[disabled],.btn:disabled{box-shadow:none!important}
+.pv .play{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 2px 6px rgba(0,0,0,.5)!important}
+/* 판 안의 글 칸은 판보다 한 단 깊게(눌린 칸) */
+:is(.card,.gate,#box,.buy) :is(input[type=text],input[type=email],input[type=password],input[type=tel],input[type=number],input[type=url],input[type=search],textarea,select){background-color:#0B1322!important;border-color:#2B3A55!important}
+/* 안쪽 디테일 끝 */
