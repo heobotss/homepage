@@ -78,11 +78,155 @@
     book: () => { const p = []; for (let i = 0; i < 420; i++) { const s = i % 2 ? 1 : -1, u = rnd(), v = rnd() * 1.3 - .65; p.push([s * u * 1.05, v, Math.sin(u * Math.PI) * .22 - u * .35, 0]); } for (let s = -1; s <= 1; s += 2) p.push(...Array.from({ length: 40 }, (_, k) => { const u = k / 39; return [s * u * 1.05, .65, Math.sin(u * Math.PI) * .22 - u * .35, s === 1 ? 1 : 0]; })); return [...p, ...line([0, -.65, 0], [0, .65, 0], 26, 1)]; },
   };
 
+  /* ── 11-22 무료 자료 그림 ── 자료마다 그 자료의 생김새 그대로(가는 선 + 점). 빙글 돌지 않고 좌우로 천천히 흔들려 앞모습이 늘 읽힌다.
+     S = 선과 점, T = 점줄(글 줄), F = 옅게 채운 판. 좌표 x 는 -1.3 ~ 1.3, y 는 -0.95 ~ 0.95, z 는 앞으로 나온 정도 */
+  const dotsOn = (pts, h, gap) => { const out = [[pts[0][0], pts[0][1], pts[0][2], h]]; let rem = 0; for (let i = 0; i < pts.length - 1; i++) { const a = pts[i], b = pts[i + 1], d = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]); let t = gap - rem; while (t <= d) { const u = t / d; out.push([a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u, h]); t += gap; } rem = d - (t - gap); } return out; };
+  const RR = (w, hh, r, cx = 0, cy = 0, z = 0) => { const p = []; [[1, 1], [-1, 1], [-1, -1], [1, -1]].forEach(([sx, sy], q) => { for (let i = 0; i <= 5; i++) { const a = (q + i / 5) * Math.PI / 2; p.push([cx + sx * (w / 2 - r) + Math.cos(a) * r, cy + sy * (hh / 2 - r) + Math.sin(a) * r, z]); } }); p.push(p[0]); return p; };
+  const AR = (r, a0, a1, cx = 0, cy = 0, z = 0, n = 28) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r, z]; });
+  const HL = (x0, x1, y, z = 0) => [[x0, y, z], [x1, y, z]];
+  const holo = fn => () => { const P = [], L = [];
+    const S = (pts, h = 0, gap = .1) => { L.push([pts, h, 0]); if (gap) P.push(...dotsOn(pts, h, gap)); };
+    const T = (pts, h = 0, gap = .062) => { P.push(...dotsOn(pts, h, gap)); };
+    const F = (pts, h = 0, gap = .1) => { L.push([pts, h, 1]); if (gap) P.push(...dotsOn(pts, h, gap)); };
+    fn(S, T, F); P.lines = L; P.swing = 1; return P; };
+  Object.assign(SHAPES, {
+    /* 수업 기록 글 뼈대 6단계 — 원고 한 장 위에 선 등뼈와 마디 여섯 */
+    spine: holo((S, T, F) => {
+      F(RR(1.36, 1.74, .08, .05, 0, -.14));
+      S([[-.42, .64, .12], [-.42, -.64, .12]], 0, .07);
+      [.5, .34, .56, .26, .46, .38].forEach((len, i) => { const y = .64 - i * .256, h = i === 0 ? 1 : 0;
+        S(AR(.062, 0, TAU, -.42, y, .12, 12), h, 0); F(AR(.03, 0, TAU, -.42, y, .12, 8), h, 0);
+        T(HL(-.26, -.26 + len * 1.5, y + .035, .12), h); T(HL(-.26, -.26 + len * .9, y - .055, .12), 0, .075); });
+    }),
+    /* 1분 계산표 — 칸 나뉜 표와 떠오른 답 칸 */
+    table: holo((S, T, F) => {
+      const W = 2.0, H = 1.36, x0 = -1, y0 = .68, rh = H / 4;
+      F(RR(W, H, .06, 0, 0, -.1));
+      F([[x0, y0, -.1], [x0 + W, y0, -.1], [x0 + W, y0 - rh, -.1], [x0, y0 - rh, -.1], [x0, y0, -.1]], 0, 0);
+      [2, 3].forEach(r => S(HL(x0, x0 + W, y0 - r * rh, -.1), 0, 0));
+      S([[x0 + .8, y0, -.1], [x0 + .8, y0 - H, -.1]], 0, 0); S([[x0 + 1.4, y0, -.1], [x0 + 1.4, y0 - H, -.1]], 0, 0);
+      for (let r = 0; r < 4; r++) { const y = y0 - (r + .5) * rh; T(HL(x0 + .12, x0 + .12 + [.4, .5, .36, .46][r], y, -.1)); T(HL(x0 + .95, x0 + 1.22, y, -.1)); if (r < 3) T(HL(x0 + 1.55, x0 + 1.84, y, -.1)); }
+      F(RR(.6, rh, .05, x0 + 1.7, y0 - 3.5 * rh, .22), 1, .07); T(HL(x0 + 1.52, x0 + 1.88, y0 - 3.5 * rh, .22), 1, .05);
+    }),
+    /* 인스타 진단 — 폰 속 게시물 아홉 칸과 한 칸을 들여다보는 돋보기 */
+    feed: holo((S, T, F) => {
+      F(RR(1.04, 1.84, .14, 0, 0, -.1));
+      S(AR(.09, 0, TAU, -.3, .68, -.02, 12), 0, 0); T(HL(-.15, .28, .68, -.02));
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) { const hot = r === 1 && c === 2, x = -.3 + c * .3, y = .34 - r * .3; (hot ? F : S)(RR(.25, .25, .03, x, y, hot ? .2 : -.02), hot ? 1 : 0, hot ? .07 : 0); }
+      S(AR(.3, 0, TAU, .3, .04, .36, 30), 1, .07); S([[.51, -.17, .36], [.8, -.46, .36]], 1, .06);
+      T(HL(-.3, .1, -.62, -.02));
+    }),
+    /* 일지 사진 판독 — 손글씨 종이를 훑어 반듯한 숫자 줄로 */
+    ocr: holo((S, T, F) => {
+      F(RR(1.0, 1.34, .05, -.62, 0, -.12));
+      for (let i = 0; i < 5; i++) { const y = .44 - i * .22; T(Array.from({ length: 15 }, (_, k) => [-1.0 + k * .052, y + Math.sin(k * 1.3 + i * 2) * .035, -.12]), 0, .05); }
+      [[-1, 1], [1, 1], [1, -1], [-1, -1]].forEach(([sx, sy]) => S([[-.62 + sx * .6, sy * .5, .08], [-.62 + sx * .6, sy * .77, .08], [-.62 + sx * .33, sy * .77, .08]], 1, .07));
+      S(HL(-1.26, .02, .1, .1), 1, .05);
+      T(HL(.1, .36, 0, 0), 1, .065); S([[.3, .07, 0], [.38, 0, 0], [.3, -.07, 0]], 1, 0);
+      for (let i = 0; i < 5; i++) { const y = .44 - i * .22; S(RR(.2, .13, .03, .62, y, .16), 0, 0); T(HL(.8, 1.24, y, .16)); }
+    }),
+    /* 문자 + 답별 다음 한마디 — 보낸 문자, 돌아온 답, 답마다 갈리는 세 갈래 */
+    chat: holo((S, T, F) => {
+      F(RR(1.3, .5, .2, -.3, .56, -.1)); T(HL(-.75, .1, .62, -.1)); T(HL(-.75, -.2, .5, -.1));
+      F(RR(.9, .42, .19, .5, .02, .18), 1, .07); T(HL(.2, .78, .02, .18), 1);
+      [-.72, 0, .72].forEach(x => { S([[.5, -.2, .1], [x, -.5, .04]], 0, .075); S(RR(.56, .26, .12, x, -.64, .04), 0, 0); T(HL(x - .16, x + .16, -.64, .04), 0, .055); });
+    }),
+    /* OT 종이 한 장 — 집게 물린 종이와 순서대로 채우는 칸 */
+    clip: holo((S, T, F) => {
+      F(RR(1.3, 1.6, .06, 0, -.08, -.1));
+      F(RR(.52, .2, .06, 0, .74, .06), 1, .06);
+      [.4, .12, -.16, -.44].forEach((y, i) => { S(RR(.15, .15, .02, -.42, y, 0), 0, 0); T(HL(-.24, -.24 + [.66, .5, .7, .42][i], y, 0));
+        if (i < 2) S([[-.47, y, .1], [-.43, y - .05, .1], [-.34, y + .07, .1]], 1, .04); });
+      T(HL(-.48, .2, -.7, 0), 0, .075);
+    }),
+    /* 넘겨받은 회원 — 앞 선생님에게서 다음 선생님으로 건너가는 회원 기록 */
+    relay: holo((S, T, F) => {
+      const man = (x, z, h) => { S(AR(.2, 0, TAU, x, .22, z, 20), h, .08); S([...AR(.42, 0, Math.PI, x, -.6, z, 20), [x + .42, -.6, z]], h, .08); };
+      man(-.8, -.06, 0); man(.8, .06, 1);
+      F(RR(.44, .58, .05, 0, -.14, .3)); [.0, -.12, -.24].forEach((y, i) => T(HL(-.13, i === 2 ? .05 : .13, y, .3), 0, .05));
+      T(AR(.66, Math.PI * .82, Math.PI * .18, 0, .14, .1, 30), 1, .07); S([[.4, .56, .1], [.55, .5, .1], [.56, .66, .1]], 1, 0);
+    }),
+    /* 모의고사 — 답 칸에 색칠한 답안지 */
+    omr: holo((S, T, F) => {
+      F(RR(1.34, 1.74, .06, 0, 0, -.1)); T(HL(-.5, .1, .68, -.1)); S(HL(-.55, .55, .56, -.1), 0, 0);
+      [1, 3, 0, 2, 1].forEach((pick, r) => { const y = .36 - r * .235; T(HL(-.52, -.44, y, 0), 0, .04);
+        for (let c = 0; c < 4; c++) { const x = -.2 + c * .23; if (c === pick) F(AR(.075, 0, TAU, x, y, .1, 12), 1, .05); else S(AR(.07, 0, TAU, x, y, 0, 12), 0, 0); } });
+    }),
+    /* 재등록 전자책 — 펼친 책과 다시 돌아오는 고리 */
+    ebook: holo((S, T, F) => {
+      const pg = (s, u, v, dz = 0) => [s * u * 1.1, -.86 + v * .9 + u * .1 - dz, u * .34 - u * u * .1];
+      for (const s of [-1, 1]) { F([pg(s, 0, 0), pg(s, 1, 0), pg(s, 1, 1), pg(s, 0, 1), pg(s, 0, 0)], 0, .1);
+        S([pg(s, 0, 0, .07), pg(s, 1, 0, .07), pg(s, 1, 0)], 0, 0);
+        for (let i = 0; i < 4; i++) T([pg(s, .16, .82 - i * .2), pg(s, i === 3 ? .55 : .86, .82 - i * .2)], 0, .07); }
+      S([pg(1, 0, 0), pg(1, 0, 1)], 1, .06);
+      S(AR(.26, Math.PI * .65, Math.PI * 2.35, 0, .52, .2, 30), 1, .07); S([[.254, .756, .2], [.118, .752, .2], [.196, .64, .2]], 1, 0);
+    }),
+    /* 재등록 시점표 — 남은 횟수 눈금과 그날 할 말 네 장 */
+    timeline: holo((S, T, F) => {
+      S(HL(-1.25, 1.25, -.5, 0), 0, .07);
+      for (let i = 0; i < 9; i++) { const x = -1.1 + i * .275; S([[x, -.44, 0], [x, -.56, 0]], 0, 0); }
+      [5, 6, 7, 8].forEach((i, k) => { const x = -1.1 + i * .275, top = -.2 + k * .26, h = k === 3 ? 1 : 0, z = .06 + k * .07;
+        S([[x, -.5, z], [x, top, z]], h, .07); (h ? F : S)(RR(.3, .2, .04, x, top + .1, z), h, h ? .06 : 0); T(HL(x - .08, x + .08, top + .1, z), h, .045); S(AR(.035, 0, TAU, x, -.5, z, 8), h, 0); });
+      T(HL(-1.1, -.1, -.74, 0), 0, .09);
+    }),
+    /* 사진 허락 — 카메라와 「좋아요」 표시 */
+    camera: holo((S, T, F) => {
+      F(RR(1.6, 1.04, .14, -.1, -.12, -.12)); S(RR(.42, .16, .05, -.5, .46, -.12), 0, .08);
+      S(AR(.36, 0, TAU, -.1, -.12, .08, 32), 0, .075); S(AR(.24, 0, TAU, -.1, -.12, .2, 24), 1, .07); F(AR(.1, 0, TAU, -.1, -.12, .3, 12), 1, 0);
+      S(AR(.05, 0, TAU, .52, .22, -.06, 8), 0, 0);
+      F(AR(.22, 0, TAU, .78, .52, .3, 22), 1, .07); S([[.68, .52, .32], [.75, .45, .32], [.89, .6, .32]], 1, 0);
+    }),
+    /* 100점 체크리스트 — 점수 눈금판과 바늘 */
+    gauge: holo((S, T, F) => {
+      const cy = -.48, a = Math.PI * .3;
+      S(AR(1.02, Math.PI, 0, 0, cy, -.08, 40), 0, .08);
+      for (let i = 0; i <= 10; i++) { const t = Math.PI - i * Math.PI / 10, r2 = i % 5 ? .82 : .76; S([[Math.cos(t) * .9, cy + Math.sin(t) * .9, -.08], [Math.cos(t) * r2, cy + Math.sin(t) * r2, -.08]], 0, 0); }
+      S(AR(1.02, Math.PI, a, 0, cy, .1, 30), 1, .06); S(AR(.94, Math.PI, a, 0, cy, .1, 30), 1, 0);
+      S([[0, cy, .22], [Math.cos(a) * .74, cy + Math.sin(a) * .74, .22]], 1, .06); F(AR(.07, 0, TAU, 0, cy, .22, 12), 1, 0);
+      T(HL(-.3, .3, -.74, 0), 0, .075);
+    }),
+    /* 질문지 → 블로그 글 — 질문 세 개가 글 한 편으로 */
+    qna: holo((S, T, F) => {
+      F(RR(1.1, 1.6, .06, .42, 0, -.14)); [.56, .38, .2, .02, -.16, -.34, -.52].forEach((y, i) => T(HL(.02, i === 6 ? .5 : .84, y, -.14), 0, .07));
+      const q = (x, y, z, r, h) => { (h ? F : S)(AR(r, 0, TAU, x, y, z, 22), h, .07); S([...AR(r * .34, Math.PI * .95, -Math.PI * .35, x, y + r * .22, z + .02, 10), [x, y - r * .22, z + .02]], h, 0); S(AR(r * .05, 0, TAU, x, y - r * .5, z + .02, 6), h, 0); };
+      q(-.78, .46, .1, .3, 1); q(-.42, -.14, .26, .22, 0); q(-.9, -.5, 0, .18, 0);
+    }),
+    /* 플레이스 판정표 — 지도 위에 꽂힌 핀 */
+    pin: holo((S, T, F) => {
+      const y0 = -.62; for (let i = -3; i <= 3; i++) { S([[i * .36, y0, -.75], [i * .36, y0, .75]], 0, i % 3 ? 0 : .09); S([[-1.08, y0, i * .25], [1.08, y0, i * .25]], 0, i % 3 ? 0 : .09); }
+      [.22, .46].forEach(r => S(Array.from({ length: 33 }, (_, k) => { const a = k / 32 * TAU; return [Math.cos(a) * r, y0, Math.sin(a) * r]; }), 1, .07));
+      const b = -Math.PI * .22; S([...AR(.34, b, Math.PI * 1.22, 0, .42, 0, 30), [0, y0, 0], [Math.cos(b) * .34, .42 + Math.sin(b) * .34, 0]], 1, .07);
+      S(AR(.13, 0, TAU, 0, .44, 0, 14), 0, 0);
+    }),
+    /* 리뷰 문장 5개 — 별 다섯과 받은 리뷰 한 줄 */
+    stars: holo((S, T, F) => {
+      [-1, -.5, 0, .5, 1].forEach(x => { const c = 1 - Math.abs(x), p = Array.from({ length: 11 }, (_, k) => { const a = Math.PI / 2 + k * Math.PI / 5, r2 = k % 2 ? .088 : .21; return [x * .98 + Math.cos(a) * r2, .42 + c * .1 + Math.sin(a) * r2, .06 + c * .2]; }); F(p, 1, .1); });
+      F(RR(1.8, .62, .16, 0, -.42, -.1)); S([[-.5, -.73, -.1], [-.62, -.9, -.1], [-.3, -.73, -.1]], 0, 0);
+      T(HL(-.68, .66, -.33, -.1)); T(HL(-.68, .2, -.5, -.1));
+    }),
+    /* 숫자로 보이는 수업일지 — 공책 위로 솟은 기록 막대 */
+    chart: holo((S, T, F) => {
+      F(RR(1.36, 1.7, .07, .06, 0, -.14)); for (let i = 0; i < 7; i++) S(AR(.035, 0, TAU, -.52, .66 - i * .22, -.14, 6), 0, 0);
+      T(HL(-.34, .3, .62, -.14)); T(HL(-.34, 0, .48, -.14), 0, .075);
+      S(HL(-.36, .62, -.6, .1), 0, .08);
+      const H = [.22, .4, .34, .62, .86]; H.forEach((v, i) => { const x = -.24 + i * .2, h = i === 4 ? 1 : 0; (h ? F : S)([[x - .065, -.6, .1], [x - .065, -.6 + v, .1], [x + .065, -.6 + v, .1], [x + .065, -.6, .1]], h, .07); });
+      S(H.map((v, i) => [-.24 + i * .2, -.6 + v + .1, .26]), 1, .06);
+    }),
+    /* 재등록률·소진률 계산 — 비율 고리와 채워진 만큼 */
+    donut: holo((S, T, F) => {
+      S(AR(.86, 0, TAU, -.3, 0, -.1, 44), 0, .08); S(AR(.56, 0, TAU, -.3, 0, -.1, 36), 0, 0);
+      const a0 = Math.PI / 2, a1 = Math.PI / 2 - TAU * .68;
+      F([...AR(.86, a0, a1, -.3, 0, .12, 36), ...AR(.56, a1, a0, -.3, 0, .12, 30), [-.3, .86, .12]], 1, .07);
+      S(AR(.07, 0, TAU, -.4, .1, .2, 8), 0, 0); S(AR(.07, 0, TAU, -.2, -.1, .2, 8), 0, 0); S([[-.18, .16, .2], [-.42, -.16, .2]], 0, 0);
+      [0, 1, 2].forEach(i => { const y = .34 - i * .3; S(RR(.12, .12, .02, .82, y, .05), i === 0 ? 1 : 0, 0); T(HL(.96, 1.3, y, .05), i === 0 ? 1 : 0, .06); });
+    }),
+  });
+
   const cache = {};
-  const items = cvs.map(cv => {
+  const items = cvs.map((cv, n) => {
     const k = cv.dataset.p3d;
     if (!cache[k]) { seed = 7 + k.length * 31; cache[k] = (SHAPES[k] || SHAPES.grid)(); }
-    return { cv, ctx: cv.getContext('2d'), pts: cache[k], on: false, a: (k.length * 1.3) % TAU, mx: 0, my: 0, tx: 0, ty: 0, w: 0, h: 0, glow: 0, tg: 0 };
+    return { cv, ctx: cv.getContext('2d'), pts: cache[k], lines: cache[k].lines, swing: cache[k].swing, on: false, a: cache[k].swing ? (STILL ? .12 : n * 1.37) : (k.length * 1.3) % TAU, mx: 0, my: 0, tx: 0, ty: 0, w: 0, h: 0, glow: 0, tg: 0 };
   });
 
   const DPR = Math.min(2, devicePixelRatio || 1);
@@ -94,9 +238,17 @@
     const { ctx, w, h } = it; if (!w) return;
     it.a += dt * .00028;
     it.mx += (it.tx - it.mx) * .06; it.my += (it.ty - it.my) * .06; it.glow += (it.tg - it.glow) * .08;
-    const ay = it.a + it.mx * .6, ax = -.32 + it.my * .35, cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
-    const S = Math.min(w, h) * .47, F = 3.2;
+    const ay = it.swing ? Math.sin(it.a * 2.1) * .46 + it.mx * .45 : it.a + it.mx * .6, ax = it.swing ? -.1 + it.my * .3 : -.32 + it.my * .35, cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
+    const S = Math.min(w, h) * (it.swing ? .46 : .47), F = 3.2;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, w, h);
+    if (it.lines) for (const [pts, hot, fl] of it.lines) {
+      let zs = 0; ctx.beginPath();
+      pts.forEach(([x, y, z], i) => { const x1 = x * cy + z * sy, z1 = -x * sy + z * cy, y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx, k = F / (F - z2), px = w / 2 + x1 * S * k, py = h / 2 - y1 * S * k; zs += z2; if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py); });
+      const d = Math.max(0, Math.min(1, (zs / pts.length + .8) / 1.6));
+      if (fl) { ctx.fillStyle = hot ? `rgba(${BLUE},${.15 + it.glow * .1})` : `rgba(${INK},.04)`; ctx.fill(); }
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.lineWidth = hot ? 1.3 : 1;
+      ctx.strokeStyle = hot ? `rgba(${BLUE},${.7 + d * .3})` : `rgba(${INK},${.27 + d * .23 + it.glow * .08})`; ctx.stroke();
+    }
     const out = [];
     for (const [x, y, z, hot] of it.pts) {
       const x1 = x * cy + z * sy, z1 = -x * sy + z * cy, y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx;
@@ -104,7 +256,7 @@
     }
     out.sort((p, q) => p[2] - q[2]);
     for (const [px, py, z, hot, k] of out) {
-      const d = (z + 1.2) / 2.4, al = Math.max(.2, Math.min(1, .38 + d * .62)) * (.85 + it.glow * .15), r = (hot ? 1.7 : 1.2) * k * (.8 + it.glow * .15);
+      const d = (z + 1.2) / 2.4, al = Math.max(.2, Math.min(1, .38 + d * .62)) * (.85 + it.glow * .15), r = (hot ? 1.7 : 1.2) * (it.swing ? .78 : 1) * k * (.8 + it.glow * .15);
       ctx.fillStyle = hot ? `rgba(${BLUE},${Math.min(1, al + .25)})` : `rgba(${INK},${al * .92})`;
       ctx.beginPath(); ctx.arc(px, py, r, 0, TAU); ctx.fill();
       if (hot) { ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(${BLUE},${(.05 + d * .07) * (1 + it.glow)})`; ctx.beginPath(); ctx.arc(px, py, r * 5, 0, TAU); ctx.fill(); ctx.globalCompositeOperation = 'source-over'; }
