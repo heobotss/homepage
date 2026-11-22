@@ -155,4 +155,15 @@ body{background:none!important}
 :is(.card,.gate,#box,div.buy) :is(input[type=text],input[type=email],input[type=password],input[type=tel],input[type=number],input[type=url],input[type=search],textarea,select){background-color:#0B1322!important;border-color:#2B3A55!important}
 /* 아이폰: 글 칸 글자가 16px보다 작으면 누를 때 화면이 저절로 확대된다 → 아이폰에서만 16px 이상으로 */
 @supports (-webkit-touch-callout:none){input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=hidden]),select,textarea{font-size:max(16px,1em)!important}}
+/* 로그인 상자 공통: 안내 글이 따로 띠·상자로 보이거나 로그인 단추만 작게 나오던 화면(재등록 도구 등)을 다른 화면과 같게 */
+.card.auth .note{border:0!important;background:none!important;padding:0!important;border-radius:0!important}
+.card.auth>.btn{display:flex!important;width:100%;justify-content:center;margin-top:14px}
+/* 무료 자료 화면에서 열쇠 없이 들어왔을 때 뜨는 로그인 칸: 꾸밈이 빠져 글자가 가장자리에 붙고 칸이 한 줄에 뭉치던 것 */
+#lockAuth .card.auth{margin-top:16px;padding:20px!important}
+#lockAuth .auth h2{margin:0 0 6px;font-size:1.0625rem}
+#lockAuth .auth label{display:block;font-size:.9375rem;margin:12px 0 6px}
+#lockAuth .auth input{display:block;width:100%;border:1px solid #2B3A55;border-radius:14px;color:inherit;font:inherit;padding:12px 14px;outline:none}
+#lockAuth .auth .note{font-size:.8125rem;line-height:1.7}
+/* 카카오 단추 모양을 화면마다 같게(둥근 알약) */
+.card.auth #aKk{border-radius:999px!important}
 /* 안쪽 디테일 끝 */
