@@ -166,10 +166,10 @@ input[type=checkbox]:disabled{opacity:.4;cursor:default}
 /* 바탕 빛은 화면 전체(html)에 건다 — 짧은 화면에서 본문 아래가 따로 끊겨 보이지 않게 */
 html{min-height:100%;background:radial-gradient(900px 620px at 16% -4%,rgba(91,143,250,.17),transparent 62%),radial-gradient(760px 540px at 100% 100%,rgba(255,86,48,.045),transparent 65%),linear-gradient(180deg,#0A1424 0%,#060B15 100%)!important;background-color:#060B15!important}
 body{background:none!important}
-/* 카드: 위에서 빛 받는 판, 테두리는 빛 받는 쪽만 밝게 */
-.card,.gate,.buy,.member,.hb-lock,.taste,#box,.what,.make,.cards:not(:has(.card)){border:1px solid transparent!important;background:linear-gradient(180deg,#18243C 0%,#111A2C 42%) padding-box,linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 38%,rgba(255,255,255,.02) 70%) border-box!important;box-shadow:0 28px 56px -28px rgba(0,0,0,.7)!important}
+/* 카드: 위에서 빛 받는 판, 테두리는 빛 받는 쪽만 밝게. 이름이 같은 단추(a.buy)·글줄(p.what)에 묻지 않게 태그를 붙여 고른다 */
+.card,section.gate,div.gate,div.buy,section.member,section.hb-lock,section.taste,#box,div.what,div.make,div.cards:not(:has(.card)){border:1px solid transparent!important;background:linear-gradient(180deg,#18243C 0%,#111A2C 42%) padding-box,linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 38%,rgba(255,255,255,.02) 70%) border-box!important;box-shadow:0 28px 56px -28px rgba(0,0,0,.7)!important}
 /* 판 안의 판은 겹치지 않게 */
-.gate .card,.card .card,.buy .card,#box .card,.card .gate{background:none!important;border:0!important;box-shadow:none!important}
+.gate .card,.card .card,div.buy .card,#box .card,.card .gate{background:none!important;border:0!important;box-shadow:none!important}
 /* 결제 화면의 고른 상품 판만 파란 테두리(빛 받는 쪽이 진하게) */
 #prodCard.card{background:linear-gradient(180deg,#1B2944 0%,#121C30 46%) padding-box,linear-gradient(135deg,rgba(91,143,250,.8),rgba(91,143,250,.22) 45%,rgba(91,143,250,.08) 75%) border-box!important}
 /* 작은 칸은 한 단 조용하게: 면 하나, 윗선만 살짝 */
@@ -180,7 +180,7 @@ body{background:none!important}
 .btn.line,.btn.sub,.btn.soon,.btn[disabled],.btn:disabled{box-shadow:none!important}
 .pv .play{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 2px 6px rgba(0,0,0,.5)!important}
 /* 판 안의 글 칸은 판보다 한 단 깊게(눌린 칸) */
-:is(.card,.gate,#box,.buy) :is(input[type=text],input[type=email],input[type=password],input[type=tel],input[type=number],input[type=url],input[type=search],textarea,select){background-color:#0B1322!important;border-color:#2B3A55!important}
+:is(.card,.gate,#box,div.buy) :is(input[type=text],input[type=email],input[type=password],input[type=tel],input[type=number],input[type=url],input[type=search],textarea,select){background-color:#0B1322!important;border-color:#2B3A55!important}
 /* 안쪽 디테일 끝 */
 </style>
 <style id="hb-bar-css">.hb-bar{position:sticky;top:0;z-index:50;height:64px;background:rgba(7,13,25,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #24324A;font-family:"P","Pretend",system-ui,-apple-system,"Malgun Gothic",sans-serif}.hb-bar .hb-in{max-width:1312px;height:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hb-bar a{color:#9FABBD;text-decoration:none}.hb-bar .hb-logo{color:#F2F0EB;font-size:20px;font-weight:800;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}.hb-bar nav{display:flex;align-items:center;gap:16px;font-size:16px}.hb-bar nav a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}.hb-bar nav a:hover{color:#F2F0EB}.hb-bar nav a.hb-me{color:#F2F0EB;border:1px solid rgba(242,240,235,.18);border-radius:999px;padding:0 16px}.hb-bar .hb-keep{display:flex;gap:12px;align-items:center;font-size:14px;color:#9FABBD}.hb-bar .hb-keep:empty{display:none}@media (max-width:720px){.hb-bar .hb-in{padding:0 16px}.hb-bar nav{gap:2px;font-size:13px}.hb-bar nav{overflow-x:auto;scrollbar-width:none;min-width:0;flex:1 1 auto;justify-content:flex-start}.hb-bar nav::-webkit-scrollbar{display:none}.hb-bar .hb-in{gap:8px}.hb-bar nav a{flex:none;min-width:0;padding:0 4px}.hb-bar nav a.hb-me{padding:0 10px;margin-left:2px}.hb-bar .hb-logo{flex:none;white-space:nowrap}.hb-bar .hb-keep{display:none}}@media (max-width:400px){.hb-bar nav{font-size:12px}.hb-bar nav a{padding:0 3px}.hb-bar nav a.hb-me{padding:0 9px}}@media (max-width:359px){.hb-bar nav{mask-image:linear-gradient(90deg,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent)}}</style>
