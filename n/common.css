@@ -439,6 +439,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .card h3{margin-bottom:var(--s1)}
 .card p{color:var(--ink2)}
 .card a{display:block}
+.card a.btn{display:inline-flex} /* 11-22: 위 규칙이 카드 안 단추까지 block 으로 바꿔 글자가 가운데보다 5.5px 위에 있었다 */
 .card-link{transition:border-color .25s;display:block}
 .card .fog{display:none}
 .fx .card.fogged .fog{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
