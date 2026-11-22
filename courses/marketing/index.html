@@ -38,6 +38,14 @@
 .p0auth .note{display:block}
 .p0auth .msg{margin-top:10px;color:#E07A6B;font-size:.9375rem}
 .p0auth .note{color:#9FABBD;font-size:.8125rem;margin-top:10px}
+/* 11-22 로그인 상자: 판 안의 판·들여쓴 안내 글·네모난 카카오 단추 정리 */
+#p0:has(.p0auth){max-width:524px}
+.p0auth .card.auth{padding:0;background:none;border:0;box-shadow:none}
+.p0auth .note{padding:0;border:0}
+.p0auth h2{margin:0 0 12px}
+.p0auth #aKk{border-radius:999px!important}
+.p0auth input[type=email],.p0auth input[type=password],.p0auth input[type=text]{background:#0B1322;border-color:#2B3A55}
+@media (max-width:520px){#p0:has(.p0auth){padding:24px 20px}}
 .p0next{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--s3)}
 .p0card{padding:var(--s3);border-radius:20px;display:flex;flex-direction:column;gap:10px}
 .p0card h3{margin:0;font-size:1.125rem}

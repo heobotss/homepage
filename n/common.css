@@ -1057,3 +1057,5 @@ h1 .blue,h2 .blue{background:linear-gradient(180deg,#8FB4FF 0%,#5B8FFA 55%,#4A7B
 /* 메뉴 간격 고르게(컴퓨터만) */
 @media (min-width:721px){.top nav{gap:28px!important}.top nav a{min-width:0!important}}
 .door-note{text-shadow:0 0 12px #060B15}
+/* ── 11-22 점검 보완 ── 4T 카드(컴퓨터): 절약 금액 줄이 단추 위에 오게 */
+@media (min-width:901px){.crs-one .card>.act{grid-row:6}}
