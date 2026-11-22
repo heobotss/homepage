@@ -1,6 +1,6 @@
 @font-face{font-family:'Pretend';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/pretendard-400.woff2') format('woff2')}
 @font-face{font-family:'Pretend';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/pretendard-700.woff2') format('woff2')}
-:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--line:#222222;--brass:#4F86F7;--brass-lt:#EDEDED;--bad:#E07A6B}
+:root{color-scheme:dark;--ink:#0A0A0A;--ink-2:#111111;--bone:#F2F2F2;--bone-2:#BDBDBD;--warm:#8E8E8E;--line:#222222;--brass:#5B8FFA;--brass-lt:#EDEDED;--bad:#E07A6B}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ink);color:var(--bone);font-family:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;font-size:15.5px;line-height:1.8;word-break:keep-all;-webkit-font-smoothing:antialiased}
 a{color:var(--brass-lt)}
@@ -23,22 +23,22 @@ th{color:var(--bone);background:var(--ink-2);font-weight:700;white-space:nowrap}
 .legal{margin-top:34px;font-size:12px;color:var(--warm);line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
 .legal a{color:var(--warm)}
 /* ── 새 옷 공통 (11-10) ── 옛 화면의 첫 스타일 끝에 덧붙는다. 색 토큰을 새 값으로 다시 선언하고 배경 빛·버튼·판만 바꾼다. 글자·id·스크립트는 그대로 */
-:root{color-scheme:dark;--ink:#0A0A0B;--ink-2:#141416;--ink-3:#1A1A1D;--bone:#F2F0EB;--bone-2:#C9C7C2;--warm:#A3A39E;--line:#242426;--line-2:rgba(242,240,235,.16);--blue:#4F86F7;--brass:#4F86F7;--bad:#E07A6B}
-html{background:#0A0A0B}
-body{background:radial-gradient(900px 520px at 50% -120px,rgba(79,134,247,.20),transparent 70%) no-repeat,radial-gradient(600px 400px at 100% 30%,rgba(79,134,247,.07),transparent 70%) no-repeat,var(--ink)}
-::selection{background:rgba(79,134,247,.35)}
-.btn{border-radius:999px;background:var(--blue);color:#0A0A0B;box-shadow:0 8px 28px rgba(79,134,247,.32),inset 0 1px 0 rgba(255,255,255,.28);transition:background .2s,transform .2s,box-shadow .2s}
-.btn:hover{background:#6B9CFF;transform:translateY(-1px)}
+:root{color-scheme:dark;--ink:#070D19;--ink-2:#111A2C;--ink-3:#18243C;--bone:#F2F0EB;--bone-2:#C3CBD8;--warm:#9FABBD;--line:#24324A;--line-2:rgba(242,240,235,.16);--blue:#5B8FFA;--brass:#5B8FFA;--bad:#E07A6B}
+html{background:#070D19}
+body{background:radial-gradient(900px 520px at 50% -120px,rgba(91,143,250,.20),transparent 70%) no-repeat,radial-gradient(600px 400px at 100% 30%,rgba(91,143,250,.07),transparent 70%) no-repeat,var(--ink)}
+::selection{background:rgba(91,143,250,.35)}
+.btn{border-radius:999px;background:var(--blue);color:#070D19;box-shadow:0 8px 28px rgba(91,143,250,.32),inset 0 1px 0 rgba(255,255,255,.28);transition:background .2s,transform .2s,box-shadow .2s}
+.btn:hover{background:#8FB4FF;transform:translateY(-1px)}
 .btn[disabled],.btn:disabled{opacity:.38;transform:none;box-shadow:none;cursor:default}
 .btn.line,.btn.sub,.btn.soon{background:transparent;color:var(--bone);border:1px solid var(--line-2);box-shadow:none}
 .btn.line:hover,.btn.sub:hover{background:rgba(242,240,235,.05);border-color:rgba(242,240,235,.36)}
 .card{border:1px solid var(--line-2);border-radius:20px;background:rgba(242,240,235,.03);box-shadow:inset 0 1px 0 rgba(242,240,235,.06),0 24px 64px rgba(0,0,0,.35)}
 input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=search],input[type=url],select,textarea{border-radius:14px}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(79,134,247,.16);outline:0}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(91,143,250,.16);outline:0}
 @media (prefers-reduced-motion:reduce){.btn,.btn:hover{transform:none}}
 /* 11-10 체크박스 한 벌 — 새 화면과 같은 꼴(얇은 테두리, 고르면 파랑) */
 input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;margin-top:2px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
-input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #070D19;border-bottom:2px solid #070D19;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
 input[type=checkbox]:checked{background:var(--blue);border-color:var(--blue)}
 input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
 input[type=checkbox]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}

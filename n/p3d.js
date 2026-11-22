@@ -88,7 +88,7 @@
   const DPR = Math.min(2, devicePixelRatio || 1);
   const size = it => { const r = it.cv.getBoundingClientRect(); it.w = r.width; it.h = r.height; it.cv.width = Math.round(r.width * DPR); it.cv.height = Math.round(r.height * DPR); };
   const css = getComputedStyle(document.documentElement);
-  const BLUE = (css.getPropertyValue('--blue-rgb') || '79,134,247').trim(), INK = (css.getPropertyValue('--ink-rgb') || '242,240,235').trim();
+  const BLUE = (css.getPropertyValue('--blue-rgb') || '91,143,250').trim(), INK = (css.getPropertyValue('--ink-rgb') || '242,240,235').trim();
 
   function draw(it, dt) {
     const { ctx, w, h } = it; if (!w) return;

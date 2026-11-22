@@ -28,7 +28,7 @@ const 교육인원 = '';
   const fmtNum = n => Number(n).toLocaleString('ko-KR');
   const wide = () => innerWidth > 900;
   const BAR = 64;
-  const TONE = { black: '#0A0A0B', deep: '#0A0F1E', ink: '#121214' };
+  const TONE = { black: '#070D19', deep: '#0A0F1E', ink: '#121214' };
   /* 요소의 글자(빛 겹 .gl 제외) */
   const ownText = el => [...el.childNodes].filter(n => !(n.nodeType === 1 && n.classList.contains('gl'))).map(n => n.textContent).join('');
 
@@ -218,7 +218,7 @@ const 교육인원 = '';
       const t0 = performance.now(), dur = 620;
       function f(now) {
         const t = clamp((now - t0) / dur, 0, 1);
-        x.clearRect(0, 0, c.width, c.height); x.fillStyle = '#4F86F7';
+        x.clearRect(0, 0, c.width, c.height); x.fillStyle = '#5B8FFA';
         for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
           const px = i * S, py = j * S, dd = Math.hypot(px - ox, py - oy) / maxD;
           let k = clamp((t * 1.45 - dd * .45) / 1, 0, 1); if (dir < 0) k = 1 - k;
@@ -1252,9 +1252,9 @@ const 교육인원 = '';
     const x = cv.getContext('2d'); let W = 0, Hh = 0, wiped = 0, auto = null;
     function paintFog() {
       W = card.clientWidth; Hh = card.clientHeight; cv.width = W; cv.height = Hh;
-      x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(20,20,22,.9)'; x.fillRect(0, 0, W, Hh);
+      x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(17,26,44,.9)'; x.fillRect(0, 0, W, Hh);
       x.fillStyle = 'rgba(242,240,235,.05)'; for (let i = 0; i < 26; i++) { x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, 20 + Math.random() * 60, 0, 6.2832); x.fill(); }
-      x.fillStyle = 'rgba(79,134,247,.06)'; for (let i = 0; i < 10; i++) { x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, 30 + Math.random() * 80, 0, 6.2832); x.fill(); }
+      x.fillStyle = 'rgba(91,143,250,.06)'; for (let i = 0; i < 10; i++) { x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, 30 + Math.random() * 80, 0, 6.2832); x.fill(); }
     }
     function wipe(px, py, r) {
       x.globalCompositeOperation = 'destination-out';

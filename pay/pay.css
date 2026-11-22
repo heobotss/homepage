@@ -11,8 +11,8 @@
 :root{
   color-scheme:dark;
   /* 이름은 옛 것 그대로(화면 안 style 속성이 var(--warm) 등을 쓴다), 값만 새 길의 색 */
-  --ink:#0A0A0B; --ink-2:#141416; --ink-3:#0C0C0E; --bone:#F2F0EB; --bone-2:#C9C7C2; --warm:#A3A39E;
-  --line:#242426; --line-2:rgba(242,240,235,.16); --brass:#4F86F7; --brass-lt:#F2F0EB; --sage:#4F86F7; --bad:#E07A6B;
+  --ink:#070D19; --ink-2:#111A2C; --ink-3:#0C0C0E; --bone:#F2F0EB; --bone-2:#C3CBD8; --warm:#9FABBD;
+  --line:#24324A; --line-2:rgba(242,240,235,.16); --brass:#5B8FFA; --brass-lt:#F2F0EB; --sage:#5B8FFA; --bad:#E07A6B;
   --sans:"Pretend","Pretendard","Apple SD Gothic Neo",-apple-system,system-ui,sans-serif;
   --tech:"Bahn","Bahnschrift",var(--sans);
   --r:20px;
@@ -22,7 +22,7 @@ html{-webkit-text-size-adjust:100%}
 body{position:relative;margin:0;min-height:100vh;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:16px;line-height:1.7;word-break:keep-all;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 /* 뒤 배경 — 위에서 내려오는 옅은 파란 빛 한 줄기와 아주 가는 점 무늬(새 길의 별빛 결) */
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(900px 520px at 50% -120px,rgba(79,134,247,.20),transparent 70%),radial-gradient(600px 400px at 100% 30%,rgba(79,134,247,.07),transparent 70%)}
+  background:radial-gradient(900px 520px at 50% -120px,rgba(91,143,250,.20),transparent 70%),radial-gradient(600px 400px at 100% 30%,rgba(91,143,250,.07),transparent 70%)}
 body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
   background-image:radial-gradient(rgba(242,240,235,.10) 1px,transparent 1.2px);background-size:28px 28px;
   -webkit-mask-image:linear-gradient(180deg,#000,transparent 70%);mask-image:linear-gradient(180deg,#000,transparent 70%)}
@@ -30,7 +30,7 @@ body>*{position:relative;z-index:1}
 a{color:var(--bone);text-underline-offset:3px}
 :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 /* 옛 머리(교체 때 새 메뉴바 .hb-bar 로 바뀐다. 바뀌기 전에도 같은 결로 보이게) */
-.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0 clamp(16px,4vw,32px);background:rgba(10,10,11,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0 clamp(16px,4vw,32px);background:rgba(7,13,25,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .top .logo{font-weight:900;font-size:20px;letter-spacing:-.02em;color:var(--bone);text-decoration:none}
 .top .logo small{display:none}
 .top .back,.top .home{font-size:14px;color:var(--warm);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
@@ -43,10 +43,10 @@ h1{font-size:clamp(34px,6vw,56px);font-weight:900;line-height:1.12;letter-spacin
 .card{position:relative;background:linear-gradient(180deg,rgba(26,26,30,.86),rgba(15,15,17,.86));border:1px solid rgba(242,240,235,.10);border-radius:var(--r);padding:28px;margin-bottom:16px;
   box-shadow:inset 0 1px 0 rgba(242,240,235,.14),0 1px 0 rgba(0,0,0,.6),0 32px 80px rgba(0,0,0,.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .card h2{display:flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.14em;color:var(--warm);font-weight:500;margin:0 0 18px;text-transform:none}
-.card h2::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--brass);box-shadow:0 0 12px 3px rgba(79,134,247,.6)}
+.card h2::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--brass);box-shadow:0 0 12px 3px rgba(91,143,250,.6)}
 /* 상품 카드 — 화면의 주인공. 파란 빛 테두리와 위쪽 빛줄 */
-#prodCard{border-color:rgba(79,134,247,.38);box-shadow:inset 0 1px 0 rgba(242,240,235,.16),0 0 0 1px rgba(79,134,247,.10),0 32px 96px rgba(0,0,0,.55),0 0 80px rgba(79,134,247,.10);overflow:hidden}
-#prodCard::before{content:"";position:absolute;left:28px;right:28px;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,134,247,.9),transparent)}
+#prodCard{border-color:rgba(91,143,250,.38);box-shadow:inset 0 1px 0 rgba(242,240,235,.16),0 0 0 1px rgba(91,143,250,.10),0 32px 96px rgba(0,0,0,.55),0 0 80px rgba(91,143,250,.10);overflow:hidden}
+#prodCard::before{content:"";position:absolute;left:28px;right:28px;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(91,143,250,.9),transparent)}
 .prod{display:flex;flex-direction:column;gap:20px;align-items:stretch}
 .prod .n{font-weight:900;font-size:clamp(22px,3.4vw,30px);line-height:1.28;letter-spacing:-.035em}
 .prod .d{color:var(--warm);font-size:14.5px;margin-top:8px}
@@ -59,14 +59,14 @@ h1{font-size:clamp(34px,6vw,56px);font-weight:900;line-height:1.12;letter-spacin
 label{display:block;font-size:13.5px;letter-spacing:.01em;color:var(--bone-2);margin:18px 0 8px}
 input[type=text],input[type=tel],input[type=email],input[type=password]{width:100%;min-height:54px;background:var(--ink-3);border:1px solid var(--line-2);border-radius:14px;color:var(--bone);font:inherit;font-size:16px;padding:12px 16px;outline:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.5);transition:border-color .2s,box-shadow .2s}
 input::placeholder{color:#62625E}
-input:focus{border-color:var(--brass);box-shadow:inset 0 1px 2px rgba(0,0,0,.5),0 0 0 4px rgba(79,134,247,.16)}
+input:focus{border-color:var(--brass);box-shadow:inset 0 1px 2px rgba(0,0,0,.5),0 0 0 4px rgba(91,143,250,.16)}
 input.err{border-color:var(--bad)}
 .agree{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--bone-2);margin-top:16px;line-height:1.6}
 .agree input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--brass)}
 /* 10-14 — hidden 을 작성자 스타일이 이기면 로그인 전에 회색 결제 버튼이 떠 「고장났나」로 읽힌다 */
 .btn[hidden],[hidden]{display:none!important}
 /* 단계 줄 — 알약 띠 */
-.steps{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 6px;margin:0 0 14px;padding:8px 16px;border:1px solid var(--line-2);border-radius:999px;background:rgba(20,20,22,.6);color:var(--warm);font-size:13.5px;line-height:1.6}
+.steps{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 6px;margin:0 0 14px;padding:8px 16px;border:1px solid var(--line-2);border-radius:999px;background:rgba(17,26,44,.6);color:var(--warm);font-size:13.5px;line-height:1.6}
 .steps b{color:var(--brass);font-weight:700}
 .got{width:100%;border-collapse:collapse;margin:24px 0 0;font-size:15px}
 .got td{padding:14px 0;border-top:1px solid var(--line);vertical-align:top;line-height:1.65}
@@ -77,9 +77,9 @@ input.err{border-color:var(--bad)}
 .got .grp{color:var(--bone-2);font-weight:700;margin-top:6px}
 .got a{text-decoration:underline}
 /* 단추 — 파란 알약에 아래로 번지는 빛 */
-.btn{display:block;width:100%;min-height:60px;border:0;border-radius:999px;padding:16px 28px;font:inherit;font-size:17.5px;font-weight:700;letter-spacing:-.01em;cursor:pointer;background:var(--brass);color:#0A0A0B;text-align:center;text-decoration:none;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 12px 40px rgba(79,134,247,.35);transition:background-color .2s,box-shadow .2s,transform .2s,opacity .2s}
-.btn:hover{background:#6B9CFF;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 16px 48px rgba(79,134,247,.5);transform:translateY(-1px)}
+.btn{display:block;width:100%;min-height:60px;border:0;border-radius:999px;padding:16px 28px;font:inherit;font-size:17.5px;font-weight:700;letter-spacing:-.01em;cursor:pointer;background:var(--brass);color:#070D19;text-align:center;text-decoration:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 12px 40px rgba(91,143,250,.35);transition:background-color .2s,box-shadow .2s,transform .2s,opacity .2s}
+.btn:hover{background:#8FB4FF;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 16px 48px rgba(91,143,250,.5);transform:translateY(-1px)}
 .btn:active{transform:none}
 .btn:disabled{opacity:.38;cursor:not-allowed;box-shadow:none;transform:none}
 .btn.line{background:rgba(242,240,235,.04);color:var(--bone);border:1px solid var(--line-2);box-shadow:none}
@@ -96,7 +96,7 @@ input.err{border-color:var(--bad)}
 .legal{margin-top:56px;font-size:12.5px;color:#8A8A85;line-height:1.85;border-top:1px solid var(--line);padding-top:20px}
 .legal a{color:#8A8A85}
 /* 완료 화면 */
-.done-icon{width:64px;height:64px;border-radius:50%;background:rgba(79,134,247,.14);color:var(--sage);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;box-shadow:0 0 0 8px rgba(79,134,247,.06),0 0 48px rgba(79,134,247,.25)}
+.done-icon{width:64px;height:64px;border-radius:50%;background:rgba(91,143,250,.14);color:var(--sage);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;box-shadow:0 0 0 8px rgba(91,143,250,.06),0 0 48px rgba(91,143,250,.25)}
 .done-icon.bad{background:rgba(224,122,107,.14);color:var(--bad);box-shadow:0 0 0 8px rgba(224,122,107,.06)}
 table.kv{width:100%;border-collapse:collapse;font-size:15px}
 table.kv td{padding:12px 0;border-bottom:1px solid var(--line);vertical-align:top}
@@ -119,13 +119,13 @@ table.kv tr:last-child td{border-bottom:0}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}.btn,.btn:hover{transition:none;transform:none}}
 
 /* 11-10 생김새만(스크립트·id·순서 그대로) — 아직 못 누르는 결제 버튼도 모양은 보이게, 체크박스는 사이트 공통 한 벌 */
-.btn:not(.line):not(.sub):disabled{opacity:1;background:rgba(79,134,247,.24);color:rgba(242,240,235,.55)}
+.btn:not(.line):not(.sub):disabled{opacity:1;background:rgba(91,143,250,.24);color:rgba(242,240,235,.55)}
 input[type=checkbox]{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 20px;border:1.5px solid rgba(242,240,235,.38);border-radius:6px;background:transparent;display:inline-grid;place-content:center;cursor:pointer;transition:background-color .15s,border-color .15s}
-input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
-input[type=checkbox]:checked{background:#4F86F7;border-color:#4F86F7}
+input[type=checkbox]::before{content:"";width:10px;height:5px;border-left:2px solid #070D19;border-bottom:2px solid #070D19;transform:translateY(-1px) rotate(-45deg) scale(0);transition:transform .15s}
+input[type=checkbox]:checked{background:#5B8FFA;border-color:#5B8FFA}
 input[type=checkbox]:checked::before{transform:translateY(-1px) rotate(-45deg) scale(1)}
 input[type=checkbox]:disabled{opacity:.4;cursor:default}
-input[type=checkbox]:focus-visible{outline:2px solid #4F86F7;outline-offset:2px}
+input[type=checkbox]:focus-visible{outline:2px solid #5B8FFA;outline-offset:2px}
 /* 11-13 대표님 「환불 규정 보기 밑에 동의가 있어 환불 내용처럼 보인다」 — 접기는 접기답게(▸ 열고 닫기), 동의 칸은 선으로 따로 떼어 「결제 전 동의」로 보이게. 글자·id·순서는 그대로 */
 .refund summary{list-style:none;gap:8px;color:var(--bone-2);text-decoration:underline;text-underline-offset:3px}
 .refund summary::-webkit-details-marker{display:none}

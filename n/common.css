@@ -9,7 +9,7 @@
    수업일지는 가운데 정렬(.jn) · 터널 글 판은 틀 없이 · 제목 낱말 등장 0.45초.
    효과 층은 전부 html.fx(자바스크립트 + GSAP + 움직임 허용) 아래에만 있다. 그 밖(움직임 줄이기·JS 없음·GSAP 없음)은 평범한 세로 배치로 전부 읽힌다.
 
-   규칙과 달리 정한 것 하나: 주 단추 글자는 규칙의 「흰 글」 대신 바탕색(#0A0A0B)이다(대비 5.7:1). */
+   규칙과 달리 정한 것 하나: 주 단추 글자는 규칙의 「흰 글」 대신 바탕색(#070D19)이다(대비 5.7:1). */
 
 @font-face{font-family:"P";src:url(fonts/pretendard-200.woff2) format("woff2");font-weight:200;font-display:swap}
 @font-face{font-family:"P";src:url(fonts/pretendard-300.woff2) format("woff2");font-weight:300;font-display:swap}
@@ -21,8 +21,8 @@
 @font-face{font-family:"B";src:url(fonts/bahn-700.woff2) format("woff2");font-weight:700;font-display:swap}
 
 :root{
-  --bg:#0A0A0B; --bg0:#0A0A0B; --face:#141416; --line:#242426; --ink:#F2F0EB; --ink2:#ABABA6; --blue:#4F86F7;
-  --ink-a18:rgba(242,240,235,.18); --ink-a10:rgba(242,240,235,.1); --blue-rgb:79,134,247; --face-rgb:20,20,22; --ink-rgb:242,240,235;
+  --bg:#070D19; --bg0:#070D19; --face:#111A2C; --line:#24324A; --ink:#F2F0EB; --ink2:#9FABBD; --blue:#5B8FFA;
+  --ink-a18:rgba(242,240,235,.18); --ink-a10:rgba(242,240,235,.1); --blue-rgb:91,143,250; --face-rgb:17,26,44; --ink-rgb:242,240,235;
   --sans:"P",system-ui,-apple-system,"Malgun Gothic",sans-serif; --num:"B","P",system-ui,sans-serif;
   --t0:128px; --t1:96px; --t2:56px; --t3:32px; --t4:20px; --t5:18px; --t6:14px; --num-big:56px;
   --s1:8px; --s2:16px; --s3:32px; --s4:64px; --s5:clamp(72px,10vh,144px);
@@ -358,7 +358,7 @@ html:not(.fx) .fill .w{color:var(--ink)}
 .door-title .door-pre{margin-bottom:var(--s2);letter-spacing:.06em}
 .door-note{text-align:center;text-wrap:balance;z-index:2;position:relative}
 /* 11-16 라이브 점검 — 보조 문구가 입자 그림에 묻혀 안 읽히던 것: 문구 뒤에 어두운 바탕 */
-.door-note{width:fit-content;margin-inline:auto;padding:6px 16px;border-radius:999px;background:rgba(10,10,11,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink)}
+.door-note{width:fit-content;margin-inline:auto;padding:6px 16px;border-radius:999px;background:rgba(7,13,25,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink)}
 /* 11-16 폰 첫 화면에 누를 단추가 없던 것 — 제목 아래 「30초 진단 해 보기」(폰에서만) */
 .door-go{display:none}
 @media (max-width:720px){.door-go{display:inline-flex;margin-top:var(--s2);position:relative;z-index:3}}
@@ -396,14 +396,14 @@ html:not(.fx) .fill .w{color:var(--ink)}
 @media (max-width:720px){.fx:not(.nostars) .who em{left:auto;right:22px}
   /* 6-6(11-03 저녁): 폰 첫 화면이 흐리던 원인 셋 — ① 제목 가는 굵기(200) → 500, 색 순백 ② 제목 뒤 반투명 어둠(rgba .72) 제거(나선은 _공통.js 에서 더 아래로 내려 대비 확보) ③ 흐림 등장 없이 바로 또렷(_공통.js runIntro). 파랑은 한 단계 밝게 */
   .door-title h1{font-weight:500;color:#FFF}
-  .door-title h1 .blue{color:#6B9CFF}}
+  .door-title h1 .blue{color:#8FB4FF}}
 @keyframes ring{from{transform:scale(.4);opacity:1}to{transform:scale(2.4);opacity:0}}
 @keyframes beat{0%,100%{box-shadow:0 0 14px 4px var(--blue),0 0 44px 12px rgba(var(--blue-rgb),.5)}50%{box-shadow:0 0 20px 7px var(--blue),0 0 70px 18px rgba(var(--blue-rgb),.6)}}
 /* 제목은 위(9%), 문 둘은 아래(bottom 6%) — 아래로 내리는 만큼 문이 떠오른다 */
 .fx:not(.nostars) .door-title{position:absolute;left:var(--gut);right:var(--gut);top:9%;pointer-events:none;will-change:opacity;opacity:0}
 .fx:not(.nostars) .door-title h1{font-size:var(--t1)}
 @media (max-width:720px){.fx:not(.nostars) .door-title h1{font-size:38px}}
-.fx:not(.nostars) .door-title h1{text-shadow:0 2px 14px rgba(10,10,11,.75),0 4px 60px rgba(10,10,11,.85)}
+.fx:not(.nostars) .door-title h1{text-shadow:0 2px 14px rgba(7,13,25,.75),0 4px 60px rgba(7,13,25,.85)}
 .fx:not(.nostars) .door-open{position:absolute;left:0;right:0;bottom:6%;padding-inline:var(--gut);opacity:0;visibility:hidden;will-change:transform,opacity}
 .fx:not(.nostars) .door-note{opacity:0;transition:opacity 1s;margin-top:var(--s2)}
 .fx:not(.nostars) .door.ready .door-note{opacity:1}
@@ -703,7 +703,7 @@ html:not(.fx) .cols .edge{display:none}
 html:not(.fx) .giant b::after{clip-path:none}
 .giant .blue-fill{position:absolute;inset:0;background:var(--blue);clip-path:inset(100% 0 0 0);z-index:0;display:none}
 .giant.blue-end .blue-fill{display:block}
-.giant.blue-end b{-webkit-text-stroke:1.5px rgba(10,10,11,.6)}
+.giant.blue-end b{-webkit-text-stroke:1.5px rgba(7,13,25,.6)}
 .giant.blue-end b::after{color:var(--bg0)}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -1000,3 +1000,60 @@ input[type=checkbox]:focus-visible{outline:2px solid var(--blue);outline-offset:
 @media (max-width:720px){.pf-shot h3{min-height:2.7em}}
 /* 센터 폰: 30초 계산기보다 제목·설명이 먼저 */
 @media (max-width:900px){#c4 .two>.tool{order:2}}
+
+/* ══ 11-22 색 개편(시안 라) — 어두운 남색 바탕 · 파랑=증명 · 주황=얻는 돈과 누르는 곳(올패스 구매 단추·절약 금액·권하는 카드 테두리·홈의 점 하나뿐) ══ */
+:root{--pt:#FF5630;--pt-rgb:255,86,48;--ink-a18:rgba(159,171,189,.32)}
+html{background:#060B15!important}
+body{background:radial-gradient(900px 620px at 16% -4%,rgba(91,143,250,.17),transparent 62%),radial-gradient(760px 540px at 100% 100%,rgba(255,86,48,.055),transparent 65%),linear-gradient(180deg,#0A1424 0%,#060B15 100%) fixed!important}
+/* 카드에 층: 위에서 빛 받는 판 */
+.card.glass{background:linear-gradient(180deg,#18243C 0%,#111A2C 42%)!important;border-color:#24324A!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 28px 56px -28px rgba(0,0,0,.7)!important}
+.card .terms>div,.card dl div{border-color:rgba(255,255,255,.07)!important}
+/* 권하는 카드 하나만 한 단 위로 */
+.card.glass.crs-all,.shop .card.glass:has(a[href*="vod-allpass"]){background:radial-gradient(120% 85% at 0% 100%,rgba(255,86,48,.10),transparent 56%),linear-gradient(180deg,#1B2944 0%,#121C30 46%)!important;border-color:rgba(255,86,48,.42)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 32px 64px -28px rgba(0,0,0,.8)!important}
+/* 주황은 화면에서 한 단추: 올패스 구매 */
+a.btn-main[href*="vod-allpass"]{background:linear-gradient(180deg,#FF6E45 0%,#FF5630 55%,#F0441F 100%)!important;color:#160703!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(0,0,0,.16),0 8px 18px -8px rgba(255,86,48,.6)!important}
+.btn-main{color:#06101F!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+/* 얻는 돈: 따로 떼어 크게 */
+.crs-gain b,#p-shop .card p.small b{display:inline-block;margin:2px 2px;padding:3px 12px;border-radius:999px;background:rgba(255,86,48,.13);box-shadow:inset 0 0 0 1px rgba(255,86,48,.3);color:#FF7A57!important;font-size:16px;font-weight:800;letter-spacing:-.01em}
+.crs-all>.lab{color:#FF7A57!important}
+.p.numf{font-variant-numeric:tabular-nums}
+.card>.lab,.gain{letter-spacing:.04em}
+.door-note{background:rgba(7,13,25,.72)!important}
+/* 홈 첫 화면: 「이 안에」 점 하나만 주황 */
+@keyframes beat2{0%,100%{box-shadow:0 0 14px 4px #FF5630,0 0 44px 12px rgba(255,86,48,.5)}50%{box-shadow:0 0 20px 7px #FF5630,0 0 70px 18px rgba(255,86,48,.32)}}
+.fx:not(.nostars) .who{background:#FFD9CC!important;animation-name:beat2!important}
+.fx:not(.nostars) .who::before,.fx:not(.nostars) .who::after{border-color:rgba(255,86,48,.75)!important}
+
+/* ── 시안 라: 다 위에 얹는 디테일 ── */
+/* 빛은 왼쪽 위 한 방향: 카드 테두리가 빛 받는 쪽만 밝다 */
+.card.glass{border:1px solid transparent!important;background:linear-gradient(180deg,#18243C 0%,#111A2C 42%) padding-box,linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 38%,rgba(255,255,255,.02) 70%) border-box!important;box-shadow:0 28px 56px -28px rgba(0,0,0,.7)!important}
+.card.glass.crs-all,.shop .card.glass:has(a[href*="vod-allpass"]){background:radial-gradient(120% 85% at 0% 100%,rgba(255,86,48,.09),transparent 56%) padding-box,linear-gradient(180deg,#1B2944 0%,#121C30 46%) padding-box,linear-gradient(135deg,rgba(255,86,48,.85),rgba(255,86,48,.22) 45%,rgba(255,86,48,.08) 75%) border-box!important;box-shadow:0 32px 64px -28px rgba(0,0,0,.8)!important}
+/* 위쪽 「상황」 두 칸은 상품 카드와 급을 가른다: 면을 빼고 윗선만 */
+.pick.card.glass,.card.glass.pick{background:none!important;border:0!important;border-top:1px solid #2B3A55!important;border-radius:0!important;box-shadow:none!important;padding-inline:0!important}
+/* 단추: 높이 하나, 글자 정가운데, 번짐 없음 */
+.card .btn{display:inline-flex!important;align-items:center;justify-content:center;height:50px;min-height:50px!important;padding:0 24px!important;line-height:1;font-size:16px!important;font-weight:700!important}
+.card .btn-sub{font-weight:600!important;border-color:rgba(159,171,189,.3)!important;color:#DDE3EC!important}
+.shop .act .btn-main,.tiers .act .btn-main{flex:1 1 auto}
+a.btn-main[href*="vod-allpass"]{background:linear-gradient(180deg,#FF6A45 0%,#FF5630 60%,#FA4A24 100%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 2px rgba(0,0,0,.45)!important}
+.btn-main{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 2px rgba(0,0,0,.4)}
+.shop .card .act,.tiers .card .act{padding-top:24px!important;gap:8px!important}
+/* 가격: 숫자와 단위 밑선 맞춤 */
+.shop .card .p,.tiers .card .p,.crs-all .p,.crs-shop .p,.pick strong{display:flex;align-items:baseline;gap:6px}
+.shop .card .p em,.tiers .card .p em,.crs-all .p em,.crs-shop .p em,.pick strong em{margin:0!important;font-size:15px!important;color:#8A96AD!important}
+/* 가격 아래 줄 높이를 맞춰 두 카드의 표 줄이 나란히 */
+#p-shop .card>p.small{min-height:34px;display:flex;align-items:center;flex-wrap:wrap;gap:0 4px}
+.crs-gain b,#p-shop .card p.small b{padding:5px 12px!important;line-height:1;font-size:15px!important}
+.crs-all>.lab{color:var(--ink2)!important}
+/* 표: 값은 또렷하게, 줄 리듬 고르게 */
+.terms{gap:0!important;margin-top:20px!important}
+.terms div{padding:13px 0!important;border-top-color:rgba(255,255,255,.08)!important;align-items:baseline;grid-template-columns:80px 1fr!important}
+.terms dt{font-size:14px;color:#8A96AD!important}
+.terms dd{color:#EEF0F3;line-height:1.55}
+.card>.lab,.card .small{font-size:13.5px}
+/* 큰 제목의 파랑: 위가 밝은 옅은 결 */
+h1 .blue,h2 .blue{background:linear-gradient(180deg,#8FB4FF 0%,#5B8FFA 55%,#4A7BEC 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+/* 구역 제목과 카드 사이를 조인다 */
+.shop,.tiers,.crs-all{margin-top:40px!important}
+/* 메뉴 간격 고르게(컴퓨터만) */
+@media (min-width:721px){.top nav{gap:28px!important}.top nav a{min-width:0!important}}
+.door-note{text-shadow:0 0 12px #060B15}
