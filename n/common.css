@@ -1059,3 +1059,14 @@ h1 .blue,h2 .blue{background:linear-gradient(180deg,#8FB4FF 0%,#5B8FFA 55%,#4A7B
 .door-note{text-shadow:0 0 12px #060B15}
 /* ── 11-22 점검 보완 ── 4T 카드(컴퓨터): 절약 금액 줄이 단추 위에 오게 */
 @media (min-width:901px){.crs-one .card>.act{grid-row:6}}
+/* ── 11-22 가격 줄 ── 따로 살 때 값은 취소선으로 가격 옆에, 절약 금액은 그 아래 따로 한 줄 */
+.card .p{flex-wrap:wrap;row-gap:2px}
+.card .p .was{font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:0;color:#8A96AD;margin-left:8px;white-space:nowrap}
+.card .p .was s{color:#9FABBD;text-decoration-thickness:1.5px;text-decoration-color:rgba(255,122,87,.75)}
+.card p.save{margin-top:12px;line-height:1}
+.card p.save b,#p-shop .card p.small b{display:inline-block;margin:0;padding:6px 12px!important;border-radius:999px;background:rgba(255,86,48,.13);box-shadow:inset 0 0 0 1px rgba(255,86,48,.3);color:#FF7A57!important;font-size:15px!important;font-weight:800;letter-spacing:-.01em;line-height:1}
+#p-shop .card>p.small{gap:0 8px}
+@media (min-width:901px){.crs-one .card>.act{grid-row:6}.crs-one .card>.inlist{grid-row:1 / span 4}.crs-one .card>.crs-sub{grid-row:5}.crs-one .card>.crs-list{grid-row:6}}
+/* ── 11-22 아이폰 ── 사파리는 고정 배경(background-attachment:fixed)을 무시해 바탕 빛이 맨 위에만 남는다 → 화면에 붙인 막으로 옮긴다 */
+body{background:none!important}
+body::before{content:"";position:fixed;left:0;right:0;top:0;bottom:-140px;z-index:-1;pointer-events:none;background:radial-gradient(900px 620px at 16% -4%,rgba(91,143,250,.17),transparent 62%),radial-gradient(760px 540px at 100% 100%,rgba(255,86,48,.055),transparent 65%),linear-gradient(180deg,#0A1424 0%,#060B15 100%)}
