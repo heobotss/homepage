@@ -462,8 +462,8 @@ a.m-s:hover{filter:brightness(1.12)}
         if (잰주) {
           var 줄 = 잰주.payload["내순위"], 최신실패 = 주간[0] !== 잰주;
           판.push('<div class="m-cn"><p class="m-lab">플레이스 순위 · ' + esc(잰주.payload["기준일"] || 잰주.period) + ' 기준</p><div class="m-tb"><table><thead><tr><th>검색어</th><th>순위</th><th>지난주보다</th></tr></thead><tbody>' +
-            줄.map(function (x) { var v = String(x["변화"] || ""), c = /^\+/.test(v) ? "up" : /^-\d/.test(v) ? "dn" : ""; return "<tr><td>" + esc(x["키워드"]) + '</td><td class="num">' + esc(x["순위"]) + '</td><td class="' + c + '">' + esc(v === "0" ? "그대로" : v) + "</td></tr>"; }).join("") +
-            "</tbody></table></div>" + (최신실패 ? '<p class="fine">이번 주는 순위를 받지 못해 지난 측정을 보여 드립니다.</p>' : "") + '<div class="m-links"><a href="/me/tools/#place">추적기 열기</a></div></div>');
+            줄.map(function (x) { var v = String(x["변화"] || ""), c = /^\+/.test(v) ? "up" : /^-\d/.test(v) ? "dn" : ""; return "<tr><td>" + esc(x["키워드"]) + '</td><td class="num">' + esc(x["순위"]) + '</td><td class="' + c + '">' + esc(v === "0" ? "그대로" : v === "-" ? "—" : v) + "</td></tr>"; }).join("") +
+            "</tbody></table></div>" + (최신실패 ? '<p class="fine">이번 주는 순위를 받지 못해 지난 측정을 보여 드립니다.</p>' : "") + (잰주.payload["알림"] ? '<p class="fine">' + esc(잰주.payload["알림"]) + "</p>" : "") + '<div class="m-links"><a href="/me/tools/#place">추적기 열기</a></div></div>');
           줄.forEach(function (x) { if (/^-\d/.test(String(x["변화"] || ""))) 할일.push("「" + esc(x["키워드"]) + "」 순위가 " + esc(String(x["변화"]).slice(1)) + "칸 내려갔어요"); });
         } else {
           판.push('<div class="m-cn e"><p class="m-lab">플레이스 순위</p><h4>아직 안 쟀어요</h4><p class="t">매주 월요일에 재서 여기에 올립니다.</p><div class="m-links"><a href="/me/tools/#place">추적기 열기</a></div></div>');
