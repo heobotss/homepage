@@ -370,6 +370,8 @@ a.m-s:hover{filter:brightness(1.12)}
     (받[7] || []).forEach(function (r) { 받은자료[r.offer_id] = 1; });
     (받[10] || []).forEach(function (p) { 상품[p.id] = p; });
     var 회원 = 층 === "member" || 층 === "center";
+    var 산구독 = 구독.filter(function (s) { return s.status === "active" || s.status === "retry" || new Date(s.next_charge_at) > new Date(); })[0];
+    var 구독중 = !!산구독, 관리자 = 회원 && !구독중;
     var 가진상품 = {}; 권리.forEach(function (e) { 가진상품[e.product_id] = e; });
 
     function 영상있나(v) {
@@ -415,7 +417,7 @@ a.m-s:hover{filter:brightness(1.12)}
     if (산것.length) {
       var 첫 = 상품[산것[0].product_id].name.replace(/\s*\(.*\)$/, "");
       왼 = '<div class="m-pn"><p class="m-lab">구매한 강의</p><h3>' + esc(첫) + (산것.length > 1 ? " 외 " + (산것.length - 1) + "개" : "") + '</h3><p class="t">' + 긴날(산것[0].expires_at) + '까지 봅니다.</p><a class="m-b" href="/vod/">강의실에서 이어 보기</a></div>';
-    } else if (회원) {
+    } else if (구독중) {
       왼 = '<div class="m-pn"><p class="m-lab">멤버십</p><h3>열린 강의와 프로그램이 있어요</h3><p class="t">강의는 강의실에서, 프로그램은 내 프로그램에서 엽니다.</p><a class="m-b" href="/vod/">강의실 가기</a></div>';
     }
     /* 지금 받으면 좋은 것 — 무료만 권한다. 가장 덜 채운 영역의 무료 자료 하나 */
@@ -438,7 +440,7 @@ a.m-s:hover{filter:brightness(1.12)}
 
     /* ── 여는 길 ── */
     var ways = "";
-    if (T.l) {
+    if (T.l && !관리자) {
       var 카드 = [];
       if (!회원 && 월값) {
         var 바로 = [잠긴프로그램 ? "프로그램 " + 잠긴프로그램 + "개" : "", 칸[2].some(function (x) { return x.s === "l"; }) ? "회원관리 강의" : ""].filter(Boolean).join(" · ");
@@ -491,7 +493,7 @@ a.m-s:hover{filter:brightness(1.12)}
       }).join("") + "</div>";
       if (!잠.length) return h + (L.length ? '<p class="m-lh done">' + CHK + "이 영역은 전부 열려 있어요</p>" : "") + "</section>";
       var 강의임 = 잠[0].k === "강의", 값 = A.pid && 상품[A.pid] ? 상품[A.pid].price : null;
-      var 방법 = 회원 ? "30일마다 한 묶음씩 열려요" : 강의임 ? "멤버십이면 " + (i === 2 ? "바로" : "30일마다 한 묶음씩") + " 열려요" + (값 ? " · 따로 사면 " + won(값) + "원" : "") : "멤버십이면 바로 열려요";
+      var 방법 = 관리자 ? "강의실 기준으로 아직 안 열려 있어요" : 회원 ? "30일마다 한 묶음씩 열려요" : 강의임 ? "멤버십이면 " + (i === 2 ? "바로" : "30일마다 한 묶음씩") + " 열려요" + (값 ? " · 따로 사면 " + won(값) + "원" : "") : "멤버십이면 바로 열려요";
       h += '<p class="m-lh">' + LOCK + "<span>아직 안 열린 " + (강의임 ? "강의" : "프로그램") + " " + 잠.length + "개 · <b>" + 방법 + "</b>" + (강의임 ? " · 누르면 강의 소개를 봅니다" : " · 누르면 어떤 건지 봅니다") + '</span></p><div class="m-locks">';
       잠.forEach(function (x, k) {
         var c = "m-lk" + (k >= 4 ? " x" : k >= 2 ? " x w" : "");
@@ -507,7 +509,6 @@ a.m-s:hover{filter:brightness(1.12)}
     var 구매칸 = 산것.length
       ? '<div><p class="m-lab">구매한 강의</p><ul>' + 산것.map(function (e) { return "<li>" + esc(상품[e.product_id].name.replace(/\s*\(.*\)$/, "")) + "<small>" + 긴날(e.expires_at) + "까지 봅니다</small></li>"; }).join("") + '</ul><div class="m-links"><a href="/vod/">강의실 가기</a></div></div>'
       : '<div><p class="m-lab">구매한 강의</p><h4>아직 구매한 강의가 없습니다</h4><p class="t">무료 강의 3편과 레슨 12편은 지금 바로 볼 수 있어요.</p><div class="m-links"><a href="/courses/">강의 보기</a><a href="/lesson/">레슨 12편</a></div></div>';
-    var 산구독 = 구독.filter(function (s) { return s.status === "active" || s.status === "retry" || new Date(s.next_charge_at) > new Date(); })[0];
     var 상태말 = { active: "결제 중", retry: "결제 실패 — 다시 시도 중", locked: "잠김", canceled: "해지됨" };
     var 구독칸 = 산구독
       ? '<div><p class="m-lab">구독</p><h4>' + esc((상품[산구독.product_id] && 상품[산구독.product_id].name) || "허봇스 구독") + '</h4><p class="t">' + (상태말[산구독.status] || "") + " · " + won(산구독.amount) + "원 · " +
