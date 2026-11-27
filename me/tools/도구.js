@@ -150,20 +150,48 @@
 
   function 등록화면() {
     그리기(머리("센터 등록", "한 번만 넣으면 추적기와 재진단이 이 정보로 돕니다.") +
-      폼("f", [["pid", "플레이스 주소나 번호", "https://map.naver.com/... 또는 숫자", "이름으로 받지 않습니다. 같은 이름 지점이 겹치기 때문입니다."],
+      폼("f", [["pid", "플레이스 주소나 번호", "https://map.naver.com/... 또는 숫자", "이름으로 받지 않습니다. 같은 이름 지점이 겹치기 때문입니다. 센터 진단표를 받으셨다면 그때 넣은 짧은 주소(naver.me)도 됩니다."],
         ["pname", "센터 이름", "화면과 메일에 쓰는 이름"], ["region", "지역", "원주 또는 서울 강남구", "시·군·구까지"],
         ["kws", "우리 검색어", "원주 PT, 원주 헬스장", "쉼표로 나눠 10개까지", "area"],
         ["comps", "경쟁 센터 플레이스 번호 (선택)", "1234567, 7654321", "쉼표로 나눠 10곳까지", "area"],
         ["trs", "선생님 블로그 (선택)", "김선생 kimpt01\n이선생 leept02", "한 줄에 이름과 블로그 아이디", "area"]], "저장하기") + '<div id="r"></div>');
     내센터().then(function (r) {
-      var c = r.data; if (!c) return;
+      var c = r.data;
+      if (!c) {   /* 11-27 처음 등록 — 센터 진단표를 받은 적이 있으면 그 센터 번호를 미리 넣어 둔다 */
+        진단번호("").then(function (x) {
+          var p = document.getElementById("pid");
+          if (x && p && !p.value) { p.value = x.pid; document.getElementById("r").innerHTML = '<p class="msg ok">센터 진단표를 받으신 센터 번호를 넣어 두었습니다. 다른 센터면 바꿔 주세요.</p>'; }
+        });
+        return;
+      }
       document.getElementById("pid").value = c.place_id; document.getElementById("pname").value = c.place_name;
       document.getElementById("region").value = c.region; document.getElementById("kws").value = (c.keywords || []).join(", ");
       document.getElementById("comps").value = (c.competitors || []).join(", ");
       document.getElementById("trs").value = (c.trainers || []).map(function (t) { return t.name + " " + t.blog; }).join("\n");
     });
+    /* 11-27 짧은 주소(naver.me)에는 번호가 없다 — 센터 진단표 신청 기록에서 같은 주소의 번호를 찾아 쓴다(없으면 안내) */
+    function 진단번호(주소) {
+      return sb.from("report_requests").select("pid,place_url").eq("kind", "center").not("pid", "is", null)
+        .order("created_at", { ascending: false }).limit(20).then(function (r) {
+          var L = (r && r.data) || [];
+          if (!주소) return L[0] || null;
+          var 고름 = function (u) { return String(u || "").trim().replace(/^https?:\/\//i, "").replace(/[\/?#].*$/, function (x) { return x.split("?")[0].replace(/\/$/, ""); }).toLowerCase(); };
+          return L.filter(function (x) { return 고름(x.place_url) === 고름(주소); })[0] || null;
+        }, function () { return null; });
+    }
     document.getElementById("f").onsubmit = function (e) {
       e.preventDefault();
+      var 칸 = document.getElementById("r");
+      if (/naver\.me\//i.test(값("pid"))) {
+        진단번호(값("pid")).then(function (x) {
+          if (x) { document.getElementById("pid").value = x.pid; 저장(); }
+          else 칸.innerHTML = '<p class="msg">짧은 주소(naver.me)에는 플레이스 번호가 들어 있지 않습니다. 그 주소를 인터넷 주소창에 붙여 열고, 열린 화면의 주소(…/place/숫자)를 복사해 넣어 주세요.</p>';
+        });
+        return;
+      }
+      저장();
+    };
+    function 저장() {
       var 칸 = document.getElementById("r");
       var 나눔 = function (v) { return v.split(/[,\n]/).map(function (x) { return x.trim(); }).filter(Boolean); };
       var m = 값("pid").match(/(\d{4,15})(?!.*\d{4,15})/);
