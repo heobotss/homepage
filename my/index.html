@@ -272,6 +272,32 @@ a.m-s:hover{filter:brightness(1.12)}
 
 @media (min-width:761px){.m-lk.more.mo{display:none}}
 
+/* 강의 진도 */
+.m-prog{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:14px;color:var(--i2)}
+.m-prog b{color:var(--i);font-size:22px}
+.m-prog .pb{flex:1;height:6px;border-radius:9px;background:var(--gv);box-shadow:inset 0 0 0 1px var(--gl);overflow:hidden}
+.m-prog .pb i{display:block;height:100%;background:linear-gradient(90deg,#4A7BEC,#8FB4FF)}
+/* 우리 센터 */
+.m-todo{margin-top:14px;background:linear-gradient(180deg,var(--t),var(--c) 60%);border:1px solid rgba(143,180,255,.45);border-radius:16px;padding:20px 22px}
+.m-todo ul{list-style:none;margin:8px 0 0;padding:0}
+.m-todo li{padding:10px 0 10px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-size:16px;font-weight:700;position:relative;word-break:keep-all}
+.m-todo li:last-child{border-bottom:0;padding-bottom:0}
+.m-todo li::before{content:"";position:absolute;left:0;top:19px;width:7px;height:7px;border-radius:2px;background:var(--b2)}
+.m-cns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.m-cn{background:var(--c);border:1px solid var(--ln);border-radius:16px;padding:20px;min-width:0}
+.m-cn.e{background:var(--gv);border-color:var(--gl)}
+.m-cn h4{font-size:17px;font-weight:700;margin:8px 0 0;word-break:keep-all}
+.m-cn p.t{font-size:14px;color:var(--i2);margin:6px 0 0;line-height:1.6;word-break:keep-all}
+.m-cn .fine{font-size:13px;color:var(--i2);margin:10px 0 0}
+.m-tb{overflow-x:auto;margin-top:10px}
+.m-tb table{width:100%;border-collapse:collapse;font-size:14.5px;white-space:nowrap}
+.m-tb th{text-align:left;font-size:12.5px;color:var(--i2);font-weight:700;padding:8px 10px 8px 0;border-bottom:1px solid var(--ln)}
+.m-tb td{padding:10px 10px 10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.m-tb td.num{font-size:16px}
+.m-tb td.up{color:var(--b2);font-weight:700}
+.m-tb td.dn{color:#E9A08F;font-weight:700}
+@media (max-width:760px){.m-cns{grid-template-columns:1fr}.m-cn{padding:16px}}
+
 </style>
 </head>
 <body>
@@ -362,12 +388,14 @@ a.m-s:hover{filter:brightness(1.12)}
       안전(sb.from("tool_jobs").select("tool,result,done_at").eq("status", "done").order("done_at", { ascending: false }).limit(60)),
       안전(sb.from("report_requests").select("kind,status,created_at").order("created_at", { ascending: false })),
       안전(sb.from("pay_products").select("id,name,price,kind")),
-      안전(sb.from("contacts").select("name").eq("email", 메일).maybeSingle())
+      안전(sb.from("contacts").select("name").eq("email", 메일).maybeSingle()),
+      안전(sb.from("vod_plays").select("video_id"))
     ]);
     var 열람 = 받[0] || [], 권리 = (받[1] || []).filter(function (e) { return !e.revoked && new Date(e.expires_at) > new Date(); }),
       구독 = 받[2] || [], 층 = 받[3] || "none", 업 = 받[4] || { ok: false }, 영상 = 받[5] || [], 자료 = 받[6] || [],
       받은자료 = {}, 일 = 받[8] || [], 신청 = 받[9] || [], 상품 = {}, 이름 = (받[11] && 받[11].name) || "";
     (받[7] || []).forEach(function (r) { 받은자료[r.offer_id] = 1; });
+    var 본 = {}; (받[12] || []).forEach(function (r) { 본[r.video_id] = 1; });   /* 재생을 시작한 강의 — 환불 계산에 쓰는 기록을 읽기만 한다 */
     (받[10] || []).forEach(function (p) { 상품[p.id] = p; });
     var 회원 = 층 === "member" || 층 === "center";
     var 산구독 = 구독.filter(function (s) { return s.status === "active" || s.status === "retry" || new Date(s.next_charge_at) > new Date(); })[0];
@@ -384,7 +412,7 @@ a.m-s:hover{filter:brightness(1.12)}
     영상.forEach(function (v) {
       var a = v.product_id === "vod-4t-coach" ? 0 : v.product_id === "vod-4t-sales" ? 1 : 2;
       var slug = 소개[v.title];
-      if (영상있나(v)) 칸[a].push({ k: "강의", n: v.title, s: "d", t: "열려 있어요 · 보기", h: "/vod/" });
+      if (영상있나(v)) 칸[a].push(본[v.id] ? { k: "강의", n: v.title, s: "d", t: "봤어요 · 다시 보기", h: "/vod/" } : { k: "강의", n: v.title, s: "o", t: "열려 있어요 · 보기 →", h: "/vod/", 안본강의: 1 });
       else 칸[a].push({ k: "강의", n: v.title, s: "l", h: slug ? "/vod/" + slug + "/" : "/courses/" });
     });
     자료.forEach(function (o) {
@@ -404,6 +432,71 @@ a.m-s:hover{filter:brightness(1.12)}
       if (회원) { var j = 한일(p.job); 칸[3].push({ k: "프로그램", n: p.n, s: j ? "d" : "o", t: j ? "다시 열기" : "열려 있어요 · 쓰기 →", h: "/me/tools/#" + p.id }); }
       else 칸[3].push({ k: "멤버십", n: p.n, s: "l", 판: p });
     });
+    var 센터판 = "";
+    if (층 === "center") {
+      var 센 = await Promise.all([
+        안전(sb.from("center_profiles").select("place_name,region,keywords,trainers").maybeSingle()),
+        안전(sb.from("center_reports").select("kind,period,title,payload,created_at").order("id", { ascending: false }).limit(12)),
+        안전(sb.from("center_rereg_summary").select("period,summary,board_token").order("period", { ascending: false }).limit(1)),
+        안전(sb.from("center_inflow").select("asked_on,channel").order("asked_on", { ascending: false }).limit(300))
+      ]);
+      var 프로필 = 센[0], 리포트 = 센[1] || [], 재등록 = (센[2] || [])[0] || null, 문의 = 센[3] || [];
+      var 주간 = 리포트.filter(function (r) { return r.kind === "place_weekly" && r.payload && Array.isArray(r.payload["내순위"]); });
+      var 잰주 = 주간.filter(function (r) { return r.payload["내순위"].some(function (x) { return /^\d+위$/.test(x["순위"] || ""); }); })[0] || null;
+      var 재진단 = 리포트.filter(function (r) { return r.kind === "rediag"; })[0] || null;
+      var 레벨 = 한일(["levels"]), 등장 = 한일(["ai"]), 시세 = 한일(["market"]), 상권 = 한일(["keyword"]);
+      var 요약 = 재등록 && 재등록.summary ? 재등록.summary : null;
+      영역.push({ n: "센터 운영", p: "대표님이 월요일에 여는 화면", pid: null }); 칸.push([]);
+      [["rediag", "매달 재진단", !!재진단], ["place", "센터 플레이스 추적기", !!주간.length], ["rereg", "재등록 · VIP 추적", !!요약], ["board", "회원 리포트 · 팀 현황판", !!(재등록 && 재등록.board_token)],
+       ["inflow", "유입경로 추적기", !!문의.length], ["market", "동네 시세표", !!시세], ["keyword", "키워드 상권 진단", !!상권], ["ai", "AI 등장률", !!등장], ["levels", "센터 블로그 레벨표", !!레벨]].forEach(function (x) {
+        var h = x[0] === "rereg" || x[0] === "board" ? "/me/tools/rereg/" : "/me/tools/#" + x[0];
+        칸[4].push({ k: "프로그램", n: x[1], s: x[2] ? "d" : "o", t: x[2] ? "다시 열기" : "열려 있어요 · 쓰기 →", h: h });
+      });
+
+      /* 「우리 센터」 판 — 있는 기록만 */
+      var 판 = [], 할일 = [];
+      if (!프로필) {
+        판.push('<div class="m-cn e"><p class="m-lab">센터 등록</p><h4>플레이스 번호와 검색어를 한 번만 넣어 주세요</h4><p class="t">등록하면 다음 월요일부터 순위가, 다음 달 1일부터 재진단이 여기에 올라옵니다.</p><a class="m-b" href="/me/tools/#center">센터 등록하기</a></div>');
+      } else {
+        /* 플레이스 순위 */
+        if (잰주) {
+          var 줄 = 잰주.payload["내순위"], 최신실패 = 주간[0] !== 잰주;
+          판.push('<div class="m-cn"><p class="m-lab">플레이스 순위 · ' + esc(잰주.payload["기준일"] || 잰주.period) + ' 기준</p><div class="m-tb"><table><thead><tr><th>검색어</th><th>순위</th><th>지난주보다</th></tr></thead><tbody>' +
+            줄.map(function (x) { var v = String(x["변화"] || ""), c = /^\+/.test(v) ? "up" : /^-\d/.test(v) ? "dn" : ""; return "<tr><td>" + esc(x["키워드"]) + '</td><td class="num">' + esc(x["순위"]) + '</td><td class="' + c + '">' + esc(v === "0" ? "그대로" : v) + "</td></tr>"; }).join("") +
+            "</tbody></table></div>" + (최신실패 ? '<p class="fine">이번 주는 순위를 받지 못해 지난 측정을 보여 드립니다.</p>' : "") + '<div class="m-links"><a href="/me/tools/#place">추적기 열기</a></div></div>');
+          줄.forEach(function (x) { if (/^-\d/.test(String(x["변화"] || ""))) 할일.push("「" + esc(x["키워드"]) + "」 순위가 " + esc(String(x["변화"]).slice(1)) + "칸 내려갔어요"); });
+        } else {
+          판.push('<div class="m-cn e"><p class="m-lab">플레이스 순위</p><h4>아직 안 쟀어요</h4><p class="t">매주 월요일에 재서 여기에 올립니다.</p><div class="m-links"><a href="/me/tools/#place">추적기 열기</a></div></div>');
+        }
+        /* 선생님별 한 표: 재등록 집계 + 블로그 레벨표를 이름으로 맞댄다 */
+        var 사람 = {}, 순서 = [];
+        function 넣(이름) { if (!사람[이름]) { 사람[이름] = {}; 순서.push(이름); } return 사람[이름]; }
+        if (요약 && Array.isArray(요약["트레이너"])) 요약["트레이너"].forEach(function (t) { var p = 넣(t["이름"]); p.re = t["재등록률"]; p.care = t["챙길대화"]; p.mem = t["맡은회원"]; });
+        if (레벨 && 레벨.result && Array.isArray(레벨.result["표"])) 레벨.result["표"].forEach(function (t) { var p = 넣(t["이름"]); p.lv = t["레벨"]; p.gap = t["마지막글경과일"]; });
+        if (순서.length) {
+          판.push('<div class="m-cn"><p class="m-lab">선생님별 한 표' + (요약 ? " · 재등록 " + esc(요약["기준일"] || 재등록.period) + " 기준" : "") + '</p><div class="m-tb"><table><thead><tr><th>이름</th><th>재등록률</th><th>지금 챙길 회원</th><th>블로그 레벨</th><th>마지막 글</th></tr></thead><tbody>' +
+            순서.map(function (n) { var p = 사람[n]; return "<tr><td>" + esc(n) + '</td><td class="num">' + (p.re == null ? "—" : Math.round(p.re * 100) + "%") + '</td><td class="num">' + (p.care == null ? "—" : p.care + "명") + '</td><td class="num">' + (p.lv == null ? "—" : p.lv) + '</td><td class="' + (p.gap > 7 ? "dn" : "") + '">' + (p.gap == null ? "—" : p.gap + "일 전") + "</td></tr>"; }).join("") +
+            '</tbody></table></div><div class="m-links"><a href="/me/tools/rereg/">재등록 · VIP 추적</a><a href="/me/tools/#levels">블로그 레벨표</a></div></div>');
+          순서.forEach(function (n) { if (사람[n].gap > 7) 할일.push(esc(n) + " 블로그 글이 " + 사람[n].gap + "일째 멈춰 있어요"); });
+        } else {
+          판.push('<div class="m-cn e"><p class="m-lab">선생님별 한 표</p><h4>아직 자료가 없어요</h4><p class="t">결제내역과 회원목록 두 파일을 넣으면 선생님별 재등록률이, 블로그를 등록하면 레벨이 여기에 모입니다.</p><div class="m-links"><a href="/me/tools/rereg/">재등록 · VIP 추적</a><a href="/me/tools/#levels">블로그 레벨표</a></div></div>');
+        }
+        if (요약 && 요약["평균"]) {
+          if (요약["평균"]["챙길대화"]) 할일.unshift("지금 챙길 회원이 " + 요약["평균"]["챙길대화"] + "명 있어요");
+          if (요약["평균"]["골든지남"]) 할일.push("재등록 골든타임이 지난 회원이 " + 요약["평균"]["골든지남"] + "명 있어요");
+        }
+      }
+      var 달 = new Date().toISOString().slice(0, 7), 이달문의 = 문의.filter(function (x) { return String(x.asked_on || "").slice(0, 7) === 달; }).length;
+      var 숫자 = [];
+      if (요약 && 요약["평균"] && 요약["평균"]["재등록률"] != null) 숫자.push('<a class="m-st" href="/me/tools/rereg/"><p class="m-lab">팀 재등록률</p><p class="v num">' + Math.round(요약["평균"]["재등록률"] * 100) + '<small>%</small></p><p class="s">' + esc(요약["기준일"] || "") + " 기준</p></a>");
+      if (문의.length) 숫자.push('<a class="m-st" href="/me/tools/#inflow"><p class="m-lab">이번 달 신규 문의</p><p class="v num">' + 이달문의 + '<small>건</small></p><p class="s">유입경로 추적기에 적힌 것</p></a>');
+      if (등장 && 등장.result && typeof 등장.result["전체비율"] === "number") 숫자.push('<a class="m-st" href="/me/tools/#ai"><p class="m-lab">센터가 답에 나온 비율</p><p class="v num">' + 등장.result["전체비율"] + '<small>%</small></p><p class="s">' + esc(등장.result["잰날"] || 날(등장.done_at)) + "에 쟀어요</p></a>");
+      if (재진단) 숫자.push('<a class="m-st" href="/me/tools/#rediag"><p class="m-lab">매달 재진단</p><p class="v" style="font-size:19px;margin-top:12px">' + esc(재진단.title || 재진단.period) + '</p><p class="s">카드 ' + ((재진단.payload && 재진단.payload["장수"]) || "") + "장 · 열어 보기</p></a>");
+      센터판 = '<h2 class="m-h2">우리 센터' + (프로필 && 프로필.place_name ? " · " + esc(프로필.place_name) : "") + "</h2>" +
+        (할일.length ? '<section class="m-todo"><p class="m-lab">이번 주에 볼 것</p><ul>' + 할일.slice(0, 5).map(function (t) { return "<li>" + t + "</li>"; }).join("") + "</ul></section>" : "") +
+        (숫자.length ? '<section class="m-stats">' + 숫자.join("") + "</section>" : "") +
+        '<section class="m-cns">' + 판.join("") + "</section>";
+    }
     칸.forEach(function (L) { var 순 = { d: 0, o: 1, l: 2 }; L.sort(function (x, y) { return 순[x.s] - 순[y.s]; }); });
 
     var T = { d: 0, o: 0, l: 0 }, 잠긴강의 = 0, 잠긴프로그램 = 0;
@@ -412,13 +505,19 @@ a.m-s:hover{filter:brightness(1.12)}
     var 마스터 = 상품["vod-4t-master"] || null;
 
     /* ── 맨 위 두 판 ── */
+    var 열린영상 = 영상.filter(영상있나), 본영상 = 열린영상.filter(function (v) { return 본[v.id]; }), 다음볼 = 열린영상.filter(function (v) { return !본[v.id]; })[0];
+    function 진도줄(없을때) {
+      if (!열린영상.length) return '<p class="t">' + 없을때 + '</p><a class="m-b" href="/vod/">강의실 가기</a>';
+      return '<div class="m-prog"><b class="num">' + 본영상.length + "</b>/ " + 열린영상.length + '편 봤어요 <span class="pb"><i style="width:' + Math.round(본영상.length / 열린영상.length * 100) + '%"></i></span></div>' +
+        '<a class="m-b" href="/vod/">' + (다음볼 ? "「" + esc(다음볼.title) + "」 " + (본영상.length ? "이어 보기" : "부터 보기") : "강의실에서 다시 보기") + "</a>";
+    }
     var 산것 = 권리.filter(function (e) { return 상품[e.product_id] && 상품[e.product_id].kind === "vod"; });
     var 왼 = "";
     if (산것.length) {
       var 첫 = 상품[산것[0].product_id].name.replace(/\s*\(.*\)$/, "");
-      왼 = '<div class="m-pn"><p class="m-lab">구매한 강의</p><h3>' + esc(첫) + (산것.length > 1 ? " 외 " + (산것.length - 1) + "개" : "") + '</h3><p class="t">' + 긴날(산것[0].expires_at) + '까지 봅니다.</p><a class="m-b" href="/vod/">강의실에서 이어 보기</a></div>';
+      왼 = '<div class="m-pn"><p class="m-lab">구매한 강의</p><h3>' + esc(첫) + (산것.length > 1 ? " 외 " + (산것.length - 1) + "개" : "") + "</h3>" + 진도줄(긴날(산것[0].expires_at) + "까지 봅니다.") + "</div>";
     } else if (구독중) {
-      왼 = '<div class="m-pn"><p class="m-lab">멤버십</p><h3>열린 강의와 프로그램이 있어요</h3><p class="t">강의는 강의실에서, 프로그램은 내 프로그램에서 엽니다.</p><a class="m-b" href="/vod/">강의실 가기</a></div>';
+      왼 = '<div class="m-pn"><p class="m-lab">구독 중</p><h3>열린 강의와 프로그램이 있어요</h3>' + 진도줄("강의는 강의실에서, 프로그램은 내 프로그램에서 엽니다.") + "</div>";
     }
     /* 지금 받으면 좋은 것 — 무료만 권한다. 가장 덜 채운 영역의 무료 자료 하나 */
     var 권할 = null, 최소 = 1e9;
@@ -503,7 +602,6 @@ a.m-s:hover{filter:brightness(1.12)}
       if (잠.length > 2) h += '<button type="button" class="m-lk more' + (잠.length > 4 ? "" : " mo") + '" data-more="1">' + 잠.length + "개 전부 보기</button>";
       return h + "</div></section>";
     }).join("");
-    if (층 === "center") areas += '<section class="m-area"><div class="m-ah"><h3>센터 운영</h3><p>대표님이 월요일에 여는 화면</p></div><div class="m-locks"><a class="m-lk" href="/me/tools/"><span class="tag">센터</span><span class="nm">센터 프로그램 열기</span><span class="ch" aria-hidden="true">›</span></a></div></section>';
 
     /* ── 구매·구독 ── */
     var 구매칸 = 산것.length
@@ -518,7 +616,7 @@ a.m-s:hover{filter:brightness(1.12)}
       '<p class="m-foot"><span>' + esc(메일) + '</span><a href="/me/">내 프로필 고치기</a><a href="/policy/refund.html">환불 규정</a><a href="#" id="myOut">로그아웃</a></p>';
 
     var 인사 = (이름 ? esc(이름) + " 선생님, " : "") + (T.d ? "받은 것 <b>" + T.d + "개</b>" + (T.o ? ", 바로 열 수 있는 것이 <b>" + T.o + "개</b> 더 있어요." : "가 있어요.") : "바로 열 수 있는 것이 <b>" + T.o + "개</b> 있어요.");
-    $("#app").innerHTML = '<p class="m-eye">마이 페이지</p><h1 class="m-h1">' + 인사 + "</h1>" + hero + strip + ways + stats + '<h2 class="m-h2">영역별로 보기</h2>' + areas + own;
+    $("#app").innerHTML = '<p class="m-eye">마이 페이지</p><h1 class="m-h1">' + 인사 + "</h1>" + hero + 센터판 + strip + ways + stats + '<h2 class="m-h2">영역별로 보기</h2>' + areas + own;
 
     $("#myOut").onclick = async function (e) { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
 
