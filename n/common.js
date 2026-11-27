@@ -1367,4 +1367,4 @@ const 교육인원 = '';
 })();
 
 /* 11-13 로그인돼 있으면 메뉴바 「로그인」을 「내 강의실」로 (계정 세션은 hb-auth 에 있다 · 주소는 같은 /vod/) */
-(function(){function f(){try{if(!localStorage.getItem("hb-auth"))return;var a=document.querySelector('a.me[href="/vod/"]');if(a)a.textContent="내 강의실";}catch(e){}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f();})();
+(function(){function f(){try{if(!localStorage.getItem("hb-auth"))return;var a=document.querySelector('a.me[href="/vod/"]');if(a){a.textContent="마이 페이지";a.href="/my/";}}catch(e){}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f();})();
