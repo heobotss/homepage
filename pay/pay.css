@@ -173,4 +173,8 @@ a.buy{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 2px rgba(0,0,0,.4)!im
 /* 파일 고르는 단추가 브라우저 기본 회색으로 나오던 것 */
 input[type=file]{color:#C3CBD8;font:inherit;max-width:100%}
 input[type=file]::file-selector-button{background:#18243C;color:#F2F0EB;border:1px solid #2B3A55;border-radius:999px;padding:7px 14px;margin-right:10px;font:inherit;font-weight:600;cursor:pointer}
+/* ── 11-28 줄바꿈 ── 한두 낱말만 다음 줄로 떨어지지 않게 줄 길이를 고르게 맞춘다(지원 안 하는 브라우저는 예전 그대로). 표는 휴대폰에서도 낱말 가운데를 끊지 않는다 */
+body{text-wrap:balance}
+h1,h2,h3,h4,p,li,dd,dt,td,th,label,small,figcaption,blockquote,summary{text-wrap-style:balance}
+@media (max-width:640px){th,td{word-break:keep-all!important;overflow-wrap:anywhere}}
 /* 안쪽 디테일 끝 */
