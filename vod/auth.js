@@ -39,11 +39,11 @@
       '<path d="M12 3C6.9 3 2.8 6.3 2.8 10.4c0 2.6 1.7 4.9 4.3 6.2l-1.1 4 4.6-2.5c.5.1 1 .1 1.4.1 5.1 0 9.2-3.3 9.2-7.8S17.1 3 12 3z"/>' +
       '</svg>카카오로 계속하기</button>' +
       '<p class="note" style="margin:0 0 16px;font-size:.8125rem">처음이셔도 카카오로 바로 시작됩니다. 아래는 이메일로 하는 방법입니다.<br>' +
-      '카카오로 시작하시면 <a href="/policy/terms.html">이용약관</a>과 <a href="/policy/privacy.html">개인정보 처리방침</a>에 동의하신 것으로 봅니다.</p>' +
+      '카카오로 시작하시면 <a href="/policy/terms.html">이용약관</a>과 <a href="/policy/privacy.html">개인정보 처리방침</a>에 동의하신 것으로&nbsp;봅니다.</p>' +
       '<div id="aName" hidden><label for="aNm">이름</label><input type="text" id="aNm" autocomplete="name" placeholder="실명"></div>' +
       '<label for="aEm">이메일</label><input type="email" id="aEm" autocomplete="email" placeholder="you@example.com">' +
       '<div id="aPwWrap"><label for="aPw">비밀번호</label><input type="password" id="aPw" autocomplete="current-password" placeholder="6자 이상"></div>' +
-      '<p class="note" id="aAg" hidden style="margin:8px 0 0;font-size:.8125rem">가입하시면 <a href="/policy/terms.html" target="_blank" rel="noopener">이용약관</a>과 <a href="/policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>에 동의하신 것으로 봅니다 · 만 14세 이상만 가입할 수 있습니다</p>' +   /* 11-16 이메일 가입에 동의 안내가 없던 것 */
+      '<p class="note" id="aAg" hidden style="margin:8px 0 0;font-size:.8125rem">가입하시면 <a href="/policy/terms.html" target="_blank" rel="noopener">이용약관</a>과 <a href="/policy/privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>에 동의하신 것으로&nbsp;봅니다 · 만 14세 이상만 가입할 수 있습니다</p>' +   /* 11-16 이메일 가입에 동의 안내가 없던 것 */
       '<p class="msg" id="aMsg"></p>' +
       '<button class="btn" id="aGo" type="button">로그인</button>' +
       '<p class="note" style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap">' +
