@@ -1073,3 +1073,5 @@ body::before{content:"";position:fixed;left:0;right:0;top:0;bottom:-140px;z-inde
 /* ── 11-28 줄바꿈 ── 한두 낱말만 다음 줄로 떨어지지 않게 줄 길이를 고르게 맞춘다 */
 body{text-wrap:balance}
 h1,h2,h3,h4,p,li,dd,dt,td,th,label,small,figcaption,.big,.sub,.fill,.lead,.small,.route a,.ladder a,.doors .say{text-wrap-style:balance}
+/* 11-28 강의 카드의 낱개 링크 */
+.crs-parts{margin-top:10px;line-height:1.9}.crs-parts a{color:#8FB4FF;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}

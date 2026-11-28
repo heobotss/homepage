@@ -545,12 +545,10 @@ a.m-s:hover{filter:brightness(1.12)}
     var ways = "";
     if (T.l && !관리자) {
       var 카드 = [];
-      if (!회원 && 월값) {
-        var 바로 = [잠긴프로그램 ? "프로그램 " + 잠긴프로그램 + "개" : "", 칸[2].some(function (x) { return x.s === "l"; }) ? "회원관리 강의" : ""].filter(Boolean).join(" · ");
-        var 차례 = 칸[0].some(function (x) { return x.s === "l"; }) || 칸[1].some(function (x) { return x.s === "l"; });
-        카드.push('<div class="m-way main"><p class="m-lab">가장 가볍게 · 멤버십</p><h3><b class="num">' + won(월값) + '</b>원<small>/월</small></h3><p class="big">안 열린 <b>' + T.l + '개</b>가 전부 열립니다</p><ul>' +
-          (바로 ? "<li><b>바로</b>" + 바로 + "</li>" : "") +
-          (차례 ? "<li><b>30일마다</b>나머지 강의가 한 묶음씩 (앞 강의 후기를 스토리에 올리면 기다리지 않아요)</li>" : "") +
+      if (!회원 && 월값 && 잠긴프로그램) {
+        카드.push('<div class="m-way main"><p class="m-lab">가장 가볍게 · 멤버십</p><h3><b class="num">' + won(월값) + '</b>원<small>/월</small></h3><p class="big">프로그램 <b>' + 잠긴프로그램 + '개</b>가 바로 열립니다</p><ul>' +
+          "<li><b>바로</b>프로그램 4개 · 첫 실전 강의 · 모의고사 VOL 1</li>" +
+          "<li><b>한 달에 하나</b>실전 강의 6종이 후기를 올리면 차례로 열려요</li>" +
           '</ul><a class="m-b" href="/pay/?p=membership-month">월 ' + won(월값) + '원으로 시작</a><p class="fine">해지는 내 구독 화면에서 언제든 · 다음 결제부터 멈춥니다</p></div>');
       }
       if (잠긴강의 && 마스터) {
@@ -558,14 +556,11 @@ a.m-s:hover{filter:brightness(1.12)}
           카드.push('<div class="m-way"><p class="m-lab">강의를 한 번에 · 4T 트레이너 시스템</p><h3><b class="num">' + won(마스터.price - 업.back) + '</b>원<small>실제로 내는 값</small></h3><p class="big">먼저 사신 강의 값은 돌려받습니다</p><ul>' +
             "<li><b>한 번에</b>강의 15편 전부 · 12개월</li><li><b>값</b>" + won(마스터.price) + "원이 결제된 뒤 먼저 낸 " + won(업.back) + "원이 자동 환불 · " + 날(업.until) + "까지</li></ul>" +
             '<a class="m-b g" href="/pay/?p=vod-4t-master">바꾸러 가기</a><p class="fine">프로그램은 들어 있지 않아요 (멤버십에 있어요)</p></div>');
-        } else if (!회원) {
-          카드.push('<div class="m-way"><p class="m-lab">강의만 한 번에 · 4T 트레이너 시스템</p><h3><b class="num">' + won(마스터.price) + '</b>원</h3><p class="big">강의 15편이 한 번에 열립니다</p><ul>' +
+        } else {
+          카드.push('<div class="m-way"><p class="m-lab">강의를 한 번에 · 4T 트레이너 시스템</p><h3><b class="num">' + won(마스터.price) + '</b>원</h3><p class="big">강의 15편이 한 번에 열립니다</p><ul>' +
             "<li><b>한 번에</b>수업 6편 · 세일즈 5편 · 회원관리 4편 · 12개월</li><li><b>나눠서</b>영역 하나만 따로 살 수도 있어요</li></ul>" +
             '<a class="m-b g" href="/courses/">강의 화면에서 보기</a><p class="fine">프로그램은 들어 있지 않아요 (멤버십에 있어요)</p></div>');
         }
-      }
-      if (회원 && 잠긴강의 && !카드.length) {
-        카드.push('<div class="m-way"><p class="m-lab">멤버십으로 쓰고 계세요</p><p class="big">남은 강의는 30일마다 한 묶음씩 열려요</p><p class="fine">앞 강의 후기를 스토리에 올리면 기다리지 않고 바로 열립니다.</p><a class="m-b g" href="/story/">스토리로 바로 열기</a></div>');
       }
       if (카드.length) ways = '<h2 class="m-h2">아직 안 열린 ' + T.l + "개, 여는 길" + (카드.length > 1 ? "은 두 가지예요" : "") + '</h2><section class="m-ways' + (카드.length > 1 ? "" : " one") + '">' + 카드.join("") + "</section>";
     }
@@ -596,7 +591,7 @@ a.m-s:hover{filter:brightness(1.12)}
       }).join("") + "</div>";
       if (!잠.length) return h + (L.length ? '<p class="m-lh done">' + CHK + "이 영역은 전부 열려 있어요</p>" : "") + "</section>";
       var 강의임 = 잠[0].k === "강의", 값 = A.pid && 상품[A.pid] ? 상품[A.pid].price : null;
-      var 방법 = 관리자 ? "강의실 기준으로 아직 안 열려 있어요" : 회원 ? "30일마다 한 묶음씩 열려요" : 강의임 ? "멤버십이면 " + (i === 2 ? "바로" : "30일마다 한 묶음씩") + " 열려요" + (값 ? " · 따로 사면 " + won(값) + "원" : "") : "멤버십이면 바로 열려요";
+      var 방법 = 관리자 ? "강의실 기준으로 아직 안 열려 있어요" : 강의임 ? (값 ? "따로 사면 " + won(값) + "원" : "따로 사는 강의예요") + (마스터 ? " · 4T 트레이너 시스템 " + won(마스터.price) + "원이면 15편 전부" : "") : "멤버십이면 바로 열려요";
       h += '<p class="m-lh">' + LOCK + "<span>아직 안 열린 " + (강의임 ? "강의" : "프로그램") + " " + 잠.length + "개 · <b>" + 방법 + "</b>" + (강의임 ? " · 누르면 강의 소개를 봅니다" : " · 누르면 어떤 건지 봅니다") + '</span></p><div class="m-locks">';
       잠.forEach(function (x, k) {
         var c = "m-lk" + (k >= 4 ? " x" : k >= 2 ? " x w" : "");
@@ -629,7 +624,7 @@ a.m-s:hover{filter:brightness(1.12)}
     function 판열기(id) {
       var p = 멤버십프로그램.filter(function (x) { return x.id === id; })[0]; if (!p) return;
       $("#pkB").innerHTML = '<p class="m-lab">이건 이런 프로그램이에요</p><h4 id="pkT">' + esc(p.n) + '</h4><p class="t">' + esc(p.말) + "</p>" +
-        (T.l > 1 ? '<p class="link">멤버십이면 이 프로그램과 함께 <b>안 열린 ' + T.l + "개가 전부</b> 열려요.</p>" : "") +
+        '<p class="link">멤버십이면 <b>프로그램 4개가 모두</b> 열려요.</p>' +
         (월값 ? '<a class="m-b" href="/pay/?p=membership-month">월 ' + won(월값) + '원으로 시작</a><p class="price">해지는 언제든 · 다음 결제부터 멈춥니다 · <a href="/plan/" style="color:inherit">가격 자세히</a></p>'
               : '<a class="m-b" href="/plan/">멤버십 알아보기</a>');
       if (dlg.showModal) dlg.showModal(); else location.href = "/plan/";
