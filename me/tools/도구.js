@@ -153,7 +153,7 @@
       폼("f", [["pid", "플레이스 주소나 번호", "https://map.naver.com/... 또는 숫자", "이름으로 받지 않습니다. 같은 이름 지점이 겹치기 때문입니다. 센터 진단표를 받으셨다면 그때 넣은 짧은 주소(naver.me)도 됩니다."],
         ["pname", "센터 이름", "화면과 메일에 쓰는 이름"], ["region", "지역", "원주 또는 서울 강남구", "시·군·구까지"],
         ["kws", "우리 검색어", "원주 PT, 원주 헬스장", "쉼표로 나눠 10개까지", "area"],
-        ["comps", "경쟁 센터 플레이스 번호 (선택)", "1234567, 7654321", "쉼표로 나눠 10곳까지", "area"],
+        ["comps", "경쟁 센터 플레이스 번호 (선택)", "1234567, 7654321", "번호나 네이버 지도 주소 · 10곳까지", "area"],
         ["trs", "선생님 블로그 (선택)", "김선생 kimpt01\n이선생 leept02", "한 줄에 이름과 블로그 아이디", "area"]], "저장하기") + '<div id="r"></div>');
     내센터().then(function (r) {
       var c = r.data;
@@ -194,15 +194,22 @@
     function 저장() {
       var 칸 = document.getElementById("r");
       var 나눔 = function (v) { return v.split(/[,\n]/).map(function (x) { return x.trim(); }).filter(Boolean); };
-      var m = 값("pid").match(/(\d{4,15})(?!.*\d{4,15})/);
+      var 원 = 값("pid"); try { 원 = decodeURIComponent(원); } catch (e2) {}
+      var m = 원.match(/\/place\/(\d{4,15})/) || 원.replace(/[?#].*$/, "").match(/(\d{4,15})(?!.*\d{4,15})/);   /* 11-28 주소 뒤 timestamp 를 번호로 잡지 않게 */
+      var 번호들 = function (v) {   /* 경쟁 센터: 번호든 지도 주소든 받는다 */
+        var out = [];
+        v = v.replace(/https?:\/\/\S+/g, function (u) { var d = u; try { d = decodeURIComponent(u); } catch (e3) {} var k = d.match(/\/place\/(\d{4,15})/); if (k) out.push(k[1]); return " "; });
+        (v.match(/\d{4,15}/g) || []).forEach(function (x) { out.push(x); });
+        return out.filter(function (x, i) { return out.indexOf(x) === i; });
+      };
       if (!m) { 칸.innerHTML = '<p class="msg">플레이스 번호를 찾지 못했습니다. 주소에 있는 숫자를 넣어 주세요.</p>'; return; }
       var 줄 = { user_id: 나.id, place_id: m[1], place_name: 값("pname"), region: 값("region"),
-        keywords: 나눔(값("kws")).slice(0, 10), competitors: 나눔(값("comps")).filter(function (x) { return /^\d{4,15}$/.test(x); }).slice(0, 10),
+        keywords: 나눔(값("kws")).slice(0, 10), competitors: 번호들(값("comps")).slice(0, 10),
         trainers: 값("trs").split("\n").map(function (s) { var p = s.trim().split(/\s+/); return p.length >= 2 ? { name: p.slice(0, -1).join(" "), blog: p[p.length - 1] } : null; }).filter(Boolean),
         updated_at: new Date().toISOString() };
       if (!줄.place_name || !줄.region) { 칸.innerHTML = '<p class="msg">센터 이름과 지역을 넣어 주세요.</p>'; return; }
       sb.from("center_profiles").upsert(줄).then(function (x) {
-        칸.innerHTML = x.error ? '<p class="msg">' + esc(HB.kr(x.error) || "저장하지 못했습니다.") + "</p>" : '<p class="msg ok">저장했습니다. 다음 월요일 리포트부터 이 정보로 잽니다.</p>';
+        칸.innerHTML = x.error ? '<p class="msg">' + esc(HB.kr(x.error) || "저장하지 못했습니다.") + "</p>" : '<p class="msg ok">플레이스 번호 ' + esc(줄.place_id) + ' 로 저장했습니다. 다음 월요일 리포트부터 이 정보로 잽니다.</p>';
       });
     };
   }
