@@ -345,8 +345,9 @@ a.m-s:hover{filter:brightness(1.12)}
     { n: "수업", p: "회원이 「이 선생님은 다르다」고 느끼는 수업", pid: "vod-4t-coach" },
     { n: "세일즈", p: "상담·OT에서 등록으로, 등록에서 재등록으로", pid: "vod-4t-sales" },
     { n: "회원관리", p: "회원이 빠지지 않고 다음 달에도 남게", pid: "vod-4t-member" },
-    { n: "마케팅", p: "검색에서 나를 찾아오게", pid: null }
+    { n: "마케팅", p: "검색에서 나를 찾아오게", pid: "vod-mkt" }
   ];
+  var 마케팅강의 = [{ id: "vod-mkt-blog", n: "블로그 17편" }, { id: "vod-mkt-review", n: "리뷰·플레이스 8편" }, { id: "vod-mkt-insta", n: "인스타그램 13편" }];
   /* 무료 자료가 들어갈 영역. 새 자료를 넣으면 여기에 한 줄 — 안 넣으면 마케팅으로 간다 */
   var 자료영역 = { "mock-vol1": 0, "score-100": 0,
     "cycle": 1, "ot-text": 1, "ot-paper": 1, "rereg": 1, "rereg-when": 1, "rate-calc": 1,
@@ -386,7 +387,7 @@ a.m-s:hover{filter:brightness(1.12)}
       안전(sb.from("pay_subscriptions").select("product_id,status,amount,period,next_charge_at").order("id", { ascending: false })),
       안전(sb.rpc("tool_tier")),
       안전(sb.rpc("my_4t_upgrade")),
-      안전(sb.from("vod_videos").select("id,product_id,title,sort").in("product_id", ["vod-4t-coach", "vod-4t-sales", "vod-4t-member"]).order("sort")),
+      안전(sb.from("vod_videos").select("id,product_id,title,sort").in("product_id", ["vod-4t-coach", "vod-4t-sales", "vod-4t-member", "vod-mkt-blog", "vod-mkt-review", "vod-mkt-insta"]).order("sort")),
       안전(sb.from("free_offers").select("id,title,kind,locked,product_id")),
       안전(sb.from("free_doc_access").select("offer_id")),
       안전(sb.from("tool_jobs").select("tool,result,done_at").eq("status", "done").order("done_at", { ascending: false }).limit(60)),
@@ -413,6 +414,16 @@ a.m-s:hover{filter:brightness(1.12)}
 
     /* ── 칸 만들기: [종류, 이름, 상태(d 받음·o 바로 열 수 있음·l 아직), 아래 줄, 주소, 누르면 뜨는 판] ── */
     var 칸 = [[], [], [], []];
+    /* 11-28 4T 트레이너 마케팅 — 38편을 낱칸으로 깔지 않고 강의 셋(블로그·리뷰·플레이스·인스타그램)을 한 칸씩. 상품이 켜져 있을 때만 보인다 */
+    var 마케팅영상 = 영상.filter(function (v) { return /^vod-mkt-/.test(v.product_id); });
+    영상 = 영상.filter(function (v) { return !/^vod-mkt-/.test(v.product_id); });
+    if (상품["vod-mkt"]) 마케팅강의.forEach(function (m) {
+      var 편 = 마케팅영상.filter(function (v) { return v.product_id === m.id; }), 가짐 = 열람.some(function (a) { return a.product_id === m.id; });
+      var 본수 = 편.filter(function (v) { return 본[v.id]; }).length, 이름 = "마케팅 " + m.n;
+      if (!가짐) 칸[3].push({ k: "강의", n: 이름, s: "l", h: "/courses/#c-mkt" });
+      else if (편.length && 본수 >= 편.length) 칸[3].push({ k: "강의", n: 이름, s: "d", t: 편.length + "편 다 봤어요 · 다시 보기", h: "/vod/?c=vod-mkt" });
+      else 칸[3].push({ k: "강의", n: 이름, s: "o", t: (본수 ? 본수 + "/" + 편.length + "편 봤어요 · 이어 보기 →" : "열려 있어요 · 보기 →"), h: "/vod/?c=vod-mkt", 안본강의: 1 });
+    });
     영상.forEach(function (v) {
       var a = v.product_id === "vod-4t-coach" ? 0 : v.product_id === "vod-4t-sales" ? 1 : 2;
       var slug = 소개[v.title];
@@ -590,8 +601,14 @@ a.m-s:hover{filter:brightness(1.12)}
         return '<a class="m-s ' + x.s + '" href="' + x.h + '"><div><p class="k"><span>' + x.k + "</span>" + (x.s === "d" ? CHK : "") + '</p><p class="n">' + esc(x.n) + '</p></div><p class="a">' + x.t + "</p></a>";
       }).join("") + "</div>";
       if (!잠.length) return h + (L.length ? '<p class="m-lh done">' + CHK + "이 영역은 전부 열려 있어요</p>" : "") + "</section>";
+      /* 11-28 마케팅 영역은 잠긴 강의와 잠긴 프로그램이 같이 있다 — 종류별로 한 줄씩 나눠 보여 준다 */
+      var 묶음 = [잠.filter(function (x) { return x.k === "강의"; }), 잠.filter(function (x) { return x.k !== "강의"; })].filter(function (g) { return g.length; });
+      return h + 묶음.map(function (잠) {
+      var h = "";
       var 강의임 = 잠[0].k === "강의", 값 = A.pid && 상품[A.pid] ? 상품[A.pid].price : null;
-      var 방법 = 관리자 ? "강의실 기준으로 아직 안 열려 있어요" : 강의임 ? (값 ? "따로 사면 " + won(값) + "원" : "따로 사는 강의예요") + (마스터 ? " · 4T 트레이너 시스템 " + won(마스터.price) + "원이면 15편 전부" : "") : "멤버십이면 바로 열려요";
+      var 낱값 = 마케팅강의.map(function (m) { return 상품[m.id] ? 상품[m.id].price : null; }).filter(Boolean).sort(function (a, b) { return a - b; })[0];
+      var 방법 = 관리자 ? "강의실 기준으로 아직 안 열려 있어요" : 강의임 ? (A.pid === "vod-mkt" ? (값 ? "전체 " + won(값) + "원" + (낱값 ? " · 하나만 고르면 " + won(낱값) + "원부터" : "") : "따로 사는 강의예요")
+        : (값 ? "따로 사면 " + won(값) + "원" : "따로 사는 강의예요") + (마스터 ? " · 4T 트레이너 시스템 " + won(마스터.price) + "원이면 15편 전부" : "")) : "멤버십이면 바로 열려요";
       h += '<p class="m-lh">' + LOCK + "<span>아직 안 열린 " + (강의임 ? "강의" : "프로그램") + " " + 잠.length + "개 · <b>" + 방법 + "</b>" + (강의임 ? " · 누르면 강의 소개를 봅니다" : " · 누르면 어떤 건지 봅니다") + '</span></p><div class="m-locks">';
       잠.forEach(function (x, k) {
         var c = "m-lk" + (k >= 4 ? " x" : k >= 2 ? " x w" : "");
@@ -599,7 +616,8 @@ a.m-s:hover{filter:brightness(1.12)}
         else h += '<a class="' + c + '" href="' + x.h + '"><span class="tag">' + x.k + '</span><span class="nm">' + esc(x.n) + '</span><span class="ch" aria-hidden="true">›</span></a>';
       });
       if (잠.length > 2) h += '<button type="button" class="m-lk more' + (잠.length > 4 ? "" : " mo") + '" data-more="1">' + 잠.length + "개 전부 보기</button>";
-      return h + "</div></section>";
+      return h + "</div>";
+      }).join("") + "</section>";
     }).join("");
 
     /* ── 구매·구독 ── */
