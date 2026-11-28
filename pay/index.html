@@ -278,7 +278,7 @@ async function 받는것표(product) {
     const ids = [product.id].concat(product.covers || []);
     let vids = [];
     try {
-      const r = await fetch(SB_URL + "/rest/v1/vod_videos?select=product_id,collection,ord,title,length_sec&product_id=in.(" + ids.map(encodeURIComponent).join(",") + ")&order=product_id,ord", { headers: { apikey: SB_KEY } });
+      const r = await fetch(SB_URL + "/rest/v1/vod_videos?select=product_id,collection,ord,title,length_sec&product_id=in.(" + ids.map(encodeURIComponent).join(",") + ")&order=sort,ord", { headers: { apikey: SB_KEY } });
       vids = r.ok ? await r.json() : [];
     } catch (e) {}
     const groups = {}; vids.forEach(v => { (groups[v.collection || v.product_id] = groups[v.collection || v.product_id] || []).push(v); });
