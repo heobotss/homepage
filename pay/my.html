@@ -46,7 +46,7 @@ async function draw() {
   const rows = r.data || [];
   if (!rows.length) {
     $("#list").innerHTML = '<section class="card"><p>아직 구독이 없습니다.</p>' +
-      '<p class="note">플랜 화면에서 멤버십이 열리면 여기에 보입니다.</p></section>';
+      '<p class="note">멤버십을 시작하면 여기에 보입니다. <a href="/plan/">가격 보기</a></p></section>';
     return;
   }
   $("#list").innerHTML = rows.map(function (s) {
