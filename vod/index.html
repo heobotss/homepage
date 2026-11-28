@@ -149,6 +149,10 @@ fetch("../policy/legal.txt").then(function(r){return r.ok?r.text():"";}).then(fu
 
 /* 상품 — 가격은 결제 페이지가 서버에서 다시 읽는다. 여기 값은 안내용 */
 var COURSES = [
+  /* 11-28 묶음 안에 낱개가 있는 강의: kids = 낱개 상품, kit = 어느 낱개를 사도 받는 자료 꾸러미, parts = 살 수 있는 낱개 */
+  { id:"vod-mkt", tag:"트레이너 마케팅 강의", name:"4T 트레이너 마케팅", desc:"블로그 · 리뷰·플레이스 · 인스타그램 · OT와 마무리까지 43편", price:299000,
+    kids:["vod-mkt-part0","vod-mkt-blog","vod-mkt-review","vod-mkt-insta"],
+    parts:[{id:"vod-mkt-blog",name:"블로그 17편",price:169000},{id:"vod-mkt-review",name:"리뷰·플레이스 8편",price:89000},{id:"vod-mkt-insta",name:"인스타그램 13편",price:129000}] },
   { id:"vod-4t-member", tag:"트레이너 시스템 강의", name:"4T 회원관리", desc:"개인운동·식단·스케줄·온라인 마케팅", price:89000 },
   { id:"vod-4t-sales",  tag:"트레이너 시스템 강의", name:"4T 세일즈", desc:"재등록·OT&체험수업·회원 소개·상담·인바디", price:109000 },
   { id:"vod-4t-coach",  tag:"트레이너 시스템 강의", name:"4T 운동지도", desc:"정적·동적평가·맞춤 운동·스몰토크·티칭 오류·2:1 PT", price:129000 },
@@ -156,15 +160,27 @@ var COURSES = [
   { id:"vod-4t-sequence", name:"4T 트레이너 시퀀스", desc:"좋아진 것을 숫자로 남기는 수업 틀 · 50분 · 시퀀스 기록 양식", price:59000 },
   { id:"vod-4t-score",    name:"4T 트레이너 점수 체크리스트", desc:"100문항으로 내 점수 재기 · 102분 · 인쇄용 체크시트", price:69000 },
   { id:"vod-4t-years",    name:"4T 연차별 체크리스트", desc:"지금 내 단계와 다음 할 일 · 준비생~5년차 이상 · 58분", price:49000 },
-  { id:"vod-anatomy",   name:"4T 실전해부학", desc:"1~3부", price:149000 },
-  { id:"vod-mock-exam", name:"4T 모의고사", desc:"문제지 9종(LV0 · VOL1~4 · 영역별 4) + 채점용 정답표 + 레벨별·영역별 해설", price:99000 },
+  { id:"vod-anatomy",   name:"4T 실전해부학", desc:"1~3부 · 뼈 16개·근육 32개 그림", price:149000,
+    kids:["vod-anatomy-1","vod-anatomy-2","vod-anatomy-3"], kit:"vod-anatomy-kit",
+    parts:[{id:"vod-anatomy-1",name:"1부",price:49000},{id:"vod-anatomy-2",name:"2부",price:79000},{id:"vod-anatomy-3",name:"3부",price:59000}] },
+  { id:"vod-mock-exam", name:"4T 모의고사", desc:"문제지 9종(LV0 · VOL1~4 · 영역별 4) + 채점용 정답표 + 레벨별·영역별 해설", price:99000,
+    kids:["vod-mock-vol1","vod-mock-vol2","vod-mock-vol3","vod-mock-vol4"], kit:"vod-mock-kit",
+    parts:[{id:"vod-mock-vol1",name:"VOL 1",price:29000},{id:"vod-mock-vol2",name:"VOL 2",price:29000},{id:"vod-mock-vol3",name:"VOL 3",price:29000},{id:"vod-mock-vol4",name:"VOL 4",price:29000}] },
   { id:"vod-startup",   name:"트레이너 창업 (창업 전)", desc:"단독 강의", price:49000 }
 ];
 var BUNDLES = [
+  { id:"vod-pass-practice", name:"4T 실전 올패스", desc:"상담·시퀀스·점수·연차별·실전해부학·모의고사·창업 7종 전부 · 12개월", price:349000 },
   { id:"vod-allpass",   name:"전체 올패스", desc:"위 강의 전부 · 12개월", price:590000 },
   { id:"vod-4t-master", tag:"트레이너 시스템 강의", name:"4T 트레이너 시스템", desc:"4T 회원관리·세일즈·운동지도 15편 · 12개월", price:249000 }
 ];
 var won = function(n){ return n.toLocaleString("ko-KR") + "원"; };
+/* 11-28 강의 한 묶음(전체 + 낱개 + 자료 꾸러미)을 한 카드로 다룬다 */
+function fam(c){ return [c.id].concat(c.kids||[]).concat(c.kit?[c.kit]:[]); }
+function has(c){ return fam(c).some(function(i){ return i!=="vod-mkt-part0" && state.access[i]; }); }
+function famExp(c){ var m=null; fam(c).forEach(function(i){ var e=state.access[i]; if(e && (!m || new Date(e)>new Date(m))) m=e; }); return m; }
+function fullAcc(pid){ return !!state.access[pid] && !state.part[pid]; }
+function cur(){ return COURSES.filter(function(x){ return x.id===state.course; })[0] || null; }
+function onSale(id){ return !state.active || !!state.active[id]; }   /* 판매 중인 상품만 「더 볼 수 있는 강의」에 보인다 */
 // 11-03: 4T 단품·묶음 카드 이름 위에 「트레이너 시스템 강의」 표시
 var kTag = function(c){ return c.tag ? '<span class="k">'+esc(c.tag)+'</span>' : ""; };
 var ymd = function(d){ var x=new Date(d); return x.getFullYear()+"."+(x.getMonth()+1)+"."+x.getDate(); };
@@ -177,7 +193,12 @@ var EBOOK_OF = { "vod-4t-sales":["ebook/rereg.pdf","ebook/ot.pdf","ebook/referra
   "vod-4t-member":["ebook/personal.pdf","ebook/diet.pdf","ebook/schedule.pdf","ebook/online.pdf"],
   "vod-4t-coach":["ebook/static.pdf","ebook/dynamic.pdf","ebook/custom.pdf","ebook/smalltalk.pdf","ebook/teaching.pdf","ebook/2on1.pdf"] };
 var ASK = '<p class="muted" style="margin-top:18px">질문·문의: <a href="mailto:gjwodbs77@gmail.com">gjwodbs77@gmail.com</a> — 결제할 때 쓴 이메일로 보내 주세요.</p>';
-function canPlay(v){ var p = state.part[v.product_id]; return !p || p.indexOf(v.id) >= 0; }
+function canPlay(v){
+  if (v.product_id === "vod-mkt-part0") return true;                       // 파트0 은 가입한 사람 누구나
+  if (fullAcc(v.product_id)) return true;                                   // 그 상품(전체·낱개)을 통째로 가진 경우
+  var L = (state.part[v.product_id]||[]).concat(state.part[state.course]||[]);   // 인증·무료 열람권으로 그 편만 열린 경우
+  return L.indexOf(v.id) >= 0;
+}
 
 async function authed(url, body){
   var s = await HB.session();
@@ -205,8 +226,10 @@ async function boot(){
   // 10-31 내 자료실 — 무료로 받은 문서형 자료(릴스 미끼). 표가 없거나 못 읽으면 빈 목록
   var r4 = await sb.from("free_doc_access").select("offer_id, created_at, free_offers(title, what)").order("created_at", { ascending:false });
   state.lib = r4.error ? [] : (r4.data || []);
+  state.active = null; try { var r6 = await sb.from("pay_products").select("id"); if (r6.data && r6.data.length) { state.active = {}; r6.data.forEach(function(x){ state.active[x.id] = 1; }); } } catch (e) {}
   var qs = new URLSearchParams(location.search), q = qs.get("c");
-  if (q && state.access[q]) openCourse(q, qs.get("t")); else if (qs.get("v") === "lib") library(); else home();
+  var qc = COURSES.filter(function(x){ return x.id===q; })[0];
+  if (qc && has(qc)) openCourse(q, qs.get("t")); else if (qs.get("v") === "lib") library(); else home();
 }
 
 function whoBar(){
@@ -218,25 +241,26 @@ function bindWho(){ var a=document.getElementById("logout"); if(a) a.onclick=asy
 function home(){
   stopPlayer(); state.course=null;
   history.replaceState(null, "", location.pathname);
-  var mine = COURSES.filter(function(c){ return state.access[c.id]; });
-  var rest = COURSES.filter(function(c){ return !state.access[c.id]; });
+  var mine = COURSES.filter(has);
+  var rest = COURSES.filter(function(c){ return !has(c) && onSale(c.id); });
   var h = whoBar() + mainTabs("home");
   h += '<h2 class="sec">내 강의 ' + mine.length + '</h2>';
   if (!mine.length) h += '<p class="muted">아직 구매한 강의가 없습니다. 아래에서 고르거나 <a href="../#/vod">무료 강의</a>부터 보세요.</p>';
   else h += '<div class="grid">' + mine.map(function(c){
     var pt = state.part[c.id];
-    return '<button class="course" data-c="'+c.id+'">'+kTag(c)+'<span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+(pt ? '무료 열람 '+pt.length+'편 · ' : '')+ymd(state.access[c.id])+'까지 볼 수 있음</span></button>';
+    return '<button class="course" data-c="'+c.id+'">'+kTag(c)+'<span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+(pt ? '무료 열람 '+pt.length+'편 · ' : (!state.access[c.id] ? '낱개 구매 · ' : ''))+ymd(famExp(c))+'까지 볼 수 있음</span></button>';
   }).join("") + '</div>';
   // 10-30: 올패스·트레이너 시스템에만 딸린 자료(교재 15권 · 시청 순서 안내)는 강의 카드가 없어 안 보이던 것 → 첫 화면에 따로 보여 준다
   var bfiles = state.files.filter(function(f){ return (f.product_id==="vod-allpass"||f.product_id==="vod-4t-master") && state.access[f.product_id]; });
   if (bfiles.length) h += '<h2 class="sec">자료 내려받기 · 교재와 안내</h2><p class="muted" style="margin:-6px 0 8px">PDF는 구매하신 이메일이 쪽마다 찍혀서 내려받아집니다. 엑셀은 컴퓨터에서 여세요. 자료는 구매한 센터 안에서만 쓰세요.</p><div class="files">'+bfiles.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
   if (rest.length) {
     h += '<h2 class="sec">더 볼 수 있는 강의</h2><div class="grid">';
-    h += BUNDLES.filter(function(b){ return !state.access[b.id]; }).map(function(b){
+    h += BUNDLES.filter(function(b){ return !state.access[b.id] && onSale(b.id); }).map(function(b){
       return '<div class="course locked" style="border-color:rgba(147,147,147,.45)">'+kTag(b)+'<span class="t">'+esc(b.name)+'</span><span class="d">'+esc(b.desc)+'</span><span class="s">'+won(b.price)+'</span><a class="buy" href="../pay/?p='+b.id+'">구매하기 →</a></div>';
     }).join("");
     h += rest.map(function(c){
-      return '<div class="course locked">'+kTag(c)+'<span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+won(c.price)+' · 12개월</span><a class="buy" href="../pay/?p='+c.id+'">구매하기 →</a></div>';
+      return '<div class="course locked">'+kTag(c)+'<span class="t">'+esc(c.name)+'</span><span class="d">'+esc(c.desc)+'</span><span class="s">'+won(c.price)+' · 12개월</span><a class="buy" href="../pay/?p='+c.id+'">구매하기 →</a>'+
+        ((c.parts||[]).filter(function(p){ return onSale(p.id); }).length ? '<span class="d" style="margin-top:8px">낱개 · '+c.parts.filter(function(p){ return onSale(p.id); }).map(function(p){ return '<a href="../pay/?p='+p.id+'">'+esc(p.name)+' '+won(p.price)+'</a>'; }).join(" · ")+'</span>' : '')+'</div>';
     }).join("") + '</div>';
   }
   h += ASK;
@@ -273,22 +297,24 @@ function openCourse(id, want){
   var c = COURSES.filter(function(x){ return x.id===id; })[0]; if(!c) return home();
   state.course = id;
   history.replaceState(null, "", location.pathname + "?c=" + id);
-  var vids = state.videos.filter(function(v){ return v.product_id===id; });
+  var F = fam(c);
+  var vids = state.videos.filter(function(v){ return F.indexOf(v.product_id) >= 0; });
   var colls = []; vids.forEach(function(v){ if (colls.indexOf(v.collection)<0) colls.push(v.collection); });
-  var files = state.part[id]
-    ? state.files.filter(function(f){ return f.product_id===id && (state.pfiles[id]||[]).indexOf(f.key)>=0; })   // 부분 열람권은 허락된 파일만
-    : state.files.filter(function(f){ return f.product_id===id; });
+  var pf = []; F.forEach(function(i){ pf = pf.concat(state.pfiles[i]||[]); });
+  var files = state.files.filter(function(f){ return F.indexOf(f.product_id) >= 0 && (fullAcc(f.product_id) || pf.indexOf(f.key) >= 0); });   // 통째로 가진 상품의 자료 + 인증으로 열린 자료만
   if (!state.part[id] && EBOOK_OF[id] && state.access["vod-4t-master"]) files = files.concat(state.files.filter(function(f){ return EBOOK_OF[id].indexOf(f.key)>=0; }));
   var wv = want ? vids.filter(function(v){ return v.title === want; })[0] : null;
   state.coll = wv ? wv.collection : colls[0];
   var h = whoBar() + '<a href="#" class="back" id="toHome">← 내 강의</a>';
   h += '<div class="player" id="player"><video id="vid" controls playsinline controlslist="nodownload nofullscreen" disablepictureinpicture></video><span class="mark" id="mark"></span><button class="fs" id="fs" type="button">전체화면</button><button class="pstart" id="pstart" type="button" hidden><i aria-hidden="true"></i><span>재생</span></button></div>';
-  h += '<p class="ptitle" id="ptitle">'+esc(c.name)+'</p><p class="muted" id="pmsg">목록에서 영상을 고르세요 · '+ymd(state.access[id])+'까지</p>';
+  h += '<p class="ptitle" id="ptitle">'+esc(c.name)+'</p><p class="muted" id="pmsg">목록에서 영상을 고르세요 · '+ymd(famExp(c))+'까지</p>';
   if (colls.length>1) h += '<div class="tabs" id="tabs">'+colls.map(function(n,i){ return '<button data-k="'+esc(n)+'" class="'+(n===state.coll?'on':'')+'">'+esc(label(n))+'</button>'; }).join("")+'</div>';
   else h += '<div style="height:18px"></div>';
   h += '<div class="list" id="list"></div>';
   if (state.part[id]) h += '<p class="muted" style="margin-top:12px">무료 열람권으로 '+state.part[id].length+'편이 열려 있습니다. 나머지는 <a href="../pay/?p='+id+'">강의를 구매</a>하면 12개월 동안 볼 수 있습니다.</p>';
   if (files.length) h += '<h2 class="sec">자료 내려받기</h2><p class="muted" style="margin:-6px 0 8px">PDF는 구매하신 이메일이 쪽마다 찍혀서 내려받아집니다. 엑셀은 컴퓨터에서 여세요. 자료는 구매한 센터 안에서만 쓰세요.</p><div class="files">'+files.map(function(f){ return '<button data-f="'+esc(f.key)+'">'+esc(f.title)+(/[.]xlsx$/.test(f.key)?' 엑셀':' PDF')+'</button>'; }).join("")+'</div>';
+  var lockedN = vids.filter(function(v){ return !canPlay(v); }).length;
+  if (!state.part[id] && lockedN) h += '<p class="muted" style="margin-top:12px">'+(vids.length-lockedN)+'편이 열려 있습니다. 나머지는 <a href="../pay/?p='+id+'">전체를 구매</a>하면 12개월 동안 볼 수 있습니다.</p>';
   if (!vids.length) h += '<p class="muted" style="margin-top:14px">영상을 준비하고 있습니다.</p>';
   h += ASK;
   $app.innerHTML = h; bindWho();
@@ -298,7 +324,7 @@ function openCourse(id, want){
   if (tabs) tabs.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ tabs.querySelectorAll("button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); state.coll=b.getAttribute("data-k"); drawList(); }; });
   $app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ download(b.getAttribute("data-f"), b); }; });
   drawList();
-  if (!wv && state.part[id]) { wv = vids.filter(canPlay)[0] || null; if (wv) { state.coll = wv.collection; if (tabs) tabs.querySelectorAll("button").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-k")===state.coll); }); drawList(); } }
+  if (!wv && (state.part[id] || lockedN)) { wv = vids.filter(canPlay)[0] || null; if (wv) { state.coll = wv.collection; if (tabs) tabs.querySelectorAll("button").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-k")===state.coll); }); drawList(); } }
   var first = wv || vids.filter(function(v){ return v.collection===state.coll; })[0];
   if (first) ready(first);
 }
@@ -310,6 +336,11 @@ function ready(v){
   var b = document.getElementById("pstart"); b.hidden = false; b.onclick = function(){ play(v.id, true); };
 }
 function label(n){
+  if (/파트0/.test(n)) return "OT";
+  if (/마케팅 파트1/.test(n)) return "블로그";
+  if (/마케팅 파트2/.test(n)) return "리뷰·플레이스";
+  if (/마케팅 파트3/.test(n)) return "인스타그램";
+  if (/마케팅 마무리/.test(n)) return "마무리";
   if (/나눠 보기/.test(n)) return "연차별로 나눠 보기";
   if (/트레이너 가이드/.test(n)) return "전체 강의";
   if (/레벨별/.test(n)) return "레벨별 해설";
@@ -317,7 +348,8 @@ function label(n){
   return n;
 }
 function drawList(){
-  var vids = state.videos.filter(function(v){ return v.product_id===state.course && v.collection===state.coll; });
+  var CF = cur() ? fam(cur()) : [state.course];
+  var vids = state.videos.filter(function(v){ return CF.indexOf(v.product_id) >= 0 && v.collection===state.coll; });
   document.getElementById("list").innerHTML = vids.map(function(v,i){
     var ok = canPlay(v);
     return '<button data-v="'+v.id+'" class="'+(v.id===state.videoId?'on':'')+'"'+(ok?'':' disabled style="opacity:.45;cursor:default"')+'><span class="n">'+(i+1)+'</span><span style="flex:1">'+esc(v.title)+'</span><span class="len">'+(ok?mmss(v.length_sec):'구매 후')+'</span></button>';
