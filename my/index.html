@@ -447,8 +447,8 @@ a.m-s:hover{filter:brightness(1.12)}
       var 레벨 = 한일(["levels"]), 등장 = 한일(["ai"]), 시세 = 한일(["market"]), 상권 = 한일(["keyword"]);
       var 요약 = 재등록 && 재등록.summary ? 재등록.summary : null;
       영역.push({ n: "센터 운영", p: "대표님이 월요일에 여는 화면", pid: null }); 칸.push([]);
-      [["rediag", "매달 재진단", !!재진단], ["place", "센터 플레이스 추적기", !!주간.length], ["rereg", "재등록 · VIP 추적", !!요약], ["board", "회원 리포트 · 팀 현황판", !!(재등록 && 재등록.board_token)],
-       ["inflow", "유입경로 추적기", !!문의.length], ["market", "동네 시세표", !!시세], ["keyword", "키워드 상권 진단", !!상권], ["ai", "AI 등장률", !!등장], ["levels", "센터 블로그 레벨표", !!레벨]].forEach(function (x) {
+      [["rediag", "센터 플레이스 월별 진단", !!재진단], ["place", "센터 플레이스 추적기", !!주간.length], ["rereg", "재등록 · VIP 추적", !!요약], ["board", "회원 리포트 · 팀 현황판", !!(재등록 && 재등록.board_token)],
+       ["inflow", "유입경로 추적기", !!문의.length], ["market", "동네 시세표", !!시세], ["keyword", "플레이스 상위 센터 리뷰·블로그 비교", !!상권], ["ai", "AI 등장률", !!등장], ["levels", "센터 블로그 레벨표", !!레벨]].forEach(function (x) {
         var h = x[0] === "rereg" || x[0] === "board" ? "/me/tools/rereg/" : "/me/tools/#" + x[0];
         칸[4].push({ k: "프로그램", n: x[1], s: x[2] ? "d" : "o", t: x[2] ? "다시 열기" : "열려 있어요 · 쓰기 →", h: h });
       });
@@ -456,7 +456,7 @@ a.m-s:hover{filter:brightness(1.12)}
       /* 「우리 센터」 판 — 있는 기록만 */
       var 판 = [], 할일 = [];
       if (!프로필) {
-        판.push('<div class="m-cn e"><p class="m-lab">센터 등록</p><h4>플레이스 번호와 검색어를 한 번만 넣어 주세요</h4><p class="t">등록하면 다음 월요일부터 순위가, 다음 달 1일부터 재진단이 여기에 올라옵니다.</p><a class="m-b" href="/me/tools/#center">센터 등록하기</a></div>');
+        판.push('<div class="m-cn e"><p class="m-lab">센터 등록</p><h4>플레이스 번호와 검색어를 한 번만 넣어 주세요</h4><p class="t">등록하면 다음 월요일부터 순위가, 다음 달 1일부터 월별 진단이 여기에 올라옵니다.</p><a class="m-b" href="/me/tools/#center">센터 등록하기</a></div>');
       } else {
         /* 플레이스 순위 */
         if (잰주) {
@@ -491,7 +491,7 @@ a.m-s:hover{filter:brightness(1.12)}
       if (요약 && 요약["평균"] && 요약["평균"]["재등록률"] != null) 숫자.push('<a class="m-st" href="/me/tools/rereg/"><p class="m-lab">팀 재등록률</p><p class="v num">' + Math.round(요약["평균"]["재등록률"] * 100) + '<small>%</small></p><p class="s">' + esc(요약["기준일"] || "") + " 기준</p></a>");
       if (문의.length) 숫자.push('<a class="m-st" href="/me/tools/#inflow"><p class="m-lab">이번 달 신규 문의</p><p class="v num">' + 이달문의 + '<small>건</small></p><p class="s">유입경로 추적기에 적힌 것</p></a>');
       if (등장 && 등장.result && typeof 등장.result["전체비율"] === "number") 숫자.push('<a class="m-st" href="/me/tools/#ai"><p class="m-lab">센터가 답에 나온 비율</p><p class="v num">' + 등장.result["전체비율"] + '<small>%</small></p><p class="s">' + esc(등장.result["잰날"] || 날(등장.done_at)) + "에 쟀어요</p></a>");
-      if (재진단) 숫자.push('<a class="m-st" href="/me/tools/#rediag"><p class="m-lab">매달 재진단</p><p class="v" style="font-size:19px;margin-top:12px">' + esc(재진단.title || 재진단.period) + '</p><p class="s">카드 ' + ((재진단.payload && 재진단.payload["장수"]) || "") + "장 · 열어 보기</p></a>");
+      if (재진단) 숫자.push('<a class="m-st" href="/me/tools/#rediag"><p class="m-lab">센터 플레이스 월별 진단</p><p class="v" style="font-size:19px;margin-top:12px">' + esc(재진단.title || 재진단.period) + '</p><p class="s">카드 ' + ((재진단.payload && 재진단.payload["장수"]) || "") + "장 · 열어 보기</p></a>");
       센터판 = '<h2 class="m-h2">우리 센터' + (프로필 && 프로필.place_name ? " · " + esc(프로필.place_name) : "") + "</h2>" +
         (할일.length ? '<section class="m-todo"><p class="m-lab">이번 주에 볼 것</p><ul>' + 할일.slice(0, 5).map(function (t) { return "<li>" + t + "</li>"; }).join("") + "</ul></section>" : "") +
         (숫자.length ? '<section class="m-stats">' + 숫자.join("") + "</section>" : "") +
