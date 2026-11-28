@@ -363,9 +363,9 @@ a.m-s:hover{filter:brightness(1.12)}
     { id: "centercheck", n: "센터 진단표", a: 3, href: "/center/check/", rep: "center", 쓰기: "무료로 재기 →" }
   ];
   var 멤버십프로그램 = [
-    { id: "review", n: "블로그 검수기", 말: "글 주소를 넣으면 올리기 전에 고칠 곳을 한 줄씩 바로 돌려 드립니다.", job: ["review"] },
+    { id: "review", n: "블로그 검수기", 말: "올린 글 주소를 넣으면 고칠 곳을 한 줄씩 돌려 드립니다. 다음 글부터 같은 실수를 안 합니다.", job: ["review"] },
     { id: "rank", n: "내 블로그 순위판", 말: "내 키워드 순위를 매주 재서 올랐는지 내렸는지 보여 드립니다.", job: ["rank"] },
-    { id: "tier", n: "블로그 체급 판정", 말: "키워드를 넣으면 상위 글과 내 레벨을 맞대 「도전 가능·아직」을 바로 답합니다.", job: ["tier"] },
+    { id: "tier", n: "블로그 체급 판정", 말: "키워드를 넣으면 상위 글과 내 레벨을 맞대 「도전 가능·아직」을 답합니다.", job: ["tier"] },
     { id: "level", n: "블로그 레벨 · 자리 지키기", 말: "검색량 몇짜리 키워드에서 5위에 들어 봤는지로 레벨을 매기고, 지킨 자리와 놓친 자리를 보여 드립니다.", job: ["level"] }
   ];
 
@@ -570,7 +570,7 @@ a.m-s:hover{filter:brightness(1.12)}
     if (진단 && 진단.result && Array.isArray(진단.result["소견"])) {
       var n = 진단.result["소견"].length;
       st.push('<div class="m-st"><p class="m-lab">내 블로그에서 고칠 곳</p><p class="v num">' + n + '<small>곳</small></p><p class="s">' + 날(진단.done_at) + '에 쟀어요 · <a href="/me/tools/#blog" style="color:var(--b2)">다시 재기</a></p>' +
-        (!회원 && n ? '<p class="rx">고칠 곳은 올리기 전에 잡아요<br><button type="button" data-pk="review">블로그 검수기 보기 ›</button></p>' : "") + "</div>");
+        (!회원 && n ? '<p class="rx">글마다 고칠 곳을 짚어 드려요<br><button type="button" data-pk="review">블로그 검수기 보기 ›</button></p>' : "") + "</div>");
       if (typeof 진단.result["글30일"] === "number") st.push('<div class="m-st"><p class="m-lab">최근 30일 블로그 글</p><p class="v num">' + 진단.result["글30일"] + '<small>편</small></p><p class="s">' + 날(진단.done_at) + " 기준</p></div>");
     } else {
       st.push('<a class="m-st e" href="/me/tools/#blog"><p class="m-lab">내 블로그에서 고칠 곳</p><p class="v">아직 안 쟀어요</p><p class="s">무료로 재기 →</p></a>');

@@ -15,11 +15,11 @@
     { id: "blog", 이름: "내 블로그 진단서", 말: "왜 검색에 안 걸리는지 소견서 한 장", 층: "free", 그림: 진단화면 },
     { id: "rank", 이름: "내 블로그 순위판", 말: "내 키워드 순위를 매주 재서 올랐는지 내렸는지 봅니다", 층: "member", 그림: 순위화면 },
     { id: "tier", 이름: "블로그 체급 판정", 말: "이 키워드에 지금 도전해도 되는지 먼저 봅니다", 층: "member", 그림: 체급화면 },
-    { id: "review", 이름: "블로그 검수기", 말: "올리기 전에 고칠 곳을 한 줄씩 받습니다", 층: "member", 그림: 검수화면 },
+    { id: "review", 이름: "블로그 검수기", 말: "올린 글에서 고칠 곳을 한 줄씩 받습니다", 층: "member", 그림: 검수화면 },
     { id: "level", 이름: "블로그 레벨 · 자리 지키기", 말: "검색량 몇짜리 키워드에서 5위에 들어 봤는지, 지킨 자리를 봅니다", 층: "member", 그림: 순위화면 },
     { id: "center", 이름: "센터 등록", 말: "플레이스 번호와 키워드를 한 번만 넣습니다", 층: "center", 설정: true, 그림: 등록화면 },
     { id: "rediag", 이름: "센터 플레이스 월별 진단", 말: "지난달과 무엇이 달라졌는지 카드로 봅니다", 층: "center", 그림: 재진단화면 },
-    { id: "place", 이름: "센터 플레이스 추적기", 말: "우리 검색어 순위와 경쟁 센터 변화를 매주 봅니다", 층: "center", 그림: 추적화면 },
+    { id: "place", 이름: "센터 플레이스 추적기", 말: "검색 키워드 순위와 경쟁 센터 변화를 매주 봅니다", 층: "center", 그림: 추적화면 },
     { id: "rereg", 이름: "재등록 · VIP 추적", 말: "파일 두 개로 재등록률과 지금 연락할 회원이 나옵니다", 층: "center", 주소: "rereg/" },
     { id: "board", 이름: "회원 리포트 · 팀 현황판", 말: "선생님별 재등록·회원 현황을 한 장으로 나눠 봅니다", 층: "center", 주소: "rereg/" },
     { id: "inflow", 이름: "유입경로 추적기", 말: "문의가 어느 채널에서 왔는지 쌓고 분기로 봅니다", 층: "center", 그림: 유입화면 },
@@ -253,7 +253,15 @@
       sb.from("center_inflow").select("id,asked_on,channel,interest,outcome,trainer").order("asked_on", { ascending: false }).limit(2000).then(function (r) {
         var 줄 = r.data || [], 칸 = document.getElementById("r");
         if (!칸) return;
-        칸.innerHTML = 유입요약(줄);
+        var 진행 = 줄.filter(function (x) { return x.outcome === "진행"; }).slice(0, 40);
+        칸.innerHTML = 유입요약(줄) + (진행.length ? '<div class="card"><h2>아직 「진행」인 문의 ' + 진행.length + '건</h2><p class="note">등록 여부가 정해지면 눌러서 바꿔 주세요. 어느 채널이 등록까지 가는지가 여기서 나옵니다.</p><div class="scroll"><table><tr><th>날짜</th><th>채널</th><th>담당</th><th>결과 바꾸기</th></tr>' +
+          진행.map(function (x) { return "<tr><td>" + esc(x.asked_on) + "</td><td>" + esc(x.channel) + "</td><td>" + esc(x.trainer || "") + '</td><td><button type="button" class="go" style="width:auto;padding:8px 14px;margin:0 6px 0 0" data-io="' + x.id + '|등록">등록</button><button type="button" class="go" style="width:auto;padding:8px 14px;margin:0;background:none;color:inherit;box-shadow:inset 0 0 0 1px #33435E" data-io="' + x.id + '|미등록">미등록</button></td></tr>'; }).join("") + "</table></div></div>" : "");
+        칸.querySelectorAll("[data-io]").forEach(function (b) {
+          b.onclick = function () {
+            var p = b.getAttribute("data-io").split("|"); b.disabled = true;
+            sb.from("center_inflow").update({ outcome: p[1] }).eq("id", Number(p[0])).then(function () { 표그리기(); });
+          };
+        });
       });
     }
     document.getElementById("f").onsubmit = function (e) {
